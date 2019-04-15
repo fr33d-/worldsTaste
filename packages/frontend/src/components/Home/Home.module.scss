@@ -1,21 +1,26 @@
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .home {
     text-align: center;
 
     &Logo {
-        animation: homeLogoSpin infinite 20s linear;
+        // animation: homeLogoSpin infinite 20s linear;
         height: 40vmin;
         pointer-events: none;
     }
 
     &Header {
-        background-color: #282c34;
-        min-height: 100vh;
+        background-color: #fff; // #282c34;
+        // min-height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         font-size: calc(10px + 2vmin);
-        color: white;
+        color: #444; // white;
     }
 }
 

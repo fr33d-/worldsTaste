@@ -31,6 +31,8 @@
         "no-object-literal-type-assertion": false,
         "variable-name": false,
         "no-suspicious-comment": false,
-        "newline-per-chained-call": false
+        "newline-per-chained-call": false, 
+        "react-a11y-event-has-role": false, 
+        "react-a11y-anchors": false 
     }
 }

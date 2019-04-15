@@ -1,5 +1,6 @@
 {
     "debug.node.autoAttach": "on",
     "debug.openDebug": "openOnDebugBreak",
-    "debug.openExplorerOnEnd": true
+    "debug.openExplorerOnEnd": true,
+    "typescript.tsdk": "node_modules/typescript/lib"
 }
