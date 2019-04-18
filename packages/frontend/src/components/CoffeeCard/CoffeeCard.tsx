@@ -15,29 +15,43 @@ export type CoffeeEntry = {
     description: string;
     origin: string;
     rating: number;
+    kind: string;
+    roasted: string;
 };
 
 type CoffeeCardProps = {
     entry: CoffeeEntry;
 };
 
-export const CoffeeCard = (props: CoffeeCardProps) => {
-    const { images, name, description, origin, rating } = props.entry;
+type CoffeeCardState = {
+    expanded: boolean; 
+}
+
+export const CoffeeCard = (props: CoffeeCardProps, state: CoffeeCardState) => {
+    const { images, name, description, origin, rating, kind, roasted } = props.entry;
+    const { expanded } = state;
 
     return (
         <>
-            <div className={classnames(Styles.card, LocalStyles.coffeecard)} >
-                {/* {images.length >= 0 && <img src={images[0].url} alt={images[0].alt} />} */}
-                <h1>{name}</h1>
-                <p>{description}</p>
-                <p>Herkunft: {origin}</p>
-                <p>Raging: {rating}</p>
-                {images.map((img, i) => (
-                    <div key={i}>
-                        <img src={img.url} alt={img.alt} />
-                        <p>{img.name}</p>
-                    </div>
-                ))}
+            <div className={LocalStyles.CoffeeCard} >
+                <div className={LocalStyles.CoffeeCardImageSection}>
+                    { !expanded && images.length > 0 && <img src={images[0].url} alt={images[0].alt} />}
+                    { expanded && images.length > 0 && images.map((img, i) => (
+                        <div key={i}>
+                            <img src={img.url} alt={img.alt} />
+                            {/* <p>{img.name}</p> */}
+                        </div>
+                    ))}
+                </div>
+                <div className={LocalStyles.CoffeeCardTextSection}>
+                    <h2>{name}</h2>
+                    <p><span>Herkunft:</span> {origin}</p>
+                    <p><span>Art:</span> {kind}</p>
+                    <p><span>Geröstet in:</span> {kind}</p>
+                    <p><span>Raging:</span> {rating}/5</p>
+                    <p className={LocalStyles.Description}><span>Beschreibung:</span><br /> {description}</p>
+                </div>
+                
             </div>
         </>
     );

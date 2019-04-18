@@ -1,8 +1,10 @@
-import classnames from "classnames";
-import React from "react";
-import { RouteComponentProps, withRouter } from "react-router";
-import LocalStyles from "./Home.module.scss";
-import Styles from "../../index.module.scss";
+import classnames from 'classnames';
+import React from 'react';
+import { RouteComponentProps, withRouter } from 'react-router';
+import Styles from '../../index.module.scss';
+import LocalStyles from './Home.module.scss';
+import { Form } from 'react-bootstrap';
+import { Navigationbar } from '../Navigationbar';
 
 // Add an untyped version of the RouteComponentProps to the HomeProps which contains the history object we can use to
 // redirect to different routes.
@@ -21,15 +23,18 @@ const HomeBase = (props: HomeProps) => {
     };
 
     return (
-        <div className={Styles.home}>
-            <header className={classnames(LocalStyles.homeHeader, Styles.card)}>
-                {/* <img src={ReactLogo} className={Styles.homeLogo} alt="React Logo!" /> */}
-                <p>Edit any component files and save to reload</p>
-                <a onClick={onClickButton('users')}>UserList</a>
-                <a onClick={onClickButton('coffee')}>Coffee</a>
-                <a onClick={onClickButton('blog')}>Blog</a>
-            </header>
-        </div>
+        <>
+            <Navigationbar />
+            <div className={`container`}>
+                <div className="row justify-content-center">
+                    <Form className="col-12 col-lg-6 card cardGoTo">
+                        <Form.Group controlId="exampleForm.ControlInput1">
+                            <Form.Control size="lg" type="text" placeholder="Go to" />
+                        </Form.Group>
+                    </Form>
+                </div>
+            </div>
+        </>
     );
 };
 

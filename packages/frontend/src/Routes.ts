@@ -3,6 +3,7 @@ import { RouteProps } from 'react-router-dom';
 import { CoffeeBase } from './components/Coffee';
 import { Home } from './components/Home';
 import { UserList } from './components/UserList';
+import { Blog } from './components/Blog';
 
 // This array describes all routes that are exposed to the client and is used to automatically populate the Router
 // component in the App component.
@@ -26,10 +27,10 @@ export const appRoutes: RouteProps[] = [
         path: '/coffee/:id?',
         component: CoffeeBase,
     },
-    // {
-    //     path: '/blog/:id?',
-    //     component: Blog,
-    // },
+    {
+        path: '/blog/:id?',
+        component: Blog,
+    },
 ];
 
 // Describes the route parameters for the /users path and is used to inject them into the UserLilst component.

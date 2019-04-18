@@ -1,0 +1,46 @@
+
+//Colors: 
+$brand-white: #fff;
+$brand-black: #000;
+$brand-white-blue: #F4F4F6;
+$brand-white-clay: #FDFBF9;
+$brand-light-gray: #D0D1D5;
+$brand-gray: #929292;
+$brand-dark-gray: #4A4A4A;
+
+$brand-text-dark-gray: #2c3340;
+
+//Override variables:
+$body-bg: $brand-white-clay;
+$body-color: $brand-text-dark-gray;
+
+$border-radius: 12px;
+$border-radius-lg: 20px;
+
+$box-shadow-sm:  0px 0px 10px 0px rgba(0,0,0,0.1);
+$box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.2);
+$box-shadow-lg: 0px 5px 15px 0px rgba(0,0,0,0.4);
+
+// $font-size-lg: 20px;
+// $font-size-sm: 14px;
+
+$h1-font-size: 50px;
+$h2-font-size: 20px;
+// $h3-font-size: 14px;
+// $h4-font-size: 14px;
+// $h5-font-size: 14px;
+// $h6-font-size: 14px;
+
+$navbar-padding-y: 15px;
+$navbar-padding-x: 0;
+
+//Custom variables:
+
+$navbar-bg-color: $brand-white-blue;
+$card-bg-color: $brand-white;
+
+$brand-blue: #254CFB;
+$brand-blue-light: #0097FF;
+
+$container-margin-big: 50px;
+$default-space: 30px;
