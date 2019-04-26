@@ -33,6 +33,7 @@
         "no-suspicious-comment": false,
         "newline-per-chained-call": false, 
         "react-a11y-event-has-role": false, 
-        "react-a11y-anchors": false 
+        "react-a11y-anchors": false, 
+        "react-a11y-role-has-required-aria-props": false
     }
 }

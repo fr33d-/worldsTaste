@@ -11,6 +11,18 @@
     box-shadow: $box-shadow;
 
     background-color: $card-bg-color;
+
+    transition: width 300ms ease-in-out, 
+                height 500ms ease-in-out, 
+                max-height 500ms ease-in-out, 
+                box-shadow 300ms cubic-bezier(.5,0,.5,.99), // ease-in-out, 
+                margin 300ms cubic-bezier(.5,0,.5,.99); //ease-in-out;
+
+    &:hover {
+        margin-top: -5px;
+        box-shadow: $box-shadow-lg;
+        margin-bottom: calc(#{$default-space} + 5px);
+    }
     
     &GoTo {
         background: radial-gradient(circle at top, #0ebdff 0%,#1414ae 100%); 

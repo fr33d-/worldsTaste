@@ -6,16 +6,40 @@
 
     display: flex;
     flex-direction: row;
-    height: 260px;
     overflow: hidden;
+    position: relative;
+    max-height: 260px;
+
+    &.Extended {
+        max-height: 700px;
+    }
+
+    &.Edit {
+        max-height: 700px;
+    }
+
+    &ActionSection {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+
+        button {
+            @extend .icon-button;
+        }
+    }
 
     &ImageSection {
+        width: 200px;
         margin-right: $default-space;
 
         img {
-            width: 200px;
+            width: 100px;
             border-radius: 12px;
             margin-bottom: 10px;
+
+            &:first-of-type {
+                width: 200px;
+            }
         }
     }
 
@@ -28,6 +52,12 @@
         flex-wrap: wrap;
         align-content: flex-start;
         align-items: flex-start;
+
+        width: 100%;
+
+        form {
+            width: 100%;
+        }
 
         .Description {
             width: 100%;
