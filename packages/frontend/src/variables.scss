@@ -10,16 +10,23 @@ $brand-dark-gray: #4A4A4A;
 
 $brand-text-dark-gray: #2c3340;
 
+$new-light-gray: #F9F9FF;
+$new-gray: #ECEDF6;
+$new-dark-gray: #C6C7D1;
+
+
 //Override variables:
-$body-bg: $brand-white-clay;
+$body-bg: $new-gray; //$brand-white-clay;
 $body-color: $brand-text-dark-gray;
 
 $border-radius: 12px;
 $border-radius-lg: 20px;
 
+$activ-box-shadow-height: 3px;
+
 $box-shadow-sm:  0px 0px 10px 0px rgba(0,0,0,0.1);
-$box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.2);
-$box-shadow-lg: 0px 5px 15px 0px rgba(0,0,0,0.4);
+$box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+$box-shadow-lg: 0px 10px 30px 0px rgba(0,0,0,0.15);
 
 // $font-size-lg: 20px;
 // $font-size-sm: 14px;
@@ -43,6 +50,8 @@ $brand-blue: #254CFB;
 $brand-blue-light: #0097FF;
 
 $container-margin-big: 50px;
+$default-space-small: 15px;
 $default-space: 30px;
+$default-space-large: 60px;
 
 $icon-button-color: $brand-gray;

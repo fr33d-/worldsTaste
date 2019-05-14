@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { RouteComponentProps } from 'react-router';
 import LocalStyles from './Sidemenu.module.scss';
 
-export class MenuItem {
+export class SideMenuItem {
     id: number = 0;
     name: string = 'Name';
     count: number = 0;
 }
 
 export type SidemenuProps = {
-    content: MenuItem[];
+    content: SideMenuItem[];
     header: string;
 };
 

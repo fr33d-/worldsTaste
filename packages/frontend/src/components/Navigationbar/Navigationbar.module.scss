@@ -1,6 +1,68 @@
 @import '../../variables.scss';
 
 .Navbar {
-    background-color: $navbar-bg-color;
+    background: none;
+    box-shadow: none;
+    height: 70px;
+    width: 100%;
+    margin-top: 10px;
+    position: relative;
+    z-index: 100;
+
     margin-bottom: $container-margin-big;
+
+    .Burger {
+        width: 30px;
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 2;
+    }
+
+    .Logo {
+        font-size: 24px;
+        width: 100%;
+        text-align: center;
+        z-index: 10;
+
+        transition: margin 300ms ease-in-out;
+
+        &:hover {
+            margin-top: -3px;
+        }
+    }
+
+    .Breadcrupm {
+        position: absolute;
+        right: 50px;
+        top: 0;
+        text-align: right;
+        background: none;
+        z-index: 5;
+
+        ul {
+            list-style: none;
+
+            li {
+                display: inline-block;
+                margin-right: 15px;
+                transition: margin 300ms ease-in-out;
+
+                &:hover {
+                    margin-top: -3px;
+                }
+
+                &::after {
+                    // content: '\f054';
+                    content: '>';
+                    font-family: 'Font Awesome 5 Brands';
+                    margin-left: 15px;
+                }
+
+                &:last-child::after {
+                    content: ' ';
+                }
+            }
+        }
+    }
 }

@@ -1,3 +1,31 @@
+@import '../../bootstrap.scss';
+@import '../../style/card.scss';
+
 .CoffeeContainer {
     margin-top: 50px;
+    margin-left: -60px;
+}
+
+.BackgroundHelper {
+    @extend .backgroundHelper;
+}
+
+.Background {
+    @extend .background;
+}
+
+.SideBar {
+    h1 {
+        margin-bottom: 40px;
+    }
+}
+
+.Filter {
+    width: fit-content;
+    text-align: right;
+    margin-left: auto;
+
+    select {
+        width: 150px;
+    }
 }

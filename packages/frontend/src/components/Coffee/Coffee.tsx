@@ -4,15 +4,17 @@ import { Button, Col, Form, Row } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router';
 import { CoffeeCard, CoffeeEntry } from '../CoffeeCard';
 import { Navigationbar } from '../Navigationbar';
-import { MenuItem, Sidemenu } from '../Sidemenu';
+import { SideMenuItem, Sidemenu } from '../Sidemenu';
 import LocalStyles from './Coffee.module.scss';
+import axios from 'axios';
 
 export type CoffeeProps = RouteComponentProps;
 
 export type CoffeeBaseState = {
     posts: CoffeeEntry[];
-    menu: MenuItem[];
+    menu: SideMenuItem[];
     filter: string;
+    loading: boolean;
 };
 
 export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
@@ -20,12 +22,14 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
         posts: [],
         menu: [],
         filter: '',
+        loading: false,
     };
 
-    public addCard = () => {
+    public createCard = () => {
         this.setState((state) => ({
             posts: [
                 {
+                    id: 3,
                     images: [],
                     name: '',
                     description: '',
@@ -37,6 +41,27 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                 ...state.posts,
             ],
         }));
+    };
+
+    public saveNewCard = (post: CoffeeEntry) => {
+        console.log('Save new card: ');
+        console.log(post);
+
+        axios
+            .post('http://localhost:4000/coffee', { post })
+            .then((response) => {
+                // handle success
+                console.log(response);
+
+                this.setState({
+                    posts: response.data,
+                    loading: false,
+                });
+            })
+            .catch((error) => {
+                // handle error
+                console.log(error);
+            });
     };
 
     public componentDidMount() {
@@ -57,71 +82,41 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                 { id: 12, name: 'Indonesia', count: 0 },
                 { id: 13, name: 'Vietnam', count: 0 },
             ],
-            posts: [
-                {
-                    images: [
-                        {
-                            name: 'Test',
-                            url: 'http://placekitten.com/500/500',
-                            alt: 'cat',
-                        },
-                        {
-                            name: 'Test 2',
-                            url: 'http://placekitten.com/500/500',
-                            alt: 'another cat',
-                        },
-                    ],
-                    name: 'Test',
-                    description:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod \
-                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,  \
-                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo \
-                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse \
-                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non \
-                        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                    origin: 'Germany',
-                    rating: 5,
-                    kind: 'Light coffee',
-                    roasted: 'Kiel',
-                },
-                {
-                    images: [
-                        {
-                            name: 'Test',
-                            url: 'http://placekitten.com/500/500',
-                            alt: 'cat',
-                        },
-                        {
-                            name: 'Test 2',
-                            url: 'http://placekitten.com/500/500',
-                            alt: 'another cat',
-                        },
-                    ],
-                    name: 'Test',
-                    description:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',
-                    origin: 'Germany',
-                    rating: 5,
-                    kind: 'Light coffee',
-                    roasted: 'Kiel',
-                },
-            ],
         });
+
+        axios
+            .get<CoffeeEntry[]>('http://localhost:4000/coffee')
+            .then((response) => {
+                // handle success
+                console.log(response);
+
+                this.setState({
+                    posts: response.data,
+                    loading: false,
+                });
+            })
+            .catch((error) => {
+                // handle error
+                console.log(error);
+            });
     }
 
     public render() {
         const { posts, menu, filter } = this.state;
-        
+
         return (
             <>
+                <div className={LocalStyles.BackgroundHelper} />
                 <Navigationbar />
                 <div className={`container`}>
                     <div className="row">
-                        <div className="col-4">
-                            <h1>Coffee</h1>
+                        <div className={`${LocalStyles.Background} ${LocalStyles.SideBar} col-3`}>
+                            <FontAwesomeIcon icon="mug-hot" size="3x" color="#8B572A"/>
+                            <h1>Blog of Coffee</h1>
+                            <Sidemenu content={menu} header={filter} />
                         </div>
-                        <div className="col-7">
-                            <Form>
+                        <div className={`col-9`}>
+                            <Form className={`${LocalStyles.Filter}`}>
                                 <Row>
                                     <Col>
                                         <Form.Group controlId="exampleForm.ControlSelect1">
@@ -129,8 +124,7 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                                                 <option disabled selected>
                                                     Sort by
                                                 </option>
-                                                <option>Origin</option>∏
-                                                <option>Rostary</option>
+                                                <option>Origin</option>∏<option>Rostary</option>
                                                 <option>Raging</option>
                                                 <option>Flavor</option>
                                             </Form.Control>
@@ -152,27 +146,28 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                                     <Col>
                                         <Form.Control placeholder="Search" />
                                     </Col>
-                                </Row>
-                            </Form>
-                        </div>
-                        <div className="col-1">
-                            {/* <Button variant="add" size='lg'>
+                                    {/* <Button variant="add" size='lg'>
                                 <FontAwesomeIcon icon="plus" />
                             </Button> */}
-                            <button className="add-button big" onClick={this.addCard}>
-                                <FontAwesomeIcon icon="plus" />
-                            </button>
-                        </div>
-                    </div>
-                    <div className={`${LocalStyles.CoffeeContainer} row`}>
-                        <div className="col-12 col-xl-3">
-                            <Sidemenu content={menu} header={filter} />
-                        </div>
-                        <div className="col-12 col-xl-9">
-                            {posts.length === 0 && <p>nothing here</p>}
-                            {posts.length >= 0 &&
-                                // tslint:disable-next-line: use-simple-attributes
-                                posts.map((post, i) => <CoffeeCard entry={post} key={posts.length - i} />)}
+                                    <Col>
+                                        <button className="add-button big" onClick={this.createCard}>
+                                            <FontAwesomeIcon icon="plus" />
+                                        </button>
+                                    </Col>
+                                </Row>
+                            </Form>
+                            <div className={`${LocalStyles.CoffeeContainer}`}>
+                                {posts.length === 0 && <p>nothing here</p>}
+                                {posts.length >= 0 &&
+                                    // tslint:disable-next-line: use-simple-attributes
+                                    posts.map((post) => (
+                                        <CoffeeCard
+                                            entry={post}
+                                            key={post.id}
+                                            saveFunction={(post) => this.saveNewCard}
+                                        />
+                                    ))}
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -1,0 +1,104 @@
+@import '../../bootstrap.scss';
+@import '../../style/card.scss';
+
+$main-menu-with: 360px;
+$sub-menu-with: 270px;
+$teaser-with: 250px;
+$menu-margin: 20px;
+
+.MainNavigator {
+    .Teaser {
+        margin-bottom: $default-space-large;
+        padding-left: 50px;
+
+        p {
+            width: $teaser-with;
+        }
+
+        &::before {
+            content: '#';
+            position: absolute;
+            font-size: 90px;
+            font-weight: 600;
+            top: -60px;
+            left: 0;
+            color: #b7c3cb;
+            opacity: 0.3;
+        }
+    }
+
+    .Menu {
+        ul {
+            list-style: none;
+            margin: 0 $menu-margin 0 0;
+            padding: 0;
+            width: $main-menu-with;
+
+            li {
+                @extend .display-4;
+
+                &.Active {
+                    text-decoration: underline;
+
+                    &::after {
+                        // content: '>';
+                        position: absolute;
+                        margin-left: 30px;
+                        right: 0;
+
+                        content: '\f054';
+                        font-family: "Font Awesome 5 Free";
+                    }
+                }
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+
+    .SubMenu {
+        width: $sub-menu-with;
+        opacity: 0;
+        margin: 0 $menu-margin 0 0;
+
+        transition: opacity 300ms ease-in-out;
+        transition-delay: 300ms;
+
+        &.ActiveSubMenu {
+            opacity: 1;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+
+            li {
+                font-size: 34px;
+                line-height: 46px;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+
+    .Background {
+        @extend .background;
+
+        max-width: calc(#{$main-menu-with} + #{$menu-margin});
+
+        &.ActiveMenu {
+            max-width: calc(#{$main-menu-with} + #{$menu-margin} + #{$sub-menu-with} + #{$menu-margin});
+        }
+
+        transition: max-width 300ms ease-in-out;
+    }
+
+    .BackgroundHelper {
+        @extend .backgroundHelper;
+    }
+}
