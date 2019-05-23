@@ -1,27 +1,40 @@
 @import '../../bootstrap.scss';
 @import '../../style/card.scss';
 
-h2 {
-    margin-bottom: 20px;
-}
+.Sidemenu {
+    position: fixed;
 
-.MenuList {
-    ul {
-        padding-left: 15px;
+    h1 {
+        margin-bottom: 40px;
+        width: $sub-menu-with;
     }
 
-    li {
-        list-style: none;
+    h2 {
+        margin-bottom: 20px;
+    }
 
-        font-size: 16px;
-        line-height: 28px;
+    .MenuList {
+        ul {
+            padding-left: 15px;
+        }
 
-        span {
-            color: $brand-light-gray;
-            margin-left: 5px;
-            font-size: 12px;
+        li {
+            list-style: none;
+
+            font-size: 16px;
+            line-height: 28px;
+
+            span {
+                color: $brand-light-gray;
+                margin-left: 5px;
+                font-size: 12px;
+            }
         }
     }
+}
+
+.BackgroundHelper {
+    @extend .backgroundHelper;
 }
 
 .Background {

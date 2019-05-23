@@ -4,6 +4,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { MainMenuItem } from '../../data';
 import { UsersRouteParams } from '../../Routes';
 import LocalStyles from './MainNavigator.module.scss';
+import ReactDOM from 'react-dom';
 
 type MainNavigatorProps = {
     menu: MainMenuItem[];
@@ -35,8 +36,32 @@ class MainNavigatorBase extends Component<MainNavigatorProps, MainNavigatorState
         }
     };
 
+    //Click outside geht nicht! 
+
+    // public deselectMenuItem() {
+    //     this.setState({
+    //         activeMenuItem: undefined,
+    //     });
+    // }
+
+    // public handleClick(e: any) {
+    //     const domNode = ReactDOM.findDOMNode(this);
+    //     if (domNode !== null && domNode.contains(e.target)) {
+    //         return;
+    //     }
+
+    //     this.deselectMenuItem();
+    // }
+
+    // public componentWillMount() {
+    //     document.addEventListener('mousedown', this.handleClick, false);
+    // }
+
+    // public componentWillUnmount() {
+    //     document.removeEventListener('mousedown', this.handleClick, false);
+    // }
+
     public render() {
-        // Todo: make this work
         const { activeMenuItem } = this.state;
         const { menu } = this.props;
 
@@ -70,7 +95,9 @@ class MainNavigatorBase extends Component<MainNavigatorProps, MainNavigatorState
                                                 key={i}
                                             >
                                                 {item.name}
-                                                <FontAwesomeIcon icon="chevron-right" size="sm" />
+                                                <span className={LocalStyles.icon}>
+                                                    <FontAwesomeIcon icon="chevron-right" size="xs" />
+                                                </span>
                                             </li>
                                         ))}
                                     </ul>
@@ -98,7 +125,6 @@ class MainNavigatorBase extends Component<MainNavigatorProps, MainNavigatorState
                     </div>
                 </div>
             </div>
-            // </div>
         );
     }
 }

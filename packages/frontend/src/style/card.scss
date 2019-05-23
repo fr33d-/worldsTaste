@@ -1,5 +1,11 @@
 @import '../variables.scss';
 
+.cardActive {
+    margin-top: -10px;
+    box-shadow: $box-shadow-lg;
+    margin-bottom: calc(#{$default-space} + 10px);
+}
+
 .card {
     width: 100%;
 
@@ -20,9 +26,7 @@
                 margin 300ms cubic-bezier(.5,0,.5,.99); //ease-in-out;
 
     &:hover {
-        margin-top: -10px;
-        box-shadow: $box-shadow-lg;
-        margin-bottom: calc(#{$default-space} + 10px);
+        @extend .cardActive;
     }
     
     &GoTo {

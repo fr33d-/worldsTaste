@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { RouteComponentProps } from 'react-router';
+import { Props as FontAwesomeProps } from "@fortawesome/react-fontawesome";
+import React, { Component, ReactElement } from 'react';
 import LocalStyles from './Sidemenu.module.scss';
 
 export class SideMenuItem {
@@ -11,6 +11,8 @@ export class SideMenuItem {
 export type SidemenuProps = {
     content: SideMenuItem[];
     header: string;
+    filter: string;
+    icon: ReactElement<FontAwesomeProps>;
 };
 
 export class Sidemenu extends Component<SidemenuProps> {
@@ -19,11 +21,14 @@ export class Sidemenu extends Component<SidemenuProps> {
     }
 
     public render() {
-        const { content, header } = this.props;
+        const { content, header, filter, icon } = this.props;
 
         return (
-            <>
-                <h2>{header}</h2>
+            <div className={`${LocalStyles.Background} col-3`}>
+            <div className={LocalStyles.Sidemenu}>
+            {icon}
+            <h1>{header}</h1>
+                <h2>{filter}</h2>
                 <div className={LocalStyles.MenuList}>
                     <ul>
                         {content.length === 0 ? (
@@ -37,7 +42,8 @@ export class Sidemenu extends Component<SidemenuProps> {
                         )}
                     </ul>
                 </div>
-            </>
+            </ div>
+            </div>
         );
     }
 }

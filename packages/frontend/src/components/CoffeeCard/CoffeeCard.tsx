@@ -26,6 +26,7 @@ export type CoffeeEntry = {
 type CoffeeCardProps = {
     entry: CoffeeEntry;
     saveFunction(post: CoffeeEntry): void;
+    deleteFunction(id: number): void;
 };
 
 type CoffeeCardState = {
@@ -37,13 +38,14 @@ type CoffeeCardState = {
 type DropdownComponentProps = {
     label: string;
     items: string[];
+    onChange(event: FormEvent<Required<FormControlProps>>): void;
 };
 
-const DropdownColumn = ({ items, label }: DropdownComponentProps) => (
+const DropdownColumn = ({ items, label, onChange }: DropdownComponentProps) => (
     <Col>
         <Form.Label>{label}</Form.Label>
         <Form.Group>
-            <Form.Control as="select">
+            <Form.Control as="select" onChange={onChange}>
                 {items.map((item, i) => (
                     <option key={i}>{item}</option>
                 ))}
@@ -59,6 +61,11 @@ export class CoffeeCard extends Component<CoffeeCardProps, CoffeeCardState> {
         entry: this.props.entry,
     };
 
+    public constructor(props: CoffeeCardProps) {
+        super(props);
+        console.log(this.props.entry);
+    }
+
     public toggleCard = () => {
         this.setState((state) => ({ expanded: !state.expanded }));
         console.log('toggled');
@@ -68,31 +75,52 @@ export class CoffeeCard extends Component<CoffeeCardProps, CoffeeCardState> {
         this.setState({ edit: true });
     };
 
-    public saveCard = (post: CoffeeEntry) => () => {
+    public saveCard = () => {
         this.setState({ edit: false });
 
         console.log('try to save new card');
-        this.props.saveFunction(post);
+        this.props.saveFunction(this.state.entry);
     };
 
-    // public handleChange = (event: FormEvent<Required<FormControlProps>>, field: string) => {
-    //     this.setState((state) => ({ entry: { ...state.entry, field: event.currentTarget.value } }));
-    //Hier müsste ein name stehen, aber field wird nicht aufgelöst
-    // };
+    public deleteCard = () => {
+        this.props.deleteFunction(this.state.entry.id);
+    }
 
     public handleNameChange = (event: FormEvent<Required<FormControlProps>>) => {
-        this.setState((state) => ({ entry: { ...state.entry, name: event.currentTarget.value } }));
+        const value = event.currentTarget.value;
+        this.setState((state) => ({ entry: { ...state.entry, name: value } }));
     };
 
     public handleDescChange = (event: FormEvent<Required<FormControlProps>>) => {
-        this.setState((state) => ({ entry: { ...state.entry, description: event.currentTarget.value } }));
+        const value = event.currentTarget.value;
+        this.setState((state) => ({ entry: { ...state.entry, description: value } }));
+    };
+
+    public handleRatingChange = (event: FormEvent<Required<FormControlProps>>) => {
+        const value = event.currentTarget.value;
+        this.setState((state) => ({ entry: { ...state.entry, rating: Number(value) } }));
+    };
+
+    public handleOriginChange = (event: FormEvent<Required<FormControlProps>>) => {
+        const value = event.currentTarget.value;
+        this.setState((state) => ({ entry: { ...state.entry, origin: value } }));
+    };
+
+    public handleKindChange = (event: FormEvent<Required<FormControlProps>>) => {
+        const value = event.currentTarget.value;
+        this.setState((state) => ({ entry: { ...state.entry, kind: value } }));
+    };
+
+    public handleRoastChange = (event: FormEvent<Required<FormControlProps>>) => {
+        const value = event.currentTarget.value;
+        this.setState((state) => ({ entry: { ...state.entry, roasted: value } }));
     };
 
     // tslint:disable:max-func-body-length
     public render() {
         const { expanded, edit } = this.state;
-        const { images, name, description, origin, rating, kind, roasted } = this.state.entry;
-        const { entry } = this.state;
+        const { id, images, name, description, origin, rating, kind, roasted } = this.state.entry;
+        const { deleteFunction } = this.props;
 
         return (
             <>
@@ -113,12 +141,12 @@ export class CoffeeCard extends Component<CoffeeCardProps, CoffeeCardState> {
                         )}
                         {edit && (
                             <>
-                                <button onClick={this.saveCard(entry)}>
+                                <button onClick={this.saveCard}>
                                     <FontAwesomeIcon icon="save" />
                                 </button>
                             </>
                         )}
-                        <button>
+                        <button onClick={this.deleteCard}>
                             <FontAwesomeIcon icon="trash-alt" />
                         </button>
                         <button onClick={this.toggleCard}>
@@ -132,8 +160,11 @@ export class CoffeeCard extends Component<CoffeeCardProps, CoffeeCardState> {
                                 <FontAwesomeIcon icon="upload" />
                             </Button>
                         )}
-                        {!expanded && images.length > 0 && <img src={images[0].url} alt={images[0].alt} />}
+                        {!expanded && images !== undefined && images.length > 0 && (
+                            <img src={images[0].url} alt={images[0].alt} />
+                        )}
                         {expanded &&
+                            images !== undefined &&
                             images.length > 0 &&
                             images.map((img, i) => <img src={img.url} alt={img.alt} key={i} />)}
                     </div>
@@ -158,10 +189,12 @@ export class CoffeeCard extends Component<CoffeeCardProps, CoffeeCardState> {
                                         <DropdownColumn
                                             label="Herkunft"
                                             items={['Hawaii', 'Mexico', 'Puerto Rico', 'Guatemala']}
+                                            onChange={this.handleOriginChange}
                                         />
                                         <DropdownColumn
                                             label="Art"
                                             items={['Leichter Kaffee', 'Starker Kaffe', 'Espresso', 'Starker Espresso']}
+                                            onChange={this.handleKindChange}
                                         />
                                     </Row>
                                     <Row>
@@ -172,8 +205,13 @@ export class CoffeeCard extends Component<CoffeeCardProps, CoffeeCardState> {
                                                 'Vits - Munich',
                                                 'Gang und Gaebe - Munich',
                                             ]}
+                                            onChange={this.handleRoastChange}
                                         />
-                                        <DropdownColumn label="Bewertung" items={['1', '2', '3', '4', '5']} />
+                                        <DropdownColumn
+                                            label="Bewertung"
+                                            items={['1', '2', '3', '4', '5']}
+                                            onChange={this.handleRatingChange}
+                                        />
                                     </Row>
                                     <Row>
                                         <Col>
@@ -199,7 +237,7 @@ export class CoffeeCard extends Component<CoffeeCardProps, CoffeeCardState> {
                                     <span>Art:</span> {kind}
                                 </p>
                                 <p>
-                                    <span>Geröstet in:</span> {kind}
+                                    <span>Geröstet in:</span> {roasted}
                                 </p>
                                 <p>
                                     <span>Raging:</span> {rating}/5
@@ -207,7 +245,7 @@ export class CoffeeCard extends Component<CoffeeCardProps, CoffeeCardState> {
                                 <p className={LocalStyles.Description}>
                                     <span>Beschreibung:</span>
                                     <br />
-                                    {!expanded && description.substring(0, 200) + ' ...'}
+                                    {!expanded && `${description.substring(0, 200)} ...`}
                                     {expanded && description}
                                 </p>
                             </>

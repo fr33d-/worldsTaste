@@ -6,6 +6,7 @@ import * as httpStatusCodes from "http-status-codes";
 import "reflect-metadata";
 import { createConnection } from "typeorm";
 import { usersRoute } from "./routes/UsersRoute";
+import { coffeeRoute } from "./routes/CoffeeRoute";
 import { errorLoggerMiddleware, errorMiddleware } from "./utils/ErrorHandlerUtil";
 import { createLogger } from "./utils/LoggerUtil";
 
@@ -38,6 +39,7 @@ createConnection()
 
         // Application routes
         server.use("/users", usersRoute);
+        server.use("/coffee", coffeeRoute);
 
         // 404 - Not Found
         server.use((_, result) => result.sendStatus(httpStatusCodes.NOT_FOUND));

@@ -10,16 +10,6 @@
     @extend .backgroundHelper;
 }
 
-.Background {
-    @extend .background;
-}
-
-.SideBar {
-    h1 {
-        margin-bottom: 40px;
-    }
-}
-
 .Filter {
     width: fit-content;
     text-align: right;

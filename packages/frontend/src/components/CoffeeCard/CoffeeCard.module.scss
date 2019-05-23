@@ -11,11 +11,8 @@
     max-height: 260px;
     border: none;
 
-    &.Extended {
-        max-height: 700px;
-    }
-
-    &.Edit {
+    &.Extended, &.Edit {
+        @extend .cardActive;
         max-height: 700px;
     }
 

@@ -56,8 +56,8 @@ export const MainMenu: MainMenuItem[] = [
     {
         name: 'Cigars',
         link: '/cigars',
-        // icon:  'smoking',
-        // iconColor: '#8B572A',
+        label: 'A pleasure of smoke',
+        icon: <FontAwesomeIcon icon="smoking" size="3x" color="#BC9B33"/>,
         active: false,
         submenu: [
             {
@@ -81,8 +81,10 @@ export const MainMenu: MainMenuItem[] = [
         ],
     },
     {
-        name: 'Restaurantes',
-        link: '/restaurantes',
+        name: 'Restaurants',
+        link: '/restaurants',
+        label: 'Good food nearby',
+        icon: <FontAwesomeIcon icon="hamburger" size="3x" color="#A83727"/>,
         active: false,
         submenu: [
             {
@@ -108,6 +110,8 @@ export const MainMenu: MainMenuItem[] = [
     {
         name: 'Craftbeer',
         link: '/craftbeer',
+        label: 'Hop and malt',
+        icon: <FontAwesomeIcon icon="beer" size="3x" color="#F8E71C"/>,
         active: false,
         submenu: [
             {
@@ -127,6 +131,8 @@ export const MainMenu: MainMenuItem[] = [
     {
         name: 'Links',
         link: '/links',
+        label: 'Read me when you need it',
+        icon: <FontAwesomeIcon icon="link" size="3x" color="#50E3C2"/>,
         active: false,
         submenu: [
             {
@@ -146,6 +152,8 @@ export const MainMenu: MainMenuItem[] = [
     {
         name: 'Concepts',
         link: '/concepts',
+        label: 'Great ideas yet small',
+        icon: <FontAwesomeIcon icon="rocket" size="3x" color="#FE5569"/>,
         active: false,
         submenu: [
             {
@@ -159,6 +167,8 @@ export const MainMenu: MainMenuItem[] = [
     {
         name: 'Blog',
         link: '/blog',
+        label: 'Read me!',
+        icon: <FontAwesomeIcon icon="book" size="3x" color="#4A90E2"/>,
         active: false,
         submenu: [
             {

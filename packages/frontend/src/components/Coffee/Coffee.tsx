@@ -25,11 +25,28 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
         loading: false,
     };
 
+    public deletePost = (id: number) => {
+        axios
+            .delete(`http://localhost:4000/coffee/${id}`)
+            .then((response) => {
+                console.log(response);
+
+                this.setState((oldState) => ({
+                    posts: oldState.posts.filter((item) => item.id !== id),
+                    loading: false,
+                }));
+            })
+            .catch((error) => {
+                // handle error
+                console.log(error);
+            });
+    };
+
     public createCard = () => {
         this.setState((state) => ({
             posts: [
                 {
-                    id: 3,
+                    id: 0, //state.posts.length + 1,
                     images: [],
                     name: '',
                     description: '',
@@ -48,15 +65,14 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
         console.log(post);
 
         axios
-            .post('http://localhost:4000/coffee', { post })
+            .post('http://localhost:4000/coffee', { ...post })
             .then((response) => {
-                // handle success
                 console.log(response);
 
-                this.setState({
-                    posts: response.data,
-                    loading: false,
-                });
+                // this.setState({
+                //     posts: response.data,
+                //     loading: false,
+                // });
             })
             .catch((error) => {
                 // handle error
@@ -110,13 +126,14 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                 <Navigationbar />
                 <div className={`container`}>
                     <div className="row">
-                        <div className={`${LocalStyles.Background} ${LocalStyles.SideBar} col-3`}>
-                            <FontAwesomeIcon icon="mug-hot" size="3x" color="#8B572A"/>
-                            <h1>Blog of Coffee</h1>
-                            <Sidemenu content={menu} header={filter} />
-                        </div>
+                        <Sidemenu
+                            content={menu}
+                            filter={filter}
+                            header={'Blog of Coffee'}
+                            icon={<FontAwesomeIcon icon="mug-hot" size="3x" color="#8B572A" />}
+                        />
                         <div className={`col-9`}>
-                            <Form className={`${LocalStyles.Filter}`}>
+                            <div className={`${LocalStyles.Filter}`}>
                                 <Row>
                                     <Col>
                                         <Form.Group controlId="exampleForm.ControlSelect1">
@@ -155,18 +172,21 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                                         </button>
                                     </Col>
                                 </Row>
-                            </Form>
+                            </div>
                             <div className={`${LocalStyles.CoffeeContainer}`}>
                                 {posts.length === 0 && <p>nothing here</p>}
                                 {posts.length >= 0 &&
                                     // tslint:disable-next-line: use-simple-attributes
-                                    posts.map((post) => (
-                                        <CoffeeCard
-                                            entry={post}
-                                            key={post.id}
-                                            saveFunction={(post) => this.saveNewCard}
-                                        />
-                                    ))}
+                                    posts.map((post) => {
+                                        return (
+                                            <CoffeeCard
+                                                entry={post}
+                                                key={post.id}
+                                                saveFunction={this.saveNewCard}
+                                                deleteFunction={this.deletePost}
+                                            />
+                                        );
+                                    })}
                             </div>
                         </div>
                     </div>

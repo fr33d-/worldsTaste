@@ -1,11 +1,6 @@
 @import '../../bootstrap.scss';
 @import '../../style/card.scss';
 
-$main-menu-with: 360px;
-$sub-menu-with: 270px;
-$teaser-with: 250px;
-$menu-margin: 20px;
-
 .MainNavigator {
     .Teaser {
         margin-bottom: $default-space-large;
@@ -36,18 +31,20 @@ $menu-margin: 20px;
 
             li {
                 @extend .display-4;
+                position: relative;
+                width: 107%;
+
+                .icon {
+                    position: absolute;
+                    right: 0;
+                    display: none;
+                }
 
                 &.Active {
                     text-decoration: underline;
 
-                    &::after {
-                        // content: '>';
-                        position: absolute;
-                        margin-left: 30px;
-                        right: 0;
-
-                        content: '\f054';
-                        font-family: "Font Awesome 5 Free";
+                    .icon {
+                        display: inline-block;
                     }
                 }
 
@@ -61,13 +58,15 @@ $menu-margin: 20px;
     .SubMenu {
         width: $sub-menu-with;
         opacity: 0;
-        margin: 0 $menu-margin 0 0;
+        margin: -45px $menu-margin 0 0; //margin-top -icon height
+        // margin-left: -200px;
 
         transition: opacity 300ms ease-in-out;
         transition-delay: 300ms;
 
         &.ActiveSubMenu {
             opacity: 1;
+            margin-left: 0;
         }
 
         ul {
@@ -76,8 +75,8 @@ $menu-margin: 20px;
             padding: 0;
 
             li {
-                font-size: 34px;
-                line-height: 46px;
+                font-size: 26px;
+                line-height: 38px;
 
                 &:hover {
                     text-decoration: underline;
@@ -88,6 +87,8 @@ $menu-margin: 20px;
 
     .Background {
         @extend .background;
+        // background: $new-gray;
+        // border: none;
 
         max-width: calc(#{$main-menu-with} + #{$menu-margin});
 
