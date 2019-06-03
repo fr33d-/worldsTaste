@@ -1,0 +1,103 @@
+@import '../../bootstrap.scss';
+@import '../../style/card.scss';
+
+
+.AttrDataBackground {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+
+    background: $white;
+    opacity: 0.8;
+}
+
+.AttrDataWindow {
+    @extend .container;
+    position: absolute;
+    top: 30vh;
+    left: 50vw;
+    margin-left: -270px;
+    width: 560px;
+    min-height: 300px;
+    opacity: 1;
+
+    border-radius: $border-radius;
+    background: $new-gray; //#F4F4F4;
+    box-shadow: $box-shadow-lg;
+
+    padding: $default-space;
+
+    ul {
+        padding: 0;
+        list-style: none;
+    }
+
+    .AttrList {
+        height: 100%;
+        width: 200px;
+        border-right: 1px solid $new-dark-gray;
+        padding: 20px $default-space;
+        text-align: center;
+
+        h2 {
+            padding: 20px 0;
+        }
+
+        ul {
+            li {
+                width: 100%;
+                text-align: center;
+                padding-bottom: 10px;
+
+                &:hover, &.Active {
+                    text-decoration: underline;
+                    font-size: 600;
+                }
+            }
+        }
+    }
+
+    .AttrItemList {
+        position: relative;
+        height: 100%;
+        width: 300px;
+        border-right: $new-darker-gray;
+        padding-left: $default-space;
+        padding-top: 20px;
+        padding-right: $default-space;
+        margin-right: $default-space;
+
+        ul {
+            padding: 20px 0 0 10px;
+            
+            li {
+                padding-bottom: 10px;
+
+                .ListDeleteButton {
+                    margin: 0 0 0 5px;
+                    @extend .iconButton;
+                }
+
+                .ListAddButton {
+                    margin: 9px 0 0 -33px;
+                    @extend .iconButton;
+                }
+            }
+
+            .Input {
+                margin: 10px 0 0 10px;
+            }
+        }
+    }
+
+    .CloseButton {
+        @extend .iconButton;
+
+        position: absolute;
+        right: -20px;
+        top: -15px;
+        
+    }
+}

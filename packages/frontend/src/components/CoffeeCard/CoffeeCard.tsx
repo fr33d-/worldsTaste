@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import React, { Component, FormEventHandler, FormEvent, ChangeEvent } from 'react';
 import { Col, Form, Row, Button, FormControlProps, FormControl } from 'react-bootstrap';
 import LocalStyles from './CoffeeCard.module.scss';
+import axios from 'axios';
 
 // import Styles from '../../index.module.scss';
 
@@ -23,8 +24,26 @@ export type CoffeeEntry = {
     roasted: string;
 };
 
+export type CoffeeKind = {
+    id: number;
+    name: string;
+};
+
+export type CoffeeRoasted = {
+    id: number;
+    name: string;
+};
+
+export type CoffeeOrigin = {
+    id: number;
+    name: string;
+};
+
 type CoffeeCardProps = {
     entry: CoffeeEntry;
+    kinds: CoffeeKind[];
+    origins: CoffeeOrigin[];
+    roasteds: CoffeeRoasted[];
     saveFunction(post: CoffeeEntry): void;
     deleteFunction(id: number): void;
 };
@@ -39,16 +58,26 @@ type DropdownComponentProps = {
     label: string;
     items: string[];
     onChange(event: FormEvent<Required<FormControlProps>>): void;
+    selectedItem: number;
 };
 
-const DropdownColumn = ({ items, label, onChange }: DropdownComponentProps) => (
+const DropdownColumn = ({ items, label, onChange, selectedItem }: DropdownComponentProps) => (
     <Col>
         <Form.Label>{label}</Form.Label>
         <Form.Group>
             <Form.Control as="select" onChange={onChange}>
-                {items.map((item, i) => (
-                    <option key={i}>{item}</option>
-                ))}
+                <option>unknown</option>
+                {items.map((item, i) => {
+                    if (i === selectedItem) {
+                        return (
+                            <option key={i} selected>
+                                {item}
+                            </option>
+                        );
+                    } else {
+                        return <option key={i}>{item}</option>;
+                    }
+                })}
             </Form.Control>
         </Form.Group>
     </Col>
@@ -63,7 +92,7 @@ export class CoffeeCard extends Component<CoffeeCardProps, CoffeeCardState> {
 
     public constructor(props: CoffeeCardProps) {
         super(props);
-        console.log(this.props.entry);
+        // console.log(this.props.entry);
     }
 
     public toggleCard = () => {
@@ -76,15 +105,44 @@ export class CoffeeCard extends Component<CoffeeCardProps, CoffeeCardState> {
     };
 
     public saveCard = () => {
-        this.setState({ edit: false });
+        if (this.state.entry.id === 0) {
+            this.createCard();
+        } else {
+            this.updateCard();
+        }
+    };
 
-        console.log('try to save new card');
-        this.props.saveFunction(this.state.entry);
+    public updateCard = () => {
+        axios
+            .put(`http://localhost:4000/coffee/${this.state.entry.id}`, { ...this.state.entry })
+            .then((response) => {
+                console.log(response);
+                this.setState({ edit: false });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
+    public createCard = () => {
+        axios
+            .post('http://localhost:4000/coffee', { ...this.state.entry })
+            .then((response) => {
+                console.log(response);
+                this.setState({ edit: false });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
+    public cancleEdit = () => {
+        this.setState({ edit: false, entry: this.props.entry });
     };
 
     public deleteCard = () => {
         this.props.deleteFunction(this.state.entry.id);
-    }
+    };
 
     public handleNameChange = (event: FormEvent<Required<FormControlProps>>) => {
         const value = event.currentTarget.value;
@@ -120,7 +178,15 @@ export class CoffeeCard extends Component<CoffeeCardProps, CoffeeCardState> {
     public render() {
         const { expanded, edit } = this.state;
         const { id, images, name, description, origin, rating, kind, roasted } = this.state.entry;
-        const { deleteFunction } = this.props;
+        const { kinds, roasteds, origins } = this.props;
+
+        let roastedsStrings: string[] = [];
+        let originsStrings: string[] = [];
+        let kindsStrings: string[] = [];
+
+        roasteds.map((item) => roastedsStrings.push(item.name));
+        kinds.map((item) => kindsStrings.push(item.name));
+        origins.map((item) => originsStrings.push(item.name));
 
         return (
             <>
@@ -141,17 +207,25 @@ export class CoffeeCard extends Component<CoffeeCardProps, CoffeeCardState> {
                         )}
                         {edit && (
                             <>
+                                <button onClick={this.cancleEdit}>
+                                    <FontAwesomeIcon icon="save" /> Cancle
+                                </button>
                                 <button onClick={this.saveCard}>
-                                    <FontAwesomeIcon icon="save" />
+                                    <FontAwesomeIcon icon="save" /> Save
                                 </button>
                             </>
                         )}
                         <button onClick={this.deleteCard}>
-                            <FontAwesomeIcon icon="trash-alt" />
+                            {!edit && <FontAwesomeIcon icon="trash-alt" />}
+                            {edit && (
+                                <>
+                                    <FontAwesomeIcon icon="trash-alt" /> Delete{' '}
+                                </>
+                            )}
                         </button>
                         <button onClick={this.toggleCard}>
-                            {!expanded && <FontAwesomeIcon icon="chevron-down" />}
-                            {expanded && <FontAwesomeIcon icon="chevron-up" />}
+                            {!expanded && !edit && <FontAwesomeIcon icon="chevron-down" />}
+                            {expanded && !edit && <FontAwesomeIcon icon="chevron-up" />}
                         </button>
                     </div>
                     <div className={LocalStyles.CoffeeCardImageSection}>
@@ -188,29 +262,31 @@ export class CoffeeCard extends Component<CoffeeCardProps, CoffeeCardState> {
                                     <Row>
                                         <DropdownColumn
                                             label="Herkunft"
-                                            items={['Hawaii', 'Mexico', 'Puerto Rico', 'Guatemala']}
+                                            items={originsStrings}
                                             onChange={this.handleOriginChange}
+                                            //Todo: hier müsste die nummer stehen des tabelleneintrags
+                                            // und nicht der string des namesn
+                                            selectedItem={0}
                                         />
                                         <DropdownColumn
                                             label="Art"
-                                            items={['Leichter Kaffee', 'Starker Kaffe', 'Espresso', 'Starker Espresso']}
+                                            items={kindsStrings}
                                             onChange={this.handleKindChange}
+                                            selectedItem={0}
                                         />
                                     </Row>
                                     <Row>
                                         <DropdownColumn
                                             label="Rösterei"
-                                            items={[
-                                                'Roesstrommel - Nuremberg',
-                                                'Vits - Munich',
-                                                'Gang und Gaebe - Munich',
-                                            ]}
+                                            items={roastedsStrings}
                                             onChange={this.handleRoastChange}
+                                            selectedItem={0}
                                         />
                                         <DropdownColumn
                                             label="Bewertung"
                                             items={['1', '2', '3', '4', '5']}
                                             onChange={this.handleRatingChange}
+                                            selectedItem={rating}
                                         />
                                     </Row>
                                     <Row>
@@ -231,7 +307,7 @@ export class CoffeeCard extends Component<CoffeeCardProps, CoffeeCardState> {
                             <>
                                 <h2>{name}</h2>
                                 <p>
-                                    <span>Herkunft:</span> {origin}
+                                    <span>Herkunft:</span> {origin} {/* Todo: Hier müsste nicht der eintrag sthen sondern die nummer aus dem array aller origins die in der db steht, bei 0 unknown  */}
                                 </p>
                                 <p>
                                     <span>Art:</span> {kind}

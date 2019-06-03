@@ -1,20 +1,25 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios';
 import React, { Component } from 'react';
-import { Button, Col, Form, Row } from 'react-bootstrap';
+import { Col, Form, Row } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router';
+import { AttrDataType, AttrDataWindow } from '../AttrDataWindow';
 import { CoffeeCard, CoffeeEntry } from '../CoffeeCard';
 import { Navigationbar } from '../Navigationbar';
-import { SideMenuItem, Sidemenu } from '../Sidemenu';
+import { Sidemenu } from '../Sidemenu';
 import LocalStyles from './Coffee.module.scss';
-import axios from 'axios';
 
 export type CoffeeProps = RouteComponentProps;
 
 export type CoffeeBaseState = {
     posts: CoffeeEntry[];
-    menu: SideMenuItem[];
+    menu: AttrDataType[];
     filter: string;
     loading: boolean;
+    coffeeKinds: AttrDataType[];
+    coffeeRoateds: AttrDataType[];
+    coffeeOrigins: AttrDataType[];
+    displayAttrMenu: boolean;
 };
 
 export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
@@ -23,6 +28,10 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
         menu: [],
         filter: '',
         loading: false,
+        coffeeKinds: [],
+        coffeeOrigins: [],
+        coffeeRoateds: [],
+        displayAttrMenu: false,
     };
 
     public deletePost = (id: number) => {
@@ -61,64 +70,78 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
     };
 
     public saveNewCard = (post: CoffeeEntry) => {
-        console.log('Save new card: ');
-        console.log(post);
-
         axios
             .post('http://localhost:4000/coffee', { ...post })
             .then((response) => {
                 console.log(response);
-
-                // this.setState({
-                //     posts: response.data,
-                //     loading: false,
-                // });
             })
             .catch((error) => {
-                // handle error
                 console.log(error);
             });
     };
 
-    public componentDidMount() {
-        this.setState({
-            filter: 'Coffee by region',
-            menu: [
-                { id: 1, name: 'Hawaii', count: 0 },
-                { id: 2, name: 'Mexico', count: 0 },
-                { id: 3, name: 'Puerto Rico', count: 0 },
-                { id: 4, name: 'Guatemala', count: 0 },
-                { id: 5, name: 'Costa Rica', count: 0 },
-                { id: 6, name: 'Colombia', count: 0 },
-                { id: 7, name: 'Brazil', count: 0 },
-                { id: 7, name: 'Ethiopia', count: 0 },
-                { id: 9, name: 'Kenya', count: 0 },
-                { id: 10, name: 'Ivory Coast', count: 0 },
-                { id: 11, name: 'Yemen', count: 0 },
-                { id: 12, name: 'Indonesia', count: 0 },
-                { id: 13, name: 'Vietnam', count: 0 },
-            ],
-        });
+    public toggleAttrMenu = () => {
+        if (this.state.displayAttrMenu === true) {
+            this.initiateData();
+        }
+        this.setState((oldState) => ({
+            displayAttrMenu: !oldState.displayAttrMenu,
+        }));
+    };
 
-        axios
-            .get<CoffeeEntry[]>('http://localhost:4000/coffee')
-            .then((response) => {
-                // handle success
-                console.log(response);
+    public initiateData() {
+        const coffeesPromise = axios.get<CoffeeEntry[]>('http://localhost:4000/coffee');
+        const kindsPromise = axios.get<AttrDataType[]>('http://localhost:4000/coffeeAttrs/kinds');
+        const originsPromise = axios.get<AttrDataType[]>('http://localhost:4000/coffeeAttrs/origins');
+        const roastedsPromise = axios.get<AttrDataType[]>('http://localhost:4000/coffeeAttrs/roasteds');
 
+        Promise.all([coffeesPromise, kindsPromise, originsPromise, roastedsPromise])
+            .then((responses) => {
+                console.log(responses[0].data);
                 this.setState({
-                    posts: response.data,
+                    posts: responses[0].data,
+                    coffeeKinds: responses[1].data,
+                    coffeeOrigins: responses[2].data,
+                    coffeeRoateds: responses[3].data,
                     loading: false,
+                    filter: 'Coffee by origin',
+                    menu: responses[2].data,
                 });
             })
             .catch((error) => {
-                // handle error
                 console.log(error);
             });
     }
 
+    public componentDidMount() {
+        this.initiateData();
+    }
+
     public render() {
-        const { posts, menu, filter } = this.state;
+        const { posts, menu, filter, coffeeKinds, coffeeOrigins, coffeeRoateds, displayAttrMenu } = this.state;
+        const attrData = [
+            {
+                id: 1,
+                name: 'Arten',
+                urlSubstring: 'kinds',
+                description: 'Kaffee Arten',
+                items: coffeeKinds,
+            },
+            {
+                id: 2,
+                name: 'Herkünfte',
+                urlSubstring: 'origins',
+                description: 'Kaffee herkunfts Länder',
+                items: coffeeOrigins,
+            },
+            {
+                id: 3,
+                name: 'Röstereien',
+                urlSubstring: 'roasteds',
+                description: 'Kaffee Röstereien',
+                items: coffeeRoateds,
+            },
+        ];
 
         return (
             <>
@@ -141,9 +164,10 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                                                 <option disabled selected>
                                                     Sort by
                                                 </option>
-                                                <option>Origin</option>∏<option>Rostary</option>
+                                                <option>Origin</option>
+                                                <option>Rostary</option>
                                                 <option>Raging</option>
-                                                <option>Flavor</option>
+                                                <option>Kind</option>
                                             </Form.Control>
                                         </Form.Group>
                                     </Col>
@@ -156,17 +180,17 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                                                 <option>Origin</option>
                                                 <option>Rostary</option>
                                                 <option>Raging</option>
-                                                <option>Flavor</option>
+                                                <option>Kind</option>
                                             </Form.Control>
                                         </Form.Group>
                                     </Col>
                                     <Col>
                                         <Form.Control placeholder="Search" />
                                     </Col>
-                                    {/* <Button variant="add" size='lg'>
-                                <FontAwesomeIcon icon="plus" />
-                            </Button> */}
                                     <Col>
+                                        <button className="add-button big" onClick={this.toggleAttrMenu}>
+                                            <FontAwesomeIcon icon="database" />
+                                        </button>
                                         <button className="add-button big" onClick={this.createCard}>
                                             <FontAwesomeIcon icon="plus" />
                                         </button>
@@ -184,6 +208,9 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                                                 key={post.id}
                                                 saveFunction={this.saveNewCard}
                                                 deleteFunction={this.deletePost}
+                                                kinds={coffeeKinds}
+                                                roasteds={coffeeRoateds}
+                                                origins={coffeeOrigins}
                                             />
                                         );
                                     })}
@@ -191,6 +218,7 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                         </div>
                     </div>
                 </div>
+                {displayAttrMenu && <AttrDataWindow content={attrData} toggleFunktion={this.toggleAttrMenu} />}
             </>
         );
     }

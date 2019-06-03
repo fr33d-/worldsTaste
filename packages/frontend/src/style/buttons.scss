@@ -7,6 +7,7 @@
 .add-button, .btn-add {
     border: 1px solid $icon-button-color;
     color: $icon-button-color;
+    margin-left: 10px;
 
     &.btn-ls, &.big {
         height: 48px;

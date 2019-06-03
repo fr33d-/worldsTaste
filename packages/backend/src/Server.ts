@@ -9,6 +9,7 @@ import { usersRoute } from "./routes/UsersRoute";
 import { coffeeRoute } from "./routes/CoffeeRoute";
 import { errorLoggerMiddleware, errorMiddleware } from "./utils/ErrorHandlerUtil";
 import { createLogger } from "./utils/LoggerUtil";
+import { coffeeAttrsRoute } from "./routes/CoffeeAttrsRouts";
 
 // Export all necessary Dtos to make them accessible from the frontend
 export * from "./models/dtos/UserDto";
@@ -32,7 +33,7 @@ createConnection()
         // This enables CORS for ALL (!) origins. Before moving to production you MUST restrict this with a proper and
         // safe configuration!
         // https://expressjs.com/en/resources/middleware/cors.html
-        server.use(cors());
+        server.use(cors({exposedHeaders: ['Location']}));
 
         // Root route
         server.get("/", (_, result) => result.sendStatus(httpStatusCodes.FORBIDDEN));
@@ -40,6 +41,7 @@ createConnection()
         // Application routes
         server.use("/users", usersRoute);
         server.use("/coffee", coffeeRoute);
+        server.use("/coffeeAttrs", coffeeAttrsRoute);
 
         // 404 - Not Found
         server.use((_, result) => result.sendStatus(httpStatusCodes.NOT_FOUND));

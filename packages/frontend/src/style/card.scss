@@ -19,26 +19,25 @@
 
     background-color: $card-bg-color;
 
-    transition: width 300ms ease-in-out, 
-                height 500ms ease-in-out, 
-                max-height 500ms ease-in-out, 
-                box-shadow 300ms cubic-bezier(.5,0,.5,.99), // ease-in-out, 
-                margin 300ms cubic-bezier(.5,0,.5,.99); //ease-in-out;
+    transition: width 300ms ease-in-out, height 500ms ease-in-out, max-height 500ms ease-in-out,
+        box-shadow 300ms cubic-bezier(0.5, 0, 0.5, 0.99),
+        // ease-in-out,
+            margin 300ms cubic-bezier(0.5, 0, 0.5, 0.99); //ease-in-out;
 
     &:hover {
         @extend .cardActive;
     }
-    
+
     &GoTo {
-        background: radial-gradient(circle at top, #0ebdff 0%,#1414ae 100%); 
+        background: radial-gradient(circle at top, #0ebdff 0%, #1414ae 100%);
         padding-top: 80px;
         border: none;
     }
 
     a {
         font-size: 24px;
-        line-height: 1.70;
-        color: #025AA5;
+        line-height: 1.7;
+        color: #025aa5;
         text-decoration: none;
     }
 }
@@ -59,4 +58,11 @@
     top: 0;
     left: 0;
     width: calc(50vw - 400px);
+}
+
+.iconButton {
+    background: none;
+    border: none;
+    color: $new-dark-gray;
+    padding: 0;
 }

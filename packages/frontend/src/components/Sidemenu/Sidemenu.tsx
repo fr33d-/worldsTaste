@@ -5,7 +5,6 @@ import LocalStyles from './Sidemenu.module.scss';
 export class SideMenuItem {
     id: number = 0;
     name: string = 'Name';
-    count: number = 0;
 }
 
 export type SidemenuProps = {
@@ -36,7 +35,7 @@ export class Sidemenu extends Component<SidemenuProps> {
                         ) : (
                             content.map((entry, i) => (
                                 <li key={i}>
-                                    {entry.name} <span>{entry.count}</span>
+                                    {entry.name}
                                 </li>
                             ))
                         )}

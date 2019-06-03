@@ -17,6 +17,8 @@ import {
     faBeer,
     faRocket,
     faBook,
+    faTimes,
+    faDatabase,
 } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
@@ -38,7 +40,9 @@ library.add(
     faBeer,
     faLink,
     faRocket,
-    faBook
+    faBook,
+    faTimes,
+    faDatabase,
 );
 import { MainMenu } from '../../data';
 import { MainNavigator } from '../MainNavigator';
