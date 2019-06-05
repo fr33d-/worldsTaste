@@ -26,7 +26,7 @@ const log = createLogger('api:controllers:coffee');
 export const getAllCoffees: RequestHandler = async (_, result) => {
     log(`GET /coffee`);
 
-    const coffeeEntities = await CoffeeEntity.find();
+    const coffeeEntities = await CoffeeEntity.find({relations: ['origin', 'kind', 'roasted']});
     result.status(httpStatusCodes.OK).json(coffeeEntities.map(CoffeeDto.fromEntity));
 };
 
@@ -38,7 +38,10 @@ export const getCoffeeById: RequestHandler = async (request, result) => {
 
     log(`GET /coffee/:id (id = ${requestParams.id})`);
 
-    const coffeeEntity = await CoffeeEntity.findOne({ where: { id: requestParams.id } });
+    const coffeeEntity = await CoffeeEntity.findOne({
+        where: { id: requestParams.id },
+        relations: ['origin', 'kind', 'roasted'],
+    });
 
     if (coffeeEntity !== undefined) {
         result.status(httpStatusCodes.OK).json(new CoffeeDto(coffeeEntity));
@@ -107,4 +110,3 @@ export const updateCoffeeById: RequestHandler = async (request, result) => {
         result.sendStatus(httpStatusCodes.NOT_FOUND);
     }
 };
-

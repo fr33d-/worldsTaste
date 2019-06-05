@@ -29,15 +29,15 @@ export class CoffeeEntity extends BaseEntity {
     // @Column()
     // public roasted!: string;
 
-    @ManyToOne(type => CoffeeOriginEntity)
-    @JoinColumn({ name: "originId" })
-    public originId!: CoffeeOriginEntity;
+    @ManyToOne(type => CoffeeOriginEntity, coffeeOrigin => coffeeOrigin.id)
+    @JoinColumn({ name: "origin" })
+    public origin!: CoffeeOriginEntity;
 
-    @ManyToOne(type => CoffeeKindEntity)
-    @JoinColumn({ name: "kindId" })
-    public kindId!: CoffeeOriginEntity;
+    @ManyToOne(type => CoffeeKindEntity, coffeeKind => coffeeKind.id)
+    @JoinColumn({ name: "kind" })
+    public kind!: CoffeeOriginEntity;
 
-    @ManyToOne(type => CoffeeRoastedEntity)
-    @JoinColumn({ name: "roastedId" })
-    public roastedId!: CoffeeOriginEntity;
+    @ManyToOne(type => CoffeeRoastedEntity, coffeeRoasted => coffeeRoasted.id)
+    @JoinColumn({ name: "roasted" })
+    public roasted!: CoffeeOriginEntity;
 }

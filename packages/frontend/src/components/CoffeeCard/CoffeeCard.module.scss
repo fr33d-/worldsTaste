@@ -10,6 +10,7 @@
     position: relative;
     max-height: 260px;
     border: none;
+    padding: 0;
 
     &.Extended, &.Edit {
         @extend .cardActive;
@@ -27,23 +28,21 @@
     }
 
     &ImageSection {
-        width: 200px;
-        margin-right: $default-space;
+        width: 250px;
+        height: 250px;
 
         img {
             width: 100px;
-            border-radius: 12px;
-            margin-bottom: 10px;
 
             &:first-of-type {
-                width: 200px;
+                width: 250px;
             }
         }
     }
 
     &TextSection {
         border-left: 1px solid rgba($color: #000000, $alpha: 0.4);
-        padding-left: $default-space;
+        padding: $default-space;
 
         display: flex;
         flex-direction: row;

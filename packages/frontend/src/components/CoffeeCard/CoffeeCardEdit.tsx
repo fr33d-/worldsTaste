@@ -8,70 +8,25 @@ import { DropdownColumn } from '../DropdownColumn';
 import LocalStyles from './CoffeeCard.module.scss';
 import coffeePlaceImage_small from './coffeePlaceImage_small.jpeg';
 import { SaveButton } from '../IconButton';
+import { CoffeeEntry, CoffeeKind, CoffeeOrigin, CoffeeRoasted } from '.';
 
-// import Styles from '../../index.module.scss';
-
-export type Image = {
-    name: string;
-    url: string;
-    alt?: string;
-};
-
-export type CoffeeEntry = {
-    id: number;
-    images?: Image[];
-    name: string;
-    description: string;
-    origin: AttrDataItemType;
-    rating: number;
-    kind: AttrDataItemType;
-    roasted: AttrDataItemType;
-};
-
-export type CoffeeKind = {
-    id: number;
-    name: string;
-};
-
-export type CoffeeRoasted = {
-    id: number;
-    name: string;
-};
-
-export type CoffeeOrigin = {
-    id: number;
-    name: string;
-};
-
-type CoffeeCardProps = {
+type CoffeeCardEditProps = {
     entry: CoffeeEntry;
     kinds: CoffeeKind[];
     origins: CoffeeOrigin[];
     roasteds: CoffeeRoasted[];
     saveFunction(post: CoffeeEntry): void;
     deleteFunction(id: number): void;
+    close(): void;
 };
 
-type CoffeeCardState = {
-    expanded: boolean;
-    edit: boolean;
+type CoffeeCardEditState = {
     entry: CoffeeEntry;
 };
 
-export class CoffeeCard extends Component<CoffeeCardProps, CoffeeCardState> {
-    public readonly state: CoffeeCardState = {
-        expanded: false,
-        edit: this.props.entry.name === '',
+export class CoffeeCardEdit extends Component<CoffeeCardEditProps, CoffeeCardEditState> {
+    public readonly state: CoffeeCardEditState = {
         entry: this.props.entry,
-    };
-
-    public toggleCard = () => {
-        this.setState((state) => ({ expanded: !state.expanded }));
-        console.log('toggled');
-    };
-
-    public editCard = () => {
-        this.setState({ edit: true });
     };
 
     public saveCard = () => {
@@ -86,8 +41,7 @@ export class CoffeeCard extends Component<CoffeeCardProps, CoffeeCardState> {
         axios
             .put(`http://localhost:4000/coffee/${this.state.entry.id}`, { ...this.state.entry })
             .then((response) => {
-                console.log(response);
-                this.setState({ edit: false });
+                this.props.close();
             })
             .catch((error) => {
                 console.log(error);
@@ -99,7 +53,7 @@ export class CoffeeCard extends Component<CoffeeCardProps, CoffeeCardState> {
             .post('http://localhost:4000/coffee', { ...this.state.entry })
             .then((response) => {
                 console.log(response);
-                this.setState({ edit: false });
+                this.props.close();
             })
             .catch((error) => {
                 console.log(error);
@@ -107,7 +61,7 @@ export class CoffeeCard extends Component<CoffeeCardProps, CoffeeCardState> {
     };
 
     public cancleEdit = () => {
-        this.setState({ edit: false, entry: this.props.entry });
+        this.props.close();
     };
 
     public deleteCard = () => {
@@ -158,63 +112,39 @@ export class CoffeeCard extends Component<CoffeeCardProps, CoffeeCardState> {
         }
     };
 
-    // tslint:disable:max-func-body-length
     public render() {
-        const { expanded, edit } = this.state;
         const { id, images, name, description, origin, rating, kind, roasted } = this.state.entry;
         const { kinds, roasteds, origins } = this.props;
 
         return (
             <>
                 <div
-                    className={classnames(
-                        LocalStyles.CoffeeCard,
-                        expanded && LocalStyles.Extended,
-                        edit && LocalStyles.Edit
-                    )}
+                    className={classnames( LocalStyles.CoffeeCard, LocalStyles.Edit )}
                 >
                     <div className={LocalStyles.CoffeeCardActionSection}>
-                        {edit ? (
+                        {(
                             <>
                                 <button onClick={this.cancleEdit}>
                                     <FontAwesomeIcon icon="save" /> Cancle
                                 </button>
                                 <SaveButton withText />
                             </>
-                        ) : (
-                            <button onClick={this.editCard}>
-                                <FontAwesomeIcon icon="edit" />
-                            </button>
                         )}
                         <button onClick={this.deleteCard}>
-                            <FontAwesomeIcon icon="trash-alt" />
-                            {edit && 'Delete'}
+                            <FontAwesomeIcon icon="trash-alt" /> Delete
                         </button>
-                        {!edit && (
-                            <button onClick={this.toggleCard}>
-                                <FontAwesomeIcon icon={expanded ? 'chevron-up' : 'chevron-down'} />
-                            </button>
-                        )}
                     </div>
                     <div className={LocalStyles.CoffeeCardImageSection}>
-                        {edit && (
-                            <Button variant="outline-secondary">
-                                <FontAwesomeIcon icon="upload" />
-                            </Button>
-                        )}
+                        <Button variant="outline-secondary">
+                            <FontAwesomeIcon icon="upload" />
+                        </Button>
 
-                        {images !== undefined && images.length > 0 ? (
-                            <>
-                                {expanded ? (
-                                    images.map((img, i) => <img src={img.url} alt={img.alt} key={i} />)
-                                ) : (
-                                     <img src={images[0].url} alt={images[0].alt} />
-                                )}
-                            </>
-                        ) : ( !edit && <img src={coffeePlaceImage_small} />)}
+                        {images !== undefined && images.length > 0 && (
+                            images.map((img, i) => <img src={img.url} alt={img.alt} key={i} />)
+                        )}
                     </div>
                     <div className={LocalStyles.CoffeeCardTextSection}>
-                        {edit && (
+                        {(
                             <>
                                 <Form>
                                     <Row>
@@ -274,28 +204,6 @@ export class CoffeeCard extends Component<CoffeeCardProps, CoffeeCardState> {
                                         </Col>
                                     </Row>
                                 </Form>
-                            </>
-                        )}
-                        {!edit && (
-                            <>
-                                <h2>{name}</h2>
-                                <p>
-                                    <span>Herkunft:</span> {origin.name}
-                                </p>
-                                <p>
-                                    <span>Art:</span> {kind.name}
-                                </p>
-                                <p>
-                                    <span>Geröstet in:</span> {roasted.name}
-                                </p>
-                                <p>
-                                    <span>Raging:</span> {rating}/5
-                                </p>
-                                <p className={LocalStyles.Description}>
-                                    <span>Beschreibung:</span>
-                                    <br />
-                                    {expanded ? description : `${description.substring(0, 200)} ...`}
-                                </p>
                             </>
                         )}
                     </div>

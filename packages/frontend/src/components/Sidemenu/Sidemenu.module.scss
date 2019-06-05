@@ -1,5 +1,6 @@
 @import '../../bootstrap.scss';
 @import '../../style/card.scss';
+@import '../../style/fonts.scss';
 
 .Sidemenu {
     position: fixed;
@@ -14,20 +15,33 @@
     }
 
     .MenuList {
-        ul {
-            padding-left: 15px;
-        }
+        padding-left: 15px;
 
         li {
+            @extend h4;
             list-style: none;
+            cursor: pointer;
 
-            font-size: 16px;
-            line-height: 28px;
+            &.active {
 
-            span {
-                color: $brand-light-gray;
-                margin-left: 5px;
-                font-size: 12px;
+                ul {
+                    max-height: 500px;
+                }
+            }
+        }
+
+        .MenuSubList {
+            padding: 0 0 0 10px;
+            margin-left: 10px;
+            max-height: 0px;
+            overflow: hidden;
+
+            transition: max-height 700ms ease-in-out;
+
+            li {
+                @extend h5;
+                list-style: disc;
+                cursor: pointer;
             }
         }
     }

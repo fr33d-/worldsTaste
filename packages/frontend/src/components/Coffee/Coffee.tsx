@@ -5,6 +5,7 @@ import { Col, Form, Row } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router';
 import { AttrDataType, AttrDataWindow } from '../AttrDataWindow';
 import { CoffeeCard, CoffeeEntry } from '../CoffeeCard';
+import { IconButton } from '../IconButton';
 import { Navigationbar } from '../Navigationbar';
 import { Sidemenu } from '../Sidemenu';
 import LocalStyles from './Coffee.module.scss';
@@ -55,14 +56,14 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
         this.setState((state) => ({
             posts: [
                 {
-                    id: 0, //state.posts.length + 1,
+                    id: 0,
                     images: [],
                     name: '',
                     description: '',
-                    origin: '',
-                    rating: 1,
-                    kind: '',
-                    roasted: '',
+                    origin: { id: 0, name: 'unknown' },
+                    rating: 0,
+                    kind: { id: 0, name: 'unknown' },
+                    roasted: { id: 0, name: 'unknown' },
                 },
                 ...state.posts,
             ],
@@ -104,7 +105,7 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                     coffeeOrigins: responses[2].data,
                     coffeeRoateds: responses[3].data,
                     loading: false,
-                    filter: 'Coffee by origin',
+                    filter: 'origin',
                     menu: responses[2].data,
                 });
             })
@@ -117,8 +118,9 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
         this.initiateData();
     }
 
+    // tslint:disable-next-line: max-func-body-length
     public render() {
-        const { posts, menu, filter, coffeeKinds, coffeeOrigins, coffeeRoateds, displayAttrMenu } = this.state;
+        const { posts, coffeeKinds, coffeeOrigins, coffeeRoateds, displayAttrMenu } = this.state;
         const attrData = [
             {
                 id: 1,
@@ -143,6 +145,22 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
             },
         ];
 
+        const filterMenu = [
+            { name: 'Herkunft', content: coffeeOrigins },
+            { name: 'Arten', content: coffeeKinds },
+            { name: 'Röstereien', content: coffeeRoateds },
+            {
+                name: 'Bewertung',
+                content: [
+                    { id: 1, name: '1' },
+                    { id: 2, name: '2' },
+                    { id: 3, name: '3' },
+                    { id: 4, name: '4' },
+                    { id: 5, name: '5' },
+                ],
+            },
+        ];
+
         return (
             <>
                 <div className={LocalStyles.BackgroundHelper} />
@@ -150,27 +168,13 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                 <div className={`container`}>
                     <div className="row">
                         <Sidemenu
-                            content={menu}
-                            filter={filter}
+                            filter={filterMenu}
                             header={'Blog of Coffee'}
                             icon={<FontAwesomeIcon icon="mug-hot" size="3x" color="#8B572A" />}
                         />
                         <div className={`col-9`}>
                             <div className={`${LocalStyles.Filter}`}>
                                 <Row>
-                                    <Col>
-                                        <Form.Group controlId="exampleForm.ControlSelect1">
-                                            <Form.Control as="select">
-                                                <option disabled selected>
-                                                    Sort by
-                                                </option>
-                                                <option>Origin</option>
-                                                <option>Rostary</option>
-                                                <option>Raging</option>
-                                                <option>Kind</option>
-                                            </Form.Control>
-                                        </Form.Group>
-                                    </Col>
                                     <Col>
                                         <Form.Group controlId="exampleForm.ControlSelect1">
                                             <Form.Control as="select">
@@ -188,19 +192,19 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                                         <Form.Control placeholder="Search" />
                                     </Col>
                                     <Col>
-                                        <button className="add-button big" onClick={this.toggleAttrMenu}>
-                                            <FontAwesomeIcon icon="database" />
-                                        </button>
-                                        <button className="add-button big" onClick={this.createCard}>
-                                            <FontAwesomeIcon icon="plus" />
-                                        </button>
+                                        <IconButton
+                                            icon="database"
+                                            className="add-button big"
+                                            onClick={this.toggleAttrMenu}
+                                        />
+                                        <IconButton icon="plus" className="add-button big" onClick={this.createCard} />
                                     </Col>
                                 </Row>
                             </div>
                             <div className={`${LocalStyles.CoffeeContainer}`}>
-                                {posts.length === 0 && <p>nothing here</p>}
-                                {posts.length >= 0 &&
-                                    // tslint:disable-next-line: use-simple-attributes
+                                {posts.length === 0 ? (
+                                    <p>nothing here</p>
+                                ) : (
                                     posts.map((post) => {
                                         return (
                                             <CoffeeCard
@@ -213,7 +217,8 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                                                 origins={coffeeOrigins}
                                             />
                                         );
-                                    })}
+                                    })
+                                )}
                             </div>
                         </div>
                     </div>

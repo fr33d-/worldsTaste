@@ -9,19 +9,19 @@ export class CoffeeDto {
     public name: string;
     public description: string;
     public rating: number;
-    public originId: CoffeeOriginEntity;
-    public kindId: CoffeeKindEntity;
-    public roastedId: CoffeeRoastedEntity;
+    public origin: CoffeeOriginEntity;
+    public kind: CoffeeKindEntity;
+    public roasted: CoffeeRoastedEntity;
 
     // This constructs a UserDto from a given UserEntity via new UserDto(userEntity).
-    public constructor({ id, name, description, originId, rating, kindId, roastedId }: CoffeeEntity) {
+    public constructor({ id, name, description, origin, rating, kind, roasted }: CoffeeEntity) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.rating = rating;
-        this.originId = originId;
-        this.kindId = kindId;
-        this.roastedId = roastedId;
+        this.origin = origin;
+        this.kind = kind;
+        this.roasted = roasted;
     }
 
     // This is mostly used in combination with Array.map, since you cannot map a constructor.
