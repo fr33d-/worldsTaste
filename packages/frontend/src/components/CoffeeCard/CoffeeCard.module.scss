@@ -8,9 +8,13 @@
     flex-direction: row;
     overflow: hidden;
     position: relative;
-    max-height: 260px;
+    // max-height: 260px;
     border: none;
     padding: 0;
+
+    @include media-breakpoint-down(sm) {
+        flex-direction: column;
+    }
 
     &.Extended, &.Edit {
         @extend .cardActive;
@@ -22,6 +26,10 @@
         top: 15px;
         right: 15px;
 
+        @include media-breakpoint-down(sm) {
+            top: 265px;
+        }
+
         button {
             @extend .icon-button;
         }
@@ -30,6 +38,13 @@
     &ImageSection {
         width: 250px;
         height: 250px;
+
+        @include media-breakpoint-down(sm) {
+            width: 100%;
+            background: $new-darker-gray;
+            min-width: 250px;
+            text-align: center;
+        }   
 
         img {
             width: 100px;
@@ -41,8 +56,8 @@
     }
 
     &TextSection {
-        border-left: 1px solid rgba($color: #000000, $alpha: 0.4);
-        padding: $default-space;
+        // border-left: 1px solid rgba($color: #000000, $alpha: 0.4);
+        margin: $default-space;
 
         display: flex;
         flex-direction: row;

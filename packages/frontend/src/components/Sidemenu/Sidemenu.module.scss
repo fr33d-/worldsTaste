@@ -5,6 +5,10 @@
 .Sidemenu {
     position: fixed;
 
+    @include media-breakpoint-down(md) {
+        display: none;
+    }
+
     h1 {
         margin-bottom: 40px;
         width: $sub-menu-with;
@@ -23,7 +27,6 @@
             cursor: pointer;
 
             &.active {
-
                 ul {
                     max-height: 500px;
                 }
@@ -49,8 +52,16 @@
 
 .BackgroundHelper {
     @extend .backgroundHelper;
+
+    @include media-breakpoint-down(md) {
+        display: none;
+    }
 }
 
 .Background {
     @extend .background;
+
+    @include media-breakpoint-down(md) {
+        display: none;
+    }
 }

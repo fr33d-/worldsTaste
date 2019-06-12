@@ -1,13 +1,22 @@
 @import '../../bootstrap.scss';
 @import '../../style/card.scss';
 
+
 .CoffeeContainer {
     margin-top: 50px;
     margin-left: -60px;
+    
+    @include media-breakpoint-down(768px) {
+        margin-left: 0;
+    }
 }
 
 .BackgroundHelper {
     @extend .backgroundHelper;
+
+    @include media-breakpoint-down(md) {
+        display: none;
+    }
 }
 
 .Filter {
@@ -17,5 +26,17 @@
 
     select {
         width: 150px;
+    }
+}
+
+.MobileHeader {
+    margin-bottom: $default-space;
+
+    @include media-breakpoint-up(lg) {
+        display: none;
+    }
+
+    svg {
+        margin-right: 20px;
     }
 }

@@ -1,15 +1,15 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
+import classNames from 'classnames';
 import React, { Component } from 'react';
-import { Col, Form, Row, Button } from 'react-bootstrap';
+import { Col, Form, Row } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router';
 import { AttrDataType, AttrDataWindow } from '../AttrDataWindow';
 import { CoffeeCard, CoffeeEntry } from '../CoffeeCard';
-import { IconButton } from '../IconButton';
+import { Footer } from '../Footer';
 import { Navigationbar } from '../Navigationbar';
 import { Sidemenu } from '../Sidemenu';
 import LocalStyles from './Coffee.module.scss';
-import { Footer } from '../Footer';
 
 export type CoffeeProps = RouteComponentProps;
 
@@ -164,16 +164,20 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
 
         return (
             <>
-                <div className={LocalStyles.BackgroundHelper} />
+                <div className={LocalStyles.BackgromdundHelper} />
                 <Navigationbar />
                 <div className={`container`}>
+                    <div className={classNames('row', LocalStyles.MobileHeader)}>
+                        <FontAwesomeIcon icon="mug-hot" size="4x" color="#8B572A" />
+                        <h1>Blog of Coffee</h1>
+                    </div>
                     <div className="row">
                         <Sidemenu
                             filter={filterMenu}
                             header={'Blog of Coffee'}
                             icon={<FontAwesomeIcon icon="mug-hot" size="3x" color="#8B572A" />}
                         />
-                        <div className={`col-9`}>
+                        <div className={`col-12 col-lg-9`}>
                             <div className={`${LocalStyles.Filter}`}>
                                 <Row>
                                     <Col>
@@ -225,7 +229,7 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                     </div>
                 </div>
                 {displayAttrMenu && <AttrDataWindow content={attrData} toggleFunktion={this.toggleAttrMenu} />}
-                <Footer year='2019' version='0.1' />
+                <Footer year="2019" version="0.1" />
             </>
         );
     }
