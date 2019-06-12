@@ -1,9 +1,9 @@
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
+import { MainMenu } from '../../data';
+import { Footer } from '../Footer';
 import { MainNavigator } from '../MainNavigator';
 import { Navigationbar } from '../Navigationbar';
-import { MainMenuItem, MainMenu } from '../../data';
-import { Form } from 'react-bootstrap';
 
 // Add an untyped version of the RouteComponentProps to the HomeProps which contains the history object we can use to
 // redirect to different routes.
@@ -25,15 +25,7 @@ const HomeBase = (props: HomeProps) => {
         <>
             <Navigationbar />
             <MainNavigator menu={MainMenu} />
-            {/* <div className={`container`}>
-                <div className="row justify-content-right">
-                    <Form className="col-12 col-lg-6 card cardGoTo">
-                        <Form.Group controlId="exampleForm.ControlInput1">
-                            <Form.Control size="lg" type="text" placeholder="Go to" />
-                        </Form.Group>
-                    </Form>
-                </div>
-            </div> */}
+            <Footer year='2019' version='0.1' />
         </>
     );
 };

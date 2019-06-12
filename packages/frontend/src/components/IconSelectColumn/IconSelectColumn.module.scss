@@ -1,0 +1,16 @@
+@import '../../bootstrap.scss';
+@import '../../style/card.scss';
+
+.IconSelect {
+    width: 100%;
+    padding: 10px;
+
+    .LabelIcon {
+        margin-right: 10px;
+    }
+
+    .SelectIcon {
+        margin-right: 5px;
+        z-index: -1;
+    }
+}

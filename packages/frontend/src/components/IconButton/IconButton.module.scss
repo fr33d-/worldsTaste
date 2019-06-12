@@ -1,0 +1,22 @@
+@import '../../bootstrap.scss';
+@import '../../style/card.scss';
+
+.IconButton {
+    @extend .color-button;
+
+    &.Blue {
+        @extend .blue;
+    }
+
+    &.Red {
+        @extend .red;
+    }
+
+    &.Green {
+        @extend .green;
+    }
+
+    &.Yellow {
+        @extend .yellow;
+    }
+}

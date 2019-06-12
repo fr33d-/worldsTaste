@@ -52,27 +52,22 @@
 
         width: 100%;
 
-        form {
-            width: 100%;
-        }
-
         .Description {
             width: 100%;
-            margin-top: 10px;
         }
 
         h2 {
             width: 100%;
             font-size: 20px;
             font-weight: 700;
-            margin-bottom: 12px;
+            margin: 0 0 20px 5px;
             line-height: 24xp;
         }
         
         p {
             font-size: 16px;
             line-height: 24px;
-            margin-bottom: 7px;
+            margin-bottom: 15px;
 
             color: $gray-600;
             width: 50%;
@@ -80,6 +75,9 @@
             span {
                 color: $black;
                 margin-right: 5px;
+                width: 40px;
+                display: inline-block;
+                text-align: center;
             }
         }
     }

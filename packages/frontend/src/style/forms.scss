@@ -1,0 +1,12 @@
+@import '../variables.scss';
+
+.formElement {
+    border-radius: $border-radius-min;
+    background: $new-light-gray;
+    height: 45px;
+    margin-bottom: $line-space;
+    display: block;
+    border: 1px solid $new-dark-gray;
+    width: 100%;
+}
+

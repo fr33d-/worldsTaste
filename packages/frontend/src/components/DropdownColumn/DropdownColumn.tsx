@@ -1,32 +1,51 @@
-import React, { FormEvent } from 'react';
+import React, { FormEvent, ChangeEvent } from 'react';
 import { Col, Form, FormControlProps } from 'react-bootstrap';
 import { AttrDataItemType } from '../AttrDataWindow';
+import LocalStyles from './DropdownColumn.module.scss';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 type DropdownComponentProps = {
-    label: string;
+    label?: string;
+    iconLabel?: IconProp;
+    iconLabelColor?: string;
     items: AttrDataItemType[];
-    onChange(event: FormEvent<Required<FormControlProps>>): void;
+    onChange(event: ChangeEvent<HTMLSelectElement>): void;
     selectedItem: AttrDataItemType;
 };
 
-export const DropdownColumn = ({ items, label, onChange, selectedItem }: DropdownComponentProps) => (
+export const DropdownColumn = ({
+    items,
+    label,
+    onChange,
+    selectedItem,
+    iconLabel,
+    iconLabelColor,
+}: DropdownComponentProps) => (
     <Col>
-        <Form.Label>{label}</Form.Label>
-        <Form.Group>
-            <Form.Control as="select" onChange={onChange}>
-                <option>unknown</option>
+        {label && <label>{label}</label>}
+        <div className={LocalStyles.select}>
+            {iconLabel && (
+                <FontAwesomeIcon icon={iconLabel} color={iconLabelColor} className={LocalStyles.Icon} size="lg" />
+            )}
+            <select onChange={onChange}>
+                <option value="unknown">unknown</option>
                 {items.map((item, i) => {
                     if (item.name === selectedItem.name) {
                         return (
-                            <option key={i} selected>
+                            <option key={i} value={item.name} selected>
                                 {item.name}
                             </option>
                         );
                     } else {
-                        return <option key={i}>{item.name}</option>;
+                        return (
+                            <option key={i} value={item.name}>
+                                {item.name}
+                            </option>
+                        );
                     }
                 })}
-            </Form.Control>
-        </Form.Group>
+            </select>
+        </div>
     </Col>
 );

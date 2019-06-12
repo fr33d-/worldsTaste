@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { Component } from 'react';
-import { Col, Form, Row } from 'react-bootstrap';
+import { Col, Form, Row, Button } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router';
 import { AttrDataType, AttrDataWindow } from '../AttrDataWindow';
 import { CoffeeCard, CoffeeEntry } from '../CoffeeCard';
@@ -9,6 +9,7 @@ import { IconButton } from '../IconButton';
 import { Navigationbar } from '../Navigationbar';
 import { Sidemenu } from '../Sidemenu';
 import LocalStyles from './Coffee.module.scss';
+import { Footer } from '../Footer';
 
 export type CoffeeProps = RouteComponentProps;
 
@@ -192,12 +193,12 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                                         <Form.Control placeholder="Search" />
                                     </Col>
                                     <Col>
-                                        <IconButton
-                                            icon="database"
-                                            className="add-button big"
-                                            onClick={this.toggleAttrMenu}
-                                        />
-                                        <IconButton icon="plus" className="add-button big" onClick={this.createCard} />
+                                        <button className="add-button big" onClick={this.toggleAttrMenu}>
+                                            <FontAwesomeIcon icon="database" />
+                                        </button>
+                                        <button className="add-button big" onClick={this.createCard}>
+                                            <FontAwesomeIcon icon="plus" />
+                                        </button>
                                     </Col>
                                 </Row>
                             </div>
@@ -224,6 +225,7 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                     </div>
                 </div>
                 {displayAttrMenu && <AttrDataWindow content={attrData} toggleFunktion={this.toggleAttrMenu} />}
+                <Footer year='2019' version='0.1' />
             </>
         );
     }

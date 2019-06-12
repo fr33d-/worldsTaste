@@ -1,0 +1,20 @@
+@import '../../bootstrap.scss';
+@import '../../style/card.scss';
+
+.Footer {
+    position: absolute;
+    bottom: 10px;
+    width: 100vw;
+
+    font-size: 14px;
+    color: $new-darker-gray;
+
+    a, :hover, :visited  {
+        text-decoration: underline;
+        color: $new-darker-gray;
+    }
+
+    svg {
+        margin-right: 10px;
+    }
+}

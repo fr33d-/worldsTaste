@@ -11,6 +11,7 @@ $brand-dark-gray: #4A4A4A;
 $brand-text-dark-gray: #2c3340;
 
 $new-light-gray: #F9F9FF;
+$new-light-gray2: #F2F2F2;
 $new-gray: #ECEDF6;
 $new-dark-gray: #C6C7D1;
 $new-darker-gray: #929292;
@@ -20,8 +21,11 @@ $new-darker-gray: #929292;
 $body-bg: $new-gray; //$brand-white-clay;
 $body-color: $brand-text-dark-gray;
 
-$border-radius: 12px;
+$border-radius-min: 5px;
+$border-radius: 10px;
 $border-radius-lg: 20px;
+
+$line-space: 15px;
 
 $activ-box-shadow-height: 3px;
 
@@ -61,3 +65,15 @@ $main-menu-with: 360px;
 $sub-menu-with: 340px;
 $teaser-with: 250px;
 $menu-margin: 20px;
+
+$red: #DC3545;
+$red-accent: #BB5959;
+
+$green: #28A745;
+$green-accent: #80B76A;
+
+$yellow: #FFC108;
+$yellow-accent: #EBAD64;
+
+$blue: #007BFF;
+$blue-accent: #17A2B8;

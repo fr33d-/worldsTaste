@@ -1,6 +1,10 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
+import { green, red, grayDark, white } from '../../style/colors';
+import { on } from 'cluster';
+import classNames from 'classnames';
+import LocalStyles from './IconButton.module.scss';
 
 type IconButtonProps = Partial<{
     icon: IconProp;
@@ -11,14 +15,41 @@ type IconButtonProps = Partial<{
 }>;
 
 export const IconButton = ({ icon, name, color, onClick, className }: IconButtonProps = { color: '#000' }) => (
-    <button onClick={onClick} className={className}>
+    <button onClick={onClick} className={classNames(className, LocalStyles.IconButton)}>
         {icon !== undefined && <FontAwesomeIcon icon={icon} color={color} />}
         {name}
     </button>
 );
 
-export const SaveButton = ({ withText }: { withText?: boolean }) =>
-    <IconButton icon="save" name={withText ? 'Save' : ''} color="#64B10A" />;
+export const SaveButton = ({ withText, onClick }: { withText?: boolean; onClick?(): void }) => (
+    <IconButton
+        icon="save"
+        name={withText ? 'Save' : ''}
+        color={white}
+        onClick={onClick}
+        className={LocalStyles.Green}
+    />
+);
+
+export const DeleteButton = ({ withText, onClick }: { withText?: boolean; onClick?(): void }) => (
+    <IconButton
+        icon="trash-alt"
+        name={withText ? 'Delete' : ''}
+        color={white}
+        onClick={onClick}
+        className={LocalStyles.Red}
+    />
+);
+
+export const CancelButton = ({ withText, onClick }: { withText?: boolean; onClick?(): void }) => (
+    <IconButton
+        icon="times-circle"
+        name={withText ? 'Cancel' : ''}
+        color={white}
+        onClick={onClick}
+        className={LocalStyles.Blue}
+    />
+);
 
 // const Foo = () => (
 //     <>

@@ -24,4 +24,37 @@
     }
 }
 
+.color-button {
+    height: 45px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: $border-radius;
+    margin-bottom: $default-space-small;
+    margin-right: $default-space-small;
+    background: $new-gray;
 
+    svg {
+        margin-right: 10px;
+    }
+
+    &.blue {
+        color: $white;
+        background: $blue;
+    }
+
+    &.red {
+        color: $white;
+        background: $red;
+    }
+
+    &.green {
+        color: $white;
+        background: $green;
+    }
+
+    &.yellow {
+        color: $white;
+        background: $yellow;
+    }
+
+}
