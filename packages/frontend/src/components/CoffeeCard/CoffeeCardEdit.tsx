@@ -38,14 +38,24 @@ export class CoffeeCardEdit extends Component<CoffeeCardEditProps, CoffeeCardEdi
     };
 
     public updateCard = () => {
+        const formData = new FormData();
+        formData.append('singleImage', this.state.entry.images![0].file);
         axios
-            .put(`http://localhost:4000/coffee/${this.state.entry.id}`, { ...this.state.entry })
+            .put(`http://localhost:4000/coffee/${this.state.entry.id}`, formData)
             .then((response) => {
                 this.props.close();
             })
             .catch((error) => {
                 console.log(error);
             });
+        // axios
+        //     .put(`http://localhost:4000/coffee/${this.state.entry.id}`, { ...this.state.entry })
+        //     .then((response) => {
+        //         this.props.close();
+        //     })
+        //     .catch((error) => {
+        //         console.log(error);
+        //     });
     };
 
     public createCard = () => {
@@ -119,9 +129,8 @@ export class CoffeeCardEdit extends Component<CoffeeCardEditProps, CoffeeCardEdi
 
         console.log(eventFiles);
 
-        const images = Object.entries(eventFiles)
-            .filter(([key, _]) => key !== 'length')
-            .map(([_, file]) => ({ name: file.name, url: '', alt: file.name, file }));
+        const images = Array.from(eventFiles)
+            .map((file) => ({ name: file.name, url: '', alt: file.name, file }));
 
         if (images.length > 0) {
             this.setState((state) => ({
