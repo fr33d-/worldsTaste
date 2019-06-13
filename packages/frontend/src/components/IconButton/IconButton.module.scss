@@ -19,4 +19,8 @@
     &.Yellow {
         @extend .yellow;
     }
+
+    &.Gray {
+        @extend .gray;
+    }
 }

@@ -8,6 +8,7 @@ import { SaveButton, DeleteButton, CancelButton } from '../IconButton';
 import LocalStyles from './CoffeeCardEdit.module.scss';
 import { green, brown, blue, red, yellow } from '../../style/colors';
 import { IconSelectColumn } from '../IconSelectColumn';
+import { Image } from '../CoffeeCard';
 
 type CoffeeCardEditProps = {
     entry: CoffeeEntry;
@@ -63,7 +64,7 @@ export class CoffeeCardEdit extends Component<CoffeeCardEditProps, CoffeeCardEdi
         this.props.deleteFunction(this.state.entry.id);
     };
 
-    public handleNameChange = (event: FormEvent<Required<FormControlProps>>) => {
+    public handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
         const value = event.currentTarget.value;
         this.setState((state) => ({ entry: { ...state.entry, name: value } }));
     };
@@ -74,7 +75,7 @@ export class CoffeeCardEdit extends Component<CoffeeCardEditProps, CoffeeCardEdi
     };
 
     public handleRatingChange = (i: number) => {
-        console.log("clicked on " + i);
+        console.log('clicked on ' + i);
         this.setState((state) => ({ entry: { ...state.entry, rating: i } }));
     };
 
@@ -109,6 +110,27 @@ export class CoffeeCardEdit extends Component<CoffeeCardEditProps, CoffeeCardEdi
         }
     };
 
+    public handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
+        const eventFiles = event.target.files;
+
+        if (eventFiles === null) {
+            return;
+        }
+
+        console.log(eventFiles);
+
+        const images = Object.entries(eventFiles)
+            .filter(([key, _]) => key !== 'length')
+            .map(([_, file]) => ({ name: file.name, url: '', alt: file.name, file }));
+
+        if (images.length > 0) {
+            this.setState((state) => ({
+                entry: { ...state.entry, images },
+            }));
+        }
+    };
+
+    //tslint:disable-next-line: max-func-body-length
     public render() {
         const { id, images, name, description, origin, rating, kind, roasted } = this.state.entry;
         const { kinds, roasteds, origins, close } = this.props;
@@ -118,27 +140,45 @@ export class CoffeeCardEdit extends Component<CoffeeCardEditProps, CoffeeCardEdi
                 <div className={LocalStyles.CoffeeCardEdit}>
                     <div className={LocalStyles.ImageSection}>
                         <div className={LocalStyles.UploadArea}>
-                            <Button variant="outline-secondary">
+                            <label htmlFor="file">
+                                {/* <Button variant="outline-secondary"> */}
                                 <FontAwesomeIcon icon="upload" />
-                            </Button>
+                                {/* </Button> */}
+                            </label>
+                            <br />
+                            <input
+                                type="file"
+                                name="pic"
+                                accept="image/*"
+                                onChange={this.handleFileUpload}
+                                className={LocalStyles.Fileupload}
+                                id="file"
+                            />
                         </div>
 
                         {images !== undefined &&
-                            images.length > 0 &&
-                            images.map((img, i) => <img src={img.url} alt={img.alt} key={i} />)}
+                            images.map(({url, alt, file}, i) => (
+                                <img
+                                    src={url === '' ? window.URL.createObjectURL(file) : url}
+                                    alt={alt}
+                                    key={i}
+                                />
+                            ))}
                     </div>
                     <div className={LocalStyles.TextSection}>
                         <h2>Kaffee</h2>
                         <Form>
                             <Row>
                                 <Col>
-                                    <Form.Label>Name</Form.Label>
-                                    <Form.Control
+                                <div className={LocalStyles.NameInput} >
+                                    <span>Name</span>
+                                    <input
                                         type="text"
                                         placeholder="Name"
                                         value={name}
                                         onChange={this.handleNameChange}
                                     />
+                                    </div>
                                 </Col>
                             </Row>
                             <Row>

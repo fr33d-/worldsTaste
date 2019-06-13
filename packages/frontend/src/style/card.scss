@@ -66,3 +66,13 @@
     color: $new-dark-gray;
     padding: 0;
 }
+
+@keyframes slidein {
+    from {
+        transform:translate(0, 100vh)
+    }
+
+    to {
+        transform:translate(0, 0%)
+    }
+}

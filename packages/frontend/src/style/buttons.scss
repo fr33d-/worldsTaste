@@ -39,22 +39,28 @@
 
     &.blue {
         color: $white;
-        background: $blue;
+        background: $blue-accent;
     }
 
     &.red {
         color: $white;
-        background: $red;
+        background: $red-accent;
     }
 
     &.green {
         color: $white;
-        background: $green;
+        background: $green-accent;
     }
 
     &.yellow {
         color: $white;
-        background: $yellow;
+        background: $yellow-accent;
+    }
+
+    &.gray {
+        color: $new-darker-gray;
+        background: transparent;
+        border: 1px solid $new-dark-gray;
     }
 
 }

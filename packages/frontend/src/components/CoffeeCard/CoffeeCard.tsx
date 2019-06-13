@@ -7,6 +7,7 @@ export type Image = {
     name: string;
     url: string;
     alt?: string;
+    file: File;
 };
 
 export type CoffeeEntry = {
@@ -67,7 +68,7 @@ export class CoffeeCard extends Component<CoffeeCardProps, CoffeeCardState> {
         const { edit, entry } = this.state;
         const { deleteFunction } = this.props;
 
-        return edit ? (
+        return !edit ? (
             <CoffeeCardEdit {...this.props} entry={entry} close={this.closeEditCard} />
         ) : (
             <CoffeeCardDisplay entry={entry} deleteFunction={deleteFunction} edit={this.editCard} />

@@ -5,14 +5,22 @@
 .CoffeeContainer {
     margin-top: 50px;
     margin-left: -60px;
+    // background: red;
     
-    @include media-breakpoint-down(768px) {
+    @include media-breakpoint-down(md) {
         margin-left: 0;
     }
 }
 
 .BackgroundHelper {
     @extend .backgroundHelper;
+
+    // background-color: $new-light-gray;
+    // height: 100vh;
+    // position: absolute;
+    // top: 0;
+    // left: 0;
+    // width: calc(50vw - 400px);
 
     @include media-breakpoint-down(md) {
         display: none;

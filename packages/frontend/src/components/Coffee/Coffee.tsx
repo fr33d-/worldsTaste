@@ -164,7 +164,7 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
 
         return (
             <>
-                <div className={LocalStyles.BackgromdundHelper} />
+                <div className={LocalStyles.BackgroundHelper} />
                 <Navigationbar />
                 <div className={`container`}>
                     <div className={classNames('row', LocalStyles.MobileHeader)}>

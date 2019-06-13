@@ -12,6 +12,13 @@
     border: none;
     padding: 45px;
 
+    // animation-duration: 1s;
+    // animation-name: slidein;
+
+    .Fileupload {
+        display: none;
+    }
+
     .ImageSection {
         width: 250px;
         height: 250px;
@@ -66,10 +73,21 @@
 
         input,
         .form-control {
-            border-radius: $border-radius-min;
-            background: $new-light-gray;
-            height: 45px;
-            margin-bottom: $line-space;
+            @extend .formElement;
+        }
+
+        .NameInput {
+            @extend .formElement;
+
+            span {
+                margin-top: 5px 15px 15px 5px;
+            }
+
+            input {
+                border: none;
+                display: inline;
+                width: fit-content;
+            }
         }
 
         .Description {
