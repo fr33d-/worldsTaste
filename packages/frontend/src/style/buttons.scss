@@ -37,24 +37,54 @@
         margin-right: 10px;
     }
 
-    &.blue {
+    &.blue-full {
         color: $white;
         background: $blue-accent;
     }
 
-    &.red {
+    &.red-full {
         color: $white;
         background: $red-accent;
     }
 
-    &.green {
+    &.green-full {
         color: $white;
         background: $green-accent;
     }
 
-    &.yellow {
+    &.yellow-full {
         color: $white;
         background: $yellow-accent;
+    }
+
+    &.gray-full {
+        color: $white;
+        background: $new-dark-gray;
+        border: 1px solid $new-dark-gray;
+    }
+
+    &.blue {
+        color: $blue-accent;
+        background: transparent;
+        border: 1px solid $blue-accent;
+    }
+
+    &.red {
+        color: $red-accent;
+        background: transparent;
+        border: 1px solid $red-accent;
+    }
+
+    &.green {
+        color: $green-accent;
+        background: transparent;
+        border: 1px solid $green-accent;
+    }
+
+    &.yellow {
+        color: $yellow-accent;
+        background: transparent;
+        border: 1px solid $yellow-accent;
     }
 
     &.gray {

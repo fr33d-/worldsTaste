@@ -4,20 +4,40 @@
 .IconButton {
     @extend .color-button;
 
+    &.BlueFull {
+        @extend .blue-full;
+    }
+
     &.Blue {
         @extend .blue;
+    }
+
+    &.RedFull {
+        @extend .red-full;
     }
 
     &.Red {
         @extend .red;
     }
 
+    &.GreenFull {
+        @extend .green-full;
+    }
+
     &.Green {
         @extend .green;
     }
 
+    &.YellowFull {
+        @extend .yellow-full;
+    }
+
     &.Yellow {
         @extend .yellow;
+    }
+
+    &.GrayFull {
+        @extend .gray;
     }
 
     &.Gray {

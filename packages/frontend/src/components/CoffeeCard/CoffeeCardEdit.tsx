@@ -6,7 +6,7 @@ import { CoffeeEntry, CoffeeKind, CoffeeOrigin, CoffeeRoasted } from '.';
 import { DropdownColumn } from '../DropdownColumn';
 import { SaveButton, DeleteButton, CancelButton } from '../IconButton';
 import LocalStyles from './CoffeeCardEdit.module.scss';
-import { green, brown, blue, red, yellow } from '../../style/colors';
+import { green, brown, blue, red, yellow, grayDarker } from '../../style/colors';
 import { IconSelectColumn } from '../IconSelectColumn';
 import { Image } from '../CoffeeCard';
 
@@ -69,7 +69,7 @@ export class CoffeeCardEdit extends Component<CoffeeCardEditProps, CoffeeCardEdi
         this.setState((state) => ({ entry: { ...state.entry, name: value } }));
     };
 
-    public handleDescChange = (event: FormEvent<Required<FormControlProps>>) => {
+    public handleDescChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
         const value = event.currentTarget.value;
         this.setState((state) => ({ entry: { ...state.entry, description: value } }));
     };
@@ -81,8 +81,6 @@ export class CoffeeCardEdit extends Component<CoffeeCardEditProps, CoffeeCardEdi
 
     public handleOriginChange = (event: ChangeEvent<HTMLSelectElement>) => {
         const value = event.currentTarget.value;
-        // console.log(value);
-        // destructuring of: (item) => item.name === value
         const origin = this.props.origins.find(({ name }) => name === value);
         if (origin !== undefined) {
             this.setState((state) => ({ entry: { ...state.entry, origin } }));
@@ -92,7 +90,6 @@ export class CoffeeCardEdit extends Component<CoffeeCardEditProps, CoffeeCardEdi
     public handleKindChange = (event: ChangeEvent<HTMLSelectElement>) => {
         const value = event.currentTarget.value;
         const kind = this.props.kinds.find((item) => item.name === value);
-        // console.log(kind);
         if (kind !== undefined) {
             this.setState((state) => ({
                 entry: { ...state.entry, kind },
@@ -157,12 +154,8 @@ export class CoffeeCardEdit extends Component<CoffeeCardEditProps, CoffeeCardEdi
                         </div>
 
                         {images !== undefined &&
-                            images.map(({url, alt, file}, i) => (
-                                <img
-                                    src={url === '' ? window.URL.createObjectURL(file) : url}
-                                    alt={alt}
-                                    key={i}
-                                />
+                            images.map(({ url, alt, file }, i) => (
+                                <img src={url === '' ? window.URL.createObjectURL(file) : url} alt={alt} key={i} />
                             ))}
                     </div>
                     <div className={LocalStyles.TextSection}>
@@ -170,14 +163,14 @@ export class CoffeeCardEdit extends Component<CoffeeCardEditProps, CoffeeCardEdi
                         <Form>
                             <Row>
                                 <Col>
-                                <div className={LocalStyles.NameInput} >
-                                    <span>Name</span>
-                                    <input
-                                        type="text"
-                                        placeholder="Name"
-                                        value={name}
-                                        onChange={this.handleNameChange}
-                                    />
+                                    <div className={LocalStyles.NameInput}>
+                                        <span>Name</span>
+                                        <input
+                                            type="text"
+                                            placeholder="Name"
+                                            value={name}
+                                            onChange={this.handleNameChange}
+                                        />
                                     </div>
                                 </Col>
                             </Row>
@@ -219,14 +212,15 @@ export class CoffeeCardEdit extends Component<CoffeeCardEditProps, CoffeeCardEdi
                             </Row>
                             <Row>
                                 <Col>
-                                    <Form.Label>Beschreibung</Form.Label>
-                                    <Form.Control
-                                        as="textarea"
-                                        rows="6"
-                                        value={description}
-                                        onChange={this.handleDescChange}
-                                        className="formElement"
-                                    />
+                                    <div className={LocalStyles.DescriptionInput}>
+                                        <FontAwesomeIcon icon="bars" size="lg" color={grayDarker} />
+                                        <textarea
+                                            placeholder="Beschreibung"
+                                            value={description}
+                                            onChange={this.handleDescChange}
+                                            className="formElement"
+                                        />
+                                    </div>
                                 </Col>
                             </Row>
                         </Form>

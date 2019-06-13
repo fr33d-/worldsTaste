@@ -27,7 +27,7 @@ export const SaveButton = ({ withText, onClick }: { withText?: boolean; onClick?
         name={withText ? 'Save' : ''}
         color={white}
         onClick={onClick}
-        className={LocalStyles.Green}
+        className={LocalStyles.GreenFull}
     />
 );
 
@@ -35,9 +35,9 @@ export const DeleteButton = ({ withText, onClick }: { withText?: boolean; onClic
     <IconButton
         icon="trash-alt"
         name={withText ? 'Delete' : ''}
-        color={grayDarker}
+        color={red}
         onClick={onClick}
-        className={LocalStyles.Gray}
+        className={LocalStyles.Red}
     />
 );
 
