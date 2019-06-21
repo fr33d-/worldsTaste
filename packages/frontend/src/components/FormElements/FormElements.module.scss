@@ -1,0 +1,46 @@
+@import './../../bootstrap.scss';
+@import './../../style/card.scss';
+@import './../../style/forms.scss';
+
+.TextInput {
+    @extend .formElement;
+    padding: 10px;
+
+    .Name {
+        margin: 5px 15px 5px 15px;
+        font-weight: 600;
+        color: $new-darker-gray
+    }
+
+    .Unit {
+        color: $new-darker-gray
+    }
+
+    input {
+        border: none;
+        background: none;
+        display: inline;
+    }
+}
+
+.DropdownInput {
+    label {
+        font-size: 14px;
+    }
+
+    .select {
+        @extend .formElement;
+        padding: 10px;
+    
+        select {
+            width: 80%;
+            background: none;
+            border: none;
+            margin-left: 10px;
+        }
+    }
+    
+    .Icon {
+        // margin: 10px;
+    }
+}

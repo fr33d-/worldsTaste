@@ -2,6 +2,8 @@
 @import '../../style/card.scss';
 
 .MainNavigator {
+    margin-top: $default-space-large;
+
     .Teaser {
         margin-bottom: $default-space-large;
         padding-left: 50px;
@@ -58,8 +60,8 @@
     .SubMenu {
         width: $sub-menu-with;
         opacity: 0;
-        margin: -45px $menu-margin 0 0; //margin-top -icon height
-        // margin-left: -200px;
+        margin: $default-space-large $menu-margin 0 0; //margin-top -icon height
+        // margin-top: $default-space-large;
 
         transition: opacity 300ms ease-in-out;
         transition-delay: 300ms;
@@ -87,8 +89,7 @@
 
     .Background {
         @extend .background;
-        // background: $new-gray;
-        // border: none;
+        height: 120vh;
 
         max-width: calc(#{$main-menu-with} + #{$menu-margin});
 

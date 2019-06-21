@@ -1,0 +1,165 @@
+@import '../../bootstrap.scss';
+@import '../../style/card.scss';
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.CigarCard {
+    @extend .card;
+
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    position: relative;
+    border: none;
+    padding: 0;
+
+    // animation-duration: 1s;
+    // animation-name: slidein;
+
+    max-height: 300px;
+
+    transition: all 500ms ease-in-out;
+
+    &.Exanded {
+        max-height: 800px;
+    }
+
+    .Details {
+        opacity: 1;
+        margin-bottom: $default-space;
+
+        &.Opend {
+            animation: fadeIn 500ms;
+        }
+
+        &.Closed {
+            opacity: 0;
+            margin-bottom: 0;
+            animation: fadeOut 500ms;
+        }
+    }
+
+    .ActionSection {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+
+        @include media-breakpoint-down(sm) {
+            top: 265px;
+        }
+
+        button {
+            @extend .icon-button;
+        }
+    }
+
+    .ImageSection {
+        width: 250px;
+        height: 250px;
+
+        @include media-breakpoint-down(sm) {
+            width: 100%;
+            background: $new-darker-gray;
+            min-width: 250px;
+            text-align: center;
+        }
+
+        .Image {
+            width: 100px;
+            height: 100px;
+            overflow: hidden;
+            text-align: center;
+            border-radius: $border-radius;
+            margin: $default-space;
+
+            &:first-of-type {
+                width: 210px;
+                height: 210px;
+            }
+
+            img {
+                margin-top: 50px;
+                height: 100px;
+            }
+        }
+    }
+
+    .TextSection {
+        margin: $default-space;
+        width: 100%;
+
+        border-left: 1px solid $new-dark-gray;
+        padding-left: 30px;
+
+        // display: flex;
+        // flex-direction: row;
+        // flex-wrap: wrap;
+        // align-content: flex-start;
+        // align-items: flex-start;
+
+        // @include media-breakpoint-down(md) {
+        //     flex-direction: column;
+        // }
+
+        .Description {
+            width: 90%;
+            margin-top: 10px;
+            margin-right: 30px;
+            line-height: 28px;
+            margin-right: 20px;
+        }
+
+        h2 {
+            width: 100%;
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0 0 20px 5px;
+            line-height: 24xp;
+        }
+
+        .row {
+            margin-bottom: 20px;
+
+            &:last-of-type {
+                margin-bottom: 0;
+            }
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 24px;
+            margin-bottom: 15px;
+
+            color: $gray-600;
+            width: 50%;
+
+            @include media-breakpoint-down(md) {
+                width: 100%;
+            }
+
+            span {
+                color: $black;
+                margin-right: 5px;
+                width: 40px;
+                display: inline-block;
+                text-align: center;
+            }
+        }
+    }
+}

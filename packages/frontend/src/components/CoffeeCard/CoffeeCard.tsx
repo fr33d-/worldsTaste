@@ -2,13 +2,9 @@ import React, { Component, useState } from 'react';
 import { AttrDataItemType } from '../AttrDataWindow';
 import { CoffeeCardDisplay } from './CoffeeCardDisplay';
 import { CoffeeCardEdit } from './CoffeeCardEdit';
+import { Image } from '../FormComponents';
 
-export type Image = {
-    name: string;
-    url: string;
-    alt?: string;
-    file: File;
-};
+
 
 export type CoffeeEntry = {
     id: number;
@@ -68,7 +64,7 @@ export class CoffeeCard extends Component<CoffeeCardProps, CoffeeCardState> {
         const { edit, entry } = this.state;
         const { deleteFunction } = this.props;
 
-        return !edit ? (
+        return edit ? (
             <CoffeeCardEdit {...this.props} entry={entry} close={this.closeEditCard} />
         ) : (
             <CoffeeCardDisplay entry={entry} deleteFunction={deleteFunction} edit={this.editCard} />

@@ -1,26 +1,33 @@
 @import '../../bootstrap.scss';
 @import '../../style/card.scss';
 
-
 .CoffeeContainer {
     margin-top: 50px;
     margin-left: -60px;
-    // background: red;
     
     @include media-breakpoint-down(md) {
         margin-left: 0;
     }
 }
 
+.Container {
+    margin-top: 100px;
+}
+
+.Introtext {
+    margin-top: $default-space;
+    margin-right: $default-space-large;
+    padding: $default-space;
+    width: 80%;
+
+    h2 {
+        padding-bottom: $default-space-small;
+    }
+}
+
 .BackgroundHelper {
     @extend .backgroundHelper;
-
-    // background-color: $new-light-gray;
-    // height: 100vh;
-    // position: absolute;
-    // top: 0;
-    // left: 0;
-    // width: calc(50vw - 400px);
+    position: fixed;
 
     @include media-breakpoint-down(md) {
         display: none;

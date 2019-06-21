@@ -1,0 +1,71 @@
+@import '../../bootstrap.scss';
+@import '../../style/card.scss';
+
+.CigarCardEdit {
+    @extend .card;
+    @extend .cardActive;
+
+    overflow: hidden;
+    position: relative;
+    border: none;
+    padding: 45px;
+
+    display: flex;
+    flex-direction: row;
+
+    .ImageSection {
+        width: 250px;
+        height: 250px;
+
+        img {
+            width: 40%;
+        }
+
+        .UploadArea {
+            height: 220px;
+            width: 220px;
+            border: 1px dashed $new-dark-gray;
+            border-radius: $border-radius;
+            margin-right: 35px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            button {
+                margin: auto;
+            }
+        }
+    }
+
+    .ButtonSection {
+        margin-top: $default-space;
+        display: flex;
+        width: 100%;
+
+        button:last-of-type {
+            margin-left: auto;
+            margin-right: 0;
+        }
+    }
+    
+    .TextSection {
+        width: 100%;
+
+        h2 {
+            width: 100%;
+            text-align: center;
+            margin-bottom: $default-space;
+        }
+
+        h3 {
+            font-size: 20px;
+            margin-top: $default-space;
+        }
+
+        .Row {
+            @extend .row;
+            // margin-bottom: $default-space-small;
+        }
+    }
+}

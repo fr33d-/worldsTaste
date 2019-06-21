@@ -3,7 +3,10 @@
 @import '../../style/fonts.scss';
 
 .Sidemenu {
+    @extend .background;
+
     position: fixed;
+    height: 120%;
 
     @include media-breakpoint-down(md) {
         display: none;
@@ -59,9 +62,5 @@
 }
 
 .Background {
-    @extend .background;
-
-    @include media-breakpoint-down(md) {
-        display: none;
-    }
+    
 }

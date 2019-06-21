@@ -1,16 +1,21 @@
 @import '../../variables.scss';
 @import '../../bootstrap.scss';
 
+.Container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    z-index: 10;
+    // background: $new-gray;
+}
+
 .Navbar {
     background: none;
     box-shadow: none;
     height: 70px;
     width: 100%;
     margin-top: 10px;
-    position: relative;
-    z-index: 100;
-
-    margin-bottom: $container-margin-big;
 
     .Burger {
         width: 30px;

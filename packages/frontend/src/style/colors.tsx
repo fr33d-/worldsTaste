@@ -12,6 +12,9 @@ export const blueAccent = '#17A2B8';
 
 export const grayDarker = '#929292';
 export const grayDark = '#C6C7D1';
+export const gray = '#ECEDF6';
+export const grayLight = '#C6C7D1';
+export const grayLighter = '#929292';
 
 export const white = '#fff';
 export const black = '#000';

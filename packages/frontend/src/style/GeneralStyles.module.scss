@@ -1,0 +1,129 @@
+@import './../bootstrap.scss';
+@import './card.scss';
+@import './forms.scss';
+
+.Introtext {
+    margin-top: $default-space;
+    margin-left: $default-space-large;
+    padding: $default-space;
+    width: 80%;
+
+    h2 {
+        padding-bottom: $default-space-small;
+    }
+}
+
+.ReplImg {
+    width: 100%;
+    text-align: center;
+
+    img {
+        width: 200px;
+        margin-bottom: $default-space;
+    }
+
+    p {
+        font-weight: 800px;
+        color: $new-dark-gray;
+        font-size: 32px;
+    }
+}
+
+.Filter {
+    width: fit-content;
+    text-align: right;
+    margin-left: auto;
+
+    select {
+        width: 150px;
+    }
+}
+
+.Container {
+    margin-top: 100px;
+}
+
+.MobileHeader {
+    margin-bottom: $default-space;
+
+    @include media-breakpoint-up(lg) {
+        display: none;
+    }
+
+    svg {
+        margin-right: 20px;
+    }
+}
+
+.BackgroundHelper {
+    @extend .backgroundHelper;
+    position: fixed;
+
+    @include media-breakpoint-down(md) {
+        display: none;
+    }
+}
+
+.CardsContainer {
+    margin-top: 50px;
+    margin-left: -60px;
+
+    @include media-breakpoint-down(md) {
+        margin-left: 0;
+    }
+}
+
+.AttrField {
+    svg {
+        margin-right: 10px;
+    }
+
+    .Value {
+        font-size: 16px;
+        color: $new-dark-gray;
+    }
+
+    .Name {
+        font-size: 12px !important;
+        color: $black !important;
+        margin-bottom: 0 !important;
+        width: 100% !important;
+    }
+
+    .Iconlist {
+        display: inline;
+        svg {
+            margin: 0;
+            margin-right: 3px;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: inline;
+
+            .Active {
+                background: $new-darker-gray;
+            }
+
+            li {
+                background: $new-gray;
+                display: inline-block;
+                height: 8px;
+                width: 18px;
+                margin-right: 1px;
+
+                $border-radius-list: 3px;
+
+                &:first-of-type {
+                    border-radius: $border-radius-list 0 0 $border-radius-list;
+                }
+
+                &:last-of-type {
+                    border-radius: 0 $border-radius-list $border-radius-list 0;
+                }
+            }
+        }
+    }
+}

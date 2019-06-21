@@ -5,6 +5,7 @@ import LocalStyles from './Navigationbar.module.scss';
 import { navigation } from '../../navigation';
 import classnames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import classNames from 'classnames';
 
 type NavbarProps = RouteComponentProps; // & {
 //     items: NavigationItem[]
@@ -17,8 +18,8 @@ class NavigationbarBase extends Component<NavbarProps> {
         console.log(pathname);
         const path = pathname.split('/').filter(Boolean);
         return (
-            <>
-                <div className="container">
+            <div className={LocalStyles.Container}>
+                <div className={classNames('container')}>
                     <div className="row">
                         <div className={`col-12 ${LocalStyles.Navbar}`}>
                             <div className={classnames(LocalStyles.Navbar, LocalStyles.Logo)} onClick={this.goHome()}>
@@ -50,7 +51,7 @@ class NavigationbarBase extends Component<NavbarProps> {
                         </div>
                     </div>
                 </div>
-            </>
+            </div>
         );
     }
 

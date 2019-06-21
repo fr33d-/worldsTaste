@@ -146,84 +146,98 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
             },
         ];
 
-        const filterMenu = [
-            { name: 'Herkunft', content: coffeeOrigins },
-            { name: 'Arten', content: coffeeKinds },
-            { name: 'Röstereien', content: coffeeRoateds },
-            {
-                name: 'Bewertung',
-                content: [
-                    { id: 1, name: '1' },
-                    { id: 2, name: '2' },
-                    { id: 3, name: '3' },
-                    { id: 4, name: '4' },
-                    { id: 5, name: '5' },
-                ],
-            },
-        ];
+        // const filterMenu = [
+        //     { name: 'Herkunft', content: coffeeOrigins },
+        //     { name: 'Arten', content: coffeeKinds },
+        //     { name: 'Röstereien', content: coffeeRoateds },
+        //     {
+        //         name: 'Bewertung',
+        //         content: [
+        //             { id: 1, name: '1' },
+        //             { id: 2, name: '2' },
+        //             { id: 3, name: '3' },
+        //             { id: 4, name: '4' },
+        //             { id: 5, name: '5' },
+        //         ],
+        //     },
+        // ];
 
         return (
             <>
                 <div className={LocalStyles.BackgroundHelper} />
                 <Navigationbar />
-                <div className={`container`}>
+                <div className={classNames(`container`, LocalStyles.Container)}>
                     <div className={classNames('row', LocalStyles.MobileHeader)}>
                         <FontAwesomeIcon icon="mug-hot" size="4x" color="#8B572A" />
                         <h1>Blog of Coffee</h1>
                     </div>
                     <div className="row">
                         <Sidemenu
-                            filter={filterMenu}
+                            filter={attrData}
                             header={'Blog of Coffee'}
                             icon={<FontAwesomeIcon icon="mug-hot" size="3x" color="#8B572A" />}
                         />
-                        <div className={`col-12 col-lg-9`}>
-                            <div className={`${LocalStyles.Filter}`}>
-                                <Row>
-                                    <Col>
-                                        <Form.Group controlId="exampleForm.ControlSelect1">
-                                            <Form.Control as="select">
-                                                <option disabled selected>
-                                                    Order by
-                                                </option>
-                                                <option>Origin</option>
-                                                <option>Rostary</option>
-                                                <option>Raging</option>
-                                                <option>Kind</option>
-                                            </Form.Control>
-                                        </Form.Group>
-                                    </Col>
-                                    <Col>
-                                        <Form.Control placeholder="Search" />
-                                    </Col>
-                                    <Col>
-                                        <button className="add-button big" onClick={this.toggleAttrMenu}>
-                                            <FontAwesomeIcon icon="database" />
-                                        </button>
-                                        <button className="add-button big" onClick={this.createCard}>
-                                            <FontAwesomeIcon icon="plus" />
-                                        </button>
-                                    </Col>
-                                </Row>
-                            </div>
-                            <div className={`${LocalStyles.CoffeeContainer}`}>
-                                {posts.length === 0 ? (
-                                    <p>nothing here</p>
-                                ) : (
-                                    posts.map((post) => {
-                                        return (
-                                            <CoffeeCard
-                                                entry={post}
-                                                key={post.id}
-                                                saveFunction={this.saveNewCard}
-                                                deleteFunction={this.deletePost}
-                                                kinds={coffeeKinds}
-                                                roasteds={coffeeRoateds}
-                                                origins={coffeeOrigins}
-                                            />
-                                        );
-                                    })
-                                )}
+                        <div className={classNames(`col-12 col-lg-9`, LocalStyles.CoffeeContent)}>
+                            <div className={LocalStyles.CoffeeContentScrollable}>
+                                <div className={`${LocalStyles.Filter}`}>
+                                    <Row>
+                                        <Col>
+                                            <Form.Group controlId="exampleForm.ControlSelect1">
+                                                <Form.Control as="select">
+                                                    <option disabled selected>
+                                                        Order by
+                                                    </option>
+                                                    <option>Origin</option>
+                                                    <option>Rostary</option>
+                                                    <option>Raging</option>
+                                                    <option>Kind</option>
+                                                </Form.Control>
+                                            </Form.Group>
+                                        </Col>
+                                        <Col>
+                                            <Form.Control placeholder="Search" />
+                                        </Col>
+                                        <Col>
+                                            <button className="add-button big" onClick={this.toggleAttrMenu}>
+                                                <FontAwesomeIcon icon="database" />
+                                            </button>
+                                            <button className="add-button big" onClick={this.createCard}>
+                                                <FontAwesomeIcon icon="plus" />
+                                            </button>
+                                        </Col>
+                                    </Row>
+                                </div>
+
+                                <div className={LocalStyles.Introtext}>
+                                    <h2>Kaffee ist Genuss und Wissenschaft</h2>
+                                    <p>
+                                        Kaffee macht nicht nur wach sondern kann viel mehr. Es ist eine Wissenschaft ihn
+                                        zuzbereiten, es gibt hunderte, wenn nicht tausende von Arten, Varianten,
+                                        Geschmäcker und alles an Nerdkram den man sich vorstellen kann. Außerdem bedient
+                                        er eine gewisse Sammelleidenschaft. Fast jede größere Stadt bietet heute mehr
+                                        als eine kleine Rösterei mit viel verschiedenen Sorten. Ein kleiner Überblick
+                                        über meine persönlichen Erfahrungen soll nun hier entstehen.
+                                    </p>
+                                </div>
+                                <div className={`${LocalStyles.CoffeeContainer}`}>
+                                    {posts.length === 0 ? (
+                                        <p>nothing here</p>
+                                    ) : (
+                                        posts.map((post) => {
+                                            return (
+                                                <CoffeeCard
+                                                    entry={post}
+                                                    key={post.id}
+                                                    saveFunction={this.saveNewCard}
+                                                    deleteFunction={this.deletePost}
+                                                    kinds={coffeeKinds}
+                                                    roasteds={coffeeRoateds}
+                                                    origins={coffeeOrigins}
+                                                />
+                                            );
+                                        })
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>

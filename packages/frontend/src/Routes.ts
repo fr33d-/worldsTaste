@@ -4,6 +4,7 @@ import { CoffeeBase } from './components/Coffee';
 import { Home } from './components/Home';
 import { UserList } from './components/UserList';
 import { Blog } from './components/Blog';
+import { Cigars } from './components/Cigars';
 
 // This array describes all routes that are exposed to the client and is used to automatically populate the Router
 // component in the App component.
@@ -26,6 +27,10 @@ export const appRoutes: RouteProps[] = [
     {
         path: '/coffee/:id?',
         component: CoffeeBase,
+    },
+    {
+        path: '/cigars/:id?',
+        component: Cigars,
     },
     {
         path: '/blog/:id?',
