@@ -39,9 +39,18 @@ export class CoffeeCardEdit extends Component<CoffeeCardEditProps, CoffeeCardEdi
 
     public updateCard = () => {
         const formData = new FormData();
-        formData.append('singleImage', this.state.entry.images![0].file);
+        // formData.append('images', this.state.entry.images![0].file);
+        // formData.append('images', this.state.entry.images![0].file);
+        // const imagesArray = this.state.entry.images!.map(({file}) => file)
+        // formData.append('images', this.state.entry.images!.map(({file}) => file));
+
+        this.state.entry.images!.forEach(({file}) => {
+            formData.append('images', file);
+        });
+
+        console.log(formData);
         axios
-            .put(`http://localhost:4000/coffee/${this.state.entry.id}`, formData)
+            .put(`http://95.157.2.48:4000/coffee/${this.state.entry.id}`, formData)
             .then((response) => {
                 this.props.close();
             })
@@ -162,6 +171,7 @@ export class CoffeeCardEdit extends Component<CoffeeCardEditProps, CoffeeCardEdi
                                 onChange={this.handleFileUpload}
                                 className={LocalStyles.Fileupload}
                                 id="file"
+                                multiple
                             />
                         </div>
 

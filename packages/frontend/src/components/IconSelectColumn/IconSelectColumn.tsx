@@ -24,7 +24,7 @@ export class IconSelectColumn extends Component<IconSelectComponentProps, IconSe
     public readonly state: IconSelectComponentState = {
         selecteValue: this.props.value,
     };
-    
+
     public hoverIcon = (i: number) => {
         this.setState({ selecteValue: i });
     };
@@ -54,27 +54,33 @@ export class IconSelectColumn extends Component<IconSelectComponentProps, IconSe
                         className={LocalStyles.LabelIcon}
                     />
                     {[...Array(selecteValue)].map((_, i) => (
-                        <span onClick={() => onChange(i+1)} key={i}
-                        onMouseEnter={() => this.hoverIcon(i+1)}
-                        onMouseOut={() => this.hoverIcon(value)}>
+                        <span onClick={() => onChange(i + 1)} key={i}>
                             <FontAwesomeIcon
                                 icon={selectIcon}
                                 color={selectIconColor}
-                                className={LocalStyles.SelectIcon}
                             />
+                            <div
+                                className={LocalStyles.Hover}
+                                onMouseEnter={() => this.hoverIcon(i + 1)}
+                                // onMouseOut={() => this.hoverIcon(value)}
+                            >
+                            </div>
                         </span>
                     ))}
                     {[...Array(numberOfValues - selecteValue)].map((_, i) => {
                         const val = selecteValue + i + 1;
                         return (
-                            <span onClick={() => onChange(val)} key={val}
-                            onMouseEnter={() => this.hoverIcon(val)}
-                            onMouseOut={() => this.hoverIcon(value)}>
+                            <span onClick={() => onChange(val)} key={val}>
                                 <FontAwesomeIcon
                                     icon={selectIcon}
                                     color={grayDark}
-                                    className={LocalStyles.SelectIcon}
                                 />
+                                <div
+                                    className={LocalStyles.Hover}
+                                    onMouseEnter={() => this.hoverIcon(val)}
+                                    // onMouseOut={() => this.hoverIcon(value)}
+                                >
+                                </div>
                             </span>
                         );
                     })}
