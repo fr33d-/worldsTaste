@@ -1,9 +1,12 @@
-import { RequestHandler } from 'express';
+import { RequestHandler, Request, Response } from 'express';
 import * as httpStatusCodes from 'http-status-codes';
 import { CoffeeDto } from '../models/dtos/CoffeeDto';
 import { CoffeeEntity } from '../models/entities/CoffeeEntity';
 import { createLogger } from '../utils/LoggerUtil';
 import { Omit } from '../utils/TypeScriptUtils';
+import fileUpload, { UploadedFile } from 'express-fileupload';
+import * as path from "path";
+import * as fs from "fs";
 
 // Small helper type to embed id paramters into custom types.
 type WithId = {
@@ -12,21 +15,11 @@ type WithId = {
 
 const log = createLogger('api:controllers:coffee');
 
-// type Coffee = {
-//     id: number;
-//     name: string;
-//     description: string;
-//     origin: string;
-//     rating: number;
-//     kind: string;
-//     roasted: string;
-// };
-
 // GET /
 export const getAllCoffees: RequestHandler = async (_, result) => {
     log(`GET /coffee`);
 
-    const coffeeEntities = await CoffeeEntity.find({relations: ['origin', 'kind', 'roasted']});
+    const coffeeEntities = await CoffeeEntity.find({ relations: ['origin', 'kind', 'roasted'] });
     result.status(httpStatusCodes.OK).json(coffeeEntities.map(CoffeeDto.fromEntity));
 };
 
@@ -48,8 +41,22 @@ export const getCoffeeById: RequestHandler = async (request, result) => {
     } else {
         result.sendStatus(httpStatusCodes.NOT_FOUND);
     }
+};
 
-    // result.status(httpStatusCodes.OK).json(exampleCoffee);
+//GET Assets
+
+export const getCoffeesAssets: RequestHandler = async (request, result) => {
+    const coffeeId = request.params.id;
+
+    const uploadsFolder = path.join(__dirname, '../uploads/coffee-images');
+    const coffeeImages = path.join(uploadsFolder, coffeeId);
+    if (fs.existsSync(coffeeImages)) {
+        const files = fs.readdirSync(coffeeImages);
+        result.status(httpStatusCodes.OK).send(files.map((item) => `/static/coffee-images/${coffeeId}/${item}`));
+        return;
+    }
+
+    result.sendStatus(httpStatusCodes.NOT_FOUND);
 };
 
 // POST /
@@ -57,13 +64,16 @@ type CreateCoffeeRequestBody = Omit<CoffeeDto, 'id'>;
 
 export const createCoffee: RequestHandler = async (request, result) => {
     log(`POST /coffee`);
+    log(request.body);
     const requestBody = request.body as CreateCoffeeRequestBody;
     const coffeeEntity = CoffeeEntity.create({ ...requestBody });
 
     try {
         await CoffeeEntity.save(coffeeEntity);
+        log('coffee saved');
         result.location(`/users/${coffeeEntity.id}`).sendStatus(httpStatusCodes.CREATED);
     } catch (error) {
+        log('error');
         log(error);
         result.sendStatus(httpStatusCodes.CONFLICT);
     }
@@ -83,9 +93,6 @@ export const deleteCoffeeById: RequestHandler = async (request, result) => {
     } else {
         result.sendStatus(httpStatusCodes.NOT_FOUND);
     }
-
-    // exampleCoffee = exampleCoffee.filter((item) => item.id !== Number(id));
-    // result.sendStatus(httpStatusCodes.OK);
 };
 
 // PUT /:id
@@ -99,6 +106,16 @@ export const updateCoffeeById: RequestHandler = async (request, result) => {
     const coffeeEntity = await CoffeeEntity.findOne({ where: { id } });
 
     if (coffeeEntity !== undefined) {
+        if (request.files !== undefined) {
+            await (request.files.images as UploadedFile[]).forEach(async (file) => {
+                const targetPath = `./uploads/coffee-images/${request.params.id}`;
+                if (!fs.existsSync(targetPath)) {
+                    fs.mkdirSync(targetPath, { recursive: true });
+                }
+                await file.mv(`${targetPath}/${file.name}`);
+            });
+        }
+
         if (coffeeEntity.id !== requestBody.id) {
             result.sendStatus(httpStatusCodes.CONFLICT);
         } else {
@@ -110,3 +127,16 @@ export const updateCoffeeById: RequestHandler = async (request, result) => {
         result.sendStatus(httpStatusCodes.NOT_FOUND);
     }
 };
+
+// TEST
+
+// export const uploadImage: RequestHandler = async (request, result) => {
+//     log(`UploadImage`);
+//     console.log(request.files);
+
+//     if (request.files !== undefined) {
+//         await (request.files.singleImage as UploadedFile).mv("./foo.png");
+//     }
+
+//     result.sendStatus(200);
+// };

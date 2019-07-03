@@ -1,6 +1,7 @@
 import bodyParser from "body-parser";
 import cors from "cors";
 import express from "express";
+import fileUpload from "express-fileupload";
 import helmet from "helmet";
 import * as httpStatusCodes from "http-status-codes";
 import "reflect-metadata";
@@ -30,6 +31,7 @@ createConnection()
         // 3rd party middleware
         server.use(helmet());
         server.use(bodyParser.json());
+        server.use(fileUpload());
         // This enables CORS for ALL (!) origins. Before moving to production you MUST restrict this with a proper and
         // safe configuration!
         // https://expressjs.com/en/resources/middleware/cors.html
