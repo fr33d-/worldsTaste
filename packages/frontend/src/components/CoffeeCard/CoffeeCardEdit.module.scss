@@ -1,13 +1,6 @@
 @import '../../bootstrap.scss';
 @import '../../style/card.scss';
 
-// .FullBackground {
-//     position: absolute;
-//     height: 100vh;
-//     width: 100vw;
-//     background: rgba(#fff, 0.7);
-// }
-
 .CoffeeCardEdit {
     @extend .card;
     @extend .cardActive;
@@ -17,12 +10,10 @@
     border: none;
     padding: 45px;
 
-    // animation-duration: 1s;
-    // animation-name: slidein;
-
     .Row {
         display: flex;
         flex-direction: row;
+        margin-bottom: $default-space-large;
     }
 
     .Fileupload {
@@ -100,28 +91,6 @@
                 background: none;
                 display: inline;
                 width: 80%;
-            }
-        }
-
-        .DescriptionInput {
-            @extend .formElement;
-            height: fit-content;
-            text-orientation: upright;
-            display: flex;
-            flex-direction: row;
-            padding: 10px;
-
-            svg {
-                margin: 5px 15px 5px 15px;
-                display: inline;
-            }
-
-            textarea {
-                border: none;
-                background: none;
-                display: inline;
-                width: 90%;
-                min-height: 150px;
             }
         }
 

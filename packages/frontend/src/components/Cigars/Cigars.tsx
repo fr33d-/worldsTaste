@@ -11,6 +11,8 @@ import GeneralStyles from './../../style/GeneralStyles.module.scss';
 import CigarReplacement from './../../images/Cigar-replacement.svg';
 import { CigarCard } from './../CigarCard';
 import { Image } from '../FormComponents';
+import LocalStyles from './Cigars.module.scss';
+import cigarSVG from './../../images/cigar.svg';
 
 export type CigarEntry = {
     id: number;
@@ -28,6 +30,7 @@ export type CigarEntry = {
     buydate: string;
     smokedate: string;
     smokeduration: number;
+    smokeagain: boolean;
     strength: number;
     lenght: number;
     aromavielfalt: number;
@@ -59,6 +62,7 @@ const exampleCigar: CigarEntry = {
     aromaentwicklung: 2,
     zugwiederstand: 5,
     rating: 5,
+    smokeagain: true,
 };
 
 const exampleProducers: AttrDataType = {
@@ -194,46 +198,43 @@ export class Cigars extends Component<CigarsProps, CigarsState> {
             <>
                 <div className={GeneralStyles.BackgroundHelper} />
                 <Navigationbar />
-                <div className={classNames(`container`, GeneralStyles.Container)}>
+                <div className={classNames(`container`, GeneralStyles.Container, 'pageContainer')}>
                     <div className={classNames('row', GeneralStyles.MobileHeader)}>
                         <FontAwesomeIcon icon="smoking" size="4x" color="#8B572A" />
                         <h1>Smoke of fame</h1>
                     </div>
                     <div className="row">
-                        <Sidemenu
+                        {/* <Sidemenu
                             filter={attrData}
                             header={'Smoke of fame'}
                             icon={<FontAwesomeIcon icon="smoking" size="3x" color="#8B572A" />}
-                        />
+                        /> */}
+                        <Sidemenu filter={attrData} image={cigarSVG} />
                         <div className={classNames(`col-12 col-lg-9`)}>
-                            <div className={`${GeneralStyles.Filter}`}>
-                                <Row>
-                                    <Col>
-                                        <Form.Group controlId="exampleForm.ControlSelect1">
-                                            <Form.Control as="select">
-                                                <option disabled selected>
-                                                    Order by
-                                                </option>
-                                                <option>Origin</option>
-                                                <option>Rostary</option>
-                                                <option>Raging</option>
-                                                <option>Kind</option>
-                                            </Form.Control>
-                                        </Form.Group>
-                                    </Col>
-                                    <Col>
-                                        <Form.Control placeholder="Search" />
-                                    </Col>
-                                    <Col>
-                                        <button className="add-button big" onClick={this.toggleAttrMenu}>
-                                            <FontAwesomeIcon icon="database" />
-                                        </button>
-                                        <button className="add-button big" onClick={this.createCard}>
-                                            <FontAwesomeIcon icon="plus" />
-                                        </button>
-                                    </Col>
-                                </Row>
-                            </div>
+                        <div className={`${LocalStyles.Filter}`}>
+                                    <Form.Control as="select" className={LocalStyles.Select}>
+                                        <option disabled selected>
+                                            Order by
+                                        </option>
+                                        <option>Origin</option>
+                                        <option>Rostary</option>
+                                        <option>Raging</option>
+                                        <option>Kind</option>
+                                    </Form.Control>
+                                    <Form.Control placeholder="Search" className={LocalStyles.Select} />
+                                    <button
+                                        className={classNames('add-button big', LocalStyles.Button)}
+                                        onClick={this.toggleAttrMenu}
+                                    >
+                                        <FontAwesomeIcon icon="database" />
+                                    </button>
+                                    <button
+                                        className={classNames('add-button big', LocalStyles.Button)}
+                                        onClick={this.createCard}
+                                    >
+                                        <FontAwesomeIcon icon="plus" />
+                                    </button>
+                                </div>
 
                             <div className={GeneralStyles.Introtext}>
                                 <h2>Zigarren raucht man überall</h2>

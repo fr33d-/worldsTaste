@@ -1,7 +1,7 @@
 import { Props as FontAwesomeProps } from '@fortawesome/react-fontawesome';
 import React, { Component, ReactElement, useLayoutEffect } from 'react';
 import LocalStyles from './Sidemenu.module.scss';
-import { Col, Form } from 'react-bootstrap';
+import { Col, Form, Image } from 'react-bootstrap';
 import { AttrDataItemType, AttrDataType } from '../AttrDataWindow';
 import Chemex from '../../images/Chemex.svg';
 
@@ -12,8 +12,9 @@ import Chemex from '../../images/Chemex.svg';
 
 export type SidemenuProps = {
     filter: AttrDataType[];
-    header: string;
-    icon?: ReactElement<FontAwesomeProps>;
+    // header: string;
+    // icon?: ReactElement<FontAwesomeProps>;
+    image: string;
 };
 
 export type SidemenuState = {
@@ -23,8 +24,8 @@ export type SidemenuState = {
 export class Sidemenu extends Component<SidemenuProps, SidemenuState> {
     public readonly state: SidemenuState = {
         activeFilter: 0,
-    }
-    
+    };
+
     public expand = (key: number) => () => {
         console.log(key);
 
@@ -34,14 +35,15 @@ export class Sidemenu extends Component<SidemenuProps, SidemenuState> {
     };
 
     public render() {
-        const { header, icon, filter } = this.props;
+        const { image, filter } = this.props;
         const { activeFilter } = this.state;
 
         return (
-            <div className={`${LocalStyles.Background} col-3`}>
+            <div className={`col-3`}>
                 <div className={LocalStyles.Sidemenu}>
-                    {icon ? icon : <img src={Chemex} /> }
-                    <h1>{header}</h1>
+                    <div className={LocalStyles.IconHeader}>
+                        <img src={image} />
+                    </div>
                     <ul className={LocalStyles.MenuList}>
                         {filter.length === 0 ? (
                             <li>nothing here</li>

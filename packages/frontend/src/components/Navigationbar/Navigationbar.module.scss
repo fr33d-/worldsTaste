@@ -7,15 +7,16 @@
     left: 0;
     width: 100vw;
     z-index: 10;
-    // background: $new-gray;
+    background: $gray-darkest;
+    padding-top: 10px;
 }
 
 .Navbar {
     background: none;
     box-shadow: none;
-    height: 70px;
+    height: 50px;
     width: 100%;
-    margin-top: 10px;
+    color: $white;
 
     .Burger {
         width: 30px;
@@ -38,7 +39,6 @@
         z-index: 10;
         width: fit-content;
         margin: 0 auto;
-
         transition: margin 300ms ease-in-out;
 
         &:hover {
@@ -53,6 +53,7 @@
         text-align: right;
         background: none;
         z-index: 5;
+        width: 40%;
 
         @include media-breakpoint-down(sm) {
             display: none;

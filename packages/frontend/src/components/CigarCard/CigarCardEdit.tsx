@@ -1,23 +1,14 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-import React, { Component, FormEvent, ChangeEvent } from 'react';
-import { Button, Col, Form, FormControlProps, Row, Container } from 'react-bootstrap';
-import { DropdownColumn } from '../DropdownColumn';
-import {
-    SaveButton,
-    DeleteButton,
-    CancelButton,
-    AdvancedCancelButton,
-    AdvancedDeleteButton,
-    AdvancedSaveButton,
-} from '../IconButton';
-import LocalStyles from './CigarCardEdit.module.scss';
-import { green, brown, blue, red, yellow, grayDarker, yellowAccent, greenAccent } from '../../style/colors';
-import { IconSelectColumn } from '../IconSelectColumn';
+import React, { ChangeEvent, Component } from 'react';
+import { greenAccent, red, yellow, yellowAccent } from '../../style/colors';
+import { AttrDataType } from '../AttrDataWindow';
 import { CigarEntry } from '../Cigars';
-import { AttrDataType, AttrDataItemType } from '../AttrDataWindow';
-import GeneralStyles from './../../style/GeneralStyles.module.scss';
-import { TextInput, DropdownInput } from '../FormElements';
+import { BoolInput, DropdownInput, TextareaInput, TextInput } from '../FormElements';
+import { SliderAttrField } from '../FormElements/AttrFields';
+import { AdvancedCancelButton, AdvancedDeleteButton, AdvancedSaveButton } from '../IconButton';
+import { IconSelectColumn } from '../IconSelectColumn';
+import LocalStyles from './CigarCardEdit.module.scss';
 
 type CigarCardEditProps = {
     entry: CigarEntry;
@@ -77,6 +68,11 @@ export class CigarCardEdit extends Component<CigarCardEditProps, CigarCardEditSt
         this.props.deleteFunction(this.state.entry.id);
     };
 
+    public handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const value = event.currentTarget.value;
+        this.setState((state) => ({ entry: { ...state.entry, name: value }, edited: true }));
+    };
+
     //tslint:disable-next-line: max-func-body-length
     public render() {
         const {
@@ -102,6 +98,7 @@ export class CigarCardEdit extends Component<CigarCardEditProps, CigarCardEditSt
             strength,
             umblatt,
             zugwiederstand,
+            smokeagain,
         } = this.state.entry;
         const { edited, saveError } = this.state;
         const {
@@ -118,13 +115,17 @@ export class CigarCardEdit extends Component<CigarCardEditProps, CigarCardEditSt
         return (
             <>
                 <div className={LocalStyles.CigarCardEdit}>
-                    <div className={LocalStyles.ImageSection}>
-                        <div className={LocalStyles.UploadArea}>
-                            <label htmlFor="file">
-                                <FontAwesomeIcon icon="upload" />
-                            </label>
-                            <br />
-                            {/* <input
+                    <div className={LocalStyles.Header}>
+                        <h2>This is a tastefull cigarr</h2>
+                    </div>
+                    <div className={LocalStyles.EditSection}>
+                        <div className={LocalStyles.ImageSection}>
+                            <div className={LocalStyles.UploadArea}>
+                                <label htmlFor="file">
+                                    <FontAwesomeIcon icon="upload" />
+                                </label>
+                                <br />
+                                {/* <input
                                     type="file"
                                     name="pic"
                                     accept="image/*"
@@ -132,101 +133,178 @@ export class CigarCardEdit extends Component<CigarCardEditProps, CigarCardEditSt
                                     className={LocalStyles.Fileupload}
                                     id="file"
                                 /> */}
-                        </div>
+                            </div>
 
-                        {images !== undefined &&
-                            images.map(({ url, alt, file }, i) => (
-                                <img src={url === '' ? window.URL.createObjectURL(file) : url} alt={alt} key={i} />
-                            ))}
+                            {images !== undefined &&
+                                images.map(({ url, alt, file }, i) => (
+                                    <img src={url === '' ? window.URL.createObjectURL(file) : url} alt={alt} key={i} />
+                                ))}
+                        </div>
+                        <div className={LocalStyles.TextSection}>
+                            <div className="row">
+                                <div className="col-12">
+                                    <TextInput name="Name" value={name} onChange={() => {}} />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <DropdownInput
+                                        items={cigarsProducer}
+                                        icon="store"
+                                        iconColor={yellowAccent}
+                                        label="Hersteller"
+                                        selectedItem={producer}
+                                        onChange={() => {}}
+                                    />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <DropdownInput
+                                        items={cigarsOrigin}
+                                        icon="globe-americas"
+                                        iconColor={greenAccent}
+                                        label="Herkunft"
+                                        selectedItem={origin}
+                                        onChange={() => {}}
+                                    />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <IconSelectColumn
+                                        labelIcon="heart"
+                                        labelIconColor={red}
+                                        selectIcon="star"
+                                        selectIconColor={yellow}
+                                        numberOfValues={5}
+                                        value={rating}
+                                        onChange={() => {}}
+                                    />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <BoolInput label="Nochmal rauchen?" onChange={() => {}} value={smokeagain} />
+                                </div>
+                                <div className="col-12">
+                                    <TextareaInput label="Beschreibung" onChange={() => {}} value={description} />
+                                </div>
+                            </div>
+                            <div className={LocalStyles.Row}>
+                                <div className="col-12">
+                                    <h3>Details</h3>
+                                </div>
+                            </div>
+                            <div className={LocalStyles.Row}>
+                                <div className="col-12 col-md-6">
+                                    <DropdownInput
+                                        items={cigarEinlage}
+                                        icon="leaf"
+                                        iconColor={greenAccent}
+                                        label="Einlage"
+                                        selectedItem={einlage}
+                                        onChange={() => {}}
+                                    />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <DropdownInput
+                                        items={cigarUmblatt}
+                                        icon="leaf"
+                                        iconColor={greenAccent}
+                                        label="Umblatt"
+                                        selectedItem={umblatt}
+                                        onChange={() => {}}
+                                    />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <DropdownInput
+                                        items={cigarDeckblatt}
+                                        icon="leaf"
+                                        iconColor={greenAccent}
+                                        label="Deckblatt"
+                                        selectedItem={deckplatt}
+                                        onChange={() => {}}
+                                    />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <DropdownInput
+                                        items={cigarAnschnitt}
+                                        icon="leaf"
+                                        iconColor={greenAccent}
+                                        label="Anschnitt"
+                                        selectedItem={anschnitt}
+                                        onChange={() => {}}
+                                    />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <TextInput name="Länge:" value={lenght} onChange={() => {}} unit="cm" />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <TextInput name="Ringmas:" value={ringmas} onChange={() => {}} unit="cm" />
+                                </div>
+                            </div>
+                            <div className={LocalStyles.Row}>
+                                <div className="col-12 col-md-6">
+                                    <TextInput name="Gekauft am:" value={buydate} onChange={() => {}} unit=" " />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <TextInput name="Geraucht am:" value={smokedate} onChange={() => {}} unit=" " />
+                                </div>
+                            </div>
+                            <div className={LocalStyles.Row}>
+                                <div className="col-12 col-md-6">
+                                    <TextInput
+                                        name="Rauchdauer:"
+                                        value={smokeduration}
+                                        onChange={() => {}}
+                                        unit="min"
+                                    />
+                                </div>
+                            </div>
+                            <div className={LocalStyles.Row}>
+                                <div className="col-12 col-md-6">
+                                    <SliderAttrField maxValue={5} name="Stärke:" value={strength} onChange={() => {}} />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <SliderAttrField
+                                        maxValue={5}
+                                        name="Zugwiederstand:"
+                                        value={zugwiederstand}
+                                        onChange={() => {}}
+                                    />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <SliderAttrField
+                                        maxValue={5}
+                                        name="Aromavielfalt:"
+                                        value={aromavielfalt}
+                                        onChange={() => {}}
+                                    />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <SliderAttrField
+                                        maxValue={5}
+                                        name="Aromaentwicklung:"
+                                        value={aromaentwicklung}
+                                        onChange={() => {}}
+                                    />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <SliderAttrField maxValue={5} name="Abbrand:" value={abbrand} onChange={() => {}} />
+                                </div>
+                            </div>
+                            <div className={LocalStyles.Row}>
+                                <div className="col-12 col-md-6">
+                                    <DropdownInput
+                                        items={cigarAromarad}
+                                        icon="cog"
+                                        iconColor={greenAccent}
+                                        label="Aromarad"
+                                        selectedItem={armoarad}
+                                        onChange={() => {}}
+                                    />
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div className={LocalStyles.TextSection}>
-                        <h2>Kaffee</h2>
-                        <div className="row">
-                            <div className="col-12">
-                                <TextInput name="Name" value={name} onChange={() => {}} />
-                            </div>
-                        </div>
-                        <div className={LocalStyles.Row}>
-                            <div className="col-12 col-md-6">
-                                <DropdownInput
-                                    items={cigarsProducer}
-                                    icon="store"
-                                    iconColor={yellowAccent}
-                                    label="Hersteller"
-                                    selectedItem={producer}
-                                    onChange={() => {}}
-                                />
-                            </div>
-                            <div className="col-12 col-md-6">
-                                <DropdownInput
-                                    items={cigarsOrigin}
-                                    icon="globe-americas"
-                                    iconColor={greenAccent}
-                                    label="Herkunft"
-                                    selectedItem={origin}
-                                    onChange={() => {}}
-                                />
-                            </div>
-                        </div>
-                        <div className={LocalStyles.Row}>
-                            <div className="col-12">Description</div>
-                        </div>
-                        <div className={LocalStyles.Row}>
-                            <div className="col-12 col-md-6">Rating</div>
-                            <div className="col-12 col-md-6">Nochmal rauen?</div>
-                        </div>
-                        <div className={LocalStyles.Row}>
-                            <div className="col-12"><h3>Details</h3></div>
-                        </div>
-                        <div className={LocalStyles.Row}>
-                            <div className="col-12 col-md-6">
-                                <DropdownInput
-                                    items={cigarEinlage}
-                                    icon="leaf"
-                                    iconColor={greenAccent}
-                                    label="Einlage"
-                                    selectedItem={einlage}
-                                    onChange={() => {}}
-                                /></div>
-                            <div className="col-12 col-md-6">
-                            <DropdownInput
-                                    items={cigarUmblatt}
-                                    icon="leaf"
-                                    iconColor={greenAccent}
-                                    label="Umblatt"
-                                    selectedItem={umblatt}
-                                    onChange={() => {}}
-                                />
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-12 col-md-6">
-                                <DropdownInput
-                                    items={cigarDeckblatt}
-                                    icon="leaf"
-                                    iconColor={greenAccent}
-                                    label="Deckblatt"
-                                    selectedItem={deckplatt}
-                                    onChange={() => {}}
-                                /></div>
-                            <div className="col-12 col-md-6">
-                            <DropdownInput
-                                    items={cigarEinlage}
-                                    icon="leaf"
-                                    iconColor={greenAccent}
-                                    label="Einlage"
-                                    selectedItem={einlage}
-                                    onChange={() => {}}
-                                />
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-12 col-md-6">
-                                <TextInput name="Länge" value={lenght} onChange={() => {}} />
-                            </div>
-                            <div className="col-12 col-md-6">
-                                <TextInput name="Name" value={name} onChange={() => {}} />
-                            </div>
+                    <div className={LocalStyles.Row}>
+                        <div className={LocalStyles.ButtonSection}>
+                            <AdvancedDeleteButton changes={edited} onClick={this.deleteCard} />
+                            <AdvancedCancelButton changes={edited} onClick={close} />
+                            <AdvancedSaveButton save={this.saveCard} close={close} error={saveError} changes={edited} />
                         </div>
                     </div>
                 </div>

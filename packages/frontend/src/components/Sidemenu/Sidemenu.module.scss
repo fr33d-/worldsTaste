@@ -3,18 +3,35 @@
 @import '../../style/fonts.scss';
 
 .Sidemenu {
+    // position: relative;
     @extend .background;
-
+    // padding-top: $default-space;
     position: fixed;
     height: 120%;
+    width: 270px;
+
 
     @include media-breakpoint-down(md) {
         display: none;
     }
 
-    h1 {
-        margin-bottom: 40px;
-        width: $sub-menu-with;
+    .IconHeader {
+        display: flex;
+        flex-direction: row;
+        vertical-align: middle;
+
+        img, svg {
+            display: block;
+            width: 150px;
+        }
+
+        h1 {
+            font-size: 32px;
+            width: 50%;
+            display: inline-block;
+            margin-left: 20px;
+            padding-top: 30px;
+        }
     }
 
     h2 {
@@ -23,15 +40,27 @@
 
     .MenuList {
         padding-left: 15px;
+        margin-top: $default-space-large;
 
         li {
             @extend h4;
             list-style: none;
             cursor: pointer;
+            line-height: 32px;
 
             &.active {
+                line-height: 42px;
+                font-weight: 700;
+
                 ul {
                     max-height: 500px;
+                    font-weight: 600;
+                    margin: 16px 0 20px 0;
+
+                    li {
+                        margin: 0;
+                        line-height: 40px;
+                    }
                 }
             }
         }
@@ -59,8 +88,4 @@
     @include media-breakpoint-down(md) {
         display: none;
     }
-}
-
-.Background {
-    
 }

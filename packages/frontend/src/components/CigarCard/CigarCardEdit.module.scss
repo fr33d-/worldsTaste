@@ -10,8 +10,14 @@
     border: none;
     padding: 45px;
 
-    display: flex;
-    flex-direction: row;
+    .EditSection {
+        display: flex;
+        flex-direction: row;
+
+        @include media-breakpoint-down(md) {
+            flex-direction: column;
+        }
+    }
 
     .ImageSection {
         width: 250px;
@@ -48,15 +54,9 @@
             margin-right: 0;
         }
     }
-    
+
     .TextSection {
         width: 100%;
-
-        h2 {
-            width: 100%;
-            text-align: center;
-            margin-bottom: $default-space;
-        }
 
         h3 {
             font-size: 20px;
@@ -65,7 +65,16 @@
 
         .Row {
             @extend .row;
-            // margin-bottom: $default-space-small;
+            margin-bottom: $default-space-small;
+        }
+    }
+
+    .Header {
+        width: 100%;
+        h2 {
+            width: 100%;
+            text-align: center;
+            margin-bottom: $default-space;
         }
     }
 }

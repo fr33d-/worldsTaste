@@ -22,9 +22,6 @@ class NavigationbarBase extends Component<NavbarProps> {
                 <div className={classNames('container')}>
                     <div className="row">
                         <div className={`col-12 ${LocalStyles.Navbar}`}>
-                            <div className={classnames(LocalStyles.Navbar, LocalStyles.Logo)} onClick={this.goHome()}>
-                                Logo
-                            </div>
                             <div className={classnames(LocalStyles.Navbar, LocalStyles.Breadcrupm)}>
                                 <ul>
                                     <li>
@@ -47,6 +44,9 @@ class NavigationbarBase extends Component<NavbarProps> {
                             </div>
                             <div className={classnames(LocalStyles.Navbar, LocalStyles.Burger)}>
                                 <FontAwesomeIcon icon="bars" size="lg" />
+                            </div>
+                            <div className={classnames(LocalStyles.Navbar, LocalStyles.Logo)} onClick={this.goHome()}>
+                                Logo
                             </div>
                         </div>
                     </div>

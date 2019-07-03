@@ -4,7 +4,14 @@ import React, { Component, FormEvent, ChangeEvent } from 'react';
 import { Button, Col, Form, FormControlProps, Row, Container } from 'react-bootstrap';
 import { CoffeeEntry, CoffeeKind, CoffeeOrigin, CoffeeRoasted } from '.';
 import { DropdownColumn } from '../DropdownColumn';
-import { SaveButton, DeleteButton, CancelButton, AdvancedCancelButton, AdvancedDeleteButton, AdvancedSaveButton } from '../IconButton';
+import {
+    SaveButton,
+    DeleteButton,
+    CancelButton,
+    AdvancedCancelButton,
+    AdvancedDeleteButton,
+    AdvancedSaveButton,
+} from '../IconButton';
 import LocalStyles from './CoffeeCardEdit.module.scss';
 import { green, brown, blue, red, yellow, grayDarker } from '../../style/colors';
 import { IconSelectColumn } from '../IconSelectColumn';
@@ -41,16 +48,42 @@ export class CoffeeCardEdit extends Component<CoffeeCardEditProps, CoffeeCardEdi
     };
 
     public updateCard = () => {
+        const formData = new FormData();
+        const images = this.state.entry.images;
+        // formData.append('images', this.state.entry.images![0].file);
+        // formData.append('images', this.state.entry.images![0].file);
+        // const imagesArray = this.state.entry.images!.map(({file}) => file)
+        // formData.append('images', this.state.entry.images!.map(({file}) => file));
+
+        if (images && images.length < 0) {
+            this.state.entry.images!.forEach(({ file }) => {
+                formData.append('images', file);
+            });
+        }
+
+        console.log(formData);
+        console.log('Update card');
         axios
-            .put(`http://localhost:4000/coffee/${this.state.entry.id}`, { ...this.state.entry })
+            .put(`http://localhost:4000/coffee/${this.state.entry.id}`, formData)
             .then((response) => {
                 // this.props.close();
-                this.setState({edited: false, saveError: false})
+                console.log('... sucessfully');
+                this.setState({ edited: false, saveError: false });
             })
             .catch((error) => {
                 console.log(error);
-                this.setState({saveError: true})
+                console.log('... failed');
+                this.setState({ saveError: true });
             });
+
+        // axios
+        //     .put(`http://localhost:4000/coffee/${this.state.entry.id}`, { ...this.state.entry })
+        //     .then((response) => {
+        //         this.props.close();
+        //     })
+        //     .catch((error) => {
+        //         console.log(error);
+        //     });
     };
 
     public createCard = () => {
@@ -59,11 +92,11 @@ export class CoffeeCardEdit extends Component<CoffeeCardEditProps, CoffeeCardEdi
             .then((response) => {
                 console.log(response);
                 // this.props.close();
-                this.setState({edited: false, saveError: false})
+                this.setState({ edited: false, saveError: false });
             })
             .catch((error) => {
                 console.log(error);
-                this.setState({saveError: true})
+                this.setState({ saveError: true });
             });
     };
 
@@ -100,7 +133,7 @@ export class CoffeeCardEdit extends Component<CoffeeCardEditProps, CoffeeCardEdi
         if (kind !== undefined) {
             this.setState((state) => ({
                 entry: { ...state.entry, kind },
-                edited: true
+                edited: true,
             }));
         }
     };
@@ -111,7 +144,7 @@ export class CoffeeCardEdit extends Component<CoffeeCardEditProps, CoffeeCardEdi
         if (roasted !== undefined) {
             this.setState((state) => ({
                 entry: { ...state.entry, roasted },
-                edited: true
+                edited: true,
             }));
         }
     };
@@ -125,14 +158,12 @@ export class CoffeeCardEdit extends Component<CoffeeCardEditProps, CoffeeCardEdi
 
         console.log(eventFiles);
 
-        const images = Object.entries(eventFiles)
-            .filter(([key, _]) => key !== 'length')
-            .map(([_, file]) => ({ name: file.name, url: '', alt: file.name, file }));
+        const images = Array.from(eventFiles).map((file) => ({ name: file.name, url: '', alt: file.name, file }));
 
         if (images.length > 0) {
             this.setState((state) => ({
                 entry: { ...state.entry, images },
-                edited: true
+                edited: true,
             }));
         }
     };
@@ -150,9 +181,7 @@ export class CoffeeCardEdit extends Component<CoffeeCardEditProps, CoffeeCardEdi
                         <div className={LocalStyles.ImageSection}>
                             <div className={LocalStyles.UploadArea}>
                                 <label htmlFor="file">
-                                    {/* <Button variant="outline-secondary"> */}
                                     <FontAwesomeIcon icon="upload" />
-                                    {/* </Button> */}
                                 </label>
                                 <br />
                                 <input
@@ -162,6 +191,7 @@ export class CoffeeCardEdit extends Component<CoffeeCardEditProps, CoffeeCardEdi
                                     onChange={this.handleFileUpload}
                                     className={LocalStyles.Fileupload}
                                     id="file"
+                                    multiple
                                 />
                             </div>
 
@@ -242,7 +272,7 @@ export class CoffeeCardEdit extends Component<CoffeeCardEditProps, CoffeeCardEdi
                         <div className={LocalStyles.ButtonSection}>
                             <AdvancedDeleteButton changes={edited} onClick={this.deleteCard} />
                             <AdvancedCancelButton changes={edited} onClick={close} />
-                            <AdvancedSaveButton save={this.saveCard} close={close} error={saveError} />
+                            <AdvancedSaveButton save={this.saveCard} close={close} error={saveError} changes={edited} />
                         </div>
                     </div>
                 </div>

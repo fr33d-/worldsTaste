@@ -4,22 +4,33 @@
 
 .TextInput {
     @extend .formElement;
-    padding: 10px;
+    outline: none !important;
+    padding: 15px;
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+
+    .NumberInput {
+        text-align: right;
+        margin-right: 8px;
+        width: 40%;
+    }
 
     .Name {
-        margin: 5px 15px 5px 15px;
+        margin-right: 15px;
         font-weight: 600;
-        color: $new-darker-gray
+        color: $new-darker-gray;
     }
 
     .Unit {
-        color: $new-darker-gray
+        color: $new-darker-gray;
     }
 
     input {
         border: none;
         background: none;
         display: inline;
+        flex-grow: 100;
     }
 }
 
@@ -30,8 +41,10 @@
 
     .select {
         @extend .formElement;
-        padding: 10px;
-    
+        padding: 15px;
+        display: flex;
+        align-items: center;
+
         select {
             width: 80%;
             background: none;
@@ -39,8 +52,48 @@
             margin-left: 10px;
         }
     }
-    
-    .Icon {
-        // margin: 10px;
+}
+
+.TextareaInput {
+    @extend .formElement;
+    height: fit-content;
+    text-orientation: upright;
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+
+    svg {
+        margin: 5px 15px 5px 15px;
+        display: inline;
     }
+
+    textarea {
+        border: none;
+        background: none;
+        display: inline;
+        width: 90%;
+        min-height: 150px;
+    }
+}
+
+.BoolInput {
+    @extend .formElement;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+
+    label {
+        font-weight: 600;
+        color: $new-darker-gray;
+        flex-grow: 1;
+        margin: 0;
+    }
+
+    input {
+        flex-grow: 1;
+        align-content: flex-end;
+        margin-bottom: 5px;
+        margin-left: 20px;
+    }
+    
 }

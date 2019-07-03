@@ -1,4 +1,8 @@
 
+//Font
+
+$font-family-sans-serif: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
 //Colors: 
 $brand-white: #fff;
 $brand-black: #000;
@@ -10,18 +14,21 @@ $brand-dark-gray: #4A4A4A;
 
 $brand-text-dark-gray: #2c3340;
 
+$gray-darkest: rgba(48, 48, 48, 0.9); //#303030;
 $new-light-gray: #F9F9FF;
 $new-light-gray2: #F2F2F2;
 $new-gray: #ECEDF6;
 $new-dark-gray: #C6C7D1;
 $new-darker-gray: #929292;
 
+$blue-gray: #F5F7FD; //#F7F5FD; //#E2E4F4; //#D6D7E1;
+
 $white: #fff;
 $black: #000;
 
 
 //Override variables:
-$body-bg: $new-gray; //$brand-white-clay;
+$body-bg: $white; //$new-gray; //$brand-white-clay;
 $body-color: $brand-text-dark-gray;
 
 $border-radius-min: 5px;

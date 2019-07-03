@@ -55,11 +55,9 @@ export const AttrFieldIconlist = ({ name, valueIcon, value, valueIconColor, icon
                 <div className={GeneralStyles.Iconlist}>
                     <ul>
                         {[...Array(value)].map(() => (
-                            // <FontAwesomeIcon icon={valueIcon} color={valueIconColor} size="sm" />
                             <li className={GeneralStyles.Active} />
                         ))}
                         {[...Array(5 - value)].map(() => (
-                            // <FontAwesomeIcon icon={valueIcon} color={gray} size="sm" />
                             <li />
                         ))}
                     </ul>
@@ -121,6 +119,7 @@ export class CigarCardDisplay extends Component<CigarCardDisplayProps, CigarCard
             umblatt,
             zugwiederstand,
             rating,
+            smokeagain,
         } = this.state.entry;
 
         return (
@@ -180,7 +179,12 @@ export class CigarCardDisplay extends Component<CigarCardDisplayProps, CigarCard
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
-                                    <AttrField color={green} icon="leaf" value="Ja!" name="Nochmal rauchen?" />
+                                    <AttrField
+                                        color={green}
+                                        icon="leaf"
+                                        value={smokeagain ? 'Ja!' : 'Nein!'}
+                                        name="Nochmal rauchen?"
+                                    />
                                 </div>
                             </div>
 

@@ -156,6 +156,7 @@ type AdvancedSaveButtonProps = {
     save(): void;
     close(): void;
     error: boolean;
+    changes: boolean;
 };
 
 export class AdvancedSaveButton extends Component<AdvancedSaveButtonProps, AdvancedSaveButtonState> {
@@ -163,17 +164,18 @@ export class AdvancedSaveButton extends Component<AdvancedSaveButtonProps, Advan
         extended: false,
     };
 
-    public toggleExtendButton = () => {
+    public saveCardButton = () => {
+        this.props.save();
         this.setState((oldstate) => ({ extended: !oldstate.extended }));
     };
 
     public componentWillMount() {
-        this.props.save();
+        // this.props.save();
     }
 
-    render() {
+    public render() {
         const { extended } = this.state;
-        const { close, save, error } = this.props;
+        const { close, save, error, changes } = this.props;
         return (
             <>
                 <div
@@ -183,10 +185,10 @@ export class AdvancedSaveButton extends Component<AdvancedSaveButtonProps, Advan
                         extended && LocalStyles.Extended
                     )}
                 >
-                    {!extended ? (
+                    {!extended || (changes && !error) ? (
                         <button
                             className={classNames(LocalStyles.FrameButton, LocalStyles.White)}
-                            onClick={this.toggleExtendButton}
+                            onClick={this.saveCardButton}
                         >
                             <FontAwesomeIcon icon="save" color={white} />
                             Save

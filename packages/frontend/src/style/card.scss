@@ -8,6 +8,7 @@
 
 .card {
     width: 100%;
+    z-index: 1;
 
     padding: $default-space;
     margin-bottom: $default-space;
@@ -43,16 +44,14 @@
 }
 
 .background {
-    background-color: $new-light-gray;
-    border-right: 1px solid $new-dark-gray;
-
+    background-color: $blue-gray; //$new-light-gray;
     height: 100vh;
     margin-top: -130px;
-    padding-top: 130px;
+    padding-top: 150px;
 }
 
 .backgroundHelper {
-    background-color: $new-light-gray;
+    background-color: $blue-gray; //$new-light-gray;
     height: 100vh;
     position: absolute;
     top: 0;
@@ -75,4 +74,8 @@
     to {
         transform:translate(0, 0%)
     }
+}
+
+.pageContainer {
+    margin-bottom: $default-space-large;
 }

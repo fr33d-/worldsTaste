@@ -10,6 +10,8 @@ import { Footer } from '../Footer';
 import { Navigationbar } from '../Navigationbar';
 import { Sidemenu } from '../Sidemenu';
 import LocalStyles from './Coffee.module.scss';
+import chemexSVG from './../../images/Chemex.svg';
+import GeneralStyles from './../../style/GeneralStyles.module.scss';
 
 export type CoffeeProps = RouteComponentProps;
 
@@ -172,44 +174,36 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                         <h1>Blog of Coffee</h1>
                     </div>
                     <div className="row">
-                        <Sidemenu
-                            filter={attrData}
-                            header={'Blog of Coffee'}
-                            icon={<FontAwesomeIcon icon="mug-hot" size="3x" color="#8B572A" />}
-                        />
+                        <Sidemenu filter={attrData} image={chemexSVG} />
                         <div className={classNames(`col-12 col-lg-9`, LocalStyles.CoffeeContent)}>
                             <div className={LocalStyles.CoffeeContentScrollable}>
-                                <div className={`${LocalStyles.Filter}`}>
-                                    <Row>
-                                        <Col>
-                                            <Form.Group controlId="exampleForm.ControlSelect1">
-                                                <Form.Control as="select">
-                                                    <option disabled selected>
-                                                        Order by
-                                                    </option>
-                                                    <option>Origin</option>
-                                                    <option>Rostary</option>
-                                                    <option>Raging</option>
-                                                    <option>Kind</option>
-                                                </Form.Control>
-                                            </Form.Group>
-                                        </Col>
-                                        <Col>
-                                            <Form.Control placeholder="Search" />
-                                        </Col>
-                                        <Col>
-                                            <button className="add-button big" onClick={this.toggleAttrMenu}>
-                                                <FontAwesomeIcon icon="database" />
-                                            </button>
-                                            <button className="add-button big" onClick={this.createCard}>
-                                                <FontAwesomeIcon icon="plus" />
-                                            </button>
-                                        </Col>
-                                    </Row>
+                                <div className={`${GeneralStyles.Filter}`}>
+                                    <Form.Control as="select" className={LocalStyles.Select}>
+                                        <option disabled selected>
+                                            Order by
+                                        </option>
+                                        <option>Origin</option>
+                                        <option>Rostary</option>
+                                        <option>Raging</option>
+                                        <option>Kind</option>
+                                    </Form.Control>
+                                    <Form.Control placeholder="Search" className={LocalStyles.Select} />
+                                    <button
+                                        className={classNames('add-button big', LocalStyles.Button)}
+                                        onClick={this.toggleAttrMenu}
+                                    >
+                                        <FontAwesomeIcon icon="database" />
+                                    </button>
+                                    <button
+                                        className={classNames('add-button big', LocalStyles.Button)}
+                                        onClick={this.createCard}
+                                    >
+                                        <FontAwesomeIcon icon="plus" />
+                                    </button>
                                 </div>
 
-                                <div className={LocalStyles.Introtext}>
-                                    <h2>Kaffee ist Genuss und Wissenschaft</h2>
+                                <div className={GeneralStyles.Introtext}>
+                                    <h2>Genuss und Wissenschaft</h2>
                                     <p>
                                         Kaffee macht nicht nur wach sondern kann viel mehr. Es ist eine Wissenschaft ihn
                                         zuzbereiten, es gibt hunderte, wenn nicht tausende von Arten, Varianten,

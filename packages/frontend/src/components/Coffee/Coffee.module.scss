@@ -4,7 +4,7 @@
 .CoffeeContainer {
     margin-top: 50px;
     margin-left: -60px;
-    
+
     @include media-breakpoint-down(md) {
         margin-left: 0;
     }
@@ -12,17 +12,6 @@
 
 .Container {
     margin-top: 100px;
-}
-
-.Introtext {
-    margin-top: $default-space;
-    margin-right: $default-space-large;
-    padding: $default-space;
-    width: 80%;
-
-    h2 {
-        padding-bottom: $default-space-small;
-    }
 }
 
 .BackgroundHelper {
@@ -34,15 +23,7 @@
     }
 }
 
-.Filter {
-    width: fit-content;
-    text-align: right;
-    margin-left: auto;
 
-    select {
-        width: 150px;
-    }
-}
 
 .MobileHeader {
     margin-bottom: $default-space;
@@ -54,4 +35,8 @@
     svg {
         margin-right: 20px;
     }
+}
+
+.CoffeeContent {
+    margin-bottom: 50px;
 }

@@ -2,10 +2,19 @@
 
 .formElement {
     border-radius: $border-radius-min;
-    background: $new-light-gray;
+    background: $blue-gray; //$new-gray;
     height: 50px;
     margin-bottom: 20px;
     display: block;
-    border: 1px solid $new-dark-gray;
+    // border: 1px solid $new-dark-gray;
     width: 100%;
+
+    input, textarea, select {
+        outline: none;
+
+        &:hover,
+        &:focus {
+            outline: none;
+        }
+    }
 }
