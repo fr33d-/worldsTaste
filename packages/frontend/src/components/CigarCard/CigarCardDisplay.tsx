@@ -1,71 +1,11 @@
-import { IconProp, library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import React, { Component } from 'react';
-import {
-    blue,
-    blueAccent,
-    brown,
-    gray,
-    grayDarker,
-    green,
-    greenAccent,
-    red,
-    yellow,
-    yellowAccent,
-    grayDark,
-} from '../../style/colors';
+import { blue, blueAccent, brown, grayDarker, green, greenAccent, red, yellow, yellowAccent } from '../../style/colors';
 import { CigarEntry } from '../Cigars';
+import { AttrField, AttrFieldIconlist } from '../FormElements/AttrFields';
 import CigarReplacement from './../../images/Cigar-replacement.svg';
 import LocalStyles from './CigarCard.module.scss';
-import GeneralStyles from './../../style/GeneralStyles.module.scss';
-
-type AttrFieldProps = {
-    name: string;
-    value: string;
-    icon: IconProp;
-    color: string;
-};
-
-export const AttrField = ({ name, value, icon, color }: AttrFieldProps) => (
-    <div className={GeneralStyles.AttrField}>
-        <p className={GeneralStyles.Name}>{name}</p>
-        <div>
-            <FontAwesomeIcon icon={icon} color={color} size="sm" />
-            <span className={GeneralStyles.Value}>{value}</span>
-        </div>
-    </div>
-);
-
-type AttrFieldIconlistProps = {
-    name: string;
-    value: number;
-    valueIcon: IconProp;
-    valueIconColor: string;
-    icon: IconProp;
-    color: string;
-};
-
-export const AttrFieldIconlist = ({ name, valueIcon, value, valueIconColor, icon, color }: AttrFieldIconlistProps) => (
-    <div className={GeneralStyles.AttrField}>
-        <p className={GeneralStyles.Name}>{name}</p>
-        <div>
-            <FontAwesomeIcon icon={icon} color={color} size="sm" />
-            {
-                <div className={GeneralStyles.Iconlist}>
-                    <ul>
-                        {[...Array(value)].map(() => (
-                            <li className={GeneralStyles.Active} />
-                        ))}
-                        {[...Array(5 - value)].map(() => (
-                            <li />
-                        ))}
-                    </ul>
-                </div>
-            }
-        </div>
-    </div>
-);
 
 type CigarCardDisplayProps = {
     entry: CigarEntry;

@@ -1,13 +1,14 @@
 import { FontawesomeObject, IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon, Props as FontAwesomeProps } from "@fortawesome/react-fontawesome";
 import React, { ComponentType, ReactElement } from "react";
+import ChemexSVG from './images/Chemex.svg';
+import Cigar from './images/cigar.svg';
 
 export type MainMenuItem = {
     name: string;
     label?: string;
     icon?: ReactElement<FontAwesomeProps>;
-    // icon?: IconProp;
-    // iconColor?: string;
+    image?: string;
     link: string;
     active: boolean;
     submenu: MainMenuItem[];
@@ -19,6 +20,7 @@ export const MainMenu: MainMenuItem[] = [
         link: '/coffee',
         label: 'Blog of Coffee',
         icon: <FontAwesomeIcon icon="mug-hot" size="3x" color="#8B572A"/>,
+        image: ChemexSVG,
         active: false,
         submenu: [
             {
@@ -58,6 +60,7 @@ export const MainMenu: MainMenuItem[] = [
         link: '/cigars',
         label: 'A pleasure of smoke',
         icon: <FontAwesomeIcon icon="smoking" size="3x" color="#BC9B33"/>,
+        image: Cigar,
         active: false,
         submenu: [
             {

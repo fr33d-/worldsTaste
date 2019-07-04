@@ -43,7 +43,8 @@
                 }
 
                 &.Active {
-                    text-decoration: underline;
+                    // text-decoration: underline;
+                    color: $new-darker-gray;
 
                     .icon {
                         display: inline-block;
@@ -51,7 +52,8 @@
                 }
 
                 &:hover {
-                    text-decoration: underline;
+                    // text-decoration: underline;
+                    color: $new-darker-gray;
                 }
             }
         }
@@ -68,7 +70,13 @@
 
         &.ActiveSubMenu {
             opacity: 1;
-            margin-left: 0;
+            margin-left: $default-space;
+        }
+
+        img {
+            width: 150px;
+            margin-bottom: $default-space;
+            margin-top: -$default-space;
         }
 
         ul {

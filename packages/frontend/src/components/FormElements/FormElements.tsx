@@ -1,91 +1,133 @@
-import LocalStyles from './FormElements.module.scss';
-import React, { FormEvent, ChangeEvent } from 'react';
-import { Col, Form, FormControlProps } from 'react-bootstrap';
-import { AttrDataItemType, AttrDataType } from '../AttrDataWindow';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { grayDarker } from '../../style/colors';
+import { AttrDataItemType, AttrDataType } from '../AttrDataWindow';
+import LocalStyles from './FormElements.module.scss';
 
 type textInputProps = {
     name: string;
-    value: string | number;
-    unit?: string;
-    onChange(): void;
+    value: string;
+    onChange: Dispatch<SetStateAction<string>>;
 };
 
-export const TextInput = ({ name, onChange, value, unit }: textInputProps) => (
-    <div className={LocalStyles.TextInput}>
-        <span className={LocalStyles.Name}>{name}</span>
-        <input
-            type="text"
-            placeholder={name}
-            value={value}
-            onChange={onChange}
-            className={unit && LocalStyles.NumberInput}
-        />
-        {unit && <span className={LocalStyles.Unit}>{unit}</span>}
-    </div>
-);
+export const TextInput = ({ name, onChange, value }: textInputProps) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        onChange(e.target.value);
+    };
+    return (
+        <div className={LocalStyles.TextInput}>
+            <span className={LocalStyles.Name}>{name}</span>
+            <input type="text" placeholder={name} value={value} onChange={handleChange} />
+        </div>
+    );
+};
+
+type numberInputProps = {
+    name: string;
+    value: number;
+    unit: string;
+    onChange: Dispatch<SetStateAction<number>>;
+};
+
+export const NumberInput = ({ name, onChange, value, unit }: numberInputProps) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        onChange(Number(e.target.value));
+    };
+
+    return (
+        <div className={LocalStyles.TextInput}>
+            <span className={LocalStyles.Name}>{name}</span>
+            <input
+                type="text"
+                placeholder={name}
+                value={value}
+                onChange={handleChange}
+                className={LocalStyles.NumberInput}
+            />
+            <span className={LocalStyles.Unit}>{unit}</span>
+        </div>
+    );
+};
 
 type DropdownInputProps = {
     label: string;
     icon?: IconProp;
     iconColor?: string;
-    items: AttrDataType;
-    onChange(event: ChangeEvent<HTMLSelectElement>): void;
+    items: AttrDataItemType[];
     selectedItem: AttrDataItemType;
+    onChange: Dispatch<SetStateAction<AttrDataItemType>>;
 };
 
-export const DropdownInput = ({ items, label, onChange, selectedItem, icon, iconColor }: DropdownInputProps) => (
-    <div className={LocalStyles.DropdownInput}>
-        <label>{label}</label>
-        <div className={LocalStyles.select}>
-            {icon && <FontAwesomeIcon icon={icon} color={iconColor} className={LocalStyles.Icon} size="sm" />}
-            <select onChange={onChange}>
-                <option value="unknown">unknown</option>
-                {items.items.map((item, i) => {
-                    if (item.name === selectedItem.name) {
-                        return (
-                            <option key={i} value={item.name} selected>
-                                {item.name}
-                            </option>
-                        );
-                    } else {
-                        return (
-                            <option key={i} value={item.name}>
-                                {item.name}
-                            </option>
-                        );
-                    }
-                })}
-            </select>
+export const DropdownInput = ({ items, label, selectedItem, icon, iconColor, onChange }: DropdownInputProps) => {
+    const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
+        const newItem = items.find(({ name }) => name === e.target.value);
+        if (newItem != undefined) onChange(newItem);
+    };
+
+    return (
+        <div className={LocalStyles.DropdownInput}>
+            <label>{label}</label>
+            <div className={LocalStyles.select}>
+                {icon && <FontAwesomeIcon icon={icon} color={iconColor} className={LocalStyles.Icon} size="sm" />}
+                <select onChange={handleChange}>
+                    <option value="unknown">unknown</option>
+                    {items.map((item, i) => {
+                        if (item.name === selectedItem.name) {
+                            return (
+                                <option key={i} value={item.name} selected>
+                                    {item.name}
+                                </option>
+                            );
+                        } else {
+                            return (
+                                <option key={i} value={item.name}>
+                                    {item.name}
+                                </option>
+                            );
+                        }
+                    })}
+                </select>
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 type TextareaProps = {
     label: string;
     value: string;
-    onChange(event: ChangeEvent<HTMLTextAreaElement>): void;
+    onChange: Dispatch<SetStateAction<string>>;
 };
 
-export const TextareaInput = ({ label, value, onChange }: TextareaProps) => (
-    <div className={LocalStyles.TextareaInput}>
-        <FontAwesomeIcon icon="bars" size="lg" color={grayDarker} />
-        <textarea placeholder={label} value={value} onChange={onChange} className="formElement" />
-    </div>
-);
+export const TextareaInput = ({ label, value, onChange }: TextareaProps) => {
+    const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        onChange(e.target.value);
+    };
+
+    return (
+        <div className={LocalStyles.TextareaInput}>
+            <FontAwesomeIcon icon="bars" size="lg" color={grayDarker} />
+            <textarea placeholder={label} value={value} onChange={handleChange} className="formElement" />
+        </div>
+    );
+};
 
 type BoolInputProps = {
     label: string;
     value: boolean;
-    onChange(event: ChangeEvent<HTMLTextAreaElement>): void;
+    onChange: Dispatch<SetStateAction<boolean>>;
 };
 
-export const BoolInput = ({ label, value, onChange }: BoolInputProps) => (
-    <div className={LocalStyles.BoolInput}>
-        <label>{label}</label>
-        {value && <input type="checkbox" name={label} value={label} checked />}
-        {!value && <input type="checkbox" name={label} value={label} />}
-    </div>
-);
+export const BoolInput = ({ label, value, onChange }: BoolInputProps) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        onChange(e.target.checked);
+    };
+
+    return (
+        <div className={LocalStyles.BoolInput}>
+            <label>{label}</label>
+            {value && <input type="checkbox" name={label} value={label} checked onChange={handleChange} />}
+            {!value && <input type="checkbox" name={label} value={label} onChange={handleChange} />}
+        </div>
+    );
+};

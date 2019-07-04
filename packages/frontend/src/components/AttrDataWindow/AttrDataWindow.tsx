@@ -43,7 +43,7 @@ export class AttrDataWindow extends Component<AttrDataProps, AttrDataState> {
     public addNewItem = () => {
         const urlSubstring = this.state.selectedCategory.urlSubstring;
         axios
-            .post(`http://localhost:4000/coffeeAttrs/${urlSubstring}`, { id: 0, name: this.state.newItemName })
+            .post(`http://localhost:4000/${urlSubstring}`, { id: 0, name: this.state.newItemName })
             .then((response) => {
                 console.log(response);
                 const header = response.headers['location'];
@@ -69,7 +69,7 @@ export class AttrDataWindow extends Component<AttrDataProps, AttrDataState> {
         const urlSubstring = this.state.selectedCategory.urlSubstring;
 
         axios
-        .delete(`http://localhost:4000/coffeeAttrs/${urlSubstring}/${id}`)
+        .delete(`http://localhost:4000/${urlSubstring}/${id}`)
         .then((response) => {
             console.log(response);
 

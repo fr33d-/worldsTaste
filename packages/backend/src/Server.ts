@@ -6,11 +6,13 @@ import helmet from "helmet";
 import * as httpStatusCodes from "http-status-codes";
 import "reflect-metadata";
 import { createConnection } from "typeorm";
-import { usersRoute } from "./routes/UsersRoute";
+import { cigarAttrsRoute } from "./routes/CigarAttrsRouts";
+import { cigarRoute } from "./routes/CigarsRoute";
+import { coffeeAttrsRoute } from "./routes/CoffeeAttrsRouts";
 import { coffeeRoute } from "./routes/CoffeeRoute";
+import { usersRoute } from "./routes/UsersRoute";
 import { errorLoggerMiddleware, errorMiddleware } from "./utils/ErrorHandlerUtil";
 import { createLogger } from "./utils/LoggerUtil";
-import { coffeeAttrsRoute } from "./routes/CoffeeAttrsRouts";
 
 // Export all necessary Dtos to make them accessible from the frontend
 export * from "./models/dtos/UserDto";
@@ -44,6 +46,8 @@ createConnection()
         server.use("/users", usersRoute);
         server.use("/coffee", coffeeRoute);
         server.use("/coffeeAttrs", coffeeAttrsRoute);
+        server.use("/cigars", cigarRoute);
+        server.use("/cigarAttrs", cigarAttrsRoute);
 
         // 404 - Not Found
         server.use((_, result) => result.sendStatus(httpStatusCodes.NOT_FOUND));

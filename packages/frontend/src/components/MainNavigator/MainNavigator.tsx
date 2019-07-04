@@ -109,8 +109,9 @@ class MainNavigatorBase extends Component<MainNavigatorProps, MainNavigatorState
                                         activeMenuItem.submenu.length > 0 &&
                                         LocalStyles.ActiveSubMenu}`}
                                 >
-                                    {activeMenuItem && activeMenuItem.icon}
-                                    <h1>{activeMenuItem && activeMenuItem.label}</h1>
+                                    {activeMenuItem && !activeMenuItem.image && activeMenuItem.icon}
+                                    <h1>{activeMenuItem && !activeMenuItem.image && activeMenuItem.label}</h1>
+                                    {activeMenuItem && activeMenuItem.image && <img src={activeMenuItem.image} />}
                                     <ul>
                                         {activeMenuItem &&
                                             activeMenuItem.submenu.map((item, i) => (

@@ -1,43 +1,70 @@
+import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
-import React, { Component } from 'react';
-import { Col, Form, Row } from 'react-bootstrap';
+import React, { Component, Dispatch, SetStateAction } from 'react';
+import { Form } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router';
-import { AttrDataType, AttrDataWindow, AttrDataItemType } from '../AttrDataWindow';
+import { AttrDataItemType, AttrDataType, AttrDataWindow } from '../AttrDataWindow';
 import { Footer } from '../Footer';
+import { Image } from '../FormComponents';
 import { Navigationbar } from '../Navigationbar';
 import { Sidemenu } from '../Sidemenu';
-import GeneralStyles from './../../style/GeneralStyles.module.scss';
 import CigarReplacement from './../../images/Cigar-replacement.svg';
-import { CigarCard } from './../CigarCard';
-import { Image } from '../FormComponents';
-import LocalStyles from './Cigars.module.scss';
 import cigarSVG from './../../images/cigar.svg';
+import GeneralStyles from './../../style/GeneralStyles.module.scss';
+import { CigarCard } from './../CigarCard';
+import LocalStyles from './Cigars.module.scss';
 
 export type CigarEntry = {
-    id: number;
-    name: string;
-    images?: Image[];
-    description: string;
-    producer: AttrDataItemType;
-    origin: AttrDataItemType;
-    rating: number;
-    einlage: AttrDataItemType;
-    umblatt: AttrDataItemType;
-    deckplatt: AttrDataItemType;
-    anschnitt: AttrDataItemType;
-    ringmas: number;
-    buydate: string;
-    smokedate: string;
-    smokeduration: number;
-    smokeagain: boolean;
-    strength: number;
-    lenght: number;
-    aromavielfalt: number;
-    zugwiederstand: number;
-    aromaentwicklung: number;
     abbrand: number;
+    anschnitt: AttrDataItemType;
     armoarad: AttrDataItemType;
+    aromavielfalt: number;
+    aromaentwicklung: number;
+    buydate: string;
+    deckplatt: AttrDataItemType;
+    description: string;
+    einlage: AttrDataItemType;
+    id: number;
+    images?: Image[];
+    lenght: number;
+    name: string;
+    origin: AttrDataItemType;
+    producer: AttrDataItemType;
+    rating: number;
+    ringmas: number;
+    smokeagain: boolean;
+    smokeduration: number;
+    smokedate: string;
+    strength: number;
+    umblatt: AttrDataItemType;
+    zugwiederstand: number;
+};
+
+export type CigarSetterEntry = {
+    setAbbrand: Dispatch<SetStateAction<number>>;
+    setAnschnitt: Dispatch<SetStateAction<AttrDataItemType>>;
+    setArmoarad: Dispatch<SetStateAction<AttrDataItemType>>;
+    setAromavielfalt: Dispatch<SetStateAction<number>>;
+    setAromaentwicklung: Dispatch<SetStateAction<number>>;
+    setBuydate: Dispatch<SetStateAction<string>>;
+    setDeckplatt: Dispatch<SetStateAction<AttrDataItemType>>;
+    setDescription: Dispatch<SetStateAction<string>>;
+    setEinlage: Dispatch<SetStateAction<AttrDataItemType>>;
+    setId: Dispatch<SetStateAction<number>>;
+    setImages: Dispatch<SetStateAction<Image[] | undefined>>;
+    setLenght: Dispatch<SetStateAction<number>>;
+    setName: Dispatch<SetStateAction<string>>;
+    setOrigin: Dispatch<SetStateAction<AttrDataItemType>>;
+    setProducer: Dispatch<SetStateAction<AttrDataItemType>>;
+    setRating: Dispatch<SetStateAction<number>>;
+    setRingmas: Dispatch<SetStateAction<number>>;
+    setSmokeagain: Dispatch<SetStateAction<boolean>>;
+    setSmokedate: Dispatch<SetStateAction<string>>;
+    setSmokeduration: Dispatch<SetStateAction<number>>;
+    setStrength: Dispatch<SetStateAction<number>>;
+    setUmblatt: Dispatch<SetStateAction<AttrDataItemType>>;
+    setZugwiederstand: Dispatch<SetStateAction<number>>;
 };
 
 const exampleCigar: CigarEntry = {
@@ -125,17 +152,17 @@ export type CigarsProps = RouteComponentProps;
 
 export type CigarsState = {
     posts: CigarEntry[];
-    menu: AttrDataType[];
+    menu: AttrDataItemType[];
     filter: string;
     loading: boolean;
     displayAttrMenu: boolean;
-    cigarsProducer: AttrDataType;
-    cigarsOrigin: AttrDataType;
-    cigarEinlage: AttrDataType;
-    cigarUmblatt: AttrDataType;
-    cigarDeckblatt: AttrDataType;
-    cigarAnschnitt: AttrDataType;
-    cigarAromarad: AttrDataType;
+    cigarsProducer: AttrDataItemType[];
+    cigarsOrigin: AttrDataItemType[];
+    cigarEinlage: AttrDataItemType[];
+    cigarUmblatt: AttrDataItemType[];
+    cigarDeckblatt: AttrDataItemType[];
+    cigarAnschnitt: AttrDataItemType[];
+    cigarAromarad: AttrDataItemType[];
 };
 
 export class Cigars extends Component<CigarsProps, CigarsState> {
@@ -144,14 +171,14 @@ export class Cigars extends Component<CigarsProps, CigarsState> {
         menu: [],
         filter: '',
         loading: false,
-        cigarsProducer: exampleProducers,
-        cigarsOrigin: exampleOrigins,
+        cigarsProducer: exampleProducers.items,
+        cigarsOrigin: exampleOrigins.items,
         displayAttrMenu: false,
-        cigarAnschnitt: exampleAnschnitt,
-        cigarDeckblatt: exampleDeckblatt,
-        cigarEinlage: exampleEinlage,
-        cigarUmblatt: exampleUmblatt,
-        cigarAromarad: exampleAromarad,
+        cigarAnschnitt: exampleAnschnitt.items,
+        cigarDeckblatt: exampleDeckblatt.items,
+        cigarEinlage: exampleEinlage.items,
+        cigarUmblatt: exampleUmblatt.items,
+        cigarAromarad: exampleAromarad.items,
     };
 
     public deletePost = (id: number) => {};
@@ -161,11 +188,45 @@ export class Cigars extends Component<CigarsProps, CigarsState> {
     public saveNewCard = (post: CigarEntry) => {};
 
     public initiateData() {
-        this.setState({
-            cigarsOrigin: exampleOrigins,
-            cigarsProducer: exampleProducers,
-            posts: [exampleCigar],
-        });
+        const cigarsPromise = axios.get<CigarEntry[]>('http://localhost:4000/cigars');
+        const anschnittPromise = axios.get<AttrDataItemType[]>('http://localhost:4000/cigarAttrs/anschnitt');
+        const aromaradPromise = axios.get<AttrDataItemType[]>('http://localhost:4000/cigarAttrs/aromarad');
+        const deckplattPromise = axios.get<AttrDataItemType[]>('http://localhost:4000/cigarAttrs/deckplatt');
+        const einlagePromise = axios.get<AttrDataItemType[]>('http://localhost:4000/cigarAttrs/einlage');
+        const originPromise = axios.get<AttrDataItemType[]>('http://localhost:4000/cigarAttrs/origin');
+        const producerPromise = axios.get<AttrDataItemType[]>('http://localhost:4000/cigarAttrs/producer');
+        const umblattPromise = axios.get<AttrDataItemType[]>('http://localhost:4000/cigarAttrs/umblatt');
+
+        Promise.all([
+            cigarsPromise,
+            anschnittPromise,
+            aromaradPromise,
+            deckplattPromise,
+            einlagePromise,
+            originPromise,
+            producerPromise,
+            umblattPromise,
+        ])
+            .then((responses) => {
+                console.log(responses[0].data);
+                this.setState({
+                    posts: responses[0].data,
+                    cigarAnschnitt: responses[1].data,
+                    cigarAromarad: responses[2].data,
+                    cigarDeckblatt: responses[3].data,
+                    cigarEinlage: responses[4].data,
+                    cigarsOrigin: responses[5].data,
+                    cigarsProducer: responses[6].data,
+                    cigarUmblatt: responses[7].data,
+                    loading: false,
+                    filter: 'origin',
+                    menu: responses[5].data,
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
     }
 
     public componentDidMount() {
@@ -183,15 +244,70 @@ export class Cigars extends Component<CigarsProps, CigarsState> {
 
     // tslint:disable-next-line: max-func-body-length
     public render() {
-        const { posts, displayAttrMenu } = this.state;
+        const {
+            posts,
+            displayAttrMenu,
+            cigarAnschnitt,
+            cigarAromarad,
+            cigarDeckblatt,
+            cigarEinlage,
+            cigarUmblatt,
+            cigarsOrigin,
+            cigarsProducer,
+            filter,
+            loading,
+            menu,
+        } = this.state;
         const attrData = [
-            exampleOrigins,
-            exampleProducers,
-            exampleAnschnitt,
-            exampleAromarad,
-            exampleDeckblatt,
-            exampleUmblatt,
-            exampleEinlage,
+            {
+                description: 'So schneidet man eine Zigarre an',
+                id: 0,
+                name: 'Anschnitte',
+                urlSubstring: 'cigarAttrs/anschnitt',
+                items: cigarAnschnitt,
+            },
+            {
+                description: 'Das Rad der Aromen',
+                id: 0,
+                name: 'Aromarad',
+                urlSubstring: 'cigarAttrs/aromarad',
+                items: cigarAromarad,
+            },
+            {
+                description: 'Variationen von Deckblättern',
+                id: 0,
+                name: 'Deckblätter',
+                urlSubstring: 'cigarAttrs/deckblatt',
+                items: cigarDeckblatt,
+            },
+            {
+                description: 'Variationen von Einlagen',
+                id: 0,
+                name: 'Einlagen',
+                urlSubstring: 'cigarAttrs/einlage',
+                items: cigarEinlage,
+            },
+            {
+                description: 'Variationen von Umblättern',
+                id: 0,
+                name: 'Umblätter',
+                urlSubstring: 'cigarAttrs/umblatt',
+                items: cigarUmblatt,
+            },
+            {
+                description: 'Aus den sonnigsten Regionen der Welt',
+                id: 0,
+                name: 'Herkünfte',
+                urlSubstring: 'cigarAttrs/origins',
+                items: cigarsOrigin,
+            },
+            {
+                description: 'Aus den lupenreinsten Demokraturen der Welt',
+                id: 0,
+                name: 'Hersteller',
+                urlSubstring: 'cigarAttrs/producer',
+                items: cigarsProducer,
+            },
         ];
 
         return (
@@ -211,30 +327,30 @@ export class Cigars extends Component<CigarsProps, CigarsState> {
                         /> */}
                         <Sidemenu filter={attrData} image={cigarSVG} />
                         <div className={classNames(`col-12 col-lg-9`)}>
-                        <div className={`${LocalStyles.Filter}`}>
-                                    <Form.Control as="select" className={LocalStyles.Select}>
-                                        <option disabled selected>
-                                            Order by
-                                        </option>
-                                        <option>Origin</option>
-                                        <option>Rostary</option>
-                                        <option>Raging</option>
-                                        <option>Kind</option>
-                                    </Form.Control>
-                                    <Form.Control placeholder="Search" className={LocalStyles.Select} />
-                                    <button
-                                        className={classNames('add-button big', LocalStyles.Button)}
-                                        onClick={this.toggleAttrMenu}
-                                    >
-                                        <FontAwesomeIcon icon="database" />
-                                    </button>
-                                    <button
-                                        className={classNames('add-button big', LocalStyles.Button)}
-                                        onClick={this.createCard}
-                                    >
-                                        <FontAwesomeIcon icon="plus" />
-                                    </button>
-                                </div>
+                            <div className={`${LocalStyles.Filter}`}>
+                                <Form.Control as="select" className={LocalStyles.Select}>
+                                    <option disabled selected>
+                                        Order by
+                                    </option>
+                                    <option>Origin</option>
+                                    <option>Rostary</option>
+                                    <option>Raging</option>
+                                    <option>Kind</option>
+                                </Form.Control>
+                                <Form.Control placeholder="Search" className={LocalStyles.Select} />
+                                <button
+                                    className={classNames('add-button big', LocalStyles.Button)}
+                                    onClick={this.toggleAttrMenu}
+                                >
+                                    <FontAwesomeIcon icon="database" />
+                                </button>
+                                <button
+                                    className={classNames('add-button big', LocalStyles.Button)}
+                                    onClick={this.createCard}
+                                >
+                                    <FontAwesomeIcon icon="plus" />
+                                </button>
+                            </div>
 
                             <div className={GeneralStyles.Introtext}>
                                 <h2>Zigarren raucht man überall</h2>
@@ -254,13 +370,13 @@ export class Cigars extends Component<CigarsProps, CigarsState> {
                                                 key={post.id}
                                                 saveFunction={this.saveNewCard}
                                                 deleteFunction={this.deletePost}
-                                                cigarAnschnitt={exampleAnschnitt}
-                                                cigarAromarad={exampleAromarad}
-                                                cigarDeckblatt={exampleDeckblatt}
-                                                cigarEinlage={exampleEinlage}
-                                                cigarUmblatt={exampleUmblatt}
-                                                cigarsProducer={exampleProducers}
-                                                cigarsOrigin={exampleOrigins}
+                                                cigarAnschnitt={cigarAnschnitt}
+                                                cigarAromarad={cigarAromarad}
+                                                cigarDeckblatt={cigarDeckblatt}
+                                                cigarEinlage={cigarEinlage}
+                                                cigarUmblatt={cigarUmblatt}
+                                                cigarsProducer={cigarsProducer}
+                                                cigarsOrigin={cigarsOrigin}
                                             />
                                         );
                                     })

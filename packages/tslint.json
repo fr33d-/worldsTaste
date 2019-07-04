@@ -37,6 +37,7 @@
         "react-a11y-role-has-required-aria-props": false, 
         "max-classes-per-file": 5,
         "cyclomatic-complexity": 30, 
-        "use-simple-attributes": false
+        "use-simple-attributes": false,
+        "react-a11y-no-onchange": false
     }
 }
