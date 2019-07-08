@@ -38,7 +38,7 @@ export const CigarCardEdit = (props: CigarCardEditProps) => {
         rating,
         abbrand,
         anschnitt,
-        armoarad,
+        aromarad,
         aromaentwicklung,
         aromavielfalt,
         buydate,
@@ -67,7 +67,7 @@ export const CigarCardEdit = (props: CigarCardEditProps) => {
     const {
         setAbbrand,
         setAnschnitt,
-        setArmoarad,
+        setAromarad,
         setAromaentwicklung,
         setAromavielfalt,
         setBuydate,
@@ -107,7 +107,6 @@ export const CigarCardEdit = (props: CigarCardEditProps) => {
             axios
                 .put(`http://localhost:4000/cigars/${props.entry.id}`, { ...props.entry })
                 .then((response) => {
-                    // this.props.close();
                     setEdited(false);
                     setSaveError(false);
                 })
@@ -301,8 +300,8 @@ export const CigarCardEdit = (props: CigarCardEditProps) => {
                                     icon="cog"
                                     iconColor={greenAccent}
                                     label="Aromarad"
-                                    selectedItem={armoarad}
-                                    onChange={setArmoarad}
+                                    selectedItem={aromarad}
+                                    onChange={setAromarad}
                                 />
                             </div>
                         </div>

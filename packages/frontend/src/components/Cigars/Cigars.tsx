@@ -18,7 +18,7 @@ import LocalStyles from './Cigars.module.scss';
 export type CigarEntry = {
     abbrand: number;
     anschnitt: AttrDataItemType;
-    armoarad: AttrDataItemType;
+    aromarad: AttrDataItemType;
     aromavielfalt: number;
     aromaentwicklung: number;
     buydate: string;
@@ -44,7 +44,7 @@ export type CigarEntry = {
 export type CigarSetterEntry = {
     setAbbrand: Dispatch<SetStateAction<number>>;
     setAnschnitt: Dispatch<SetStateAction<AttrDataItemType>>;
-    setArmoarad: Dispatch<SetStateAction<AttrDataItemType>>;
+    setAromarad: Dispatch<SetStateAction<AttrDataItemType>>;
     setAromavielfalt: Dispatch<SetStateAction<number>>;
     setAromaentwicklung: Dispatch<SetStateAction<number>>;
     setBuydate: Dispatch<SetStateAction<string>>;
@@ -67,86 +67,86 @@ export type CigarSetterEntry = {
     setZugwiederstand: Dispatch<SetStateAction<number>>;
 };
 
-const exampleCigar: CigarEntry = {
-    id: 0,
-    description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod',
-    name: 'Test',
-    origin: { id: 0, name: 'Kuba' },
-    producer: { id: 0, name: 'PCC' },
-    einlage: { id: 0, name: 'Banane' },
-    umblatt: { id: 0, name: 'Schilf' },
-    deckplatt: { id: 0, name: 'Banane' },
-    anschnitt: { id: 0, name: 'schwierig' },
-    armoarad: { id: 0, name: 'eklig' },
-    lenght: 20,
-    ringmas: 8,
-    buydate: '1.1.1970',
-    smokedate: '1.1.1970',
-    smokeduration: 260,
-    aromavielfalt: 2,
-    strength: 5,
-    abbrand: 3,
-    aromaentwicklung: 2,
-    zugwiederstand: 5,
-    rating: 5,
-    smokeagain: true,
-};
+// const exampleCigar: CigarEntry = {
+//     id: 0,
+//     description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod',
+//     name: 'Test',
+//     origin: { id: 0, name: 'Kuba' },
+//     producer: { id: 0, name: 'PCC' },
+//     einlage: { id: 0, name: 'Banane' },
+//     umblatt: { id: 0, name: 'Schilf' },
+//     deckplatt: { id: 0, name: 'Banane' },
+//     anschnitt: { id: 0, name: 'schwierig' },
+//     aromarad: { id: 0, name: 'eklig' },
+//     lenght: 20,
+//     ringmas: 8,
+//     buydate: '1.1.1970',
+//     smokedate: '1.1.1970',
+//     smokeduration: 260,
+//     aromavielfalt: 2,
+//     strength: 5,
+//     abbrand: 3,
+//     aromaentwicklung: 2,
+//     zugwiederstand: 5,
+//     rating: 5,
+//     smokeagain: true,
+// };
 
-const exampleProducers: AttrDataType = {
-    description: 'Hier rollt man die Zigarren noch von Hand',
-    id: 0,
-    name: 'Hersteller',
-    urlSubstring: 'cigars/producer',
-    items: [{ id: 0, name: 'PCC' }, { id: 1, name: 'Jose' }],
-};
+// const exampleProducers: AttrDataType = {
+//     description: 'Hier rollt man die Zigarren noch von Hand',
+//     id: 0,
+//     name: 'Hersteller',
+//     urlSubstring: 'cigars/producer',
+//     items: [{ id: 0, name: 'PCC' }, { id: 1, name: 'Jose' }],
+// };
 
-const exampleOrigins: AttrDataType = {
-    description: 'zB. Bahndamm',
-    id: 0,
-    name: 'Hersteller',
-    urlSubstring: 'cigars/origins',
-    items: [{ id: 0, name: 'Kuba' }, { id: 1, name: 'USA' }],
-};
+// const exampleOrigins: AttrDataType = {
+//     description: 'zB. Bahndamm',
+//     id: 0,
+//     name: 'Hersteller',
+//     urlSubstring: 'cigars/origins',
+//     items: [{ id: 0, name: 'Kuba' }, { id: 1, name: 'USA' }],
+// };
 
-const exampleEinlage: AttrDataType = {
-    description: 'zB. Bahndamm',
-    id: 0,
-    name: 'Einlage',
-    urlSubstring: 'cigars/einlage',
-    items: [{ id: 0, name: 'Kuba' }, { id: 1, name: 'USA' }],
-};
+// const exampleEinlage: AttrDataType = {
+//     description: 'zB. Bahndamm',
+//     id: 0,
+//     name: 'Einlage',
+//     urlSubstring: 'cigars/einlage',
+//     items: [{ id: 0, name: 'Kuba' }, { id: 1, name: 'USA' }],
+// };
 
-const exampleUmblatt: AttrDataType = {
-    description: 'zB. Bahndamm',
-    id: 0,
-    name: 'Umblatt',
-    urlSubstring: 'cigars/einlage',
-    items: [{ id: 0, name: 'Kuba' }, { id: 1, name: 'USA' }],
-};
+// const exampleUmblatt: AttrDataType = {
+//     description: 'zB. Bahndamm',
+//     id: 0,
+//     name: 'Umblatt',
+//     urlSubstring: 'cigars/einlage',
+//     items: [{ id: 0, name: 'Kuba' }, { id: 1, name: 'USA' }],
+// };
 
-const exampleDeckblatt: AttrDataType = {
-    description: 'zB. Bahndamm',
-    id: 0,
-    name: 'Deckblatt',
-    urlSubstring: 'cigars/einlage',
-    items: [{ id: 0, name: 'Kuba' }, { id: 1, name: 'USA' }],
-};
+// const exampleDeckblatt: AttrDataType = {
+//     description: 'zB. Bahndamm',
+//     id: 0,
+//     name: 'Deckblatt',
+//     urlSubstring: 'cigars/einlage',
+//     items: [{ id: 0, name: 'Kuba' }, { id: 1, name: 'USA' }],
+// };
 
-const exampleAnschnitt: AttrDataType = {
-    description: 'zB. Bahndamm',
-    id: 0,
-    name: 'Anschnitt',
-    urlSubstring: 'cigars/einlage',
-    items: [{ id: 0, name: 'Kuba' }, { id: 1, name: 'USA' }],
-};
+// const exampleAnschnitt: AttrDataType = {
+//     description: 'zB. Bahndamm',
+//     id: 0,
+//     name: 'Anschnitt',
+//     urlSubstring: 'cigars/einlage',
+//     items: [{ id: 0, name: 'Kuba' }, { id: 1, name: 'USA' }],
+// };
 
-const exampleAromarad: AttrDataType = {
-    description: 'zB. Bahndamm',
-    id: 0,
-    name: 'Aromarad',
-    urlSubstring: 'cigars/einlage',
-    items: [{ id: 0, name: 'Kuba' }, { id: 1, name: 'USA' }],
-};
+// const exampleAromarad: AttrDataType = {
+//     description: 'zB. Bahndamm',
+//     id: 0,
+//     name: 'Aromarad',
+//     urlSubstring: 'cigars/einlage',
+//     items: [{ id: 0, name: 'Kuba' }, { id: 1, name: 'USA' }],
+// };
 
 export type CigarsProps = RouteComponentProps;
 
@@ -171,19 +171,49 @@ export class Cigars extends Component<CigarsProps, CigarsState> {
         menu: [],
         filter: '',
         loading: false,
-        cigarsProducer: exampleProducers.items,
-        cigarsOrigin: exampleOrigins.items,
+        cigarsProducer: [{id: 0, name: 'unknown'}],
+        cigarsOrigin: [{id: 0, name: 'unknown'}],
         displayAttrMenu: false,
-        cigarAnschnitt: exampleAnschnitt.items,
-        cigarDeckblatt: exampleDeckblatt.items,
-        cigarEinlage: exampleEinlage.items,
-        cigarUmblatt: exampleUmblatt.items,
-        cigarAromarad: exampleAromarad.items,
+        cigarAnschnitt: [{id: 0, name: 'unknown'}],
+        cigarDeckblatt: [{id: 0, name: 'unknown'}],
+        cigarEinlage: [{id: 0, name: 'unknown'}],
+        cigarUmblatt: [{id: 0, name: 'unknown'}],
+        cigarAromarad: [{id: 0, name: 'unknown'}],
     };
 
     public deletePost = (id: number) => {};
 
-    public createCard = () => {};
+    public createCard = () => {
+        this.setState((state) => ({
+            posts: [
+                {
+                    id: 0,
+                    description: '',
+                    name: '',
+                    origin: { id: 0, name: 'unknown' },
+                    producer: { id: 0, name: 'unknown' },
+                    einlage: { id: 0, name: 'unknown' },
+                    umblatt: { id: 0, name: 'unknown' },
+                    deckplatt: { id: 0, name: 'unknown' },
+                    anschnitt: { id: 0, name: 'unknown' },
+                    aromarad: { id: 0, name: 'unknown' },
+                    lenght: 0,
+                    ringmas: 0,
+                    buydate: '1.1.1970',
+                    smokedate: '1.1.1970',
+                    smokeduration: 0,
+                    aromavielfalt: 0,
+                    strength: 0,
+                    abbrand: 0,
+                    aromaentwicklung: 0,
+                    zugwiederstand: 0,
+                    rating: 0,
+                    smokeagain: false,
+                },
+                ...state.posts,
+            ],
+        }));
+    };
 
     public saveNewCard = (post: CigarEntry) => {};
 
@@ -226,7 +256,6 @@ export class Cigars extends Component<CigarsProps, CigarsState> {
             .catch((error) => {
                 console.log(error);
             });
-
     }
 
     public componentDidMount() {
@@ -268,42 +297,42 @@ export class Cigars extends Component<CigarsProps, CigarsState> {
             },
             {
                 description: 'Das Rad der Aromen',
-                id: 0,
+                id: 1,
                 name: 'Aromarad',
                 urlSubstring: 'cigarAttrs/aromarad',
                 items: cigarAromarad,
             },
             {
                 description: 'Variationen von Deckblättern',
-                id: 0,
+                id: 2,
                 name: 'Deckblätter',
                 urlSubstring: 'cigarAttrs/deckblatt',
                 items: cigarDeckblatt,
             },
             {
                 description: 'Variationen von Einlagen',
-                id: 0,
+                id: 3,
                 name: 'Einlagen',
                 urlSubstring: 'cigarAttrs/einlage',
                 items: cigarEinlage,
             },
             {
                 description: 'Variationen von Umblättern',
-                id: 0,
+                id: 4,
                 name: 'Umblätter',
                 urlSubstring: 'cigarAttrs/umblatt',
                 items: cigarUmblatt,
             },
             {
                 description: 'Aus den sonnigsten Regionen der Welt',
-                id: 0,
+                id: 5,
                 name: 'Herkünfte',
-                urlSubstring: 'cigarAttrs/origins',
+                urlSubstring: 'cigarAttrs/origin',
                 items: cigarsOrigin,
             },
             {
                 description: 'Aus den lupenreinsten Demokraturen der Welt',
-                id: 0,
+                id: 6,
                 name: 'Hersteller',
                 urlSubstring: 'cigarAttrs/producer',
                 items: cigarsProducer,
@@ -320,15 +349,10 @@ export class Cigars extends Component<CigarsProps, CigarsState> {
                         <h1>Smoke of fame</h1>
                     </div>
                     <div className="row">
-                        {/* <Sidemenu
-                            filter={attrData}
-                            header={'Smoke of fame'}
-                            icon={<FontAwesomeIcon icon="smoking" size="3x" color="#8B572A" />}
-                        /> */}
                         <Sidemenu filter={attrData} image={cigarSVG} />
                         <div className={classNames(`col-12 col-lg-9`)}>
-                            <div className={`${LocalStyles.Filter}`}>
-                                <Form.Control as="select" className={LocalStyles.Select}>
+                            <div className={`${GeneralStyles.Filter}`}>
+                                <Form.Control as="select" className={GeneralStyles.Select}>
                                     <option disabled selected>
                                         Order by
                                     </option>
@@ -337,15 +361,15 @@ export class Cigars extends Component<CigarsProps, CigarsState> {
                                     <option>Raging</option>
                                     <option>Kind</option>
                                 </Form.Control>
-                                <Form.Control placeholder="Search" className={LocalStyles.Select} />
+                                <Form.Control placeholder="Search" className={GeneralStyles.Select} />
                                 <button
-                                    className={classNames('add-button big', LocalStyles.Button)}
+                                    className={classNames('add-button big', GeneralStyles.Button)}
                                     onClick={this.toggleAttrMenu}
                                 >
                                     <FontAwesomeIcon icon="database" />
                                 </button>
                                 <button
-                                    className={classNames('add-button big', LocalStyles.Button)}
+                                    className={classNames('add-button big', GeneralStyles.Button)}
                                     onClick={this.createCard}
                                 >
                                     <FontAwesomeIcon icon="plus" />

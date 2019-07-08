@@ -106,17 +106,21 @@ export const updateCoffeeById: RequestHandler = async (request, result) => {
     const coffeeEntity = await CoffeeEntity.findOne({ where: { id } });
 
     if (coffeeEntity !== undefined) {
-        if (request.files !== undefined) {
-            await (request.files.images as UploadedFile[]).forEach(async (file) => {
-                const targetPath = `./uploads/coffee-images/${request.params.id}`;
-                if (!fs.existsSync(targetPath)) {
-                    fs.mkdirSync(targetPath, { recursive: true });
-                }
-                await file.mv(`${targetPath}/${file.name}`);
-            });
-        }
+        // if (request.files !== undefined) {
+        //     await (request.files.images as UploadedFile[]).forEach(async (file) => {
+        //         const targetPath = `./uploads/coffee-images/${request.params.id}`;
+        //         if (!fs.existsSync(targetPath)) {
+        //             fs.mkdirSync(targetPath, { recursive: true });
+        //         }
+        //         await file.mv(`${targetPath}/${file.name}`);
+        //     });
+        // }
 
         if (coffeeEntity.id !== requestBody.id) {
+            log(coffeeEntity.id)
+            log(requestBody)
+            log(id)
+            log(coffeeEntity.id !== requestBody.id)
             result.sendStatus(httpStatusCodes.CONFLICT);
         } else {
             CoffeeEntity.merge(coffeeEntity, { ...requestBody });

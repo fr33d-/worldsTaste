@@ -45,7 +45,7 @@ export class CigarCardDisplay extends Component<CigarCardDisplayProps, CigarCard
             producer,
             abbrand,
             anschnitt,
-            armoarad,
+            aromarad,
             aromaentwicklung,
             aromavielfalt,
             buydate,
@@ -197,6 +197,22 @@ export class CigarCardDisplay extends Component<CigarCardDisplayProps, CigarCard
                                             name="Rauchdauer:"
                                         />
                                     </div>
+                                    <div className="col-12 col-md-6  col-lg-4">
+                                        <AttrField
+                                            color={greenAccent}
+                                            icon="leaf"
+                                            value={einlage.name}
+                                            name="Einlage"
+                                        />
+                                    </div>
+                                    <div className="col-12 col-md-6  col-lg-4">
+                                        <AttrField
+                                            color={greenAccent}
+                                            icon="leaf"
+                                            value={umblatt.name}
+                                            name="Umblatt"
+                                        />
+                                    </div>
                                 </div>
 
                                 <div className={classNames('row', LocalStyles.row)}>
@@ -254,9 +270,10 @@ export class CigarCardDisplay extends Component<CigarCardDisplayProps, CigarCard
                                             valueIcon="star"
                                         />
                                     </div>
+                                    
 
                                     <div className="col-12 col-md-6  col-lg-4">
-                                        <AttrField color={green} icon="cog" value={armoarad.name} name="Armomarad" />
+                                        <AttrField color={green} icon="cog" value={aromarad.name} name="Armomarad" />
                                     </div>
                                 </div>
                             </div>

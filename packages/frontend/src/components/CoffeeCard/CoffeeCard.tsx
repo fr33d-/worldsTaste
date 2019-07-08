@@ -4,8 +4,6 @@ import { CoffeeCardDisplay } from './CoffeeCardDisplay';
 import { CoffeeCardEdit } from './CoffeeCardEdit';
 import { Image } from '../FormComponents';
 
-
-
 export type CoffeeEntry = {
     id: number;
     images?: Image[];
@@ -17,60 +15,67 @@ export type CoffeeEntry = {
     roasted: AttrDataItemType;
 };
 
-export type CoffeeKind = {
-    id: number;
-    name: string;
-};
-
-export type CoffeeRoasted = {
-    id: number;
-    name: string;
-};
-
-export type CoffeeOrigin = {
-    id: number;
-    name: string;
+export type SetCoffeeEntry = {
+    setId: React.Dispatch<React.SetStateAction<number>>;
+    setImages?: React.Dispatch<React.SetStateAction<Image[] | undefined>>;
+    setName: React.Dispatch<React.SetStateAction<string>>;
+    setDescription: React.Dispatch<React.SetStateAction<string>>;
+    setOrigin: React.Dispatch<React.SetStateAction<AttrDataItemType>>;
+    setRating: React.Dispatch<React.SetStateAction<number>>;
+    setKind: React.Dispatch<React.SetStateAction<AttrDataItemType>>;
+    setRoasted: React.Dispatch<React.SetStateAction<AttrDataItemType>>;
 };
 
 type CoffeeCardProps = {
     entry: CoffeeEntry;
-    kinds: CoffeeKind[];
-    origins: CoffeeOrigin[];
-    roasteds: CoffeeRoasted[];
+    kinds: AttrDataItemType[];
+    origins: AttrDataItemType[];
+    roasteds: AttrDataItemType[];
     saveFunction(post: CoffeeEntry): void;
     deleteFunction(id: number): void;
 };
 
-type CoffeeCardState = {
-    edit: boolean;
-    entry: CoffeeEntry;
+export const CoffeeCard = (props: CoffeeCardProps) => {
+    const [edit, setEdit] = useState(props.entry.name === '');
+    // const [entry, setEntry] = useState(props.entry);
+    const { deleteFunction, kinds, origins, roasteds, saveFunction } = props;
+    const [id, setId] = useState(props.entry.id);
+    const [images, setImages] = useState(props.entry.images);
+    const [name, setName] = useState(props.entry.name);
+    const [description, setDescription] = useState(props.entry.description);
+    const [origin, setOrigin] = useState(props.entry.origin);
+    const [rating, setRating] = useState(props.entry.rating);
+    const [roasted, setRoasted] = useState(props.entry.roasted);
+    const [kind, setKind] = useState(props.entry.kind);
+
+    const entry: CoffeeEntry = {
+        id,
+        images,
+        name,
+        description,
+        origin,
+        rating,
+        roasted,
+        kind,
+    };
+
+    const setEntry: SetCoffeeEntry = {
+        setId,
+        setImages,
+        setName,
+        setDescription,
+        setOrigin,
+        setRating,
+        setRoasted,
+        setKind,
+    };
+
+    return edit ? (
+        <CoffeeCardEdit {...props} entry={entry} setEntry={setEntry} close={() => setEdit(false)} />
+    ) : (
+        <CoffeeCardDisplay entry={entry} deleteFunction={deleteFunction} edit={() => setEdit(true)} />
+    );
 };
-
-export class CoffeeCard extends Component<CoffeeCardProps, CoffeeCardState> {
-    public readonly state: CoffeeCardState = {
-        edit: this.props.entry.name === '',
-        entry: this.props.entry,
-    };
-
-    public editCard = () => {
-        this.setState({ edit: true });
-    };
-
-    public closeEditCard = () => {
-        this.setState({ edit: false });
-    };
-
-    public render() {
-        const { edit, entry } = this.state;
-        const { deleteFunction } = this.props;
-
-        return edit ? (
-            <CoffeeCardEdit {...this.props} entry={entry} close={this.closeEditCard} />
-        ) : (
-            <CoffeeCardDisplay entry={entry} deleteFunction={deleteFunction} edit={this.editCard} />
-        );
-    }
-}
 
 //Cool new stuff with hooks
 // const NewCoffeeCard = (props: CoffeeCardProps) => {

@@ -8,6 +8,7 @@
     left: 0;
     height: 100vh;
     width: 100vw;
+    z-index: 10;
 
     background: $white;
     opacity: 0.8;
@@ -22,6 +23,7 @@
     width: 560px;
     min-height: 300px;
     opacity: 1;
+    z-index: 20;
 
     border-radius: $border-radius;
     background: $new-gray; //#F4F4F4;
@@ -37,7 +39,7 @@
     .AttrList {
         height: 100%;
         width: 200px;
-        border-right: 1px solid $new-dark-gray;
+        // border-right: 1px solid $new-dark-gray;
         padding: 20px $default-space;
         text-align: center;
 
@@ -51,9 +53,14 @@
                 text-align: center;
                 padding-bottom: 10px;
 
+                span {
+                    font-size: 14px;
+                    color: $new-darker-gray;
+                }
+
                 &:hover, &.Active {
-                    text-decoration: underline;
-                    font-size: 600;
+                    // text-decoration: underline;
+                    font-weight: 700;
                 }
             }
         }
@@ -68,6 +75,12 @@
         padding-top: 20px;
         padding-right: $default-space;
         margin-right: $default-space;
+
+        .ListHeader {
+            font-size: 16px;
+            text-align: center;
+            
+        }
 
         ul {
             padding: 20px 0 0 10px;

@@ -46,7 +46,6 @@
     }
 
     .ButtonSection {
-        margin-top: $default-space;
         display: flex;
         width: 100%;
 
@@ -68,31 +67,31 @@
 
         width: 100%;
 
-        form {
-            width: 100%;
-        }
+        // form {
+        //     width: 100%;
+        // }
 
-        input,
-        .form-control {
-            @extend .formElement;
-        }
+        // input,
+        // .form-control {
+        //     @extend .formElement;
+        // }
 
-        .NameInput {
-            @extend .formElement;
+        // .NameInput {
+        //     @extend .formElement;
 
-            span {
-                margin: 5px 15px 5px 15px;
-                font-weight: 600;
-                color: $new-darker-gray
-            }
+        //     span {
+        //         margin: 5px 15px 5px 15px;
+        //         font-weight: 600;
+        //         color: $new-darker-gray
+        //     }
 
-            input {
-                border: none;
-                background: none;
-                display: inline;
-                width: 80%;
-            }
-        }
+        //     input {
+        //         border: none;
+        //         background: none;
+        //         display: inline;
+        //         width: 80%;
+        //     }
+        // }
 
         h2 {
             width: 100%;
@@ -115,6 +114,15 @@
                 display: inline-block;
                 text-align: center;
             }
+        }
+    }
+
+    .Header {
+        width: 100%;
+        h2 {
+            width: 100%;
+            text-align: center;
+            margin-bottom: $default-space;
         }
     }
 }

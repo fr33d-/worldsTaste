@@ -110,7 +110,7 @@ export const deleteCigarAromaradEntity: RequestHandler = async (request, result)
 //Deckblatt
 
 export const getCigarDeckplattEntities: RequestHandler = async (_, result) => {
-    log(`GET /coffee/deckblatt`);
+    log(`GET /cigarAttrs/deckblatt`);
 
     const cigarDeckplattEntity = await CigarDeckplattEntity.find();
     result.status(httpStatusCodes.OK).json(cigarDeckplattEntity.map(CigarDeckplattDto.fromEntity));

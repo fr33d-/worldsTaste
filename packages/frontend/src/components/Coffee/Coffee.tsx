@@ -73,7 +73,7 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
         }));
     };
 
-    public saveNewCard = (post: CoffeeEntry) => {
+    public saveCard = (post: CoffeeEntry) => {
         axios
             .post('http://localhost:4000/coffee', { ...post })
             .then((response) => {
@@ -178,7 +178,7 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                         <div className={classNames(`col-12 col-lg-9`, LocalStyles.CoffeeContent)}>
                             <div className={LocalStyles.CoffeeContentScrollable}>
                                 <div className={`${GeneralStyles.Filter}`}>
-                                    <Form.Control as="select" className={LocalStyles.Select}>
+                                    <Form.Control as="select" className={GeneralStyles.Select}>
                                         <option disabled selected>
                                             Order by
                                         </option>
@@ -187,15 +187,15 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                                         <option>Raging</option>
                                         <option>Kind</option>
                                     </Form.Control>
-                                    <Form.Control placeholder="Search" className={LocalStyles.Select} />
+                                    <Form.Control placeholder="Search" className={GeneralStyles.Select} />
                                     <button
-                                        className={classNames('add-button big', LocalStyles.Button)}
+                                        className={classNames('add-button big', GeneralStyles.Button)}
                                         onClick={this.toggleAttrMenu}
                                     >
                                         <FontAwesomeIcon icon="database" />
                                     </button>
                                     <button
-                                        className={classNames('add-button big', LocalStyles.Button)}
+                                        className={classNames('add-button big', GeneralStyles.Button)}
                                         onClick={this.createCard}
                                     >
                                         <FontAwesomeIcon icon="plus" />
@@ -203,7 +203,7 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                                 </div>
 
                                 <div className={GeneralStyles.Introtext}>
-                                    <h2>Genuss und Wissenschaft</h2>
+                                    <h2>Kaffee - Genuss und Wissenschaft</h2>
                                     <p>
                                         Kaffee macht nicht nur wach sondern kann viel mehr. Es ist eine Wissenschaft ihn
                                         zuzbereiten, es gibt hunderte, wenn nicht tausende von Arten, Varianten,
@@ -222,7 +222,7 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                                                 <CoffeeCard
                                                     entry={post}
                                                     key={post.id}
-                                                    saveFunction={this.saveNewCard}
+                                                    saveFunction={this.saveCard}
                                                     deleteFunction={this.deletePost}
                                                     kinds={coffeeKinds}
                                                     roasteds={coffeeRoateds}

@@ -5,6 +5,11 @@ import { MainMenuItem } from '../../data';
 import { UsersRouteParams } from '../../Routes';
 import LocalStyles from './MainNavigator.module.scss';
 import ReactDOM from 'react-dom';
+import classNames from 'classnames';
+import shape from './shape1.svg';
+import shapeBlue from './shapeBlue.svg';
+import Line from './Line.svg';
+import Background from './Background.svg';
 
 type MainNavigatorProps = {
     menu: MainMenuItem[];
@@ -36,94 +41,62 @@ class MainNavigatorBase extends Component<MainNavigatorProps, MainNavigatorState
         }
     };
 
-    //Click outside geht nicht! 
-
-    // public deselectMenuItem() {
-    //     this.setState({
-    //         activeMenuItem: undefined,
-    //     });
-    // }
-
-    // public handleClick(e: any) {
-    //     const domNode = ReactDOM.findDOMNode(this);
-    //     if (domNode !== null && domNode.contains(e.target)) {
-    //         return;
-    //     }
-
-    //     this.deselectMenuItem();
-    // }
-
-    // public componentWillMount() {
-    //     document.addEventListener('mousedown', this.handleClick, false);
-    // }
-
-    // public componentWillUnmount() {
-    //     document.removeEventListener('mousedown', this.handleClick, false);
-    // }
-
     public render() {
         const { activeMenuItem } = this.state;
         const { menu } = this.props;
 
         return (
-            <div className={LocalStyles.MainNavigator}>
-                <div className="container">
-                    <div className={LocalStyles.BackgroundHelper} />
-                    <div className="row">
+            <div className={classNames(LocalStyles.MainNavigator, 'container')}>
+                <div className="row">
+                    <div className={`col-5 ${LocalStyles.Menu}`}>
+                        <div className={LocalStyles.Header}>
+                            <span>Pleasure DB</span>
+                            <img src={Line} />
+                            <FontAwesomeIcon color="#fff" icon="search" />
+                        </div>
+                        <ul>
+                            {menu.map((item, i) => (
+                                <li
+                                    onClick={this.clickMenuItem(item)}
+                                    className={`${activeMenuItem &&
+                                        item.link === activeMenuItem.link &&
+                                        LocalStyles.Active}`}
+                                    key={i}
+                                >
+                                    {item.name}
+                                    <span className={LocalStyles.icon}>
+                                        <FontAwesomeIcon icon="chevron-right" size="xs" />
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
+                        <img src={shape} className={LocalStyles.Shape} />
+                        <div className={LocalStyles.Footer}>A small collection of pleasures</div>
+                    </div>
+
+                    {activeMenuItem && (
                         <div
-                            className={`offset-1 ${LocalStyles.Background} ${activeMenuItem &&
-                                activeMenuItem.submenu.length > 0 &&
-                                LocalStyles.ActiveMenu}`}
+                            className={`col-7 ${LocalStyles.SubMenu}`}
                         >
-                            <div className="row">
-                                <div className={`col-12 ${LocalStyles.Teaser} ${LocalStyles.MainNavigator}`}>
-                                    <p>
-                                        Komische Website, die eigentlich nur eine technische Demo und ein wenig spieler
-                                        ist!
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className={`col ${LocalStyles.Menu} ${LocalStyles.MainNavigator}`}>
-                                    <ul>
-                                        {menu.map((item, i) => (
-                                            <li
-                                                onClick={this.clickMenuItem(item)}
-                                                className={`${activeMenuItem &&
-                                                    item.link === activeMenuItem.link &&
-                                                    LocalStyles.Active}`}
-                                                key={i}
-                                            >
+                            <img src={Background} className={LocalStyles.SubMenBackground} />
+                            {activeMenuItem && !activeMenuItem.image && activeMenuItem.icon}
+                            {activeMenuItem && activeMenuItem.image && (
+                                <img src={activeMenuItem.image} className={LocalStyles.Icon} />
+                            )}
+                            <div className={LocalStyles.Right}>
+                                <h1>{activeMenuItem && activeMenuItem.label}</h1>
+                                <ul>
+                                    {activeMenuItem &&
+                                        activeMenuItem.submenu.map((item, i) => (
+                                            <li onClick={this.navigate(item)} key={i}>
                                                 {item.name}
-                                                <span className={LocalStyles.icon}>
-                                                    <FontAwesomeIcon icon="chevron-right" size="xs" />
-                                                </span>
                                             </li>
                                         ))}
-                                    </ul>
-                                </div>
-                                <div
-                                    className={`col ${LocalStyles.SubMenu}
-                                    ${LocalStyles.MainNavigator}
-                                    ${activeMenuItem &&
-                                        activeMenuItem.submenu.length > 0 &&
-                                        LocalStyles.ActiveSubMenu}`}
-                                >
-                                    {activeMenuItem && !activeMenuItem.image && activeMenuItem.icon}
-                                    <h1>{activeMenuItem && !activeMenuItem.image && activeMenuItem.label}</h1>
-                                    {activeMenuItem && activeMenuItem.image && <img src={activeMenuItem.image} />}
-                                    <ul>
-                                        {activeMenuItem &&
-                                            activeMenuItem.submenu.map((item, i) => (
-                                                <li onClick={this.navigate(item)} key={i}>
-                                                    {item.name}
-                                                </li>
-                                            ))}
-                                    </ul>
-                                </div>
+                                </ul>
+                                <img src={shapeBlue} className={LocalStyles.Shape} />
                             </div>
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
         );

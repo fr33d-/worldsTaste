@@ -65,25 +65,24 @@ export class AttrDataWindow extends Component<AttrDataProps, AttrDataState> {
     };
 
     public deleteItem = (id: number) => {
-
         const urlSubstring = this.state.selectedCategory.urlSubstring;
 
         axios
-        .delete(`http://localhost:4000/${urlSubstring}/${id}`)
-        .then((response) => {
-            console.log(response);
+            .delete(`http://localhost:4000/${urlSubstring}/${id}`)
+            .then((response) => {
+                console.log(response);
 
-            this.setState((oldState) => ({
-                selectedCategory: {
-                    ...oldState.selectedCategory,
-                    items: oldState.selectedCategory.items.filter((item) => item.id !== id),
-                },
-            }));
-        })
-        .catch((error) => {
-            // handle error
-            console.log(error);
-        });
+                this.setState((oldState) => ({
+                    selectedCategory: {
+                        ...oldState.selectedCategory,
+                        items: oldState.selectedCategory.items.filter((item) => item.id !== id),
+                    },
+                }));
+            })
+            .catch((error) => {
+                // handle error
+                console.log(error);
+            });
 
         this.setState((oldState) => ({
             selectedCategory: {
@@ -118,6 +117,7 @@ export class AttrDataWindow extends Component<AttrDataProps, AttrDataState> {
                                         className={classnames(item.id === selectedCategory.id && LocalStyles.Active)}
                                     >
                                         {item.name}
+                                        <span> ({item.items.length})</span>
                                     </li>
                                 ))}
                             </ul>
@@ -126,7 +126,10 @@ export class AttrDataWindow extends Component<AttrDataProps, AttrDataState> {
                             <button className={LocalStyles.CloseButton} onClick={toggleFunktion}>
                                 <FontAwesomeIcon icon="times" color="#929292" />
                             </button>
-                            <h2>{selectedCategory.description}</h2>
+                            <span className={LocalStyles.ListHeader}>
+                                <b>{selectedCategory.name}</b>
+                                <br /> {selectedCategory.description}
+                            </span>
                             <ul>
                                 {selectedCategory.items.map((item) => (
                                     <li key={item.id}>

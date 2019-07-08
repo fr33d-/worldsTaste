@@ -6,6 +6,7 @@ import {
     getAllCigars,
     getCigarAssets,
     getCigarById,
+    updateCigarById,
 } from '../controllers/CigarsController';
 
 // Define a new router that basically wraps multiple endpoint into a single object.
@@ -18,6 +19,7 @@ cigarRoute.route('/:id').get(getCigarById);
 cigarRoute.route('/:id').delete(deleteCigarById);
 cigarRoute.route('/assets/:id').get(getCigarAssets);
 
+cigarRoute.route('/:id').put(updateCigarById);
 // coffeeRoute.route('/:id').put(uploadImage);
 
 export { cigarRoute };

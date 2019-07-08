@@ -21,7 +21,7 @@ export const CigarCard = (props: CoffeeCardProps) => {
     const [edit, setEdit] = useState(props.entry.name === '');
     const [abbrand, setAbbrand] = useState(props.entry.abbrand);
     const [anschnitt, setAnschnitt] = useState(props.entry.anschnitt);
-    const [armoarad, setArmoarad] = useState(props.entry.armoarad);
+    const [aromarad, setAromarad] = useState(props.entry.aromarad);
     const [aromaentwicklung, setAromaentwicklung] = useState(props.entry.aromaentwicklung);
     const [aromavielfalt, setAromavielfalt] = useState(props.entry.aromavielfalt);
     const [buydate, setBuydate] = useState(props.entry.buydate);
@@ -54,7 +54,7 @@ export const CigarCard = (props: CoffeeCardProps) => {
     const cigarEntry: CigarEntry = {
         abbrand,
         anschnitt,
-        armoarad,
+        aromarad,
         aromavielfalt,
         aromaentwicklung,
         buydate,
@@ -80,7 +80,7 @@ export const CigarCard = (props: CoffeeCardProps) => {
     const cigarSetterEntry: CigarSetterEntry = {
         setAbbrand,
         setAnschnitt,
-        setArmoarad,
+        setAromarad,
         setAromavielfalt,
         setAromaentwicklung,
         setBuydate,
@@ -103,7 +103,7 @@ export const CigarCard = (props: CoffeeCardProps) => {
         setZugwiederstand,
     };
 
-    return !edit ? (
+    return edit ? (
         <CigarCardEdit {...props} entry={cigarEntry} close={closeEditCard} setterEntry={cigarSetterEntry} />
     ) : (
         <CigarCardDisplay entry={cigarEntry} deleteFunction={props.deleteFunction} edit={editCard} />

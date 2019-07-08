@@ -3,6 +3,7 @@ import { FontAwesomeIcon, Props as FontAwesomeProps } from "@fortawesome/react-f
 import React, { ComponentType, ReactElement } from "react";
 import ChemexSVG from './images/Chemex.svg';
 import Cigar from './images/cigar.svg';
+import Tabak from './images/Tabak.svg';
 
 export type MainMenuItem = {
     name: string;
@@ -11,6 +12,7 @@ export type MainMenuItem = {
     image?: string;
     link: string;
     active: boolean;
+    order: number;
     submenu: MainMenuItem[];
 };
 
@@ -22,36 +24,42 @@ export const MainMenu: MainMenuItem[] = [
         icon: <FontAwesomeIcon icon="mug-hot" size="3x" color="#8B572A"/>,
         image: ChemexSVG,
         active: false,
+        order: 1,
         submenu: [
             {
                 name: 'Latest',
                 link: '/latest',
                 active: false,
                 submenu: [],
+                order: 1,
             },
             {
                 name: 'Regions',
                 link: '/regions',
                 active: false,
                 submenu: [],
+                order: 2,
             },
             {
                 name: 'Roastaries',
                 link: '/rostaries',
                 active: false,
                 submenu: [],
+                order: 3,
             },
             {
                 name: 'Flavors',
                 link: '/flavors',
                 active: false,
                 submenu: [],
+                order: 4,
             },
             {
                 name: 'Ratings',
                 link: '/ratings',
                 active: false,
                 submenu: [],
+                order: 5,
             },
         ],
     },
@@ -60,52 +68,29 @@ export const MainMenu: MainMenuItem[] = [
         link: '/cigars',
         label: 'A pleasure of smoke',
         icon: <FontAwesomeIcon icon="smoking" size="3x" color="#BC9B33"/>,
-        image: Cigar,
+        image: Tabak,
         active: false,
+        order: 2,
         submenu: [
             {
                 name: 'Latest',
                 link: '/latest',
                 active: false,
+                order: 1,
                 submenu: [],
             },
             {
                 name: 'Regions',
                 link: '/regions',
                 active: false,
+                order: 2,
                 submenu: [],
             },
             {
                 name: 'Ratings',
                 link: '/ratings',
                 active: false,
-                submenu: [],
-            },
-        ],
-    },
-    {
-        name: 'Restaurants',
-        link: '/restaurants',
-        label: 'Good food nearby',
-        icon: <FontAwesomeIcon icon="hamburger" size="3x" color="#A83727"/>,
-        active: false,
-        submenu: [
-            {
-                name: 'Latest',
-                link: '/latest',
-                active: false,
-                submenu: [],
-            },
-            {
-                name: 'Regions',
-                link: '/regions',
-                active: false,
-                submenu: [],
-            },
-            {
-                name: 'Ratings',
-                link: '/ratings',
-                active: false,
+                order: 3,
                 submenu: [],
             },
         ],
@@ -116,17 +101,20 @@ export const MainMenu: MainMenuItem[] = [
         label: 'Hop and malt',
         icon: <FontAwesomeIcon icon="beer" size="3x" color="#F8E71C"/>,
         active: false,
+        order: 3,
         submenu: [
             {
                 name: 'Latest',
                 link: '/latest',
                 active: false,
+                order: 1,
                 submenu: [],
             },
             {
                 name: 'Ratings',
                 link: '/ratings',
                 active: false,
+                order: 2,
                 submenu: [],
             },
         ],
@@ -137,59 +125,20 @@ export const MainMenu: MainMenuItem[] = [
         label: 'Read me when you need it',
         icon: <FontAwesomeIcon icon="link" size="3x" color="#50E3C2"/>,
         active: false,
+        order: 4,
         submenu: [
             {
                 name: 'Latest',
                 link: '/latest',
                 active: false,
+                order: 1,
                 submenu: [],
             },
             {
                 name: 'Reading list',
                 link: '/readinglist',
                 active: false,
-                submenu: [],
-            },
-        ],
-    },
-    {
-        name: 'Concepts',
-        link: '/concepts',
-        label: 'Great ideas yet small',
-        icon: <FontAwesomeIcon icon="rocket" size="3x" color="#FE5569"/>,
-        active: false,
-        submenu: [
-            {
-                name: 'Latest',
-                link: '/latest',
-                active: false,
-                submenu: [],
-            },
-        ],
-    },
-    {
-        name: 'Blog',
-        link: '/blog',
-        label: 'Read me!',
-        icon: <FontAwesomeIcon icon="book" size="3x" color="#4A90E2"/>,
-        active: false,
-        submenu: [
-            {
-                name: 'Latest',
-                link: '/latest',
-                active: false,
-                submenu: [],
-            },
-            {
-                name: 'Technologie',
-                link: '/technologie',
-                active: false,
-                submenu: [],
-            },
-            {
-                name: 'UX',
-                link: '/ux',
-                active: false,
+                order: 2,
                 submenu: [],
             },
         ],

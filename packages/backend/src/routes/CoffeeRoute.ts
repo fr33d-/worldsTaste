@@ -20,6 +20,7 @@ coffeeRoute.route('/:id').get(getCoffeeById);
 coffeeRoute.route('/:id').delete(deleteCoffeeById);
 coffeeRoute.route('/assets/:id').get(getCoffeesAssets);
 
+coffeeRoute.route('/:id').put(updateCoffeeById);
 // coffeeRoute.route('/:id').put(uploadImage);
 
 export { coffeeRoute };

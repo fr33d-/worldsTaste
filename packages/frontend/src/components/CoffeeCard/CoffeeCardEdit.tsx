@@ -1,155 +1,91 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-import React, { Component, FormEvent, ChangeEvent } from 'react';
-import { Button, Col, Form, FormControlProps, Row, Container } from 'react-bootstrap';
-import { CoffeeEntry, CoffeeKind, CoffeeOrigin, CoffeeRoasted } from '.';
-import { DropdownColumn } from '../DropdownColumn';
-import {
-    SaveButton,
-    DeleteButton,
-    CancelButton,
-    AdvancedCancelButton,
-    AdvancedDeleteButton,
-    AdvancedSaveButton,
-} from '../IconButton';
+import React, { ChangeEvent, useState } from 'react';
+import { CoffeeEntry, SetCoffeeEntry } from '.';
+import { blue, brown, green } from '../../style/colors';
+import { AttrDataItemType } from '../AttrDataWindow';
+import { DropdownInput, TextareaInput, TextInput } from '../FormElements';
+import { LikeSliderAttrField } from '../FormElements/AttrFields';
+import { AdvancedCancelButton, AdvancedDeleteButton, AdvancedSaveButton } from '../IconButton';
 import LocalStyles from './CoffeeCardEdit.module.scss';
-import { green, brown, blue, red, yellow, grayDarker } from '../../style/colors';
-import { IconSelectColumn } from '../IconSelectColumn';
 
 type CoffeeCardEditProps = {
     entry: CoffeeEntry;
-    kinds: CoffeeKind[];
-    origins: CoffeeOrigin[];
-    roasteds: CoffeeRoasted[];
+    kinds: AttrDataItemType[];
+    origins: AttrDataItemType[];
+    roasteds: AttrDataItemType[];
+    setEntry: SetCoffeeEntry;
     saveFunction(post: CoffeeEntry): void;
     deleteFunction(id: number): void;
     close(): void;
 };
 
-type CoffeeCardEditState = {
-    entry: CoffeeEntry;
-    saveError: boolean;
-    edited: boolean;
-};
+// tslint:disable-next-line: max-func-body-length
+export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
+    // const [entry, setEntry] = useState(props.entry);
+    const [saveError, setSaveError] = useState(false);
+    const [edited, setEdited] = useState(false);
 
-export class CoffeeCardEdit extends Component<CoffeeCardEditProps, CoffeeCardEditState> {
-    public readonly state: CoffeeCardEditState = {
-        entry: this.props.entry,
-        saveError: false,
-        edited: false,
-    };
-
-    public saveCard = () => {
-        if (this.state.entry.id === 0) {
-            this.createCard();
+    const saveCard = () => {
+        if (props.entry.id === 0) {
+            axios
+                .post('http://localhost:4000/coffee', { ...props.entry })
+                .then((response) => {
+                    console.log(response);
+                    setEdited(false);
+                    setSaveError(false);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    setSaveError(true);
+                });
         } else {
-            this.updateCard();
+            axios
+                .put(`http://localhost:4000/coffee/${props.entry.id}`, { ...props.entry })
+                .then((response) => {
+                    props.close();
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         }
     };
 
-    public updateCard = () => {
+    const updateCard = () => {
         const formData = new FormData();
-        const images = this.state.entry.images;
+        const images = props.entry.images;
         // formData.append('images', this.state.entry.images![0].file);
         // formData.append('images', this.state.entry.images![0].file);
         // const imagesArray = this.state.entry.images!.map(({file}) => file)
         // formData.append('images', this.state.entry.images!.map(({file}) => file));
 
-        if (images && images.length < 0) {
-            this.state.entry.images!.forEach(({ file }) => {
-                formData.append('images', file);
-            });
-        }
+        // if (images && images.length < 0) {
+        //     this.state.entry.images!.forEach(({ file }) => {
+        //         formData.append('images', file);
+        //     });
+        // }
 
-        console.log(formData);
-        console.log('Update card');
-        axios
-            .put(`http://localhost:4000/coffee/${this.state.entry.id}`, formData)
-            .then((response) => {
-                // this.props.close();
-                console.log('... sucessfully');
-                this.setState({ edited: false, saveError: false });
-            })
-            .catch((error) => {
-                console.log(error);
-                console.log('... failed');
-                this.setState({ saveError: true });
-            });
-
+        // console.log(formData);
+        // console.log('Update card');
         // axios
-        //     .put(`http://localhost:4000/coffee/${this.state.entry.id}`, { ...this.state.entry })
+        //     .put(`http://localhost:4000/coffee/${this.state.entry.id}`, formData)
         //     .then((response) => {
-        //         this.props.close();
+        //         // this.props.close();
+        //         console.log('... sucessfully');
+        //         this.setState({ edited: false, saveError: false });
         //     })
         //     .catch((error) => {
         //         console.log(error);
+        //         console.log('... failed');
+        //         this.setState({ saveError: true });
         //     });
     };
 
-    public createCard = () => {
-        axios
-            .post('http://localhost:4000/coffee', { ...this.state.entry })
-            .then((response) => {
-                console.log(response);
-                // this.props.close();
-                this.setState({ edited: false, saveError: false });
-            })
-            .catch((error) => {
-                console.log(error);
-                this.setState({ saveError: true });
-            });
+    const deleteCard = () => {
+        props.deleteFunction(props.entry.id);
     };
 
-    public deleteCard = () => {
-        this.props.deleteFunction(this.state.entry.id);
-    };
-
-    public handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const value = event.currentTarget.value;
-        this.setState((state) => ({ entry: { ...state.entry, name: value }, edited: true }));
-    };
-
-    public handleDescChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        const value = event.currentTarget.value;
-        this.setState((state) => ({ entry: { ...state.entry, description: value }, edited: true }));
-    };
-
-    public handleRatingChange = (i: number) => {
-        console.log('clicked on ' + i);
-        this.setState((state) => ({ entry: { ...state.entry, rating: i }, edited: true }));
-    };
-
-    public handleOriginChange = (event: ChangeEvent<HTMLSelectElement>) => {
-        const value = event.currentTarget.value;
-        const origin = this.props.origins.find(({ name }) => name === value);
-        if (origin !== undefined) {
-            this.setState((state) => ({ entry: { ...state.entry, origin }, edited: true }));
-        }
-    };
-
-    public handleKindChange = (event: ChangeEvent<HTMLSelectElement>) => {
-        const value = event.currentTarget.value;
-        const kind = this.props.kinds.find((item) => item.name === value);
-        if (kind !== undefined) {
-            this.setState((state) => ({
-                entry: { ...state.entry, kind },
-                edited: true,
-            }));
-        }
-    };
-
-    public handleRoastChange = (event: ChangeEvent<HTMLSelectElement>) => {
-        const value = event.currentTarget.value;
-        const roasted = this.props.roasteds.find((item) => item.name === value);
-        if (roasted !== undefined) {
-            this.setState((state) => ({
-                entry: { ...state.entry, roasted },
-                edited: true,
-            }));
-        }
-    };
-
-    public handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
         const eventFiles = event.target.files;
 
         if (eventFiles === null) {
@@ -160,123 +96,97 @@ export class CoffeeCardEdit extends Component<CoffeeCardEditProps, CoffeeCardEdi
 
         const images = Array.from(eventFiles).map((file) => ({ name: file.name, url: '', alt: file.name, file }));
 
-        if (images.length > 0) {
-            this.setState((state) => ({
-                entry: { ...state.entry, images },
-                edited: true,
-            }));
+        if (images != undefined && images.length > 0) {
+            // props.setEntry.setImages(images);
+            setEdited(true);
         }
     };
 
     //tslint:disable-next-line: max-func-body-length
-    public render() {
-        const { id, images, name, description, origin, rating, kind, roasted } = this.state.entry;
-        const { edited, saveError } = this.state;
-        const { kinds, roasteds, origins, close } = this.props;
+    const { id, images, name, description, origin, rating, kind, roasted } = props.entry;
+    const { setId, setImages, setName, setDescription, setOrigin, setRating, setKind, setRoasted } = props.setEntry;
+    const { kinds, roasteds, origins, close } = props;
 
-        return (
-            <>
-                <div className={LocalStyles.CoffeeCardEdit}>
-                    <div className={LocalStyles.Row}>
-                        <div className={LocalStyles.ImageSection}>
-                            <div className={LocalStyles.UploadArea}>
-                                <label htmlFor="file">
-                                    <FontAwesomeIcon icon="upload" />
-                                </label>
-                                <br />
-                                <input
-                                    type="file"
-                                    name="pic"
-                                    accept="image/*"
-                                    onChange={this.handleFileUpload}
-                                    className={LocalStyles.Fileupload}
-                                    id="file"
-                                    multiple
+    return (
+        <>
+            <div className={LocalStyles.CoffeeCardEdit}>
+                <div className={LocalStyles.Header}>
+                    <h2>This is a tastefull cigarr</h2>
+                </div>
+                <div className={LocalStyles.Row}>
+                    <div className={LocalStyles.ImageSection}>
+                        <div className={LocalStyles.UploadArea}>
+                            <label htmlFor="file">
+                                <FontAwesomeIcon icon="upload" />
+                            </label>
+                            <br />
+                            {/* tslint:disable-next-line: react-a11y-input-elements */}
+                            <input
+                                type="file"
+                                name="pic"
+                                accept="image/*"
+                                onChange={handleFileUpload}
+                                className={LocalStyles.Fileupload}
+                                id="file"
+                                multiple
+                            />
+                        </div>
+
+                        {images !== undefined &&
+                            images.map(({ url, alt, file }, i) => (
+                                <img src={url === '' ? window.URL.createObjectURL(file) : url} alt={alt} key={i} />
+                            ))}
+                    </div>
+                    <div className={LocalStyles.TextSection}>
+                        <div className="row">
+                            <div className="col-12">
+                                <TextInput name="Name" value={name} onChange={setName} />
+                            </div>
+                            <div className="col-12 col-md-6">
+                                <DropdownInput
+                                    items={origins}
+                                    icon="globe-americas"
+                                    iconColor={green}
+                                    label="Herkunft"
+                                    selectedItem={origin}
+                                    onChange={setOrigin}
                                 />
                             </div>
-
-                            {images !== undefined &&
-                                images.map(({ url, alt, file }, i) => (
-                                    <img src={url === '' ? window.URL.createObjectURL(file) : url} alt={alt} key={i} />
-                                ))}
-                        </div>
-                        <div className={LocalStyles.TextSection}>
-                            <h2>Kaffee</h2>
-                            <Form>
-                                <Row>
-                                    <Col>
-                                        <div className={LocalStyles.NameInput}>
-                                            <span>Name</span>
-                                            <input
-                                                type="text"
-                                                placeholder="Name"
-                                                value={name}
-                                                onChange={this.handleNameChange}
-                                            />
-                                        </div>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <DropdownColumn
-                                        iconLabel="globe-americas"
-                                        iconLabelColor={green}
-                                        items={origins}
-                                        onChange={this.handleOriginChange}
-                                        selectedItem={origin}
-                                    />
-                                    <DropdownColumn
-                                        iconLabel="mug-hot"
-                                        iconLabelColor={brown}
-                                        items={kinds}
-                                        onChange={this.handleKindChange}
-                                        selectedItem={kind}
-                                    />
-                                </Row>
-                                <Row>
-                                    <DropdownColumn
-                                        iconLabel="flask"
-                                        iconLabelColor={blue}
-                                        items={roasteds}
-                                        onChange={this.handleRoastChange}
-                                        selectedItem={roasted}
-                                    />
-                                    <Col>
-                                        <IconSelectColumn
-                                            labelIcon="heart"
-                                            labelIconColor={red}
-                                            selectIcon="star"
-                                            selectIconColor={yellow}
-                                            numberOfValues={5}
-                                            value={rating}
-                                            onChange={this.handleRatingChange}
-                                        />
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col>
-                                        <div className={LocalStyles.DescriptionInput}>
-                                            <FontAwesomeIcon icon="bars" size="lg" color={grayDarker} />
-                                            <textarea
-                                                placeholder="Beschreibung"
-                                                value={description}
-                                                onChange={this.handleDescChange}
-                                                className="formElement"
-                                            />
-                                        </div>
-                                    </Col>
-                                </Row>
-                            </Form>
-                        </div>
-                    </div>
-                    <div className={LocalStyles.Row}>
-                        <div className={LocalStyles.ButtonSection}>
-                            <AdvancedDeleteButton changes={edited} onClick={this.deleteCard} />
-                            <AdvancedCancelButton changes={edited} onClick={close} />
-                            <AdvancedSaveButton save={this.saveCard} close={close} error={saveError} changes={edited} />
+                            <div className="col-12 col-md-6">
+                                <DropdownInput
+                                    items={origins}
+                                    icon="mug-hot"
+                                    iconColor={brown}
+                                    label="Art"
+                                    selectedItem={kind}
+                                    onChange={setKind}
+                                />
+                            </div>
+                            <div className="col-12 col-md-6">
+                                <DropdownInput
+                                    items={origins}
+                                    icon="flask"
+                                    iconColor={blue}
+                                    label="Rösterei"
+                                    selectedItem={roasted}
+                                    onChange={setRoasted}
+                                />
+                            </div>
+                            <div className="col-12 col-md-6">
+                                <LikeSliderAttrField maxValue={5} value={rating} onChange={setRating} />
+                            </div>
+                            <div className="col-12">
+                                <TextareaInput label="Beschreibung" onChange={setDescription} value={description} />
+                            </div>
                         </div>
                     </div>
                 </div>
-            </>
-        );
-    }
-}
+                <div className={LocalStyles.ButtonSection}>
+                    <AdvancedDeleteButton changes={edited} onClick={deleteCard} />
+                    <AdvancedCancelButton changes={edited} onClick={close} />
+                    <AdvancedSaveButton save={saveCard} close={close} error={saveError} changes={edited} />
+                </div>
+            </div>
+        </>
+    );
+};

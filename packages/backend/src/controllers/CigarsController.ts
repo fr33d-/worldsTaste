@@ -59,6 +59,8 @@ export const createCigar: RequestHandler = async (request, result) => {
         result.location(`/users/${coffeeEntity.id}`).sendStatus(httpStatusCodes.CREATED);
     } catch (error) {
         log('error');
+        log('saving error');
+        log(requestBody);
         log(error);
         result.sendStatus(httpStatusCodes.CONFLICT);
     }
@@ -91,15 +93,15 @@ export const updateCigarById: RequestHandler = async (request, result) => {
     const cigarEntity = await CigarEntity.findOne({ where: { id } });
 
     if (cigarEntity !== undefined) {
-        if (request.files !== undefined) {
-            await (request.files.images as UploadedFile[]).forEach(async (file) => {
-                const targetPath = `./uploads/cigar-images/${request.params.id}`;
-                if (!fs.existsSync(targetPath)) {
-                    fs.mkdirSync(targetPath, { recursive: true });
-                }
-                await file.mv(`${targetPath}/${file.name}`);
-            });
-        }
+        // if (request.files !== undefined) {
+        //     await (request.files.images as UploadedFile[]).forEach(async (file) => {
+        //         const targetPath = `./uploads/cigar-images/${request.params.id}`;
+        //         if (!fs.existsSync(targetPath)) {
+        //             fs.mkdirSync(targetPath, { recursive: true });
+        //         }
+        //         await file.mv(`${targetPath}/${file.name}`);
+        //     });
+        // }
 
         if (cigarEntity.id !== requestBody.id) {
             result.sendStatus(httpStatusCodes.CONFLICT);
