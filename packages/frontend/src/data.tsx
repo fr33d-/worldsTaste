@@ -2,8 +2,8 @@ import { FontawesomeObject, IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon, Props as FontAwesomeProps } from "@fortawesome/react-fontawesome";
 import React, { ComponentType, ReactElement } from "react";
 import ChemexSVG from './images/Chemex.svg';
-import Cigar from './images/cigar.svg';
 import Tabak from './images/Tabak.svg';
+import Beer from './images/Beer.svg';
 
 export type MainMenuItem = {
     name: string;
@@ -12,7 +12,7 @@ export type MainMenuItem = {
     image?: string;
     link: string;
     active: boolean;
-    order: number;
+    order?: string;
     submenu: MainMenuItem[];
 };
 
@@ -24,42 +24,37 @@ export const MainMenu: MainMenuItem[] = [
         icon: <FontAwesomeIcon icon="mug-hot" size="3x" color="#8B572A"/>,
         image: ChemexSVG,
         active: false,
-        order: 1,
+        order: 'One',
         submenu: [
             {
                 name: 'Latest',
                 link: '/latest',
                 active: false,
                 submenu: [],
-                order: 1,
             },
             {
                 name: 'Regions',
                 link: '/regions',
                 active: false,
                 submenu: [],
-                order: 2,
             },
             {
                 name: 'Roastaries',
                 link: '/rostaries',
                 active: false,
                 submenu: [],
-                order: 3,
             },
             {
                 name: 'Flavors',
                 link: '/flavors',
                 active: false,
                 submenu: [],
-                order: 4,
             },
             {
                 name: 'Ratings',
                 link: '/ratings',
                 active: false,
                 submenu: [],
-                order: 5,
             },
         ],
     },
@@ -70,27 +65,24 @@ export const MainMenu: MainMenuItem[] = [
         icon: <FontAwesomeIcon icon="smoking" size="3x" color="#BC9B33"/>,
         image: Tabak,
         active: false,
-        order: 2,
+        order: 'Two',
         submenu: [
             {
                 name: 'Latest',
                 link: '/latest',
                 active: false,
-                order: 1,
                 submenu: [],
             },
             {
                 name: 'Regions',
                 link: '/regions',
                 active: false,
-                order: 2,
                 submenu: [],
             },
             {
                 name: 'Ratings',
                 link: '/ratings',
                 active: false,
-                order: 3,
                 submenu: [],
             },
         ],
@@ -100,21 +92,20 @@ export const MainMenu: MainMenuItem[] = [
         link: '/craftbeer',
         label: 'Hop and malt',
         icon: <FontAwesomeIcon icon="beer" size="3x" color="#F8E71C"/>,
+        image: Beer,
         active: false,
-        order: 3,
+        order: 'Three',
         submenu: [
             {
                 name: 'Latest',
                 link: '/latest',
                 active: false,
-                order: 1,
                 submenu: [],
             },
             {
                 name: 'Ratings',
                 link: '/ratings',
                 active: false,
-                order: 2,
                 submenu: [],
             },
         ],
@@ -125,20 +116,18 @@ export const MainMenu: MainMenuItem[] = [
         label: 'Read me when you need it',
         icon: <FontAwesomeIcon icon="link" size="3x" color="#50E3C2"/>,
         active: false,
-        order: 4,
+        order: 'Four',
         submenu: [
             {
                 name: 'Latest',
                 link: '/latest',
                 active: false,
-                order: 1,
                 submenu: [],
             },
             {
                 name: 'Reading list',
                 link: '/readinglist',
                 active: false,
-                order: 2,
                 submenu: [],
             },
         ],
