@@ -31,33 +31,34 @@ export const SliderAttrField = ({ name, value, maxValue, icon, onChange, iconCol
 );
 
 type LikeSliderAttrFieldProps = {
+    name?: string;
     value: number;
     maxValue: number;
     onChange: Dispatch<SetStateAction<number>>;
 };
 
-export const LikeSliderAttrField = ({ value, maxValue, onChange }: LikeSliderAttrFieldProps) => {
+export const LikeSliderAttrField = ({ name, value, maxValue, onChange }: LikeSliderAttrFieldProps) => {
     const [stateValue, setStateValue] = useState(value);
     const hoverIcon = (i: number) => {
         setStateValue(i);
-    }
+    };
     return (
         <>
-        {name && <label>{name}</label>}
-        <div className={LocalStyles.LikeSliderAttrField}>
-            <FontAwesomeIcon icon="heart" color={red} size='lg' />
-            <ul>
-                {[...Array(maxValue)].map((_, i) => (
-                    <span onClick={() => onChange(i)} key={i}>
-                        <FontAwesomeIcon icon="star" color={i <= stateValue ? yellow : grayDark} />
-                        <div className={LocalStyles.Hover} onMouseEnter={() => hoverIcon(i)} />
-                    </span>
-                ))}
-            </ul>
-        </div>
-    </>
+            {name && <label>{name}</label>}
+            <div className={LocalStyles.LikeSliderAttrField}>
+                <FontAwesomeIcon icon="heart" color={red} size="lg" />
+                <ul>
+                    {[...Array(maxValue)].map((_, i) => (
+                        <span onClick={() => onChange(i)} key={i}>
+                            <FontAwesomeIcon icon="star" color={i <= stateValue ? yellow : grayDark} />
+                            <div className={LocalStyles.Hover} onMouseEnter={() => hoverIcon(i)} />
+                        </span>
+                    ))}
+                </ul>
+            </div>
+        </>
     );
-}
+};
 
 type AttrFieldProps = {
     name: string;
@@ -93,11 +94,32 @@ export const AttrFieldIconlist = ({ name, valueIcon, value, valueIconColor, icon
             {
                 <div className={GeneralStyles.Iconlist}>
                     <ul>
-                        {[...Array(value)].map(() => (
-                            <li className={GeneralStyles.Active} />
+                        {[...Array(5)].map((_, i) => (
+                            <li className={i <= value ? GeneralStyles.Active : ''} key={i} />
                         ))}
-                        {[...Array(5 - value)].map(() => (
-                            <li />
+                    </ul>
+                </div>
+            }
+        </div>
+    </div>
+);
+
+type AttrFieldLikeList = {
+    name: string;
+    value: number;
+};
+
+
+export const AttrFieldLikeList = ({ name, value }: AttrFieldLikeList) => (
+    <div className={GeneralStyles.AttrField}>
+        <p className={GeneralStyles.Name}>{name}</p>
+        <div>
+            <FontAwesomeIcon icon='heart' color={red} size="sm" />
+            {
+                <div className={GeneralStyles.Iconlist}>
+                    <ul>
+                        {[...Array(5)].map((_, i) => (
+                            <FontAwesomeIcon icon='star' color={i <= value ? yellow : grayDark} size="sm" key={i} />
                         ))}
                     </ul>
                 </div>

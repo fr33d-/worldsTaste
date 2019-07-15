@@ -31,14 +31,16 @@ type CoffeeCardProps = {
     kinds: AttrDataItemType[];
     origins: AttrDataItemType[];
     roasteds: AttrDataItemType[];
-    saveFunction(post: CoffeeEntry): void;
+    edit: boolean;
+    setCoffeeEditCard(id: number): void;
+    clearCoffeeEditCard(): void;
     deleteFunction(id: number): void;
 };
 
 export const CoffeeCard = (props: CoffeeCardProps) => {
-    const [edit, setEdit] = useState(props.entry.name === '');
+    const [edit, setEdit] = useState(props.edit);
     // const [entry, setEntry] = useState(props.entry);
-    const { deleteFunction, kinds, origins, roasteds, saveFunction } = props;
+    const { deleteFunction } = props;
     const [id, setId] = useState(props.entry.id);
     const [images, setImages] = useState(props.entry.images);
     const [name, setName] = useState(props.entry.name);
@@ -47,6 +49,16 @@ export const CoffeeCard = (props: CoffeeCardProps) => {
     const [rating, setRating] = useState(props.entry.rating);
     const [roasted, setRoasted] = useState(props.entry.roasted);
     const [kind, setKind] = useState(props.entry.kind);
+
+    const setEditCard = () => {
+        setEdit(true);
+        props.setCoffeeEditCard(props.entry.id);
+    };
+
+    const unsetEditCard = () => {
+        setEdit(false);
+        props.clearCoffeeEditCard();
+    };
 
     const entry: CoffeeEntry = {
         id,
@@ -71,21 +83,8 @@ export const CoffeeCard = (props: CoffeeCardProps) => {
     };
 
     return edit ? (
-        <CoffeeCardEdit {...props} entry={entry} setEntry={setEntry} close={() => setEdit(false)} />
+        <CoffeeCardEdit {...props} entry={entry} setEntry={setEntry} close={unsetEditCard} />
     ) : (
-        <CoffeeCardDisplay entry={entry} deleteFunction={deleteFunction} edit={() => setEdit(true)} />
+        <CoffeeCardDisplay entry={entry} deleteFunction={deleteFunction} edit={setEditCard} />
     );
 };
-
-//Cool new stuff with hooks
-// const NewCoffeeCard = (props: CoffeeCardProps) => {
-//     const [edit, setEdit] = useState(props.entry.name === '');
-
-//     const { entry, deleteFunction } = props;
-
-//     return edit ? (
-//         <CoffeeCardEdit {...props} close={() => setEdit(false)} />
-//     ) : (
-//         <CoffeeCardDisplay entry={entry} deleteFunction={deleteFunction} edit={() => setEdit(true)} />
-//     );
-// };

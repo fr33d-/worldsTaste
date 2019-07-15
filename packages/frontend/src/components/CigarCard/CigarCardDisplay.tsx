@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import React, { Component } from 'react';
 import { blue, blueAccent, brown, grayDarker, green, greenAccent, red, yellow, yellowAccent } from '../../style/colors';
 import { CigarEntry } from '../Cigars';
-import { AttrField, AttrFieldIconlist } from '../FormElements/AttrFields';
+import { AttrField, AttrFieldIconlist, AttrFieldLikeList } from '../FormElements/AttrFields';
 import CigarReplacement from './../../images/Cigar-replacement.svg';
 import LocalStyles from './CigarCard.module.scss';
 
@@ -109,13 +109,9 @@ export class CigarCardDisplay extends Component<CigarCardDisplayProps, CigarCard
                             </div>
                             <div className={classNames('row', LocalStyles.row)}>
                                 <div className="col-12 col-md-6">
-                                    <AttrFieldIconlist
-                                        color={red}
-                                        icon="heart"
+                                    <AttrFieldLikeList
                                         value={rating}
                                         name="Gesammtbewertung:"
-                                        valueIconColor={yellow}
-                                        valueIcon="star"
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">

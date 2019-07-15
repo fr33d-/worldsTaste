@@ -15,7 +15,6 @@ type CoffeeCardEditProps = {
     origins: AttrDataItemType[];
     roasteds: AttrDataItemType[];
     setEntry: SetCoffeeEntry;
-    saveFunction(post: CoffeeEntry): void;
     deleteFunction(id: number): void;
     close(): void;
 };
@@ -96,7 +95,7 @@ export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
 
         const images = Array.from(eventFiles).map((file) => ({ name: file.name, url: '', alt: file.name, file }));
 
-        if (images != undefined && images.length > 0) {
+        if (images !== undefined && images.length > 0) {
             // props.setEntry.setImages(images);
             setEdited(true);
         }
@@ -108,7 +107,7 @@ export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
     const { kinds, roasteds, origins, close } = props;
 
     return (
-        <>
+        <div className={LocalStyles.CoffeeCardEditFrame}>
             <div className={LocalStyles.CoffeeCardEdit}>
                 <div className={LocalStyles.Header}>
                     <h2>This is a tastefull cigarr</h2>
@@ -173,7 +172,7 @@ export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
                                 />
                             </div>
                             <div className="col-12 col-md-6">
-                                <LikeSliderAttrField maxValue={5} value={rating} onChange={setRating} />
+                                <LikeSliderAttrField maxValue={5} value={rating} onChange={setRating} name="Gesamtbewertung:"/>
                             </div>
                             <div className="col-12">
                                 <TextareaInput label="Beschreibung" onChange={setDescription} value={description} />
@@ -187,6 +186,6 @@ export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
                     <AdvancedSaveButton save={saveCard} close={close} error={saveError} changes={edited} />
                 </div>
             </div>
-        </>
+        </div>
     );
 };

@@ -14,6 +14,7 @@ import cigarSVG from './../../images/cigar.svg';
 import GeneralStyles from './../../style/GeneralStyles.module.scss';
 import { CigarCard } from './../CigarCard';
 import LocalStyles from './Cigars.module.scss';
+import Tabak from './../../images/Tabak.svg';
 
 export type CigarEntry = {
     abbrand: number;
@@ -349,7 +350,7 @@ export class Cigars extends Component<CigarsProps, CigarsState> {
                         <h1>Smoke of fame</h1>
                     </div>
                     <div className="row">
-                        <Sidemenu filter={attrData} image={cigarSVG} />
+                        <Sidemenu filter={attrData} image={Tabak} />
                         <div className={classNames(`col-12 col-lg-9`)}>
                             <div className={`${GeneralStyles.Filter}`}>
                                 <Form.Control as="select" className={GeneralStyles.Select}>

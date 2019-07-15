@@ -41,34 +41,6 @@
     }
 }
 
-.Filter {
-    width: fit-content;
-    text-align: right;
-    margin-left: auto;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
-    .Select {
-        box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.15);
-        border: none;
-        border-radius: 5px;
-        width: 150px;
-        margin-right: $default-space;
-    }
-
-    .Button {
-        box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.15);
-        border: none;
-        color: $new-darker-gray;
-        margin-right: $default-space-small;
-    }
-
-    select {
-        width: 150px;
-    }
-}
-
 .Container {
     margin-top: 100px;
 }

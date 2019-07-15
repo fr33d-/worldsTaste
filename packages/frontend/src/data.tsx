@@ -12,7 +12,7 @@ export type MainMenuItem = {
     image?: string;
     link: string;
     active: boolean;
-    order?: string;
+    color?: string;
     submenu: MainMenuItem[];
 };
 
@@ -24,7 +24,7 @@ export const MainMenu: MainMenuItem[] = [
         icon: <FontAwesomeIcon icon="mug-hot" size="3x" color="#8B572A"/>,
         image: ChemexSVG,
         active: false,
-        order: 'One',
+        color: '#D46D4F',
         submenu: [
             {
                 name: 'Latest',
@@ -65,7 +65,7 @@ export const MainMenu: MainMenuItem[] = [
         icon: <FontAwesomeIcon icon="smoking" size="3x" color="#BC9B33"/>,
         image: Tabak,
         active: false,
-        order: 'Two',
+        color: '#46988E',
         submenu: [
             {
                 name: 'Latest',
@@ -94,7 +94,7 @@ export const MainMenu: MainMenuItem[] = [
         icon: <FontAwesomeIcon icon="beer" size="3x" color="#F8E71C"/>,
         image: Beer,
         active: false,
-        order: 'Three',
+        color: '#346A6E',
         submenu: [
             {
                 name: 'Latest',
@@ -116,7 +116,7 @@ export const MainMenu: MainMenuItem[] = [
         label: 'Read me when you need it',
         icon: <FontAwesomeIcon icon="link" size="3x" color="#50E3C2"/>,
         active: false,
-        order: 'Four',
+        color: '#495F99',
         submenu: [
             {
                 name: 'Latest',

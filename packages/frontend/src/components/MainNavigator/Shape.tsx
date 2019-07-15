@@ -1,0 +1,43 @@
+import React, { Component } from 'react';
+
+type ShapeProps = {
+    color: string;
+    className: string;
+};
+
+export const Shape = (props: ShapeProps) => {
+    return (
+        <div className={props.className}>
+            <svg width="645px" height="410px" viewBox="0 0 645 410" version="1.1">
+                {/* xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> */}
+                <title>Group 8</title>
+                <desc>Created with Sketch.</desc>
+                <g id="Start-page-" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+                    <g
+                        id="Desktop-HD-Copy-36"
+                        transform="translate(-630.000000, -313.000000)"
+                        fill={props.color}
+                        fillRule="nonzero"
+                    >
+                        <g id="Group" transform="translate(165.000000, 181.000000)">
+                            <g id="Coffee-Cigars-Restau-+-Group-2-+-Latest-Regions-Rosta-+-Group-Copy-2-Mask">
+                                <g id="Group-8" transform="translate(465.017824, 132.042409)">
+                                    <path
+                                        d="M644.982176,-7.95807864e-13 L644.982176,409.957591 L0,409.957591 C8.40160406,358.594585 74.1619292,318.610489 154.039406,318.610489 L261.456679,318.610489 C319.144129,315.802908 359.772551,307.886752 383.341946,294.86202 C402.905817,284.05079 425.200376,261.71567 450.225623,227.85666 L540.503466,63.7755246 C558.331947,31.3720329 598.292537,8.52972002 644.982176,-7.95807864e-13 L644.982176,-7.95807864e-13 Z"
+                                        id="Path"
+                                        fillOpacity="0.1"
+                                    />
+                                    <path
+                                        d="M341.427,409.957591 C370.071957,374.864131 396.294071,357.317402 420.093352,357.317402 C476.334427,357.317402 581.482176,371.287752 581.482176,274.391419 C581.482176,215.063563 602.648843,171.019602 644.982176,142.259536 L644.982176,409.957591 L341.427,409.957591 L341.427,409.957591 Z"
+                                        id="Path"
+                                        fillOpacity="0.3"
+                                    />
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </svg>
+        </div>
+    );
+};

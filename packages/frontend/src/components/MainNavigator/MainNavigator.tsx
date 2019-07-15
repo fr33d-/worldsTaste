@@ -1,10 +1,12 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
-import React, { Component, CSSProperties } from 'react';
+import React, { Component } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { MainMenuItem } from '../../data';
 import { UsersRouteParams } from '../../Routes';
-import arrowBlue from './arrowLeftBlue.svg';
+// import arrowBlue from './arrowLeftBlue.svg';
+import { ArrowLeft } from './ArrowLeft';
+import { Shape } from './Shape';
 import Background from './Background.svg';
 import Line from './Line.svg';
 import LocalStyles from './MainNavigator.module.scss';
@@ -12,7 +14,6 @@ import menuSmall from './menuSmall.svg';
 import shape from './shape1.svg';
 import shapeBlue from './shapeBlue.svg';
 import tastes from './Tastes.svg';
-import { string } from 'prop-types';
 
 type MainNavigatorProps = {
     menu: MainMenuItem[];
@@ -21,23 +22,40 @@ type MainNavigatorProps = {
 type MainNavigatorState = {
     activeMenuItem?: MainMenuItem;
     animationClass: string;
+    backgroundColor: string;
 };
 
 class MainNavigatorBase extends Component<MainNavigatorProps, MainNavigatorState> {
     public readonly state: MainNavigatorState = {
         activeMenuItem: undefined,
         animationClass: '',
+        backgroundColor: '#495F99',
     };
 
     public clickMenuItem = (clickedItem: MainMenuItem) => () => {
+        if (this.state.activeMenuItem !== undefined && this.state.activeMenuItem.color !== undefined) {
+            this.setState({ backgroundColor: this.state.activeMenuItem.color });
+        } else {
+            this.setState({});
+        }
+
         this.setState({
             animationClass: LocalStyles.FadeOut,
         });
         setTimeout(() => {
-            this.setState({
-                activeMenuItem: clickedItem,
-                animationClass: LocalStyles.FadeIn,
-            });
+            if (clickedItem.color !== undefined) {
+                this.setState({
+                    animationClass: LocalStyles.FadeIn,
+                    backgroundColor: clickedItem.color,
+                    activeMenuItem: clickedItem,
+                });
+            } else {
+                this.setState({
+                    activeMenuItem: clickedItem,
+                    animationClass: LocalStyles.FadeIn,
+                    backgroundColor: '#495F99',
+                });
+            }
         }, 500);
     };
 
@@ -74,12 +92,22 @@ class MainNavigatorBase extends Component<MainNavigatorProps, MainNavigatorState
               };
     };
 
+    public readonly animationColor = () => {
+        return this.state.activeMenuItem !== undefined
+            ? {
+                  backgroundColor: this.state.activeMenuItem.color,
+              }
+            : {
+                  backgroundColor: '#495F99',
+              };
+    };
+
     public render() {
-        const { activeMenuItem, animationClass } = this.state;
+        const { activeMenuItem, animationClass, backgroundColor } = this.state;
         const { menu } = this.props;
 
         return (
-            <div className={classNames(LocalStyles.MainNavigator, 'container')}>
+            <div className={classNames(LocalStyles.MainNavigator, 'container')} style={this.animationColor()}>
                 <div className="row">
                     <div className={`col-5 ${LocalStyles.Menu}`}>
                         <div className={LocalStyles.Header}>
@@ -110,9 +138,9 @@ class MainNavigatorBase extends Component<MainNavigatorProps, MainNavigatorState
                         <img src={Background} className={LocalStyles.SubMenBackground} style={this.topHeight()} />
                         {activeMenuItem ? (
                             <>
-                                <img src={shapeBlue} className={LocalStyles.Shape} />
-                                <img
-                                    src={arrowBlue}
+                                <Shape color={backgroundColor} className={LocalStyles.Shape} />
+                                <ArrowLeft
+                                    color={backgroundColor}
                                     className={LocalStyles.BackArrow}
                                     onClick={this.deselectMenuItem()}
                                 />

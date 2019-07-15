@@ -2,16 +2,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import classNames from 'classnames';
 import React, { Component } from 'react';
-import { Col, Form, Row } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router';
 import { AttrDataType, AttrDataWindow } from '../AttrDataWindow';
 import { CoffeeCard, CoffeeEntry } from '../CoffeeCard';
+import { Filter } from '../Filter';
 import { Footer } from '../Footer';
 import { Navigationbar } from '../Navigationbar';
 import { Sidemenu } from '../Sidemenu';
-import LocalStyles from './Coffee.module.scss';
 import chemexSVG from './../../images/Chemex.svg';
 import GeneralStyles from './../../style/GeneralStyles.module.scss';
+import LocalStyles from './Coffee.module.scss';
 
 export type CoffeeProps = RouteComponentProps;
 
@@ -24,6 +24,7 @@ export type CoffeeBaseState = {
     coffeeRoateds: AttrDataType[];
     coffeeOrigins: AttrDataType[];
     displayAttrMenu: boolean;
+    editCard?: CoffeeEntry;
 };
 
 export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
@@ -73,17 +74,6 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
         }));
     };
 
-    public saveCard = (post: CoffeeEntry) => {
-        axios
-            .post('http://localhost:4000/coffee', { ...post })
-            .then((response) => {
-                console.log(response);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    };
-
     public toggleAttrMenu = () => {
         if (this.state.displayAttrMenu === true) {
             this.initiateData();
@@ -117,13 +107,29 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
             });
     }
 
+    public setEditCard = (id: number) => {
+        const card = this.state.posts.find((item) => item.id === id);
+
+        if (card !== undefined) {
+            this.setState({
+                editCard: card,
+            });
+        }
+    };
+
+    public clearEditCard = () => {
+        this.setState({
+            editCard: undefined,
+        });
+    };
+
     public componentDidMount() {
         this.initiateData();
     }
 
     // tslint:disable-next-line: max-func-body-length
     public render() {
-        const { posts, coffeeKinds, coffeeOrigins, coffeeRoateds, displayAttrMenu } = this.state;
+        const { posts, coffeeKinds, coffeeOrigins, coffeeRoateds, displayAttrMenu, editCard } = this.state;
         const attrData = [
             {
                 id: 1,
@@ -148,96 +154,87 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
             },
         ];
 
-        // const filterMenu = [
-        //     { name: 'Herkunft', content: coffeeOrigins },
-        //     { name: 'Arten', content: coffeeKinds },
-        //     { name: 'Röstereien', content: coffeeRoateds },
-        //     {
-        //         name: 'Bewertung',
-        //         content: [
-        //             { id: 1, name: '1' },
-        //             { id: 2, name: '2' },
-        //             { id: 3, name: '3' },
-        //             { id: 4, name: '4' },
-        //             { id: 5, name: '5' },
-        //         ],
-        //     },
-        // ];
-
         return (
             <>
                 <div className={LocalStyles.BackgroundHelper} />
                 <Navigationbar />
-                <div className={classNames(`container`, LocalStyles.Container)}>
-                    <div className={classNames('row', LocalStyles.MobileHeader)}>
-                        <FontAwesomeIcon icon="mug-hot" size="4x" color="#8B572A" />
-                        <h1>Blog of Coffee</h1>
-                    </div>
-                    <div className="row">
-                        <Sidemenu filter={attrData} image={chemexSVG} />
-                        <div className={classNames(`col-12 col-lg-9`, LocalStyles.CoffeeContent)}>
-                            <div className={LocalStyles.CoffeeContentScrollable}>
-                                <div className={`${GeneralStyles.Filter}`}>
-                                    <Form.Control as="select" className={GeneralStyles.Select}>
-                                        <option disabled selected>
-                                            Order by
-                                        </option>
-                                        <option>Origin</option>
-                                        <option>Rostary</option>
-                                        <option>Raging</option>
-                                        <option>Kind</option>
-                                    </Form.Control>
-                                    <Form.Control placeholder="Search" className={GeneralStyles.Select} />
-                                    <button
-                                        className={classNames('add-button big', GeneralStyles.Button)}
-                                        onClick={this.toggleAttrMenu}
-                                    >
-                                        <FontAwesomeIcon icon="database" />
-                                    </button>
-                                    <button
-                                        className={classNames('add-button big', GeneralStyles.Button)}
-                                        onClick={this.createCard}
-                                    >
-                                        <FontAwesomeIcon icon="plus" />
-                                    </button>
-                                </div>
+                <div className={classNames(editCard && LocalStyles.EditBackground)}>
+                    <div className={LocalStyles.Container}>
+                        <div className={classNames('row', LocalStyles.MobileHeader)}>
+                            <FontAwesomeIcon icon="mug-hot" size="4x" color="#8B572A" />
+                            <h1>Blog of Coffee</h1>
+                        </div>
+                        <div className="row">
+                            <Sidemenu filter={attrData} image={chemexSVG} />
+                            <div className={classNames(`col-12 col-lg-9`, LocalStyles.CoffeeContent)}>
+                                <div className={LocalStyles.CoffeeContentScrollable}>
+                                    <Filter
+                                        addAction={this.createCard}
+                                        dataAction={this.toggleAttrMenu}
+                                        orderAction={() => {}}
+                                        orderItems={attrData}
+                                    />
 
-                                <div className={GeneralStyles.Introtext}>
-                                    <h2>Kaffee - Genuss und Wissenschaft</h2>
-                                    <p>
-                                        Kaffee macht nicht nur wach sondern kann viel mehr. Es ist eine Wissenschaft ihn
-                                        zuzbereiten, es gibt hunderte, wenn nicht tausende von Arten, Varianten,
-                                        Geschmäcker und alles an Nerdkram den man sich vorstellen kann. Außerdem bedient
-                                        er eine gewisse Sammelleidenschaft. Fast jede größere Stadt bietet heute mehr
-                                        als eine kleine Rösterei mit viel verschiedenen Sorten. Ein kleiner Überblick
-                                        über meine persönlichen Erfahrungen soll nun hier entstehen.
-                                    </p>
-                                </div>
-                                <div className={`${LocalStyles.CoffeeContainer}`}>
-                                    {posts.length === 0 ? (
-                                        <p>nothing here</p>
-                                    ) : (
-                                        posts.map((post) => {
-                                            return (
-                                                <CoffeeCard
-                                                    entry={post}
-                                                    key={post.id}
-                                                    saveFunction={this.saveCard}
-                                                    deleteFunction={this.deletePost}
-                                                    kinds={coffeeKinds}
-                                                    roasteds={coffeeRoateds}
-                                                    origins={coffeeOrigins}
-                                                />
-                                            );
-                                        })
-                                    )}
+                                    <div className={GeneralStyles.Introtext}>
+                                        <h2>Kaffee - Genuss und Wissenschaft</h2>
+                                        <p>
+                                            Kaffee macht nicht nur wach sondern kann viel mehr. Es ist eine Wissenschaft
+                                            ihn zuzbereiten, es gibt hunderte, wenn nicht tausende von Arten, Varianten,
+                                            Geschmäcker und alles an Nerdkram den man sich vorstellen kann. Außerdem
+                                            bedient er eine gewisse Sammelleidenschaft. Fast jede größere Stadt bietet
+                                            heute mehr als eine kleine Rösterei mit viel verschiedenen Sorten. Ein
+                                            kleiner Überblick über meine persönlichen Erfahrungen soll nun hier
+                                            entstehen.
+                                        </p>
+                                    </div>
+                                    <div className={`${LocalStyles.CoffeeContainer}`}>
+                                        {posts.length === 0 ? (
+                                            <p>nothing here</p>
+                                        ) : (
+                                            posts.map((post) => {
+                                                return (
+                                                    <CoffeeCard
+                                                        entry={post}
+                                                        key={post.id}
+                                                        deleteFunction={this.deletePost}
+                                                        kinds={coffeeKinds}
+                                                        roasteds={coffeeRoateds}
+                                                        origins={coffeeOrigins}
+                                                        edit={false}
+                                                        setCoffeeEditCard={this.setEditCard}
+                                                        clearCoffeeEditCard={this.clearEditCard}
+                                                    />
+                                                );
+                                            })
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    {displayAttrMenu && <AttrDataWindow content={attrData} toggleFunktion={this.toggleAttrMenu} />}
+                    <Footer year="2019" version="0.1" />
                 </div>
-                {displayAttrMenu && <AttrDataWindow content={attrData} toggleFunktion={this.toggleAttrMenu} />}
-                <Footer year="2019" version="0.1" />
+                {editCard && (
+                    <div className={LocalStyles.EditFrame}>
+                        <div className="container">
+                            <div className="col-12 col-md-10 offset-md-1">
+                                <div className={LocalStyles.EditCard}>
+                                    <CoffeeCard
+                                        entry={editCard}
+                                        deleteFunction={this.deletePost}
+                                        kinds={coffeeKinds}
+                                        roasteds={coffeeRoateds}
+                                        origins={coffeeOrigins}
+                                        edit={true}
+                                        setCoffeeEditCard={this.setEditCard}
+                                        clearCoffeeEditCard={this.clearEditCard}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </>
         );
     }
