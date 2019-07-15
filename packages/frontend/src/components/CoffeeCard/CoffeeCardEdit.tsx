@@ -5,9 +5,10 @@ import { CoffeeEntry, SetCoffeeEntry } from '.';
 import { blue, brown, green } from '../../style/colors';
 import { AttrDataItemType } from '../AttrDataWindow';
 import { DropdownInput, TextareaInput, TextInput } from '../FormElements';
-import { LikeSliderAttrField } from '../FormElements/AttrFields';
+import { LikeSliderAttrField, SliderAttrField } from '../FormElements/AttrFields';
 import { AdvancedCancelButton, AdvancedDeleteButton, AdvancedSaveButton } from '../IconButton';
 import LocalStyles from './CoffeeCardEdit.module.scss';
+import classNames from 'classnames';
 
 type CoffeeCardEditProps = {
     entry: CoffeeEntry;
@@ -24,6 +25,7 @@ export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
     // const [entry, setEntry] = useState(props.entry);
     const [saveError, setSaveError] = useState(false);
     const [edited, setEdited] = useState(false);
+    const [tab, setTab] = useState(0);
 
     const saveCard = () => {
         if (props.entry.id === 0) {
@@ -107,85 +109,148 @@ export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
     const { kinds, roasteds, origins, close } = props;
 
     return (
-        <div className={LocalStyles.CoffeeCardEditFrame}>
+        <>
             <div className={LocalStyles.CoffeeCardEdit}>
-                <div className={LocalStyles.Header}>
-                    <h2>This is a tastefull cigarr</h2>
+                <div className="col-12">
+                    <TextInput name="Name" value={name} onChange={setName} />
                 </div>
-                <div className={LocalStyles.Row}>
-                    <div className={LocalStyles.ImageSection}>
-                        <div className={LocalStyles.UploadArea}>
-                            <label htmlFor="file">
-                                <FontAwesomeIcon icon="upload" />
-                            </label>
-                            <br />
-                            {/* tslint:disable-next-line: react-a11y-input-elements */}
-                            <input
-                                type="file"
-                                name="pic"
-                                accept="image/*"
-                                onChange={handleFileUpload}
-                                className={LocalStyles.Fileupload}
-                                id="file"
-                                multiple
-                            />
-                        </div>
+                <div className={LocalStyles.TabBar}>
+                    <ul>
+                        <li className={classNames(tab === 0 && LocalStyles.Active)} onClick={() => setTab(0)}>
+                            Information
+                        </li>
+                        <li className={classNames(tab === 1 && LocalStyles.Active)} onClick={() => setTab(1)}>
+                            Details
+                        </li>
+                        <li className={classNames(tab === 2 && LocalStyles.Active)} onClick={() => setTab(2)}>
+                            Images
+                        </li>
+                        <li className={classNames(tab === 3 && LocalStyles.Active)} onClick={() => setTab(3)}>
+                            Bewings
+                        </li>
+                    </ul>
+                </div>
+                {/* tslint:disable-next-line: max-func-body-length */}
+                {(() => {
+                    console.log(tab);
+                    switch (tab) {
+                        case 0: //Info
+                            return (
+                                <>
+                                    <div className={LocalStyles.TextSection}>
+                                        <div className="row">
+                                            <div className="col-12 col-md-6">
+                                                <DropdownInput
+                                                    items={origins}
+                                                    icon="globe-americas"
+                                                    iconColor={green}
+                                                    label="Herkunft"
+                                                    selectedItem={origin}
+                                                    onChange={setOrigin}
+                                                />
+                                            </div>
+                                            <div className="col-12 col-md-6">
+                                                <DropdownInput
+                                                    items={kinds}
+                                                    icon="mug-hot"
+                                                    iconColor={brown}
+                                                    label="Art"
+                                                    selectedItem={kind}
+                                                    onChange={setKind}
+                                                />
+                                            </div>
+                                            <div className="col-12 col-md-6">
+                                                <DropdownInput
+                                                    items={roasteds}
+                                                    icon="flask"
+                                                    iconColor={blue}
+                                                    label="Rösterei"
+                                                    selectedItem={roasted}
+                                                    onChange={setRoasted}
+                                                />
+                                            </div>
+                                            <div className="col-12 col-md-6">
+                                                <LikeSliderAttrField
+                                                    maxValue={5}
+                                                    value={rating}
+                                                    onChange={setRating}
+                                                    name="Gesamtbewertung:"
+                                                />
+                                            </div>
+                                            <div className="col-12">
+                                                <TextareaInput
+                                                    label="Beschreibung"
+                                                    onChange={setDescription}
+                                                    value={description}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                            );
+                        case 1: //Details
+                            return (
+                                <>
+                                    <div className={LocalStyles.TextSection}>
+                                        <div className="row">
+                                            <div className="col-12 col-md-6">
+                                                {/* <SliderAttrField
+                                                    maxValue={5}
+                                                    name="Geschmack:"
+                                                    value={taste}
+                                                    onChange={setTaste}
+                                                />Ì */}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                            );
+                        case 2: //Images
+                            return (
+                                <>
+                                    <div className={LocalStyles.ImageSection}>
+                                        <div className={LocalStyles.UploadArea}>
+                                            <label htmlFor="file">
+                                                <FontAwesomeIcon icon="upload" />
+                                            </label>
+                                            <br />
+                                            {/* tslint:disable-next-line: react-a11y-input-elements */}
+                                            <input
+                                                type="file"
+                                                name="pic"
+                                                accept="image/*"
+                                                onChange={handleFileUpload}
+                                                className={LocalStyles.Fileupload}
+                                                id="file"
+                                                multiple
+                                            />
+                                        </div>
 
-                        {images !== undefined &&
-                            images.map(({ url, alt, file }, i) => (
-                                <img src={url === '' ? window.URL.createObjectURL(file) : url} alt={alt} key={i} />
-                            ))}
-                    </div>
-                    <div className={LocalStyles.TextSection}>
-                        <div className="row">
-                            <div className="col-12">
-                                <TextInput name="Name" value={name} onChange={setName} />
-                            </div>
-                            <div className="col-12 col-md-6">
-                                <DropdownInput
-                                    items={origins}
-                                    icon="globe-americas"
-                                    iconColor={green}
-                                    label="Herkunft"
-                                    selectedItem={origin}
-                                    onChange={setOrigin}
-                                />
-                            </div>
-                            <div className="col-12 col-md-6">
-                                <DropdownInput
-                                    items={origins}
-                                    icon="mug-hot"
-                                    iconColor={brown}
-                                    label="Art"
-                                    selectedItem={kind}
-                                    onChange={setKind}
-                                />
-                            </div>
-                            <div className="col-12 col-md-6">
-                                <DropdownInput
-                                    items={origins}
-                                    icon="flask"
-                                    iconColor={blue}
-                                    label="Rösterei"
-                                    selectedItem={roasted}
-                                    onChange={setRoasted}
-                                />
-                            </div>
-                            <div className="col-12 col-md-6">
-                                <LikeSliderAttrField maxValue={5} value={rating} onChange={setRating} name="Gesamtbewertung:"/>
-                            </div>
-                            <div className="col-12">
-                                <TextareaInput label="Beschreibung" onChange={setDescription} value={description} />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                        {images !== undefined &&
+                                            images.map(({ url, alt, file }, i) => (
+                                                <img
+                                                    src={url === '' ? window.URL.createObjectURL(file) : url}
+                                                    alt={alt}
+                                                    key={i}
+                                                />
+                                            ))}
+                                    </div>
+                                </>
+                            );
+                        case 3: //Bewings
+                            return <></>;
+                        default:
+                            //Details
+                            return <></>;
+                    }
+                })()}
+
                 <div className={LocalStyles.ButtonSection}>
                     <AdvancedDeleteButton changes={edited} onClick={deleteCard} />
                     <AdvancedCancelButton changes={edited} onClick={close} />
                     <AdvancedSaveButton save={saveCard} close={close} error={saveError} changes={edited} />
                 </div>
             </div>
-        </div>
+        </>
     );
 };
