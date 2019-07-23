@@ -1,1 +1,1 @@
-export * from './CigarCard';
+export * from './CigarCardDisplay';

@@ -1,42 +1,35 @@
-import { Props as FontAwesomeProps } from '@fortawesome/react-fontawesome';
-import React, { Component, ReactElement, useLayoutEffect } from 'react';
+import React, { Component } from 'react';
+import { AttrDataType, FilterMenuType } from '../FormComponents';
 import LocalStyles from './Sidemenu.module.scss';
-import { Col, Form, Image } from 'react-bootstrap';
-import { AttrDataItemType, AttrDataType } from '../AttrDataWindow';
-import Chemex from '../../images/Chemex.svg';
-
-// export type SidebarMenuItem = {
-//     name: string;
-//     content: AttrDataItemType[];
-// };
+import classNames from 'classnames';
 
 export type SidemenuProps = {
-    filter: AttrDataType[];
-    // header: string;
-    // icon?: ReactElement<FontAwesomeProps>;
+    filter: FilterMenuType[];
     image: string;
+    activeFilter?: string;
+    filterAction(filterName: string, filterAttr: string): void;
 };
 
 export type SidemenuState = {
-    activeFilter: number;
+    openFilter: number;
 };
 
 export class Sidemenu extends Component<SidemenuProps, SidemenuState> {
     public readonly state: SidemenuState = {
-        activeFilter: 0,
+        openFilter: 0,
     };
 
     public expand = (key: number) => () => {
         console.log(key);
 
         this.setState({
-            activeFilter: key,
+            openFilter: key,
         });
     };
 
     public render() {
-        const { image, filter } = this.props;
-        const { activeFilter } = this.state;
+        const { image, filter, filterAction, activeFilter } = this.props;
+        const { openFilter } = this.state;
 
         return (
             <div className={`col-3`}>
@@ -53,12 +46,18 @@ export class Sidemenu extends Component<SidemenuProps, SidemenuState> {
                                     <li
                                         key={i}
                                         onClick={this.expand(i)}
-                                        className={`${i === activeFilter && LocalStyles.active}`}
+                                        className={`${i === openFilter && LocalStyles.active}`}
                                     >
                                         {filterItem.name}
                                         <ul key={i} className={`${LocalStyles.MenuSubList}`}>
-                                            {filterItem.items.map((menuItem, i) => (
-                                                <li key={menuItem.name}>{menuItem.name}</li>
+                                            {filterItem.items.map((item, i) => (
+                                                <li
+                                                    key={item}
+                                                    onClick={() => filterAction(filterItem.name, item)}
+                                                    className={classNames(item === activeFilter && LocalStyles.Active)}
+                                                >
+                                                    {item}
+                                                </li>
                                             ))}
                                         </ul>
                                     </li>

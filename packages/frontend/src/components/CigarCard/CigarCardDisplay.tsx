@@ -3,25 +3,29 @@ import classNames from 'classnames';
 import React, { Component } from 'react';
 import { blue, blueAccent, brown, grayDarker, green, greenAccent, red, yellow, yellowAccent } from '../../style/colors';
 import { CigarEntry } from '../Cigars';
-import { AttrField, AttrFieldIconlist, AttrFieldLikeList } from '../FormElements/AttrFields';
+import { AttrField, AttrFieldLikeList, AttrFieldSlider, AttrFieldDescription } from '../FormElements/AttrFields';
 import CigarReplacement from './../../images/Cigar-replacement.svg';
 import LocalStyles from './CigarCard.module.scss';
+import GeneralStyles from './../../style/GeneralStyles.module.scss';
+import { baseURL } from '../../data';
 
 type CigarCardDisplayProps = {
     entry: CigarEntry;
     deleteFunction(id: number): void;
-    edit(): void;
+    editFunction(id: number): void;
 };
 
 type CigarCardDisplayState = {
     expanded: boolean;
     entry: CigarEntry;
+    tab: number;
 };
 
 export class CigarCardDisplay extends Component<CigarCardDisplayProps, CigarCardDisplayState> {
     public readonly state: CigarCardDisplayState = {
         expanded: false,
         entry: this.props.entry,
+        tab: 0,
     };
 
     public deleteCard = () => {
@@ -32,13 +36,21 @@ export class CigarCardDisplay extends Component<CigarCardDisplayProps, CigarCard
         this.setState((state) => ({ expanded: !state.expanded }));
     };
 
+    public editCard = () => {
+        this.props.editFunction(this.state.entry.id);
+    };
+
+    public setTab = (i: number) => {
+        this.setState({ tab: i });
+    };
+
     // tslint:disable-next-line: max-func-body-length
     public render() {
-        const { expanded } = this.state;
-        const { edit } = this.props;
+        const { expanded, tab } = this.state;
         const {
             id,
-            images,
+            imageFiles,
+            imageStrings,
             description,
             name,
             origin,
@@ -49,7 +61,7 @@ export class CigarCardDisplay extends Component<CigarCardDisplayProps, CigarCard
             aromaentwicklung,
             aromavielfalt,
             buydate,
-            deckplatt,
+            deckblatt,
             einlage,
             lenght,
             ringmas,
@@ -66,7 +78,7 @@ export class CigarCardDisplay extends Component<CigarCardDisplayProps, CigarCard
             <>
                 <div className={classNames(LocalStyles.CigarCard, expanded && LocalStyles.Exanded)}>
                     <div className={LocalStyles.ActionSection}>
-                        <button onClick={edit}>
+                        <button onClick={this.editCard}>
                             <FontAwesomeIcon icon="edit" />
                         </button>
                         <button onClick={this.deleteCard}>
@@ -77,99 +89,115 @@ export class CigarCardDisplay extends Component<CigarCardDisplayProps, CigarCard
                         </button>
                     </div>
                     <div className={LocalStyles.ImageSection}>
-                        {images !== undefined && images.length > 0 ? (
+                        {imageStrings !== undefined && imageStrings.length > 0 ? (
                             <>
                                 {expanded ? (
-                                    images.map((img, i) => <img src={img.url} alt={img.alt} key={i} />)
+                                    imageStrings.map((img, i) => (
+                                        <div
+                                            className={LocalStyles.Img}
+                                            style={{ backgroundImage: `url(${baseURL}${img})` }}
+                                            key={i}
+                                        />
+                                    ))
                                 ) : (
-                                    <img src={images[0].url} alt={images[0].alt} />
+                                    <div
+                                        className={LocalStyles.Img}
+                                        style={{ backgroundImage: `url(${baseURL}${imageStrings[0]})` }}
+                                    />
                                 )}
                             </>
                         ) : (
-                            <div className={LocalStyles.Image}>
-                                <img src={CigarReplacement} />
-                            </div>
+                            <img src={CigarReplacement} className={LocalStyles.PlaceImg}/>
                         )}
                     </div>
                     <div className={LocalStyles.TextSection}>
                         <div className="container">
-                            <div className={classNames('row', LocalStyles.row)}>
-                                <h2>{name}</h2>
-                                <div className="col-12 col-md-6">
-                                    <AttrField color={yellow} icon="store" value={producer.name} name="Hersteller:" />
+                            <h2>{name}</h2>
+                            {expanded && (
+                                <div className={GeneralStyles.TabBar}>
+                                    <ul>
+                                        <li
+                                            className={classNames(tab === 0 && GeneralStyles.Active)}
+                                            onClick={() => this.setTab(0)}
+                                        >
+                                            Information
+                                        </li>
+                                        <li
+                                            className={classNames(tab === 1 && GeneralStyles.Active)}
+                                            onClick={() => this.setTab(1)}
+                                        >
+                                            Bewings
+                                        </li>
+                                    </ul>
                                 </div>
-                                <div className="col-12 col-md-6">
-                                    <AttrField
-                                        color={greenAccent}
-                                        icon="globe-americas"
-                                        value={origin.name}
-                                        name="Herkunft:"
-                                    />
-                                </div>
-                            </div>
-                            <div className={classNames('row', LocalStyles.row)}>
-                                <div className="col-12 col-md-6">
-                                    <AttrFieldLikeList
-                                        value={rating}
-                                        name="Gesammtbewertung:"
-                                    />
-                                </div>
-                                <div className="col-12 col-md-6">
-                                    <AttrField
-                                        color={green}
-                                        icon="leaf"
-                                        value={smokeagain ? 'Ja!' : 'Nein!'}
-                                        name="Nochmal rauchen?"
-                                    />
-                                </div>
-                            </div>
+                            )}
 
-                            <div className={classNames('row', LocalStyles.row)}>
-                                <p className={LocalStyles.Description}>
-                                    <span>
-                                        <FontAwesomeIcon icon="bars" size="lg" color={grayDarker} />
-                                    </span>
-                                    {expanded ? description : `${description.substring(0, 200)} ...`}
-                                </p>
-                            </div>
-                            <div
-                                className={classNames(
-                                    LocalStyles.Details,
-                                    expanded ? LocalStyles.Opend : LocalStyles.Closed
-                                )}
-                            >
-                                <div className={classNames('row', LocalStyles.row)}>
-                                    <div className="col-12 col-md-6 col-lg-4">
-                                        <AttrField color={greenAccent} icon="leaf" value="Banane" name="Einlage:" />
+                            {(tab === 0 || !expanded) && (
+                                <div className="row">
+                                    <div className="col-12 col-md-6">
+                                        <AttrField
+                                            color={yellow}
+                                            icon="store"
+                                            value={producer.name}
+                                            name="Hersteller:"
+                                        />
                                     </div>
-                                    <div className="col-12 col-md-6  col-lg-4">
-                                        <AttrField color={greenAccent} icon="leaf" value="Banahne" name="Umblatt" />
-                                    </div>
-                                    <div className="col-12 col-md-6  col-lg-4">
+                                    <div className="col-12 col-md-6">
                                         <AttrField
                                             color={greenAccent}
+                                            icon="globe-americas"
+                                            value={origin.name}
+                                            name="Herkunft:"
+                                        />
+                                    </div>
+                                    <div className="col-12 col-md-6">
+                                        <AttrFieldLikeList value={rating} name="Gesammtbewertung:" />
+                                    </div>
+                                    <div className="col-12 col-md-6">
+                                        <AttrField
+                                            color={green}
                                             icon="leaf"
-                                            value={deckplatt.name}
-                                            name="Deckblatt"
+                                            value={smokeagain ? 'Ja!' : 'Nein!'}
+                                            name="Nochmal rauchen?"
+                                        />
+                                    </div>
+                                    <div className="col-12">
+                                        <AttrFieldDescription
+                                            expanded={expanded}
+                                            name="Beschreibung:"
+                                            value={description}
                                         />
                                     </div>
                                 </div>
+                            )}
 
-                                <div className={classNames('row', LocalStyles.row)}>
-                                    <div className="col-12 col-md-6  col-lg-4">
+                            {tab === 1 && expanded && (
+                                <div className="row">
+                                    <div className="col-12 col-md-6">
+                                        <AttrField color={greenAccent} icon="leaf" value="Banane" name="Einlage:" />
+                                    </div>
+                                    <div className="col-12 col-md-6 ">
+                                        <AttrField color={greenAccent} icon="leaf" value="Banahne" name="Umblatt" />
+                                    </div>
+                                    <div className="col-12 col-md-6 ">
+                                        <AttrField
+                                            color={greenAccent}
+                                            icon="leaf"
+                                            value={deckblatt.name}
+                                            name="Deckblatt"
+                                        />
+                                    </div>
+                                    <div className="col-12 col-md-6 ">
                                         <AttrField color={red} icon="cut" value={anschnitt.name} name="Anschnitt:" />
                                     </div>
 
-                                    <div className="col-12 col-md-6  col-lg-4">
+                                    <div className="col-12 col-md-6 ">
                                         <AttrField color={brown} icon="ruler" value={`${lenght} cm`} name="Länge:" />
                                     </div>
-                                    <div className="col-12 col-md-6  col-lg-4">
+                                    <div className="col-12 col-md-6 ">
                                         <AttrField color={brown} icon="ruler" value={`${ringmas} cm`} name="Rigmaß:" />
                                     </div>
-                                </div>
-
-                                <div className={classNames('row', LocalStyles.row)}>
-                                    <div className="col-12 col-md-6  col-lg-4">
+                                    <div className="col-12 col-md-6 ">
                                         <AttrField
                                             color={blueAccent}
                                             icon="calendar-alt"
@@ -177,7 +205,7 @@ export class CigarCardDisplay extends Component<CigarCardDisplayProps, CigarCard
                                             name="Gekauft am:"
                                         />
                                     </div>
-                                    <div className="col-12 col-md-6  col-lg-4">
+                                    <div className="col-12 col-md-6 ">
                                         <AttrField
                                             color={blueAccent}
                                             icon="calendar-alt"
@@ -185,7 +213,7 @@ export class CigarCardDisplay extends Component<CigarCardDisplayProps, CigarCard
                                             name="Geraucht am:"
                                         />
                                     </div>
-                                    <div className="col-12 col-md-6  col-lg-4">
+                                    <div className="col-12 col-md-6 ">
                                         <AttrField
                                             color={blueAccent}
                                             icon="clock"
@@ -193,7 +221,7 @@ export class CigarCardDisplay extends Component<CigarCardDisplayProps, CigarCard
                                             name="Rauchdauer:"
                                         />
                                     </div>
-                                    <div className="col-12 col-md-6  col-lg-4">
+                                    <div className="col-12 col-md-6 ">
                                         <AttrField
                                             color={greenAccent}
                                             icon="leaf"
@@ -201,7 +229,7 @@ export class CigarCardDisplay extends Component<CigarCardDisplayProps, CigarCard
                                             name="Einlage"
                                         />
                                     </div>
-                                    <div className="col-12 col-md-6  col-lg-4">
+                                    <div className="col-12 col-md-6 ">
                                         <AttrField
                                             color={greenAccent}
                                             icon="leaf"
@@ -209,70 +237,44 @@ export class CigarCardDisplay extends Component<CigarCardDisplayProps, CigarCard
                                             name="Umblatt"
                                         />
                                     </div>
-                                </div>
 
-                                <div className={classNames('row', LocalStyles.row)}>
-                                    <div className="col-12 col-md-6  col-lg-4">
-                                        <AttrFieldIconlist
-                                            color={red}
-                                            icon="cut"
-                                            value={strength}
-                                            name="Stärke:"
-                                            valueIconColor={yellow}
-                                            valueIcon="star"
-                                        />
+                                    <div className="col-12 col-md-6 ">
+                                        <AttrFieldSlider color={red} icon="cut" value={strength} name="Stärke:" />
                                     </div>
 
-                                    <div className="col-12 col-md-6  col-lg-4">
-                                        <AttrFieldIconlist
+                                    <div className="col-12 col-md-6 ">
+                                        <AttrFieldSlider
                                             color={blue}
                                             icon="carrot"
                                             value={zugwiederstand}
                                             name="Zugwiederstand:"
-                                            valueIconColor={yellow}
-                                            valueIcon="star"
                                         />
                                     </div>
-                                    <div className="col-12 col-md-6  col-lg-4">
-                                        <AttrFieldIconlist
+                                    <div className="col-12 col-md-6 ">
+                                        <AttrFieldSlider
                                             color={blue}
                                             icon="smile-beam"
                                             value={aromavielfalt}
                                             name="Armomavielfalt:"
-                                            valueIconColor={yellow}
-                                            valueIcon="star"
                                         />
                                     </div>
-                                </div>
-
-                                <div className={classNames('row', LocalStyles.row)}>
-                                    <div className="col-12 col-md-6  col-lg-4">
-                                        <AttrFieldIconlist
+                                    <div className="col-12 col-md-6 ">
+                                        <AttrFieldSlider
                                             color={yellowAccent}
                                             icon="smile-beam"
                                             value={aromaentwicklung}
                                             name="Aromaentwicklung:"
-                                            valueIconColor={yellow}
-                                            valueIcon="star"
                                         />
                                     </div>
-                                    <div className="col-12 col-md-6  col-lg-4">
-                                        <AttrFieldIconlist
-                                            color={blue}
-                                            icon="ruler"
-                                            value={abbrand}
-                                            name="Abbrand:"
-                                            valueIconColor={yellow}
-                                            valueIcon="star"
-                                        />
+                                    <div className="col-12 col-md-6 ">
+                                        <AttrFieldSlider color={blue} icon="ruler" value={abbrand} name="Abbrand:" />
                                     </div>
-                                    
 
-                                    <div className="col-12 col-md-6  col-lg-4">
+                                    <div className="col-12 col-md-6 ">
                                         <AttrField color={green} icon="cog" value={aromarad.name} name="Armomarad" />
                                     </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
                     </div>
                 </div>

@@ -7,21 +7,50 @@ import { CoffeeOriginEntity, CoffeeKindEntity, CoffeeRoastedEntity } from '../en
 export class CoffeeDto {
     public id: number;
     public name: string;
+    public imageStrings: string[];
     public description: string;
     public rating: number;
     public origin: CoffeeOriginEntity;
     public kind: CoffeeKindEntity;
     public roasted: CoffeeRoastedEntity;
+    public bitter: number;
+    public ownDescription: string;
+    public sour: number;
+    public taste: number;
+    public tasteKind: number;
+    public woody: number;
 
     // This constructs a UserDto from a given UserEntity via new UserDto(userEntity).
-    public constructor({ id, name, description, origin, rating, kind, roasted }: CoffeeEntity) {
+    public constructor({
+        id,
+        name,
+        // images,
+        description,
+        origin,
+        rating,
+        kind,
+        roasted,
+        bitter,
+        ownDescription,
+        sour,
+        taste,
+        tasteKind,
+        woody,
+    }: CoffeeEntity) {
         this.id = id;
         this.name = name;
+        this.imageStrings = [];
         this.description = description;
         this.rating = rating;
         this.origin = origin;
         this.kind = kind;
         this.roasted = roasted;
+        this.bitter = bitter;
+        this.ownDescription = ownDescription;
+        this.sour = sour;
+        this.taste = taste;
+        this.tasteKind = tasteKind;
+        this.woody = woody;
     }
 
     // This is mostly used in combination with Array.map, since you cannot map a constructor.
@@ -29,4 +58,3 @@ export class CoffeeDto {
         return new CoffeeDto(coffeeEntity);
     }
 }
-

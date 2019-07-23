@@ -1,22 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classnames from 'classnames';
-import React, { Component, FormEvent } from 'react';
+import React, { Component, ChangeEvent, KeyboardEvent } from 'react';
 import { Form, FormControlProps, Row } from 'react-bootstrap';
 import LocalStyles from './AttrDataWindow.module.scss';
 import axios from 'axios';
-
-export type AttrDataItemType = {
-    id: number;
-    name: string;
-};
-
-export type AttrDataType = {
-    id: number;
-    name: string;
-    urlSubstring: string;
-    description: string;
-    items: AttrDataItemType[];
-};
+import { AttrDataType } from '../FormComponents';
 
 export type AttrDataProps = {
     content: AttrDataType[];
@@ -26,12 +14,14 @@ export type AttrDataProps = {
 export type AttrDataState = {
     selectedCategory: AttrDataType;
     newItemName: string;
+    error: boolean;
 };
 
 export class AttrDataWindow extends Component<AttrDataProps, AttrDataState> {
     public readonly state: AttrDataState = {
         selectedCategory: this.props.content[0],
         newItemName: '',
+        error: false,
     };
 
     public selectCategory = (id: number) => {
@@ -57,10 +47,12 @@ export class AttrDataWindow extends Component<AttrDataProps, AttrDataState> {
                         ],
                     },
                     newItemName: '',
+                    error: false,
                 }));
             })
             .catch((error) => {
                 console.log(error);
+                this.setState({ error: true });
             });
     };
 
@@ -76,29 +68,30 @@ export class AttrDataWindow extends Component<AttrDataProps, AttrDataState> {
                     selectedCategory: {
                         ...oldState.selectedCategory,
                         items: oldState.selectedCategory.items.filter((item) => item.id !== id),
+                        error: false,
                     },
                 }));
             })
             .catch((error) => {
                 // handle error
                 console.log(error);
+                this.setState({ error: true });
             });
-
-        this.setState((oldState) => ({
-            selectedCategory: {
-                ...oldState.selectedCategory,
-                items: oldState.selectedCategory.items.filter((item) => item.id !== id),
-            },
-        }));
     };
 
-    public handleItemNameChange = (event: FormEvent<Required<FormControlProps>>) => {
+    public handleItemNameChange = (event: ChangeEvent<HTMLInputElement>) => {
         const value = event.currentTarget.value;
         this.setState((state) => ({ newItemName: value }));
     };
 
+    public handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            this.addNewItem();
+        }
+      }
+
     public render() {
-        const { selectedCategory, newItemName } = this.state;
+        const { selectedCategory, newItemName, error } = this.state;
         const { content, toggleFunktion } = this.props;
 
         return (
@@ -108,7 +101,7 @@ export class AttrDataWindow extends Component<AttrDataProps, AttrDataState> {
                     <Row>
                         <div className={LocalStyles.AttrList}>
                             <FontAwesomeIcon icon="mug-hot" size="3x" color="#8B572A" />
-                            <h2>Kaffee Arten</h2>
+                            <h2>Kaffee Daten</h2>
                             <ul>
                                 {content.map((item) => (
                                     <li
@@ -127,8 +120,8 @@ export class AttrDataWindow extends Component<AttrDataProps, AttrDataState> {
                                 <FontAwesomeIcon icon="times" color="#929292" />
                             </button>
                             <span className={LocalStyles.ListHeader}>
-                                <b>{selectedCategory.name}</b>
-                                <br /> {selectedCategory.description}
+                                <h2>{selectedCategory.name}</h2>
+                                {selectedCategory.description}
                             </span>
                             <ul>
                                 {selectedCategory.items.map((item) => (
@@ -144,12 +137,13 @@ export class AttrDataWindow extends Component<AttrDataProps, AttrDataState> {
                                 ))}
                                 <li>
                                     <Row>
-                                        <Form.Control
+                                        <input
                                             type="text"
                                             placeholder="New item"
                                             value={newItemName}
                                             onChange={this.handleItemNameChange}
                                             className={LocalStyles.Input}
+                                            onKeyPress={this.handleKeyPress}
                                         />
                                         <button onClick={this.addNewItem} className={LocalStyles.ListAddButton}>
                                             <FontAwesomeIcon icon="plus" color="#929292" size="lg" />
@@ -157,6 +151,7 @@ export class AttrDataWindow extends Component<AttrDataProps, AttrDataState> {
                                     </Row>
                                 </li>
                             </ul>
+                            {error && <p className={LocalStyles.Error}>Theres a error with the server, sorry!</p>}
                         </div>
                     </Row>
                 </div>

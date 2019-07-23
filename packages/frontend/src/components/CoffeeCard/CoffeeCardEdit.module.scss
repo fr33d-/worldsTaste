@@ -1,8 +1,6 @@
 @import '../../bootstrap.scss';
 @import '../../style/card.scss';
 
-
-
 .CoffeeCardEdit {
     @extend .card;
     @extend .cardActive;
@@ -19,27 +17,54 @@
     }
 
     .Fileupload {
-        display: none;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        background: red;
     }
 
     .ImageSection {
-        width: 250px;
-        height: 250px;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: $default-space-small;
 
-        img {
-            width: 40%;
+        .Image {
+            position: relative;
+            margin: $default-space-small $default-space-small 0 0;
+
+            button {
+                position: absolute;
+                height: 32px;
+                width: 32px;
+                top: 0;
+                right: 0px;
+                background: $new-dark-gray;
+                border-radius: 16px;
+            }
+            img {
+                width: 120px;
+            }
         }
 
         .UploadArea {
-            height: 220px;
-            width: 220px;
+            height: 120px;
+            width: 120px;
             border: 1px dashed $new-dark-gray;
             border-radius: $border-radius;
-            margin-right: 35px;
+            margin: $default-space-small $default-space-small 0 0;
+            position: relative;
 
             display: flex;
             align-items: center;
             justify-content: center;
+
+            label {
+                position: absolute;
+                top: 50px;
+                left: 50px;
+            }
 
             button {
                 margin: auto;
@@ -59,14 +84,6 @@
     }
 
     .TextSection {
-        // display: flex;
-        // flex-direction: row;
-        // flex-wrap: wrap;
-        // align-content: flex-start;
-        // align-items: flex-start;
-
-        // width: 100%;
-
         h2 {
             width: 100%;
             text-align: center;
@@ -87,29 +104,6 @@
                 width: 40px;
                 display: inline-block;
                 text-align: center;
-            }
-        }
-    }
-
-    .TabBar {
-        width: 100%;
-        text-align: center;
-        padding: $default-space 0;
-
-        ul {
-            padding: 0;
-            
-            li {
-                display: inline;
-                padding: 9px 20px;
-                font-size: 16px;
-                color: $new-darker-gray;
-
-                &.Active {
-                    background: $blue;
-                    color: $white;
-                    border-radius: 18px;
-                }
             }
         }
     }

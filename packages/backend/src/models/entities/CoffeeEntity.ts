@@ -1,6 +1,13 @@
 import { BaseEntity, Column, Entity, Index, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
 import { CoffeeOriginEntity, CoffeeKindEntity, CoffeeRoastedEntity } from "./CoffeeAttrsEntity";
 
+export type Image = {
+    name: string;
+    url?: string;
+    alt?: string;
+    file?: File;
+};
+
 @Entity()
 export class CoffeeEntity extends BaseEntity {
 
@@ -8,11 +15,12 @@ export class CoffeeEntity extends BaseEntity {
     public id!: number;
 
     @Column()
-    @Index({ unique: true })
     public name!: string;
 
-    // @Column()
+    // @Column({array: true})
     // public images!: Image[];
+    // @Column()
+    // public images!: string;
 
     @Column()
     public description!: string;
@@ -20,14 +28,23 @@ export class CoffeeEntity extends BaseEntity {
     @Column()
     public rating!: number;
 
-    // @Column()
-    // public origin!: string;
+    @Column()
+    public taste!: number;
 
-    // @Column()
-    // public kind!: string;
+    @Column()
+    public tasteKind!: number;
 
-    // @Column()
-    // public roasted!: string;
+    @Column()
+    public woody!: number;
+
+    @Column()
+    public bitter!: number;
+
+    @Column()
+    public sour!: number;
+
+    @Column()
+    public ownDescription!: string;
 
     @ManyToOne(type => CoffeeOriginEntity, coffeeOrigin => coffeeOrigin.id)
     @JoinColumn({ name: "origin" })

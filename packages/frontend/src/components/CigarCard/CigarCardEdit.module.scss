@@ -19,20 +19,41 @@
         }
     }
 
+    .Fileupload {
+        display: none;
+    }
+    
     .ImageSection {
-        width: 250px;
-        height: 250px;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: $default-space-small;
 
-        img {
-            width: 40%;
+        .Image {
+            position: relative;
+            margin: $default-space-small $default-space-small 0 0;
+
+            button {
+                position: absolute;
+                height: 32px;
+                width: 32px;
+                top: 0;
+                right: 0px;
+                background: $new-dark-gray;
+                border-radius: 16px;
+            }
+            img {
+                width: 120px;
+            }
         }
 
         .UploadArea {
-            height: 220px;
-            width: 220px;
+            height: 120px;
+            width: 120px;
             border: 1px dashed $new-dark-gray;
             border-radius: $border-radius;
-            margin-right: 35px;
+            margin: $default-space-small $default-space-small 0 0;
 
             display: flex;
             align-items: center;

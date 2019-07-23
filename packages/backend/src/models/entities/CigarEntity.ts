@@ -1,6 +1,6 @@
 import { BaseEntity, Column, Entity, Index, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
 import { CoffeeOriginEntity, CoffeeKindEntity, CoffeeRoastedEntity } from "./CoffeeAttrsEntity";
-import { CigarAnschnittEntity, CigarAromaradEntity, CigarDeckplattEntity, CigarEinlageEntity, CigarOriginEntity, CigarProducerEntity, CigarUmblattEntity } from "./CigarAttrsEntity";
+import { CigarAnschnittEntity, CigarAromaradEntity, CigarDeckblattEntity, CigarEinlageEntity, CigarOriginEntity, CigarProducerEntity, CigarUmblattEntity } from "./CigarAttrsEntity";
 
 @Entity()
 export class CigarEntity extends BaseEntity {
@@ -62,9 +62,9 @@ export class CigarEntity extends BaseEntity {
     @JoinColumn({ name: "aromarad" })
     public aromarad!: CigarAromaradEntity;
 
-    @ManyToOne(type => CigarDeckplattEntity, cigarDeckplatt => cigarDeckplatt.id)
-    @JoinColumn({ name: "deckplatt" })
-    public deckplatt!: CigarDeckplattEntity;
+    @ManyToOne(type => CigarDeckblattEntity, cigarDeckblatt => cigarDeckblatt.id)
+    @JoinColumn({ name: "deckblatt" })
+    public deckblatt!: CigarDeckblattEntity;
 
     @ManyToOne(type => CigarEinlageEntity, cigarEinlage => cigarEinlage.id)
     @JoinColumn({ name: "einlage" })

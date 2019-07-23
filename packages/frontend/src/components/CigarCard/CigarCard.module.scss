@@ -37,7 +37,7 @@
     transition: all 500ms ease-in-out;
 
     &.Exanded {
-        max-height: 800px;
+        max-height: 900px;
     }
 
     .Details {
@@ -70,32 +70,32 @@
     }
 
     .ImageSection {
-        width: 250px;
-        height: 250px;
+        width: 260px;
+        padding: $default-space 0 0 $default-space;
 
         @include media-breakpoint-down(sm) {
             width: 100%;
             background: $new-darker-gray;
             min-width: 250px;
             text-align: center;
-        }
+        }   
 
-        .Image {
+        img, .Img {
             width: 100px;
             height: 100px;
-            overflow: hidden;
-            text-align: center;
-            border-radius: $border-radius;
-            margin: $default-space;
+            // max-width: 210px;
+            // max-height: 210px;
+            border-radius: $border-radius-min;
+            margin: 0 $default-space-small $default-space-small 0;
+            display: inline-block;
+
+            background-size: cover;
+            background-position: center;
 
             &:first-of-type {
-                width: 210px;
-                height: 210px;
-            }
-
-            img {
-                margin-top: 50px;
-                height: 100px;
+                width: 220px;
+                height: 220px;
+                border-radius: $border-radius;
             }
         }
     }
@@ -105,7 +105,7 @@
         width: 100%;
 
         border-left: 1px solid $new-dark-gray;
-        padding-left: 30px;
+        padding-left: $default-space;
 
         .Description {
             width: 90%;
@@ -151,5 +151,10 @@
                 text-align: center;
             }
         }
+    }
+
+    .PlaceImg {
+        width: 150px;
+        margin: 80px 60px;
     }
 }

@@ -1,7 +1,7 @@
 import {
     CigarAnschnittEntity,
     CigarAromaradEntity,
-    CigarDeckplattEntity,
+    CigarDeckblattEntity,
     CigarEinlageEntity,
     CigarOriginEntity,
     CigarProducerEntity,
@@ -12,6 +12,7 @@ import { CigarEntity } from '../entities/CigarEntity';
 export class CigarDto {
     public id: number;
     public name: string;
+    public imageStrings: string[];
     public abbrand: number;
     public aromavielfalt: number;
     public aromaentwicklung: number;
@@ -27,7 +28,7 @@ export class CigarDto {
     public zugwiederstand: number;
     public anschnitt: CigarAnschnittEntity;
     public aromarad: CigarAromaradEntity;
-    public deckplatt: CigarDeckplattEntity;
+    public deckblatt: CigarDeckblattEntity;
     public einlage: CigarEinlageEntity;
     public origin: CigarOriginEntity;
     public producer: CigarProducerEntity;
@@ -51,7 +52,7 @@ export class CigarDto {
         zugwiederstand,
         anschnitt,
         aromarad,
-        deckplatt,
+        deckblatt,
         einlage,
         origin,
         producer,
@@ -59,6 +60,7 @@ export class CigarDto {
     }: CigarEntity) {
         this.id = id;
         this.name = name;
+        this.imageStrings = [];
         this.abbrand = abbrand;
         this.aromavielfalt = aromavielfalt;
         this.aromaentwicklung = aromaentwicklung;
@@ -74,7 +76,7 @@ export class CigarDto {
         this.zugwiederstand = zugwiederstand;
         this.anschnitt = anschnitt;
         this.aromarad = aromarad;
-        this.deckplatt = deckplatt;
+        this.deckblatt = deckblatt;
         this.einlage = einlage;
         this.origin = origin;
         this.producer = producer;

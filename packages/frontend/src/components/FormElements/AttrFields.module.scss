@@ -1,7 +1,6 @@
 @import '../../bootstrap.scss';
 @import '../../style/card.scss';
 
-
 // SliderAttrField
 
 .Iconlist {
@@ -54,10 +53,11 @@
     }
 
     ul {
-        margin: 5px 10px;
+        margin: 5px 20px;
         padding: 0;
         list-style: none;
         display: inline;
+        width: 100%;
 
         .Active {
             background: $red-accent;
@@ -67,7 +67,7 @@
             background: $new-dark-gray;
             display: inline-block;
             height: 10px;
-            width: 40px;
+            width: 17%;
             margin-right: 1px;
 
             $border-radius-list: 5px;
@@ -90,7 +90,6 @@
     flex-direction: row;
     align-items: center;
 
-
     &.svg {
         margin-right: 10px;
         flex-grow: 1;
@@ -107,19 +106,88 @@
             display: inline-block;
             height: fit-content;
             width: fit-content;
-    
+
             .Hover {
                 position: absolute;
                 background: transparent;
                 height: 20px;
-                width : 20px;
+                width: 20px;
                 top: 0;
                 left: 0;
             }
-    
+
             svg {
                 margin: 0 2px;
             }
         }
+    }
+}
+
+.Description {
+    margin-bottom: $default-space-small;
+
+    p {
+        width: 100%;
+        line-height: 24px;
+        font-size: 16px;
+        color: $new-darker-gray;
+    }
+
+    svg {
+        margin: 0 $default-space-small 0 0;
+    }
+}
+
+.AttrField {
+    margin-bottom: $default-space-small;
+
+    svg {
+        margin-right: 10px;
+    }
+
+    .Value {
+        font-size: 16px;
+        color: $new-darker-gray;
+    }
+
+    .Iconlist {
+        display: inline;
+        svg {
+            margin: 0;
+            margin-right: 3px;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: inline;
+
+            li {
+                background: $new-dark-gray;
+                display: inline-block;
+                height: 8px;
+                width: 36px;
+                margin-right: 1px;
+
+                $border-radius-list: 3px;
+
+                &:first-of-type {
+                    border-radius: $border-radius-list 0 0 $border-radius-list;
+                }
+
+                &:last-of-type {
+                    border-radius: 0 $border-radius-list $border-radius-list 0;
+                }
+            }
+        }
+    }
+}
+
+.AttrFieldLabel {
+    font-size: 12px;
+
+    &:nth-of-type(2) {
+        margin-left: 70px;
     }
 }

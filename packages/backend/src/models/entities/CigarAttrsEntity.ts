@@ -23,7 +23,7 @@ export class CigarAromaradEntity extends BaseEntity {
 }
 
 @Entity()
-export class CigarDeckplattEntity extends BaseEntity {
+export class CigarDeckblattEntity extends BaseEntity {
 
     @PrimaryGeneratedColumn()
     public id!: number;

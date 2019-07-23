@@ -20,3 +20,5 @@ export const white = '#fff';
 export const black = '#000';
 
 export const brown = '#8B572A';
+
+export const cyan = '#50E3C2';

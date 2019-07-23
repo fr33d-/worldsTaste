@@ -61,6 +61,10 @@
                         margin: 0;
                         line-height: 40px;
                     }
+
+                    .Active {
+                        font-weight: bold;
+                    }
                 }
             }
         }
@@ -89,3 +93,4 @@
         display: none;
     }
 }
+

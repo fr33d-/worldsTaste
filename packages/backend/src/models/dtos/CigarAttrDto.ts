@@ -1,7 +1,7 @@
 import {
     CigarAnschnittEntity,
     CigarAromaradEntity,
-    CigarDeckplattEntity,
+    CigarDeckblattEntity,
     CigarEinlageEntity,
     CigarOriginEntity,
     CigarProducerEntity,
@@ -36,17 +36,17 @@ export class CigarAromaradDto {
     }
 }
 
-export class CigarDeckplattDto {
+export class CigarDeckblattDto {
     public id: number;
     public name: string;
 
-    public constructor({ id, name }: CigarDeckplattEntity) {
+    public constructor({ id, name }: CigarDeckblattEntity) {
         this.id = id;
         this.name = name;
     }
 
-    public static fromEntity(cigarDeckplattEntity: CigarDeckplattEntity) {
-        return new CigarDeckplattDto(cigarDeckplattEntity);
+    public static fromEntity(cigarDeckblattEntity: CigarDeckblattEntity) {
+        return new CigarDeckblattDto(cigarDeckblattEntity);
     }
 }
 

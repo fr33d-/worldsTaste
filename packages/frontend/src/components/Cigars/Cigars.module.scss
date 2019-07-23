@@ -1,53 +1,20 @@
 @import '../../bootstrap.scss';
 @import '../../style/card.scss';
 
-// .Filter {
-//     width: fit-content;
-//     text-align: right;
-//     margin-left: auto;
-//     display: flex;
-//     flex-direction: row;
-//     align-items: center;
+.EditFrame {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background: rgba(0,0,0,0.2);
+    padding-top: 120px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
 
-//     .Select {
-//         box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.15);
-//         border: none;
-//         border-radius: 5px;
-//         width: 150px;
-//         margin-right: $default-space;
-//     }
-
-//     .Button {
-//         box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.15);
-//         border: none;
-//         color: $new-darker-gray;
-//         margin-right: $default-space-small;
-//     }
-
-//     select {
-//         width: 150px;
-//     }
-// }
-
-.Introtext {
-    margin-top: $default-space;
-    margin-left: $default-space;
-    padding: $default-space;
-    width: 80%;
-
-    p {
-        color: $new-darker-gray;
-        font-size: 14px;
-        padding-left: 20px;
-        font-weight: 300;
-
-        border-left: 1px solid $new-dark-gray;
-    }
-
-    h2 {
-        padding-bottom: $default-space-small;
-        color: $black;
-        font-size: 32px;
-        font-weight: 400;
+.EditBackground {
+    * {
+        filter: blur(5px);
     }
 }

@@ -6,7 +6,7 @@ import {
     getCigarAromaradEntities,
     createCigarAromaradEntity,
     deleteCigarAromaradEntity,
-    deleteCigarDeckplattEntity,
+    deleteCigarDeckblattEntity,
     getCigarEinlageEntities,
     deleteCigarEinlageEntity,
     getCigarOriginEntities,
@@ -18,7 +18,7 @@ import {
     getCigarUmblattEntities,
     createCigarUmblattEntity,
     deleteCigarUmblattEntity,
-    getCigarDeckplattEntities,
+    getCigarDeckblattEntities,
     createCigarDeckblattEntity,
     createCigarEinlageEntity,
 } from '../controllers/CigarAttrsController';
@@ -34,9 +34,9 @@ cigarAttrsRoute.route('/aromarad').get(getCigarAromaradEntities);
 cigarAttrsRoute.route('/aromarad').post(createCigarAromaradEntity);
 cigarAttrsRoute.route('/aromarad/:id').delete(deleteCigarAromaradEntity);
 
-cigarAttrsRoute.route('/deckplatt').get(getCigarDeckplattEntities);
-cigarAttrsRoute.route('/deckplatt').post(createCigarDeckblattEntity);
-cigarAttrsRoute.route('/deckplatt/:id').delete(deleteCigarDeckplattEntity);
+cigarAttrsRoute.route('/deckblatt').get(getCigarDeckblattEntities);
+cigarAttrsRoute.route('/deckblatt').post(createCigarDeckblattEntity);
+cigarAttrsRoute.route('/deckblatt/:id').delete(deleteCigarDeckblattEntity);
 
 cigarAttrsRoute.route('/einlage').get(getCigarEinlageEntities);
 cigarAttrsRoute.route('/einlage').post(createCigarEinlageEntity);

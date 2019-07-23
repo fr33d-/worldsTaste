@@ -1,17 +1,17 @@
-import React, { FormEvent, ChangeEvent } from 'react';
-import { Col, Form, FormControlProps } from 'react-bootstrap';
-import { AttrDataItemType } from '../AttrDataWindow';
-import LocalStyles from './DropdownColumn.module.scss';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { ChangeEvent } from 'react';
+import { Col } from 'react-bootstrap';
+import { AttrDataItemType } from '../FormComponents';
+import LocalStyles from './DropdownColumn.module.scss';
 
 type DropdownComponentProps = {
     label?: string;
     iconLabel?: IconProp;
     iconLabelColor?: string;
     items: AttrDataItemType[];
-    onChange(event: ChangeEvent<HTMLSelectElement>): void;
     selectedItem: AttrDataItemType;
+    onChange(event: ChangeEvent<HTMLSelectElement>): void;
 };
 
 export const DropdownColumn = ({

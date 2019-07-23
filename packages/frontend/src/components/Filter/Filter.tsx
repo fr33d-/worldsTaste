@@ -1,11 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import React, { ChangeEvent } from 'react';
-import { AttrDataType } from '../AttrDataWindow';
 import LocalStyles from './Filter.module.scss';
+import { AttrDataType, FilterMenuType } from '../FormComponents';
 
 type FilterProps = {
-    orderItems: AttrDataType[];
+    orderItems: FilterMenuType[];
     orderAction(event: ChangeEvent<HTMLSelectElement>): void;
     dataAction(): void;
     addAction(): void;

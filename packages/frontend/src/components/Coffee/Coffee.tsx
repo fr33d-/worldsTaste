@@ -3,13 +3,15 @@ import axios from 'axios';
 import classNames from 'classnames';
 import React, { Component } from 'react';
 import { RouteComponentProps } from 'react-router';
-import { AttrDataType, AttrDataWindow } from '../AttrDataWindow';
-import { CoffeeCard, CoffeeEntry } from '../CoffeeCard';
+import { AttrDataWindow } from '../AttrDataWindow';
+import { CoffeeCardDisplay } from '../CoffeeCard/CoffeeCardDisplay';
+import { CoffeeCardEdit } from '../CoffeeCard/CoffeeCardEdit';
 import { Filter } from '../Filter';
 import { Footer } from '../Footer';
+import { AttrDataType, CoffeeEntry, FilterMenuType } from '../FormComponents';
 import { Navigationbar } from '../Navigationbar';
 import { Sidemenu } from '../Sidemenu';
-import chemexSVG from './../../images/Chemex.svg';
+import { default as chemexSVG, default as CoffeeReplacement } from './../../images/Chemex.svg';
 import GeneralStyles from './../../style/GeneralStyles.module.scss';
 import LocalStyles from './Coffee.module.scss';
 
@@ -17,6 +19,7 @@ export type CoffeeProps = RouteComponentProps;
 
 export type CoffeeBaseState = {
     posts: CoffeeEntry[];
+    filteredPosts: CoffeeEntry[];
     menu: AttrDataType[];
     filter: string;
     loading: boolean;
@@ -25,11 +28,13 @@ export type CoffeeBaseState = {
     coffeeOrigins: AttrDataType[];
     displayAttrMenu: boolean;
     editCard?: CoffeeEntry;
+    activeFilter?: string;
 };
 
 export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
     public readonly state: CoffeeBaseState = {
         posts: [],
+        filteredPosts: [],
         menu: [],
         filter: '',
         loading: false,
@@ -51,27 +56,46 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                 }));
             })
             .catch((error) => {
-                // handle error
                 console.log(error);
             });
     };
 
     public createCard = () => {
-        this.setState((state) => ({
-            posts: [
-                {
-                    id: 0,
-                    images: [],
-                    name: '',
-                    description: '',
-                    origin: { id: 0, name: 'unknown' },
-                    rating: 0,
-                    kind: { id: 0, name: 'unknown' },
-                    roasted: { id: 0, name: 'unknown' },
-                },
-                ...state.posts,
-            ],
-        }));
+        const newPost: CoffeeEntry = {
+            id: 0,
+            imageFiles: [],
+            imageStrings: [],
+            name: 'Neue Karte',
+            description: '',
+            origin: this.state.coffeeOrigins[0],
+            rating: 0,
+            kind: this.state.coffeeKinds[0],
+            roasted: this.state.coffeeRoateds[0],
+            bitter: 0,
+            ownDescription: '',
+            sour: 0,
+            taste: 0,
+            tasteKind: 0,
+            woody: 0,
+        };
+
+        axios
+            .post('http://localhost:4000/coffee', { ...newPost })
+            .then((response) => {
+                console.log(response.headers['location']);
+                const location: string = response.headers['location'];
+                const [id] = location.split('/').slice(-1);
+                newPost.id = Number(id);
+
+                this.setState((state) => ({
+                    posts: [newPost, ...state.posts],
+                }));
+
+                this.setEditCard(Number(id));
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     };
 
     public toggleAttrMenu = () => {
@@ -94,6 +118,7 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                 console.log(responses[0].data);
                 this.setState({
                     posts: responses[0].data,
+                    filteredPosts: responses[0].data,
                     coffeeKinds: responses[1].data,
                     coffeeOrigins: responses[2].data,
                     coffeeRoateds: responses[3].data,
@@ -101,6 +126,7 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                     filter: 'origin',
                     menu: responses[2].data,
                 });
+                console.log(this.state.filteredPosts);
             })
             .catch((error) => {
                 console.log(error);
@@ -117,19 +143,90 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
         }
     };
 
-    public clearEditCard = () => {
+    public clearEditCard = (newPost: CoffeeEntry, deleted: boolean) => {
+        // let newPosts = [];
+        // if (deleted) {
+        //     newPosts = this.state.posts.filter(post => post.id !== newPost.id);
+        // } else {
+        //     newPosts = this.state.posts.map(post => {
+        //         return post.id === newPost.id ? newPost :post;
+        //     });
+        // }
+        
+        // console.log(newPosts);
+
+        // this.setState({
+        //     editCard: undefined,
+        //     posts: newPosts,
+        //     filteredPosts: newPosts,
+        // });
+
         this.setState({
             editCard: undefined,
         });
+
+        this.initiateData();
     };
 
     public componentDidMount() {
         this.initiateData();
     }
 
+    public filterPosts = (filterName: string, filterAttr: string) => {
+        let newPosts = [];
+
+        switch (filterName) {
+            case 'Arten':
+                newPosts = this.state.posts.filter((post) => {
+                    console.log(`Vergleich ${post.kind.name} === ${filterAttr}`);
+                    return (post.kind.name === filterAttr);
+                });
+                break;
+            case 'Herkunft':
+                newPosts = this.state.posts.filter((post) => {
+                    console.log(`Vergleich ${post.origin.name} === ${filterAttr}`);
+                    return (post.origin.name === filterAttr);
+                });
+                break;
+            case 'Röstereien':
+                // newPosts = this.state.posts.filter((post) => post.roasted.name === filterAttr);
+                newPosts = this.state.posts.filter((post) => {
+                    console.log(`Vergleich ${post.roasted.name} === ${filterAttr}`);
+                    return (post.roasted.name === filterAttr);
+                });
+                break;
+            case 'Bewertung':
+                // newPosts = this.state.posts.filter((post) => String(post.rating) === filterAttr);
+                newPosts = this.state.posts.filter((post) => {
+                    console.log(post);
+                    if (String(post.rating) === filterAttr) {
+                        console.log(`Vergleich ${String(post.rating)} === ${filterAttr}`);
+                    } else {
+                        console.log(`Vergleich ${String(post.rating)} != ${filterAttr}`);
+                    }
+                    return (String(post.rating) === filterAttr);
+                });
+                break;
+            default:
+                newPosts = this.state.posts;
+                break;
+        }
+
+        this.setState({ filteredPosts: newPosts, activeFilter: filterAttr });
+    };
+
     // tslint:disable-next-line: max-func-body-length
     public render() {
-        const { posts, coffeeKinds, coffeeOrigins, coffeeRoateds, displayAttrMenu, editCard } = this.state;
+        const {
+            posts,
+            coffeeKinds,
+            coffeeOrigins,
+            coffeeRoateds,
+            displayAttrMenu,
+            editCard,
+            filteredPosts,
+            activeFilter,
+        } = this.state;
         const attrData = [
             {
                 id: 1,
@@ -153,6 +250,24 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                 items: coffeeRoateds,
             },
         ];
+        const filterMenu: FilterMenuType[] = [
+            {
+                name: 'Arten',
+                items: coffeeKinds.map((item) => item.name),
+            },
+            {
+                name: 'Herkunft',
+                items: coffeeOrigins.map((item) => item.name),
+            },
+            {
+                name: 'Röstereien',
+                items: coffeeRoateds.map((item) => item.name),
+            },
+            {
+                name: 'Bewertung',
+                items: ['1', '2', '3', '4', '5'],
+            },
+        ];
 
         return (
             <>
@@ -165,14 +280,19 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                             <h1>Blog of Coffee</h1>
                         </div>
                         <div className="row">
-                            <Sidemenu filter={attrData} image={chemexSVG} />
+                            <Sidemenu
+                                filter={filterMenu}
+                                image={chemexSVG}
+                                filterAction={this.filterPosts}
+                                activeFilter={activeFilter}
+                            />
                             <div className={classNames(`col-12 col-lg-9`, LocalStyles.CoffeeContent)}>
                                 <div className={LocalStyles.CoffeeContentScrollable}>
                                     <Filter
                                         addAction={this.createCard}
                                         dataAction={this.toggleAttrMenu}
                                         orderAction={() => {}}
-                                        orderItems={attrData}
+                                        orderItems={filterMenu}
                                     />
 
                                     <div className={GeneralStyles.Introtext}>
@@ -189,20 +309,17 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                                     </div>
                                     <div className={`${LocalStyles.CoffeeContainer}`}>
                                         {posts.length === 0 ? (
-                                            <p>nothing here</p>
+                                            <div className={GeneralStyles.ReplImg}>
+                                                <img src={CoffeeReplacement} />
+                                                <p>No coffees to display</p>
+                                            </div>
                                         ) : (
-                                            posts.map((post) => {
+                                            filteredPosts.map((post) => {
                                                 return (
-                                                    <CoffeeCard
+                                                    <CoffeeCardDisplay
                                                         entry={post}
-                                                        key={post.id}
                                                         deleteFunction={this.deletePost}
-                                                        kinds={coffeeKinds}
-                                                        roasteds={coffeeRoateds}
-                                                        origins={coffeeOrigins}
-                                                        edit={false}
-                                                        setCoffeeEditCard={this.setEditCard}
-                                                        clearCoffeeEditCard={this.clearEditCard}
+                                                        editFunction={this.setEditCard}
                                                     />
                                                 );
                                             })
@@ -220,15 +337,13 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                         <div className="container">
                             <div className="col-12 col-md-10 offset-md-1">
                                 <div className={LocalStyles.EditCard}>
-                                    <CoffeeCard
+                                    <CoffeeCardEdit
                                         entry={editCard}
                                         deleteFunction={this.deletePost}
                                         kinds={coffeeKinds}
                                         roasteds={coffeeRoateds}
                                         origins={coffeeOrigins}
-                                        edit={true}
-                                        setCoffeeEditCard={this.setEditCard}
-                                        clearCoffeeEditCard={this.clearEditCard}
+                                        close={this.clearEditCard}
                                     />
                                 </div>
                             </div>

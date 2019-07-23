@@ -5,6 +5,8 @@ import ChemexSVG from './images/Chemex.svg';
 import Tabak from './images/Tabak.svg';
 import Beer from './images/Beer.svg';
 
+export const baseURL = 'http://localhost:4000';
+
 export type MainMenuItem = {
     name: string;
     label?: string;

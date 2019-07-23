@@ -3,7 +3,7 @@ import * as httpStatusCodes from 'http-status-codes';
 import {
     CigarAnschnittDto,
     CigarAromaradDto,
-    CigarDeckplattDto,
+    CigarDeckblattDto,
     CigarEinlageDto,
     CigarOriginDto,
     CigarProducerDto,
@@ -12,7 +12,7 @@ import {
 import {
     CigarAnschnittEntity,
     CigarAromaradEntity,
-    CigarDeckplattEntity,
+    CigarDeckblattEntity,
     CigarEinlageEntity,
     CigarOriginEntity,
     CigarProducerEntity,
@@ -109,22 +109,22 @@ export const deleteCigarAromaradEntity: RequestHandler = async (request, result)
 
 //Deckblatt
 
-export const getCigarDeckplattEntities: RequestHandler = async (_, result) => {
+export const getCigarDeckblattEntities: RequestHandler = async (_, result) => {
     log(`GET /cigarAttrs/deckblatt`);
 
-    const cigarDeckplattEntity = await CigarDeckplattEntity.find();
-    result.status(httpStatusCodes.OK).json(cigarDeckplattEntity.map(CigarDeckplattDto.fromEntity));
+    const cigarDeckblattEntity = await CigarDeckblattEntity.find();
+    result.status(httpStatusCodes.OK).json(cigarDeckblattEntity.map(CigarDeckblattDto.fromEntity));
 };
 
-type CreateCigarDeckblattEntityRequestBody = Omit<CigarDeckplattDto, 'id'>;
+type CreateCigarDeckblattEntityRequestBody = Omit<CigarDeckblattDto, 'id'>;
 
 export const createCigarDeckblattEntity: RequestHandler = async (request, result) => {
     log(`POST /cigarAttrs/deckblatt`);
     const requestBody = request.body as CreateCigarDeckblattEntityRequestBody;
-    const cigarDeckblattEntity = CigarDeckplattEntity.create({ ...requestBody });
+    const cigarDeckblattEntity = CigarDeckblattEntity.create({ ...requestBody });
 
     try {
-        await CigarDeckplattEntity.save(cigarDeckblattEntity);
+        await CigarDeckblattEntity.save(cigarDeckblattEntity);
         result.location(`/coffeeAttrs/deckblatt/${cigarDeckblattEntity.id}`).sendStatus(httpStatusCodes.CREATED);
     } catch (error) {
         log(error);
@@ -132,15 +132,15 @@ export const createCigarDeckblattEntity: RequestHandler = async (request, result
     }
 };
 
-type DeleteCigarDeckplattEntityRequestBody = WithId;
+type DeleteCigarDeckblattEntityRequestBody = WithId;
 
-export const deleteCigarDeckplattEntity: RequestHandler = async (request, result) => {
-    const { id } = request.params as DeleteCigarDeckplattEntityRequestBody;
+export const deleteCigarDeckblattEntity: RequestHandler = async (request, result) => {
+    const { id } = request.params as DeleteCigarDeckblattEntityRequestBody;
     log(`DELETE /cigarAttrs/deckblatt/:id (id = ${id})`);
-    const cigarDeckplattEntity = await CigarDeckplattEntity.findOne({ where: { id } });
+    const cigarDeckblattEntity = await CigarDeckblattEntity.findOne({ where: { id } });
 
-    if (cigarDeckplattEntity !== undefined) {
-        await CigarDeckplattEntity.delete({ id });
+    if (cigarDeckblattEntity !== undefined) {
+        await CigarDeckblattEntity.delete({ id });
         result.sendStatus(httpStatusCodes.OK);
     } else {
         result.sendStatus(httpStatusCodes.NOT_FOUND);

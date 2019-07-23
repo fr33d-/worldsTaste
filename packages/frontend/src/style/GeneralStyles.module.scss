@@ -75,56 +75,26 @@
     }
 }
 
-.AttrField {
-    svg {
-        margin-right: 10px;
-    }
 
-    .Value {
-        font-size: 16px;
-        color: $new-dark-gray;
-    }
 
-    .Name {
-        font-size: 12px !important;
-        color: $black !important;
-        margin-bottom: 0 !important;
-        width: 100% !important;
-    }
+.TabBar {
+    width: 100%;
+    text-align: center;
+    padding: $default-space 0;
 
-    .Iconlist {
-        display: inline;
-        svg {
-            margin: 0;
-            margin-right: 3px;
-        }
-
-        ul {
-            margin: 0;
-            padding: 0;
-            list-style: none;
+    ul {
+        padding: 0;
+        
+        li {
             display: inline;
+            padding: 9px 20px;
+            font-size: 16px;
+            color: $new-darker-gray;
 
-            .Active {
-                background: $new-darker-gray;
-            }
-
-            li {
-                background: $new-gray;
-                display: inline-block;
-                height: 8px;
-                width: 18px;
-                margin-right: 1px;
-
-                $border-radius-list: 3px;
-
-                &:first-of-type {
-                    border-radius: $border-radius-list 0 0 $border-radius-list;
-                }
-
-                &:last-of-type {
-                    border-radius: 0 $border-radius-list $border-radius-list 0;
-                }
+            &.Active {
+                background: $blue;
+                color: $white;
+                border-radius: 18px;
             }
         }
     }

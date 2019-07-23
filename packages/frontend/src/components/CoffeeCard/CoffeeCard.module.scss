@@ -9,7 +9,7 @@
     overflow: hidden;
     position: relative;
     border: none;
-    padding: 0;
+    padding: 40px 40px 20px 40px;
 
     animation-duration: 1s;
     animation-name: slidein;
@@ -20,7 +20,7 @@
 
     &.Extended, &.Edit {
         @extend .cardActive;
-        max-height: 700px;
+        max-height: 800px;
     }
 
     &ActionSection {
@@ -39,7 +39,8 @@
 
     &ImageSection {
         width: 250px;
-        height: 250px;
+        // padding: $default-space-small;
+        // padding-top: 15px;
 
         @include media-breakpoint-down(sm) {
             width: 100%;
@@ -48,18 +49,31 @@
             text-align: center;
         }   
 
-        img {
+        img, .Img {
             width: 100px;
+            height: 100px;
+            // max-width: 210px;
+            // max-height: 210px;
+            border-radius: $border-radius-min;
+            margin: $default-space-small $default-space-small 0 0;
+            display: inline-block;
+
+            background-size: cover;
+            background-position: center;
 
             &:first-of-type {
-                width: 250px;
+                width: 220px;
+                height: 220px;
+                border-radius: $border-radius;
+                margin-top: 0;
             }
         }
     }
 
     &TextSection {
-        // border-left: 1px solid rgba($color: #000000, $alpha: 0.4);
-        margin: $default-space;
+        margin-left: $default-space-small;
+        padding-left: $default-space-small;
+        border-left: 1px solid $new-dark-gray;
 
         display: flex;
         flex-direction: row;
@@ -81,29 +95,8 @@
             width: 100%;
             font-size: 20px;
             font-weight: 700;
-            margin: 0 0 20px 5px;
+            margin: 0 0 15px 5px;
             line-height: 24xp;
-        }
-        
-        p {
-            font-size: 16px;
-            line-height: 24px;
-            margin-bottom: 15px;
-
-            color: $gray-600;
-            width: 50%;
-
-            @include media-breakpoint-down(md) {
-                width: 100%;
-            }
-
-            span {
-                color: $black;
-                margin-right: 5px;
-                width: 40px;
-                display: inline-block;
-                text-align: center;
-            }
         }
     }
 }

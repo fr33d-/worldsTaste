@@ -2,8 +2,8 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { grayDarker } from '../../style/colors';
-import { AttrDataItemType, AttrDataType } from '../AttrDataWindow';
 import LocalStyles from './FormElements.module.scss';
+import { AttrDataItemType } from '../FormComponents';
 
 type textInputProps = {
     name: string;
@@ -62,7 +62,9 @@ type DropdownInputProps = {
 export const DropdownInput = ({ items, label, selectedItem, icon, iconColor, onChange }: DropdownInputProps) => {
     const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
         const newItem = items.find(({ name }) => name === e.target.value);
-        if (newItem != undefined) onChange(newItem);
+        if (newItem !== undefined) {
+            onChange(newItem);
+        }
     };
 
     return (
@@ -71,7 +73,6 @@ export const DropdownInput = ({ items, label, selectedItem, icon, iconColor, onC
             <div className={LocalStyles.select}>
                 {icon && <FontAwesomeIcon icon={icon} color={iconColor} className={LocalStyles.Icon} size="sm" />}
                 <select onChange={handleChange}>
-                    <option value="unknown">unknown</option>
                     {items.map((item, i) => {
                         if (item.name === selectedItem.name) {
                             return (

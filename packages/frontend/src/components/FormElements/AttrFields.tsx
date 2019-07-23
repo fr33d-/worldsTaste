@@ -4,31 +4,58 @@ import classNames from 'classnames';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import GeneralStyles from './../../style/GeneralStyles.module.scss';
 import LocalStyles from './AttrFields.module.scss';
-import { red, gray, yellow, grayDark } from '../../style/colors';
+import { red, gray, yellow, grayDark, grayDarker } from '../../style/colors';
 
 type SliderAttrFieldProps = {
     name?: string;
     value: number;
-    maxValue: number;
     icon?: IconProp;
     iconColor?: string;
-    color?: string;
+    color: string;
     onChange(i: number): void;
 };
 
-export const SliderAttrField = ({ name, value, maxValue, icon, onChange, iconColor }: SliderAttrFieldProps) => (
-    <>
-        {name && <label>{name}</label>}
-        <div className={LocalStyles.SliderAttrField}>
-            {icon && <FontAwesomeIcon icon={icon} color={iconColor} size="sm" />}
-            <ul>
-                {[...Array(maxValue)].map((_, i) => (
-                    <li onClick={() => onChange(i)} className={classNames(i <= value && LocalStyles.Active)} key={i} />
-                ))}
-            </ul>
-        </div>
-    </>
-);
+export const SliderAttrField = ({ name, value, icon, onChange, iconColor, color }: SliderAttrFieldProps) => {
+    const style = { backgroundColor: color };
+    return (
+        <>
+            {name && <label>{name}</label>}
+            <div className={LocalStyles.SliderAttrField}>
+                {icon && <FontAwesomeIcon icon={icon} color={iconColor} size="sm" />}
+                <ul>
+                    {[...Array(5)].map((_, i) => {
+                        return i <= value ? (
+                            <li onClick={() => onChange(i)} style={style} key={i} />
+                        ) : (
+                            <li onClick={() => onChange(i)} key={i} />
+                        );
+                    })}
+                </ul>
+            </div>
+        </>
+    );
+};
+
+export const SingleSliderAttrField = ({ name, value, icon, onChange, iconColor, color }: SliderAttrFieldProps) => {
+    const style = { backgroundColor: `hsl(${value * 30}, 50%, 50%)` };
+    return (
+        <>
+            {name && <label>{name}</label>}
+            <div className={LocalStyles.SliderAttrField}>
+                {icon && <FontAwesomeIcon icon={icon} color={iconColor} size="sm" />}
+                <ul>
+                    {[...Array(5)].map((_, i) => {
+                        return i === value ? (
+                            <li onClick={() => onChange(i)} style={style} key={i} />
+                        ) : (
+                            <li onClick={() => onChange(i)} key={i} />
+                        );
+                    })}
+                </ul>
+            </div>
+        </>
+    );
+};
 
 type LikeSliderAttrFieldProps = {
     name?: string;
@@ -44,7 +71,7 @@ export const LikeSliderAttrField = ({ name, value, maxValue, onChange }: LikeSli
     };
     return (
         <>
-            {name && <label>{name}</label>}
+            {name && <label className={LocalStyles.AttrFieldLabel}>{name}</label>}
             <div className={LocalStyles.LikeSliderAttrField}>
                 <FontAwesomeIcon icon="heart" color={red} size="lg" />
                 <ul>
@@ -68,62 +95,110 @@ type AttrFieldProps = {
 };
 
 export const AttrField = ({ name, value, icon, color }: AttrFieldProps) => (
-    <div className={GeneralStyles.AttrField}>
-        <p className={GeneralStyles.Name}>{name}</p>
-        <div>
+    <>
+        <label className={LocalStyles.AttrFieldLabel}>{name}</label>
+        <div className={LocalStyles.AttrField}>
             <FontAwesomeIcon icon={icon} color={color} size="sm" />
-            <span className={GeneralStyles.Value}>{value}</span>
+            <span className={LocalStyles.Value}>{value}</span>
         </div>
-    </div>
+    </>
 );
 
-type AttrFieldIconlistProps = {
+type AttrFieldSliderProps = {
     name: string;
     value: number;
-    valueIcon: IconProp;
-    valueIconColor: string;
-    icon: IconProp;
+    icon?: IconProp;
     color: string;
 };
 
-export const AttrFieldIconlist = ({ name, valueIcon, value, valueIconColor, icon, color }: AttrFieldIconlistProps) => (
-    <div className={GeneralStyles.AttrField}>
-        <p className={GeneralStyles.Name}>{name}</p>
-        <div>
-            <FontAwesomeIcon icon={icon} color={color} size="sm" />
-            {
-                <div className={GeneralStyles.Iconlist}>
-                    <ul>
-                        {[...Array(5)].map((_, i) => (
-                            <li className={i <= value ? GeneralStyles.Active : ''} key={i} />
-                        ))}
-                    </ul>
-                </div>
-            }
-        </div>
-    </div>
-);
+export const AttrFieldSlider = ({ name, value, icon, color }: AttrFieldSliderProps) => {
+    const style = { backgroundColor: color };
+    return (
+        <>
+            <label className={LocalStyles.AttrFieldLabel}>{name}</label>
+            <div className={LocalStyles.AttrField}>
+                {icon && <FontAwesomeIcon icon={icon} color={color} size="sm" />}
+                {
+                    <div className={LocalStyles.Iconlist}>
+                        <ul>
+                            {[...Array(5)].map((_, i) => {
+                                return i <= value ? <li key={i} style={style} /> : <li key={i} />;
+                            })}
+                        </ul>
+                    </div>
+                }
+            </div>
+        </>
+    );
+};
+
+type AttrFieldSliderSingleProps = {
+    textLeft: string;
+    textRight: string;
+    value: number;
+    icon?: IconProp;
+    color: string;
+};
+
+export const AttrFieldSliderSingle = ({ textLeft, textRight, value, icon, color }: AttrFieldSliderSingleProps) => {
+    const style = { backgroundColor: color };
+    return (
+        <>
+            <label className={LocalStyles.AttrFieldLabel}>{textLeft}</label>
+            <label className={LocalStyles.AttrFieldLabel}>{textRight}</label>
+            <div className={LocalStyles.AttrField}>
+                {icon && <FontAwesomeIcon icon={icon} color={color} size="sm" />}
+                {
+                    <div className={LocalStyles.Iconlist}>
+                        <ul>
+                            {[...Array(5)].map((_, i) => {
+                                return i === value ? <li key={i} style={style} /> : <li key={i} />;
+                            })}
+                        </ul>
+                    </div>
+                }
+            </div>
+        </>
+    );
+};
 
 type AttrFieldLikeList = {
     name: string;
     value: number;
 };
 
-
 export const AttrFieldLikeList = ({ name, value }: AttrFieldLikeList) => (
-    <div className={GeneralStyles.AttrField}>
-        <p className={GeneralStyles.Name}>{name}</p>
-        <div>
-            <FontAwesomeIcon icon='heart' color={red} size="sm" />
+    <>
+        <label className={LocalStyles.AttrFieldLabel}>{name}</label>
+        <div className={LocalStyles.AttrField}>
+            <FontAwesomeIcon icon="heart" color={red} size="sm" />
             {
-                <div className={GeneralStyles.Iconlist}>
+                <div className={LocalStyles.Iconlist}>
                     <ul>
                         {[...Array(5)].map((_, i) => (
-                            <FontAwesomeIcon icon='star' color={i <= value ? yellow : grayDark} size="sm" key={i} />
+                            <FontAwesomeIcon icon="star" color={i < value ? yellow : grayDark} size="sm" key={i} />
                         ))}
                     </ul>
                 </div>
             }
         </div>
-    </div>
+    </>
+);
+
+type AttrFieldDescriptionProps = {
+    name: string;
+    value: string;
+    expanded: boolean;
+};
+
+export const AttrFieldDescription = ({ name, value, expanded }: AttrFieldDescriptionProps) => (
+    <>
+        <label className={LocalStyles.AttrFieldLabel}>{name}</label>
+        <div className={LocalStyles.Description}>
+            <p>
+                <FontAwesomeIcon icon="bars" size="lg" color={grayDarker} />
+                {expanded || value.length < 200 ? value : `${value.substring(0, 200)} ...`}
+            </p>
+        </div>
+    </>
 );
