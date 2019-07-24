@@ -13,14 +13,32 @@ export type CoffeeEntry = {
     description: string;
     origin: AttrDataItemType;
     rating: number;
-    kind: AttrDataItemType;
+    kind: AttrDataItemType; //Filterkaffee, Espresso
     roasted: AttrDataItemType;
-    taste: number;
-    tasteKind: number;
-    woody: number;
+    taste: number; //Geschmacksintensivität
+    tasteKind: number; // Schokolade/Frucht
+    woody: number; //Holzig, Mehlig, Erbsig
     bitter: number;
     sour: number;
     ownDescription: string;
+    dateAdded: Date;
+    processed: AttrDataItemType;
+    buydate: Date;
+    species: AttrDataItemType; //Arabica, Robusta
+};
+
+export type BrewingEntry = {
+    id: number;
+    bitter: number;
+    brewdate: Date;
+    ownDescription: string;
+    tasteKind: number; // Schokolade/Frucht
+    useforcalculation: boolean;
+    rating: number;
+    strength: number;
+    sour: number;
+    woody: number; //Holzig, Mehlig, Erbsig
+    method: AttrDataItemType;
 };
 
 export type AttrDataItemType = {

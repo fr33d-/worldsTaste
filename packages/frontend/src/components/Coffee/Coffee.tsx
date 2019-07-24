@@ -26,6 +26,9 @@ export type CoffeeBaseState = {
     coffeeKinds: AttrDataType[];
     coffeeRoateds: AttrDataType[];
     coffeeOrigins: AttrDataType[];
+    coffeeProcessed: AttrDataType[];
+    coffeeSpecies: AttrDataType[];
+    coffeeBrewMethod: AttrDataType[];
     displayAttrMenu: boolean;
     editCard?: CoffeeEntry;
     activeFilter?: string;
@@ -42,6 +45,9 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
         coffeeOrigins: [],
         coffeeRoateds: [],
         displayAttrMenu: false,
+        coffeeProcessed: [],
+        coffeeSpecies: [],
+        coffeeBrewMethod: [],
     };
 
     public deletePost = (id: number) => {
@@ -77,6 +83,10 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
             taste: 0,
             tasteKind: 0,
             woody: 0,
+            buydate: new Date(),
+            dateAdded: new Date(),
+            processed: this.state.coffeeProcessed[0],
+            species: this.state.coffeeSpecies[0],
         };
 
         axios
@@ -112,8 +122,19 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
         const kindsPromise = axios.get<AttrDataType[]>('http://localhost:4000/coffeeAttrs/kinds');
         const originsPromise = axios.get<AttrDataType[]>('http://localhost:4000/coffeeAttrs/origins');
         const roastedsPromise = axios.get<AttrDataType[]>('http://localhost:4000/coffeeAttrs/roasteds');
+        const processedPromise = axios.get<AttrDataType[]>('http://localhost:4000/coffeeAttrs/processes');
+        const speciesPromise = axios.get<AttrDataType[]>('http://localhost:4000/coffeeAttrs/species');
+        const brewMethodPromise = axios.get<AttrDataType[]>('http://localhost:4000/coffeeAttrs/brewmethod');
 
-        Promise.all([coffeesPromise, kindsPromise, originsPromise, roastedsPromise])
+        Promise.all([
+            coffeesPromise,
+            kindsPromise,
+            originsPromise,
+            roastedsPromise,
+            processedPromise,
+            speciesPromise,
+            brewMethodPromise,
+        ])
             .then((responses) => {
                 console.log(responses[0].data);
                 this.setState({
@@ -122,6 +143,9 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                     coffeeKinds: responses[1].data,
                     coffeeOrigins: responses[2].data,
                     coffeeRoateds: responses[3].data,
+                    coffeeProcessed: responses[4].data,
+                    coffeeSpecies: responses[5].data,
+                    coffeeBrewMethod: responses[6].data,
                     loading: false,
                     filter: 'origin',
                     menu: responses[2].data,
@@ -152,7 +176,7 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
         //         return post.id === newPost.id ? newPost :post;
         //     });
         // }
-        
+
         // console.log(newPosts);
 
         // this.setState({
@@ -179,20 +203,20 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
             case 'Arten':
                 newPosts = this.state.posts.filter((post) => {
                     console.log(`Vergleich ${post.kind.name} === ${filterAttr}`);
-                    return (post.kind.name === filterAttr);
+                    return post.kind.name === filterAttr;
                 });
                 break;
             case 'Herkunft':
                 newPosts = this.state.posts.filter((post) => {
                     console.log(`Vergleich ${post.origin.name} === ${filterAttr}`);
-                    return (post.origin.name === filterAttr);
+                    return post.origin.name === filterAttr;
                 });
                 break;
             case 'Röstereien':
                 // newPosts = this.state.posts.filter((post) => post.roasted.name === filterAttr);
                 newPosts = this.state.posts.filter((post) => {
                     console.log(`Vergleich ${post.roasted.name} === ${filterAttr}`);
-                    return (post.roasted.name === filterAttr);
+                    return post.roasted.name === filterAttr;
                 });
                 break;
             case 'Bewertung':
@@ -204,7 +228,7 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                     } else {
                         console.log(`Vergleich ${String(post.rating)} != ${filterAttr}`);
                     }
-                    return (String(post.rating) === filterAttr);
+                    return String(post.rating) === filterAttr;
                 });
                 break;
             default:
