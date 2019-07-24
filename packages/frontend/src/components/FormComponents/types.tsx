@@ -25,6 +25,7 @@ export type CoffeeEntry = {
     processed: AttrDataItemType;
     buydate: Date;
     species: AttrDataItemType; //Arabica, Robusta
+    brewings?: BrewingEntry[];
 };
 
 export type BrewingEntry = {

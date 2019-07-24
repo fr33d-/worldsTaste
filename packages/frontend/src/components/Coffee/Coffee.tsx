@@ -14,6 +14,7 @@ import { Sidemenu } from '../Sidemenu';
 import { default as chemexSVG, default as CoffeeReplacement } from './../../images/Chemex.svg';
 import GeneralStyles from './../../style/GeneralStyles.module.scss';
 import LocalStyles from './Coffee.module.scss';
+import { deleteCoffee, createCoffee } from './DataMethods';
 
 export type CoffeeProps = RouteComponentProps;
 
@@ -51,61 +52,34 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
     };
 
     public deletePost = (id: number) => {
-        axios
-            .delete(`http://localhost:4000/coffee/${id}`)
-            .then((response) => {
-                console.log(response);
-
-                this.setState((oldState) => ({
-                    posts: oldState.posts.filter((item) => item.id !== id),
-                    loading: false,
-                }));
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        if (deleteCoffee(id)) {
+            this.setState((oldState) => ({
+                posts: oldState.posts.filter((item) => item.id !== id),
+                loading: false,
+            }));
+        } else {
+            console.log('Cant delete Post');
+        }
     };
 
     public createCard = () => {
-        const newPost: CoffeeEntry = {
-            id: 0,
-            imageFiles: [],
-            imageStrings: [],
-            name: 'Neue Karte',
-            description: '',
-            origin: this.state.coffeeOrigins[0],
-            rating: 0,
-            kind: this.state.coffeeKinds[0],
-            roasted: this.state.coffeeRoateds[0],
-            bitter: 0,
-            ownDescription: '',
-            sour: 0,
-            taste: 0,
-            tasteKind: 0,
-            woody: 0,
-            buydate: new Date(),
-            dateAdded: new Date(),
-            processed: this.state.coffeeProcessed[0],
-            species: this.state.coffeeSpecies[0],
-        };
+        const newCoffee = createCoffee(
+            this.state.coffeeOrigins[0],
+            this.state.coffeeKinds[0],
+            this.state.coffeeRoateds[0],
+            this.state.coffeeProcessed[0],
+            this.state.coffeeSpecies[0]
+        );
 
-        axios
-            .post('http://localhost:4000/coffee', { ...newPost })
-            .then((response) => {
-                console.log(response.headers['location']);
-                const location: string = response.headers['location'];
-                const [id] = location.split('/').slice(-1);
-                newPost.id = Number(id);
+        if (typeof newCoffee === 'object') {
+            this.setState((state) => ({
+                posts: [newCoffee, ...state.posts],
+            }));
 
-                this.setState((state) => ({
-                    posts: [newPost, ...state.posts],
-                }));
-
-                this.setEditCard(Number(id));
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+            this.setEditCard(Number(newCoffee.id));
+        } else {
+            console.log('Cant create coffee');
+        }
     };
 
     public toggleAttrMenu = () => {
@@ -238,6 +212,26 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
 
         this.setState({ filteredPosts: newPosts, activeFilter: filterAttr });
     };
+
+    public getBrewingsForCoffee(coffeeId: number) {
+
+        axios
+        .get(`http://localhost:4000/coffeebrewings/${coffeeId}`)
+        .then((response) => {
+            console.log(response);
+            const brewings = response.data;
+
+            this.setState(state => {
+                posts: state.posts.map(post => {
+                    return post.id === coffeeId ? {coffeebrewings: brewings, ...post} : post;
+                });
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+
+    }
 
     // tslint:disable-next-line: max-func-body-length
     public render() {

@@ -46,8 +46,10 @@ createConnection()
         server.use("/users", usersRoute);
         server.use("/coffee", coffeeRoute);
         server.use("/coffeeAttrs", coffeeAttrsRoute);
+        server.use("/coffeebrewings", coffeeBrewingRoute);
         server.use("/cigars", cigarRoute);
         server.use("/cigarAttrs", cigarAttrsRoute);
+        
 
         // 404 - Not Found
         server.use((_, result) => result.sendStatus(httpStatusCodes.NOT_FOUND));
