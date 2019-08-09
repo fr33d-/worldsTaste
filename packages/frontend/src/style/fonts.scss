@@ -1,5 +1,20 @@
 @import '../variables.scss';
 
+$line_height: 8px;
+
+$default-space-s: calc(#{$line_height}* 2);
+$default-space-m: calc(#{$line_height}* 4);
+$default-space-l: calc(#{$line_height}* 6);
+$default-space-xl: calc(#{$line_height}* 10);
+$default-space-xxl: calc(#{$line_height}* 14);
+
+$default-padding: $default-space-m;
+$default-margin: calc(#{$line_height}* 2);
+
+$border-radius-s: $line_height;
+$border-radius-m: calc(#{$line_height}* 2);
+$border-radius-l: calc(#{$line_height}* 4);
+
 .display-4 {
     line-height: 68px;
     font-weight: 700;
@@ -7,37 +22,71 @@
 
 h1,
 .h1 {
-    font-size: 60px;
+    font-size: 53px;
+    line-height: calc(#{$line_height}* 8);
     font-weight: 400;
-    margin-bottom: $default-space;
+    margin-bottom: $default-space-m;
 }
 
 h2,
 .h2 {
-    line-height: 24xp;
-    font-size: 20px;
-    font-weight: 700;
+    line-height: calc(#{$line_height}* 6);
+    font-size: 39px;
+    font-weight: 400;
+    margin-bottom: $default-space-m;
+}
+
+h3,
+.h3 {
+    line-height: calc(#{$line_height}* 4);
+    font-size: 32px;
+    font-weight: 400;
+    margin-bottom: $default-space-m;
 }
 
 h4,
 .h4 {
-    font-size: 24px;
-    line-height: 38px;
-    font-weight: 500;
+    font-size: 21x;
+    line-height: calc(#{$line_height}* 3);
+    font-weight: 700;
+    margin-bottom: $default-space-s;
 }
 
 h5,
 .h5 {
-    font-size: 16px;
-    line-height: 32px;
+    font-size: 21x;
+    line-height: calc(#{$line_height}* 3);
+    font-weight: 400;
+    margin-bottom: $default-space-s;
+}
+
+h6,
+.h6 {
+    font-size: 16x;
+    line-height: calc(#{$line_height}* 3);
+    font-weight: 700;
+    margin-bottom: $default-space-s;
+}
+
+p,
+.p {
+    font-size: 16x;
+    line-height: calc(#{$line_height}* 3);
     font-weight: 400;
 }
 
+li {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: calc(#{$line_height}* 5);
+}
 
-small, .small {
+small,
+.small {
     font-size: 14px;
 }
 
-label, .label {
+label,
+.label {
     font-size: 14px;
 }

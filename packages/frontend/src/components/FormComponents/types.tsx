@@ -22,8 +22,8 @@ export type CoffeeEntry = {
     sour: number;
     ownDescription: string;
     dateAdded: Date;
-    processed: AttrDataItemType;
-    buydate: Date;
+    process: AttrDataItemType;
+    buyDate: Date;
     species: AttrDataItemType; //Arabica, Robusta
     brewings?: BrewingEntry[];
 };
@@ -31,8 +31,9 @@ export type CoffeeEntry = {
 export type BrewingEntry = {
     id: number;
     bitter: number;
-    brewdate: Date;
+    brewDate: Date;
     ownDescription: string;
+    taste: number;
     tasteKind: number; // Schokolade/Frucht
     useforcalculation: boolean;
     rating: number;
@@ -40,6 +41,8 @@ export type BrewingEntry = {
     sour: number;
     woody: number; //Holzig, Mehlig, Erbsig
     method: AttrDataItemType;
+    waterAmount: number;
+    coffeeAmount: number;
 };
 
 export type AttrDataItemType = {

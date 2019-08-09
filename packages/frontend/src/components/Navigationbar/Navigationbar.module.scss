@@ -18,8 +18,15 @@
     width: 100%;
     color: $white;
 
+    .User {
+        border: none;
+        background: none;
+        margin-right: 10px;
+        color: $white;
+    }
+
     .Burger {
-        width: 30px;
+        width: 140px;
         position: absolute;
         right: 0;
         top: 3px;
@@ -48,16 +55,16 @@
 
     .Breadcrupm {
         position: absolute;
-        right: 50px;
+        right: 140px;
         top: 0;
         text-align: right;
         background: none;
         z-index: 5;
-        width: 40%;
+        width: 30%;
 
         @include media-breakpoint-down(sm) {
             display: none;
-          }
+        }
 
         ul {
             list-style: none;

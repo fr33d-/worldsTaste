@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import * as httpStatusCodes from 'http-status-codes';
-import { CoffeeKindDto, CoffeeOriginDto, CoffeeRoastedDto } from '../models/dtos/CoffeeAttrDto';
-import { CoffeeKindEntity, CoffeeOriginEntity, CoffeeRoastedEntity } from '../models/entities/CoffeeAttrsEntity';
+import { CoffeeKindDto, CoffeeOriginDto, CoffeeRoastedDto, CoffeeSpeciesDto, CoffeeProcessDto, CoffeeMethodDto } from '../models/dtos/CoffeeAttrDto';
+import { CoffeeKindEntity, CoffeeOriginEntity, CoffeeRoastedEntity, CoffeeSpeciesEntity, CoffeeProcessEntity, CoffeeMethodEntity } from '../models/entities/CoffeeAttrsEntity';
 import { createLogger } from '../utils/LoggerUtil';
 import { Omit } from '../utils/TypeScriptUtils';
 
@@ -32,6 +32,27 @@ export const getCoffeeRoasteds: RequestHandler = async (_, result) => {
 
     const coffeeRoastedEntities = await CoffeeRoastedEntity.find();
     result.status(httpStatusCodes.OK).json(coffeeRoastedEntities.map(CoffeeRoastedDto.fromEntity));
+};
+
+export const getCoffeeSpecies: RequestHandler = async (_, result) => {
+    log(`GET /coffee/Species`);
+
+    const coffeeSpeciesEntities = await CoffeeSpeciesEntity.find();
+    result.status(httpStatusCodes.OK).json(coffeeSpeciesEntities.map(CoffeeSpeciesDto.fromEntity));
+};
+
+export const getCoffeeProcesses: RequestHandler = async (_, result) => {
+    log(`GET /coffee/roasteds`);
+
+    const coffeeProcessEntities = await CoffeeProcessEntity.find();
+    result.status(httpStatusCodes.OK).json(coffeeProcessEntities.map(CoffeeProcessDto.fromEntity));
+};
+
+export const getCoffeeMethodes: RequestHandler = async (_, result) => {
+    log(`GET /coffee/method`);
+
+    const coffeeMethodEntities = await CoffeeMethodEntity.find();
+    result.status(httpStatusCodes.OK).json(coffeeMethodEntities.map(CoffeeMethodDto.fromEntity));
 };
 
 // POSTs for menu, filtering and selection
@@ -67,7 +88,7 @@ export const createCoffeeRoasteds: RequestHandler = async (request, result) => {
     }
 };
 
-type CreateCoffeeKindRequestBody = Omit<CoffeeOriginDto, 'id'>;
+type CreateCoffeeKindRequestBody = Omit<CoffeeKindDto, 'id'>;
 
 export const createCoffeeKinds: RequestHandler = async (request, result) => {
     log(`POST /coffeeAttrs/kinds`);
@@ -77,6 +98,51 @@ export const createCoffeeKinds: RequestHandler = async (request, result) => {
     try {
         await CoffeeKindEntity.save(coffeeKindsEntity);
         result.location(`/coffeeAttrs/kinds/${coffeeKindsEntity.id}`).sendStatus(httpStatusCodes.CREATED);
+    } catch (error) {
+        result.sendStatus(httpStatusCodes.CONFLICT);
+    }
+};
+
+type CreateCoffeeSpeciesRequestBody = Omit<CoffeeSpeciesDto, 'id'>;
+
+export const createCoffeeSpecies: RequestHandler = async (request, result) => {
+    log(`POST /coffeeAttrs/Species`);
+    const requestBody = request.body as CreateCoffeeSpeciesRequestBody;
+    const coffeeSpeciesEntity = CoffeeSpeciesEntity.create({ ...requestBody });
+
+    try {
+        await CoffeeSpeciesEntity.save(coffeeSpeciesEntity);
+        result.location(`/coffeeAttrs/species/${coffeeSpeciesEntity.id}`).sendStatus(httpStatusCodes.CREATED);
+    } catch (error) {
+        result.sendStatus(httpStatusCodes.CONFLICT);
+    }
+};
+
+type CreateCoffeeProcessRequestBody = Omit<CoffeeProcessDto, 'id'>;
+
+export const createCoffeeProcess: RequestHandler = async (request, result) => {
+    log(`POST /coffeeAttrs/process`);
+    const requestBody = request.body as CreateCoffeeProcessRequestBody;
+    const coffeeProcessEntity = CoffeeProcessEntity.create({ ...requestBody });
+
+    try {
+        await CoffeeProcessEntity.save(coffeeProcessEntity);
+        result.location(`/coffeeAttrs/process/${coffeeProcessEntity.id}`).sendStatus(httpStatusCodes.CREATED);
+    } catch (error) {
+        result.sendStatus(httpStatusCodes.CONFLICT);
+    }
+};
+
+type CreateCoffeeMethodRequestBody = Omit<CoffeeMethodDto, 'id'>;
+
+export const createCoffeeMethod: RequestHandler = async (request, result) => {
+    log(`POST /coffeeAttrs/method`);
+    const requestBody = request.body as CreateCoffeeMethodRequestBody;
+    const coffeeMethodEntity = CoffeeMethodEntity.create({ ...requestBody });
+
+    try {
+        await CoffeeMethodEntity.save(coffeeMethodEntity);
+        result.location(`/coffeeAttrs/method/${coffeeMethodEntity.id}`).sendStatus(httpStatusCodes.CREATED);
     } catch (error) {
         result.sendStatus(httpStatusCodes.CONFLICT);
     }
@@ -131,3 +197,51 @@ export const deleteCoffeeOriginById: RequestHandler = async (request, result) =>
         result.sendStatus(httpStatusCodes.NOT_FOUND);
     }
 };
+
+type DeleteCoffeeSpeciesByIdRequestParams = WithId;
+
+export const deleteCoffeeSpeciesById: RequestHandler = async (request, result) => {
+    const { id } = request.params as DeleteCoffeeSpeciesByIdRequestParams;
+    log(`DELETE /coffeeAttrs/species/:id (id = ${id})`);
+    const coffeeSpeciesEntity = await CoffeeSpeciesEntity.findOne({ where: { id } });
+
+    if (coffeeSpeciesEntity !== undefined) {
+        await CoffeeSpeciesEntity.delete({ id });
+        result.sendStatus(httpStatusCodes.OK);
+    } else {
+        result.sendStatus(httpStatusCodes.NOT_FOUND);
+    }
+};
+
+type DeleteCoffeeProcessByIdRequestParams = WithId;
+
+export const deleteCoffeeProcessById: RequestHandler = async (request, result) => {
+    const { id } = request.params as DeleteCoffeeProcessByIdRequestParams;
+    log(`DELETE /coffeeAttrs/process/:id (id = ${id})`);
+    const coffeeProcessEntity = await CoffeeProcessEntity.findOne({ where: { id } });
+
+    if (coffeeProcessEntity !== undefined) {
+        await CoffeeProcessEntity.delete({ id });
+        result.sendStatus(httpStatusCodes.OK);
+    } else {
+        result.sendStatus(httpStatusCodes.NOT_FOUND);
+    }
+};
+
+type DeleteCoffeeMethodByIdRequestParams = WithId;
+
+export const deleteCoffeeMethodById: RequestHandler = async (request, result) => {
+    const { id } = request.params as DeleteCoffeeMethodByIdRequestParams;
+    log(`DELETE /coffeeAttrs/method/:id (id = ${id})`);
+    const coffeeMethodEntity = await CoffeeMethodEntity.findOne({ where: { id } });
+
+    if (coffeeMethodEntity !== undefined) {
+        await CoffeeMethodEntity.delete({ id });
+        result.sendStatus(httpStatusCodes.OK);
+    } else {
+        result.sendStatus(httpStatusCodes.NOT_FOUND);
+    }
+};
+
+
+

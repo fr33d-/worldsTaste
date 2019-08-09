@@ -1,11 +1,9 @@
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { faFacebook, faFlickr, faGithub, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
-import { green, red, grayDark, white } from '../../style/colors';
-import classNames from 'classnames';
+import { Container, Row } from 'react-bootstrap';
+import { grayDark } from '../../style/colors';
 import LocalStyles from './Footer.module.scss';
-import { Row, Container } from 'react-bootstrap';
-import { faFacebook, faGithub, faInstagram, faFlickr } from '@fortawesome/free-brands-svg-icons';
 
 type FooterProps = {
     year: string;
@@ -22,13 +20,13 @@ export const Footer = ({ year, version }: FooterProps) => (
                         <FontAwesomeIcon icon={faFacebook} color={grayDark} />
                     </a>
                     <a href="https://github.com/fr33d-">
-                    <FontAwesomeIcon icon={faGithub} color={grayDark} />
+                        <FontAwesomeIcon icon={faGithub} color={grayDark} />
                     </a>
                     <a href="https://www.instagram.com/fr33d/">
-                    <FontAwesomeIcon icon={faInstagram} color={grayDark} />
+                        <FontAwesomeIcon icon={faInstagram} color={grayDark} />
                     </a>
                     <a href="https://www.flickr.com/photos/fredericw">
-                    <FontAwesomeIcon icon={faFlickr} color={grayDark} />
+                        <FontAwesomeIcon icon={faFlickr} color={grayDark} />
                     </a>
                 </div>
                 <div className="col-5">

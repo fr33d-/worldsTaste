@@ -1,6 +1,12 @@
 import express, { Router } from 'express';
 import * as path from 'path';
 import {
+    createCoffeeBrewing,
+    deleteCoffeeBrewingById,
+    getCoffeeBrewings,
+    updateCoffeeBrewingById,
+} from '../controllers/CoffeeBrewingController';
+import {
     createCoffee,
     deleteCoffeeById,
     deleteCoffeeImageByURL,
@@ -23,6 +29,11 @@ coffeeRoute.route('/assets/').get(getCoffeesAssets);
 coffeeRoute.route('/assets/:id').post(postCoffeesAssets);
 coffeeRoute.route('/assets/:id').delete(deleteCoffeeImageByURL);
 // coffeeRoute.route('/assets/:id').delete(deleteCoffeesAssets);
+
+coffeeRoute.route('/:id/brewings').get(getCoffeeBrewings);
+coffeeRoute.route('/:id/brewings').post(createCoffeeBrewing);
+coffeeRoute.route('/:id/brewings/:brewId').put(updateCoffeeBrewingById);
+coffeeRoute.route('/:id/brewings/:brewId').delete(deleteCoffeeBrewingById);
 
 coffeeRoute.route('/:id').put(updateCoffeeById);
 // coffeeRoute.route('/:id').put(uploadImage);

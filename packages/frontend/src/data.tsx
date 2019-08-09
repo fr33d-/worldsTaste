@@ -5,7 +5,13 @@ import ChemexSVG from './images/Chemex.svg';
 import Tabak from './images/Tabak.svg';
 import Beer from './images/Beer.svg';
 
-export const baseURL = 'http://localhost:4000';
+export const baseURL = 'http://localhost:4000/api';
+export const userURL = '/user';
+export const coffeeURL = '/coffee';
+export const brewingURL = '/coffeebrewings';
+export const coffeeAttrURL = '/coffeeAttrs';
+export const cigarsURL = '/cigars';
+export const cigarsAttrURL = '/cigarAttrs';
 
 export type MainMenuItem = {
     name: string;

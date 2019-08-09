@@ -9,7 +9,7 @@
     overflow: hidden;
     position: relative;
     border: none;
-    padding: 40px 40px 20px 40px;
+    padding: 40px;
 
     animation-duration: 1s;
     animation-name: slidein;
@@ -18,9 +18,10 @@
         flex-direction: column;
     }
 
-    &.Extended, &.Edit {
+    &.Extended,
+    &.Edit {
         @extend .cardActive;
-        max-height: 800px;
+        max-height: 900px;
     }
 
     &ActionSection {
@@ -35,25 +36,58 @@
         button {
             @extend .icon-button;
         }
+
+        .IconButton {
+            @extend .icon-button;
+
+            border-radius: 15px;
+            height: 30px;
+            padding: 4px 12px;
+            margin-right: 5px;
+            font-size: 14px;
+            color: $new-darker-gray;
+            outline: 0;
+
+            &:hover,
+            &:focus {
+                outline: 0;
+            }
+
+            svg {
+                margin-right: 8px;
+            }
+
+            &.HoverGreen:hover {
+                background-color: $green;
+                color: $white;
+            }
+
+            &.HoverBlue:hover {
+                background-color: $blue;
+                color: $white;
+            }
+
+            &.HoverRed:hover {
+                background-color: $red;
+                color: $white;
+            }
+        }
     }
 
     &ImageSection {
         width: 250px;
-        // padding: $default-space-small;
-        // padding-top: 15px;
 
         @include media-breakpoint-down(sm) {
             width: 100%;
             background: $new-darker-gray;
             min-width: 250px;
             text-align: center;
-        }   
+        }
 
-        img, .Img {
+        img,
+        .Img {
             width: 100px;
             height: 100px;
-            // max-width: 210px;
-            // max-height: 210px;
             border-radius: $border-radius-min;
             margin: $default-space-small $default-space-small 0 0;
             display: inline-block;
@@ -86,6 +120,12 @@
         }
 
         width: 100%;
+
+        .BrewingTab {
+            height: 500px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
 
         .Description {
             width: 100%;

@@ -1,16 +1,16 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-import React, { useState, ChangeEvent } from 'react';
-import { greenAccent, yellowAccent, grayDarker, brown } from '../../style/colors';
+import classNames from 'classnames';
+import React, { ChangeEvent, useState } from 'react';
+import { baseURL, cigarsURL } from '../../data';
+import { brown, grayDarker, greenAccent, yellowAccent } from '../../style/colors';
 import { CigarEntry } from '../Cigars';
 import { AttrDataItemType } from '../FormComponents';
 import { BoolInput, DropdownInput, NumberInput, TextareaInput, TextInput } from '../FormElements';
 import { LikeSliderAttrField, SliderAttrField } from '../FormElements/AttrFields';
 import { AdvancedCancelButton, AdvancedDeleteButton, AdvancedSaveButton } from '../IconButton';
-import LocalStyles from './CigarCardEdit.module.scss';
-import classNames from 'classnames';
 import GeneralStyles from './../../style/GeneralStyles.module.scss';
-import { baseURL } from '../../data';
+import LocalStyles from './CigarCardEdit.module.scss';
 
 type CigarCardEditProps = {
     entry: CigarEntry;
@@ -93,7 +93,7 @@ export const CigarCardEdit = (props: CigarCardEditProps) => {
         };
 
         axios
-            .put(`http://localhost:4000/cigars/${props.entry.id}`, { ...requestObject })
+            .put(`${baseURL}${cigarsURL}/${props.entry.id}`, { ...requestObject })
             .then((response) => {
                 setEdited(false);
                 setSaveError(false);
@@ -109,7 +109,7 @@ export const CigarCardEdit = (props: CigarCardEditProps) => {
 
     const deleteImageByURL = (url: string, id: number) => {
         axios
-            .delete(`http://localhost:4000/cigars/assets/${id}`, { data: { url: url } })
+            .delete(`${baseURL}${cigarsURL}/assets/${id}`, { data: { url: url } })
             .then((response) => {
                 console.log('... sucessfully');
                 setSaveError(false);
@@ -139,7 +139,7 @@ export const CigarCardEdit = (props: CigarCardEditProps) => {
         });
 
         axios
-            .post(`http://localhost:4000/cigars/assets/${props.entry.id}`, formData)
+            .post(`${baseURL}${cigarsURL}/assets/${props.entry.id}`, formData)
             .then((response) => {
                 console.log('... sucessfully');
                 setEdited(false);
@@ -154,7 +154,7 @@ export const CigarCardEdit = (props: CigarCardEditProps) => {
                     imageStrings.push(newImageString);
                     setImageStrings(imageStrings);
                     console.log(imageStrings);
-                } 
+                }
             })
             .catch((error) => {
                 console.log(error);

@@ -3,18 +3,19 @@ import axios from 'axios';
 import classNames from 'classnames';
 import React, { Component } from 'react';
 import { RouteComponentProps } from 'react-router';
+import { baseURL, coffeeAttrURL, coffeeURL } from '../../data';
 import { AttrDataWindow } from '../AttrDataWindow';
+import { CoffeeBrewingWindow } from '../CoffeeCard/CoffeeBrewingCard';
 import { CoffeeCardDisplay } from '../CoffeeCard/CoffeeCardDisplay';
 import { CoffeeCardEdit } from '../CoffeeCard/CoffeeCardEdit';
 import { Filter } from '../Filter';
 import { Footer } from '../Footer';
-import { AttrDataType, CoffeeEntry, FilterMenuType } from '../FormComponents';
+import { AttrDataType, BrewingEntry, CoffeeEntry, FilterMenuType } from '../FormComponents';
 import { Navigationbar } from '../Navigationbar';
 import { Sidemenu } from '../Sidemenu';
 import { default as chemexSVG, default as CoffeeReplacement } from './../../images/Chemex.svg';
 import GeneralStyles from './../../style/GeneralStyles.module.scss';
 import LocalStyles from './Coffee.module.scss';
-import { deleteCoffee, createCoffee } from './DataMethods';
 
 export type CoffeeProps = RouteComponentProps;
 
@@ -27,12 +28,13 @@ export type CoffeeBaseState = {
     coffeeKinds: AttrDataType[];
     coffeeRoateds: AttrDataType[];
     coffeeOrigins: AttrDataType[];
-    coffeeProcessed: AttrDataType[];
+    coffeeProcesses: AttrDataType[];
     coffeeSpecies: AttrDataType[];
     coffeeBrewMethod: AttrDataType[];
     displayAttrMenu: boolean;
     editCard?: CoffeeEntry;
     activeFilter?: string;
+    brewingCard?: CoffeeEntry;
 };
 
 export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
@@ -46,40 +48,71 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
         coffeeOrigins: [],
         coffeeRoateds: [],
         displayAttrMenu: false,
-        coffeeProcessed: [],
+        coffeeProcesses: [],
         coffeeSpecies: [],
         coffeeBrewMethod: [],
     };
 
     public deletePost = (id: number) => {
-        if (deleteCoffee(id)) {
-            this.setState((oldState) => ({
-                posts: oldState.posts.filter((item) => item.id !== id),
-                loading: false,
-            }));
-        } else {
-            console.log('Cant delete Post');
-        }
+        axios
+            .delete(`http://localhost:4000/coffee/${id}`)
+            .then((response) => {
+                console.log(response);
+                console.log('Post deleted');
+                this.setState((oldState) => ({
+                    posts: oldState.posts.filter((item) => item.id !== id),
+                    filteredPosts: oldState.posts.filter((item) => item.id !== id),
+                    loading: false,
+                }));
+            })
+            .catch((error) => {
+                console.log(error);
+                console.log('Cant delete Post');
+            });
     };
 
     public createCard = () => {
-        const newCoffee = createCoffee(
-            this.state.coffeeOrigins[0],
-            this.state.coffeeKinds[0],
-            this.state.coffeeRoateds[0],
-            this.state.coffeeProcessed[0],
-            this.state.coffeeSpecies[0]
-        );
+        const newPost: CoffeeEntry = {
+            id: 0,
+            imageFiles: [],
+            imageStrings: [],
+            name: 'Neue Karte',
+            description: '',
+            origin: this.state.coffeeOrigins[0],
+            rating: 0,
+            kind: this.state.coffeeKinds[0],
+            roasted: this.state.coffeeRoateds[0],
+            bitter: 0,
+            ownDescription: '',
+            sour: 0,
+            taste: 0,
+            tasteKind: 0,
+            woody: 0,
+            buyDate: new Date(),
+            dateAdded: new Date(),
+            process: this.state.coffeeProcesses[0],
+            species: this.state.coffeeSpecies[0],
+        };
 
-        if (typeof newCoffee === 'object') {
-            this.setState((state) => ({
-                posts: [newCoffee, ...state.posts],
-            }));
+        axios
+            .post(`${baseURL}${coffeeURL}`, { ...newPost })
+            .then((response) => {
+                console.log(response.headers['location']);
+                const location: string = response.headers['location'];
+                const [id] = location.split('/').slice(-1);
+                newPost.id = Number(id);
 
-            this.setEditCard(Number(newCoffee.id));
-        } else {
-            console.log('Cant create coffee');
-        }
+                console.log('Coffee created');
+                this.setState((state) => ({
+                    posts: [newPost, ...state.posts],
+                }));
+
+                this.setEditCard(Number(newPost.id));
+            })
+            .catch((error) => {
+                console.log(error);
+                console.log('Cant create coffee');
+            });
     };
 
     public toggleAttrMenu = () => {
@@ -92,13 +125,13 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
     };
 
     public initiateData() {
-        const coffeesPromise = axios.get<CoffeeEntry[]>('http://localhost:4000/coffee');
-        const kindsPromise = axios.get<AttrDataType[]>('http://localhost:4000/coffeeAttrs/kinds');
-        const originsPromise = axios.get<AttrDataType[]>('http://localhost:4000/coffeeAttrs/origins');
-        const roastedsPromise = axios.get<AttrDataType[]>('http://localhost:4000/coffeeAttrs/roasteds');
-        const processedPromise = axios.get<AttrDataType[]>('http://localhost:4000/coffeeAttrs/processes');
-        const speciesPromise = axios.get<AttrDataType[]>('http://localhost:4000/coffeeAttrs/species');
-        const brewMethodPromise = axios.get<AttrDataType[]>('http://localhost:4000/coffeeAttrs/brewmethod');
+        const coffeesPromise = axios.get<CoffeeEntry[]>(`${baseURL}${coffeeURL}`);
+        const kindsPromise = axios.get<AttrDataType[]>(`${baseURL}${coffeeAttrURL}/kinds`);
+        const originsPromise = axios.get<AttrDataType[]>(`${baseURL}${coffeeAttrURL}/origins`);
+        const roastedsPromise = axios.get<AttrDataType[]>(`${baseURL}${coffeeAttrURL}/roasteds`);
+        const processedPromise = axios.get<AttrDataType[]>(`${baseURL}${coffeeAttrURL}/processes`);
+        const speciesPromise = axios.get<AttrDataType[]>(`${baseURL}${coffeeAttrURL}/species`);
+        const brewMethodPromise = axios.get<AttrDataType[]>(`${baseURL}${coffeeAttrURL}/method`);
 
         Promise.all([
             coffeesPromise,
@@ -117,7 +150,7 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                     coffeeKinds: responses[1].data,
                     coffeeOrigins: responses[2].data,
                     coffeeRoateds: responses[3].data,
-                    coffeeProcessed: responses[4].data,
+                    coffeeProcesses: responses[4].data,
                     coffeeSpecies: responses[5].data,
                     coffeeBrewMethod: responses[6].data,
                     loading: false,
@@ -141,29 +174,18 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
         }
     };
 
-    public clearEditCard = (newPost: CoffeeEntry, deleted: boolean) => {
-        // let newPosts = [];
-        // if (deleted) {
-        //     newPosts = this.state.posts.filter(post => post.id !== newPost.id);
-        // } else {
-        //     newPosts = this.state.posts.map(post => {
-        //         return post.id === newPost.id ? newPost :post;
-        //     });
-        // }
+    public cardUpdated = (newPost: CoffeeEntry) => {
+        console.log(newPost);
 
-        // console.log(newPosts);
-
-        // this.setState({
-        //     editCard: undefined,
-        //     posts: newPosts,
-        //     filteredPosts: newPosts,
-        // });
+        const newPosts = this.state.posts.map((post) => {
+            return post.id === newPost.id ? newPost : post;
+        });
 
         this.setState({
             editCard: undefined,
+            posts: newPosts,
+            filteredPosts: newPosts,
         });
-
-        this.initiateData();
     };
 
     public componentDidMount() {
@@ -213,25 +235,35 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
         this.setState({ filteredPosts: newPosts, activeFilter: filterAttr });
     };
 
-    public getBrewingsForCoffee(coffeeId: number) {
-
-        axios
-        .get(`http://localhost:4000/coffeebrewings/${coffeeId}`)
-        .then((response) => {
-            console.log(response);
-            const brewings = response.data;
-
-            this.setState(state => {
-                posts: state.posts.map(post => {
-                    return post.id === coffeeId ? {coffeebrewings: brewings, ...post} : post;
-                });
-            });
-        })
-        .catch((error) => {
-            console.log(error);
+    public closeBrewingWindow = () => {
+        this.setState({
+            brewingCard: undefined,
         });
+    };
 
-    }
+    public openBrewingWindow = (coffeeEntry: CoffeeEntry) => {
+        //Add brewings to coffee card
+        axios
+            .get(`${baseURL}${coffeeURL}/${coffeeEntry.id}/brewings`)
+            .then((response) => {
+                console.log('Got brewings');
+                let loadedBrewings = response.data as BrewingEntry[];
+                // console.log(loadedBrewings);
+                loadedBrewings = loadedBrewings.map((brewing) => {
+                    brewing.brewDate = new Date(brewing.brewDate);
+                    return brewing;
+                });
+                // console.log(loadedBrewings);
+
+                this.setState({
+                    brewingCard: { brewings: loadedBrewings, ...coffeeEntry },
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+                console.log('Cant get brewings');
+            });
+    };
 
     // tslint:disable-next-line: max-func-body-length
     public render() {
@@ -240,17 +272,21 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
             coffeeKinds,
             coffeeOrigins,
             coffeeRoateds,
+            coffeeProcesses,
+            coffeeSpecies,
+            coffeeBrewMethod,
             displayAttrMenu,
             editCard,
             filteredPosts,
             activeFilter,
+            brewingCard,
         } = this.state;
         const attrData = [
             {
                 id: 1,
-                name: 'Arten',
+                name: 'Röstarten',
                 urlSubstring: 'coffeeAttrs/kinds',
-                description: 'Kaffee Arten',
+                description: 'Kaffee Arten, zB Filter Kaffee oder Espresso',
                 items: coffeeKinds,
             },
             {
@@ -266,6 +302,27 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                 urlSubstring: 'coffeeAttrs/roasteds',
                 description: 'Kaffee Röstereien',
                 items: coffeeRoateds,
+            },
+            {
+                id: 4,
+                name: 'Bohnenart',
+                urlSubstring: 'coffeeAttrs/species',
+                description: 'Art der Bohne, zB Arabica oder Robusta',
+                items: coffeeSpecies,
+            },
+            {
+                id: 5,
+                name: 'Prozess',
+                urlSubstring: 'coffeeAttrs/processes',
+                description: 'Verarbeitungsprozess, zB Washed oder Natural',
+                items: coffeeProcesses,
+            },
+            {
+                id: 6,
+                name: 'Brühmethoden',
+                urlSubstring: 'coffeeAttrs/method',
+                description: 'Brühmethoden, zB. V60, French Press oder AeroPress',
+                items: coffeeBrewMethod,
             },
         ];
         const filterMenu: FilterMenuType[] = [
@@ -291,7 +348,7 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
             <>
                 <div className={LocalStyles.BackgroundHelper} />
                 <Navigationbar />
-                <div className={classNames(editCard && LocalStyles.EditBackground)}>
+                <div className={classNames((editCard || displayAttrMenu || brewingCard) && LocalStyles.EditBackground)}>
                     <div className={LocalStyles.Container}>
                         <div className={classNames('row', LocalStyles.MobileHeader)}>
                             <FontAwesomeIcon icon="mug-hot" size="4x" color="#8B572A" />
@@ -338,6 +395,7 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                                                         entry={post}
                                                         deleteFunction={this.deletePost}
                                                         editFunction={this.setEditCard}
+                                                        openBrewings={this.openBrewingWindow}
                                                     />
                                                 );
                                             })
@@ -347,9 +405,24 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                             </div>
                         </div>
                     </div>
-                    {displayAttrMenu && <AttrDataWindow content={attrData} toggleFunktion={this.toggleAttrMenu} />}
                     <Footer year="2019" version="0.1" />
                 </div>
+                {displayAttrMenu && <AttrDataWindow content={attrData} toggleFunktion={this.toggleAttrMenu} />}
+                {brewingCard && (
+                    <div className={LocalStyles.EditFrame}>
+                        <div className="container">
+                            <div className="col-12">
+                                <div className={LocalStyles.EditCard}>
+                                    <CoffeeBrewingWindow
+                                        entry={brewingCard}
+                                        methods={coffeeBrewMethod}
+                                        close={this.closeBrewingWindow}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
                 {editCard && (
                     <div className={LocalStyles.EditFrame}>
                         <div className="container">
@@ -361,7 +434,10 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                                         kinds={coffeeKinds}
                                         roasteds={coffeeRoateds}
                                         origins={coffeeOrigins}
-                                        close={this.clearEditCard}
+                                        processes={coffeeProcesses}
+                                        specieses={coffeeSpecies}
+                                        close={this.cardUpdated}
+                                        cardDeleted={() => {}}
                                     />
                                 </div>
                             </div>

@@ -1,14 +1,23 @@
 import { Router } from 'express';
 import {
     createCoffeeKinds,
+    createCoffeeMethod,
     createCoffeeOrigin,
+    createCoffeeProcess,
     createCoffeeRoasteds,
-    getCoffeeKinds,
-    getCoffeeOrigins,
-    getCoffeeRoasteds,
-    deleteCoffeeRoastedsById,
+    createCoffeeSpecies,
     deleteCoffeeKindsById,
+    deleteCoffeeMethodById,
     deleteCoffeeOriginById,
+    deleteCoffeeProcessById,
+    deleteCoffeeRoastedsById,
+    deleteCoffeeSpeciesById,
+    getCoffeeKinds,
+    getCoffeeMethodes,
+    getCoffeeOrigins,
+    getCoffeeProcesses,
+    getCoffeeRoasteds,
+    getCoffeeSpecies,
 } from '../controllers/CoffeeAttrsController';
 
 // Define a new router that basically wraps multiple endpoint into a single object.
@@ -34,5 +43,8 @@ coffeeAttrsRoute.route('/species').get(getCoffeeSpecies);
 coffeeAttrsRoute.route('/species').post(createCoffeeSpecies);
 coffeeAttrsRoute.route('/species/:id').delete(deleteCoffeeSpeciesById);
 
+coffeeAttrsRoute.route('/method').get(getCoffeeMethodes);
+coffeeAttrsRoute.route('/method').post(createCoffeeMethod);
+coffeeAttrsRoute.route('/method/:id').delete(deleteCoffeeMethodById);
 
 export { coffeeAttrsRoute };

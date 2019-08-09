@@ -17,6 +17,11 @@ class NavigationbarBase extends Component<NavbarProps> {
         const { pathname } = this.props.location;
         console.log(pathname);
         const path = pathname.split('/').filter(Boolean);
+
+        const gotoUser = () => {
+            this.props.history.push('/user');
+        };
+
         return (
             <div className={LocalStyles.Container}>
                 <div className={classNames('container')}>
@@ -29,7 +34,7 @@ class NavigationbarBase extends Component<NavbarProps> {
                                         <FontAwesomeIcon icon="chevron-right" className={LocalStyles.svg} />
                                     </li>
                                     {path.map((item, i) => {
-                                        if ((path.length === i+1)) {
+                                        if (path.length === i + 1) {
                                             return <li>{item}</li>;
                                         } else {
                                             return (
@@ -43,6 +48,7 @@ class NavigationbarBase extends Component<NavbarProps> {
                                 </ul>
                             </div>
                             <div className={classnames(LocalStyles.Navbar, LocalStyles.Burger)}>
+                                <button className={LocalStyles.User} onClick={gotoUser}>User Auth</button>
                                 <FontAwesomeIcon icon="bars" size="lg" />
                             </div>
                             <div className={classnames(LocalStyles.Navbar, LocalStyles.Logo)} onClick={this.goHome()}>

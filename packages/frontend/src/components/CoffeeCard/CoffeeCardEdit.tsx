@@ -2,11 +2,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import classNames from 'classnames';
 import React, { ChangeEvent, useState } from 'react';
-import { baseURL } from '../../data';
-import { blue, brown, green, grayDarker, cyan, red, yellow } from '../../style/colors';
+import { baseURL, coffeeURL } from '../../data';
+import { blue, brown, cyan, grayDarker, green, yellow } from '../../style/colors';
 import { AttrDataItemType, CoffeeEntry } from '../FormComponents';
 import { DropdownInput, TextareaInput, TextInput } from '../FormElements';
-import { LikeSliderAttrField, SliderAttrField, SingleSliderAttrField } from '../FormElements/AttrFields';
+import { LikeSliderAttrField, SingleSliderAttrField, SliderAttrField } from '../FormElements/AttrFields';
 import { AdvancedCancelButton, AdvancedDeleteButton, AdvancedSaveButton } from '../IconButton';
 import GeneralStyles from './../../style/GeneralStyles.module.scss';
 import LocalStyles from './CoffeeCardEdit.module.scss';
@@ -16,8 +16,11 @@ type CoffeeCardEditProps = {
     kinds: AttrDataItemType[];
     origins: AttrDataItemType[];
     roasteds: AttrDataItemType[];
+    processes: AttrDataItemType[];
+    specieses: AttrDataItemType[];
     deleteFunction(id: number): void;
-    close(post: CoffeeEntry, deleted: boolean): void;
+    close(post: CoffeeEntry): void;
+    cardDeleted(id: number): void;
 };
 
 // tslint:disable-next-line: max-func-body-length
@@ -41,48 +44,61 @@ export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
     const [bitter, setBitter] = useState(props.entry.bitter);
     const [sour, setSour] = useState(props.entry.sour);
     const [ownDescription, setOwnDescription] = useState(props.entry.ownDescription);
-    const { kinds, roasteds, origins, close } = props;
+    const [dateAdded, setDateAdded] = useState(props.entry.dateAdded);
+    const [process, setProcess] = useState(props.entry.process);
+    const [buyDate, setBuyDate] = useState(props.entry.buyDate);
+    const [species, setSpecies] = useState(props.entry.species);
+
+    const { kinds, roasteds, origins, close, processes, specieses } = props;
 
     const closeCard = () => {
-        const newObject = {
-            id: id,
-            name: name,
-            description: description,
-            origin: origin,
-            rating: rating,
-            roasted: roasted,
-            kind: kind,
-            taste: taste,
-            tasteKind: tasteKind,
-            woody: woody,
-            bitter: bitter,
-            sour: sour,
-            ownDescription: ownDescription,
+        const newObject: CoffeeEntry = {
+            id,
+            name,
+            description,
+            origin,
+            rating,
+            roasted,
+            kind,
+            taste,
+            tasteKind,
+            woody,
+            bitter,
+            sour,
+            ownDescription,
+            buyDate,
+            dateAdded,
+            process,
+            species,
         };
 
-        props.close(newObject, false);
-    }
+        props.close(newObject);
+    };
 
     const saveCard = () => {
-        const requestObject = {
-            id: id,
-            name: name,
-            description: description,
-            origin: origin,
-            rating: rating,
-            roasted: roasted,
-            kind: kind,
-            taste: taste,
-            tasteKind: tasteKind,
-            woody: woody,
-            bitter: bitter,
-            sour: sour,
-            ownDescription: ownDescription,
+        const requestObject: CoffeeEntry = {
+            id,
+            name,
+            description,
+            origin,
+            rating,
+            roasted,
+            kind,
+            taste,
+            tasteKind,
+            woody,
+            bitter,
+            sour,
+            ownDescription,
+            buyDate,
+            dateAdded,
+            process,
+            species,
         };
 
         if (props.entry.id === 0) {
             axios
-                .post('http://localhost:4000/coffee', { ...requestObject })
+                .post(`${baseURL}${coffeeURL}`, { ...requestObject })
                 .then((response) => {
                     console.log(response);
                     setEdited(false);
@@ -94,7 +110,7 @@ export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
                 });
         } else {
             axios
-                .put(`http://localhost:4000/coffee/${props.entry.id}`, { ...requestObject })
+                .put(`${baseURL}${coffeeURL}/${props.entry.id}`, { ...requestObject })
                 .then((response) => {
                     setEdited(false);
                     setSaveError(false);
@@ -107,7 +123,7 @@ export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
 
     const deleteCard = () => {
         props.deleteFunction(props.entry.id);
-        const newObject = {
+        const newObject: CoffeeEntry = {
             id: id,
             name: name,
             description: description,
@@ -121,14 +137,18 @@ export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
             bitter: bitter,
             sour: sour,
             ownDescription: ownDescription,
+            buyDate: buyDate,
+            dateAdded: dateAdded,
+            process: process,
+            species: species,
         };
 
-        props.close(newObject, true);
+        props.cardDeleted(id);
     };
 
     const deleteImageByURL = (url: string, id: number) => {
         axios
-            .delete(`http://localhost:4000/coffee/assets/${id}`, { data: { url: url } })
+            .delete(`${baseURL}${coffeeURL}/assets/${id}`, { data: { url: url } })
             .then((response) => {
                 console.log('... sucessfully');
                 setSaveError(false);
@@ -152,7 +172,7 @@ export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
         });
 
         axios
-            .post(`http://localhost:4000/coffee/assets/${props.entry.id}`, formData)
+            .post(`${baseURL}${coffeeURL}/assets/${props.entry.id}`, formData)
             .then((response) => {
                 console.log('... sucessfully');
                 setEdited(false);
@@ -164,8 +184,9 @@ export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
                 console.log(newImageString);
 
                 if (typeof newImageString === 'string' && imageStrings !== undefined) {
-                    imageStrings.push(newImageString);
-                    setImageStrings(imageStrings);
+                    setImageStrings([newImageString, ...imageStrings]);
+                    // imageStrings.push(newImageString);
+                    // setImageStrings(imageStrings);
                     console.log(imageStrings);
                 }
             })
@@ -251,6 +272,26 @@ export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
+                                    <DropdownInput
+                                        items={processes}
+                                        icon="leaf"
+                                        iconColor={green}
+                                        label="Prozess"
+                                        selectedItem={process}
+                                        onChange={setProcess}
+                                    />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <DropdownInput
+                                        items={specieses}
+                                        icon="leaf"
+                                        iconColor={green}
+                                        label="Bohnenart"
+                                        selectedItem={species}
+                                        onChange={setSpecies}
+                                    />
+                                </div>
+                                <div className="col-12 col-md-6">
                                     <LikeSliderAttrField
                                         maxValue={5}
                                         value={rating}
@@ -271,12 +312,7 @@ export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
                         <div className={LocalStyles.TextSection}>
                             <div className="row">
                                 <div className="col-12 col-md-6">
-                                    <SliderAttrField
-                                        color={blue}
-                                        name="Geschmack:"
-                                        value={taste}
-                                        onChange={setTaste}
-                                    />
+                                    <SliderAttrField color={blue} name="Geschmack:" value={taste} onChange={setTaste} />
                                 </div>
                                 <div className="col-12 col-md-6">
                                     <SingleSliderAttrField
@@ -293,12 +329,7 @@ export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
                                     <SliderAttrField color={green} name="Erbisg:" value={woody} onChange={setWoody} />
                                 </div>
                                 <div className="col-12 col-md-6">
-                                    <SliderAttrField
-                                        color={cyan}
-                                        name="Bitter:"
-                                        value={bitter}
-                                        onChange={setBitter}
-                                    />
+                                    <SliderAttrField color={cyan} name="Bitter:" value={bitter} onChange={setBitter} />
                                 </div>
                                 <div className="col-12">
                                     <TextareaInput

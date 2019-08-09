@@ -20,13 +20,19 @@ export const IconButton = ({ icon, name, color, onClick, className }: IconButton
     </button>
 );
 
-export const SaveButton = ({ withText, onClick }: { withText?: boolean; onClick?(): void }) => (
+type SaveButtonProps = {
+    withText?: boolean;
+    error: boolean;
+    save?(): void;
+};
+
+export const SaveButton = (props: SaveButtonProps) => (
     <IconButton
-        icon="save"
-        name={withText ? 'Save' : ''}
+        icon={props.error ? 'ban' : 'save'}
+        name={props.withText ? (props.error ? 'Error' : 'Save') : ''}
         color={white}
-        onClick={onClick}
-        className={LocalStyles.GreenFull}
+        onClick={props.save}
+        className={props.error ? LocalStyles.RedFull : LocalStyles.GreenFull}
     />
 );
 
@@ -153,10 +159,10 @@ type AdvancedSaveButtonState = {
 };
 
 type AdvancedSaveButtonProps = {
-    save(): void;
-    close(): void;
     error: boolean;
     changes: boolean;
+    save(): void;
+    close?(): void;
 };
 
 export class AdvancedSaveButton extends Component<AdvancedSaveButtonProps, AdvancedSaveButtonState> {
@@ -204,10 +210,15 @@ export class AdvancedSaveButton extends Component<AdvancedSaveButtonProps, Advan
                     ) : (
                         <>
                             <span>card saved!</span>
-                            <button className={classNames(LocalStyles.FrameButton, LocalStyles.White)} onClick={close}>
-                                <FontAwesomeIcon icon="times-circle" color={white} />
-                                <span>close</span>
-                            </button>
+                            {close && (
+                                <button
+                                    className={classNames(LocalStyles.FrameButton, LocalStyles.White)}
+                                    onClick={close}
+                                >
+                                    <FontAwesomeIcon icon="times-circle" color={white} />
+                                    <span>close</span>
+                                </button>
+                            )}
                         </>
                     )}
                 </div>

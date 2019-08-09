@@ -6,6 +6,18 @@ import GeneralStyles from './../../style/GeneralStyles.module.scss';
 import LocalStyles from './AttrFields.module.scss';
 import { red, gray, yellow, grayDark, grayDarker } from '../../style/colors';
 
+type dateFormatProps = {
+    date: Date;
+}
+
+export const DateFormat = ({date}: dateFormatProps) => {
+    return (
+        <>
+        {date.getDate()}.{date.getMonth()}.{date.getFullYear()} - {date.getUTCHours()}:{date.getUTCMinutes()} Uhr
+        </>
+    );
+}
+
 type SliderAttrFieldProps = {
     name?: string;
     value: number;

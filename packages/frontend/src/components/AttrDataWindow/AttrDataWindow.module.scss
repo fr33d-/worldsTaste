@@ -1,7 +1,6 @@
 @import '../../bootstrap.scss';
 @import '../../style/card.scss';
 
-
 .AttrDataBackground {
     position: absolute;
     top: 0;
@@ -17,10 +16,11 @@
 .AttrDataWindow {
     @extend .container;
     position: absolute;
-    top: 30vh;
+    top: 20vh;
     left: 50vw;
-    margin-left: -270px;
-    width:600px;
+    margin-left: -345px;
+    width: 690px;
+    height: 500px;
     min-height: 300px;
     opacity: 1;
     z-index: 20;
@@ -37,30 +37,34 @@
     }
 
     .AttrList {
-        height: 100%;
-        width: 240px;
-        // border-right: 1px solid $new-dark-gray;
+        height: 500px;
+        width: 320px;
         padding: 20px $default-space;
-        text-align: center;
         background: $new-gray;
-        padding: $default-space-large;
+        padding: $default-space-large $default-space $default-space-large $default-space-large;
+        border-radius: $border-radius 0 0 $border-radius;
 
         h2 {
-            padding: 20px 0;
+            font-size: 32px;
+            color: $black;
+            font-weight: 400;
+            margin-bottom: $default-space;
         }
 
         ul {
             li {
                 width: 100%;
-                text-align: center;
-                padding-bottom: 10px;
+                color: $new-darker-gray;
+                // text-align: center;
+                // padding-bottom: 10px;
 
-                span {
-                    font-size: 14px;
-                    color: $new-darker-gray;
-                }
+                // span {
+                //     font-size: 14px;
+                //     color: $new-darker-gray;
+                // }
 
-                &:hover, &.Active {
+                &:hover,
+                &.Active {
                     // text-decoration: underline;
                     font-weight: 700;
                 }
@@ -70,30 +74,25 @@
 
     .AttrItemList {
         position: relative;
-        height: 100%;
-        width: 300px;
-        // border-right: $new-darker-gray;
-        // padding-left: $default-space;
-        // padding-top: 20px;
-        // padding-right: $default-space;
-        // margin-right: $default-space;
-        padding: $default-space;
+        height: 500px;
+        width: 370px;
+        padding: $default-space-large; // $default-space;
 
         .ListHeader {
             font-size: 16px;
             color: $new-darker-gray;
 
             h2 {
-                font-size: 32px;
+                font-size: 24px;
                 color: $black;
                 font-weight: 400;
-                margin-bottom: 12px;
+                margin-bottom: $default-space-small;
             }
         }
 
         ul {
             padding: $default-space 0 0 10px;
-            
+
             li {
                 padding-bottom: 10px;
 
@@ -110,6 +109,7 @@
 
             .Input {
                 margin: 10px 0 0 10px;
+                width: 80%;
             }
 
             input {
@@ -124,9 +124,8 @@
         @extend .iconButton;
 
         position: absolute;
-        right: -20px;
-        // top: -15px;
-        
+        right: 35px;
+        top: 20px;
     }
 
     .Error {

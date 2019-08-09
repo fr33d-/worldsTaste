@@ -1,7 +1,7 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { ChangeEvent, Dispatch, SetStateAction } from 'react';
-import { grayDarker } from '../../style/colors';
+import { grayDarker, blue } from '../../style/colors';
 import LocalStyles from './FormElements.module.scss';
 import { AttrDataItemType } from '../FormComponents';
 
@@ -106,9 +106,37 @@ export const TextareaInput = ({ label, value, onChange }: TextareaProps) => {
     };
 
     return (
-        <div className={LocalStyles.TextareaInput}>
-            <FontAwesomeIcon icon="bars" size="lg" color={grayDarker} />
-            <textarea placeholder={label} value={value} onChange={handleChange} className="formElement" />
+        <>
+            <div className={LocalStyles.TextareaInput}>
+                <FontAwesomeIcon icon="bars" size="lg" color={grayDarker} />
+                <textarea placeholder={label} value={value} onChange={handleChange} className="formElement" />
+            </div>
+        </>
+    );
+};
+
+type DateInputProps = {
+    label: string;
+    value: Date;
+    onChange: Dispatch<React.SetStateAction<Date>>;
+};
+
+export const DateInput = ({ label, value, onChange }: DateInputProps) => {
+    // const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    //     onChange(e.target.value);
+    // };
+
+    return (
+        <div className={LocalStyles.DateInput}>
+            <label>{label}</label>
+            <div className={LocalStyles.DateInputArea}>
+                <FontAwesomeIcon icon="calendar" size="lg" color={blue} />
+                <input
+                    type="text"
+                    placeholder={label}
+                    value={`${value.getDate()}.${value.getMonth()}.${value.getFullYear()} - ${value.getUTCHours()}:${value.getUTCMinutes()} Uhr`}
+                />
+            </div>
         </div>
     );
 };
@@ -125,10 +153,13 @@ export const BoolInput = ({ label, value, onChange }: BoolInputProps) => {
     };
 
     return (
-        <div className={LocalStyles.BoolInput}>
-            <label>{label}</label>
-            {value && <input type="checkbox" name={label} value={label} checked onChange={handleChange} />}
-            {!value && <input type="checkbox" name={label} value={label} onChange={handleChange} />}
-        </div>
+        <>
+            <label>Boolean</label>
+            <div className={LocalStyles.BoolInput}>
+                <label>{label}</label>
+                {value && <input type="checkbox" name={label} value={label} checked onChange={handleChange} />}
+                {!value && <input type="checkbox" name={label} value={label} onChange={handleChange} />}
+            </div>
+        </>
     );
 };

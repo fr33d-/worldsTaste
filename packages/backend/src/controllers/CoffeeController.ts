@@ -20,7 +20,7 @@ const log = createLogger('api:controllers:coffee');
 export const getAllCoffees: RequestHandler = async (_, result) => {
     log(`GET /coffee`);
 
-    const coffeeEntities = await CoffeeEntity.find({ relations: ['origin', 'kind', 'roasted'] });
+    const coffeeEntities = await CoffeeEntity.find({ relations: ['origin', 'kind', 'roasted', 'process', 'species'] });
 
     //Append images
     const uploadsFolder = path.join(__dirname, '../../uploads/coffee-images');
@@ -48,7 +48,7 @@ export const getCoffeeById: RequestHandler = async (request, result) => {
 
     const coffeeEntity = await CoffeeEntity.findOne({
         where: { id: requestParams.id },
-        relations: ['origin', 'kind', 'roasted'],
+        relations: ['origin', 'kind', 'roasted', 'process', 'species'],
     });
 
     if (coffeeEntity !== undefined) {
@@ -65,7 +65,7 @@ export const createCoffee: RequestHandler = async (request, result) => {
     log(`POST /coffee`);
     log(request.body);
     const requestBody = request.body as CreateCoffeeRequestBody;
-    const coffeeEntity = CoffeeEntity.create({ ...requestBody });
+    const coffeeEntity = CoffeeEntity.create({ ...requestBody, brewings: [] });
 
     try {
         await CoffeeEntity.save(coffeeEntity);
@@ -193,15 +193,13 @@ export const deleteCoffeeImageByURL: RequestHandler = async (request, result) =>
     const targetPath = `./uploads/coffee-images/${id}`;
 
     // log(targetPath + '/' + fileName);
-    
+
     try {
         fs.unlinkSync(`${targetPath}/${fileName}`);
-    } catch(err) {
+    } catch (err) {
         log(err);
         result.sendStatus(httpStatusCodes.NOT_FOUND);
     }
 
     result.sendStatus(httpStatusCodes.OK);
-        
-    
 };

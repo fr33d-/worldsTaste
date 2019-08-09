@@ -55,6 +55,29 @@
     }
 }
 
+.DateInput {
+    label {
+        font-size: 14px;
+    }
+
+    .DateInputArea {
+        @extend .formElement;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+
+        input {
+            background: none;
+            border: none;
+        }
+
+        svg {
+            margin-right: $default-space-m;
+        }
+
+    }
+}
+
 .TextareaInput {
     @extend .formElement;
     height: fit-content;
@@ -96,5 +119,4 @@
         margin-bottom: 5px;
         margin-left: 20px;
     }
-    
 }

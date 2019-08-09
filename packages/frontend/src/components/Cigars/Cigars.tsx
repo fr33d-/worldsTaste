@@ -3,12 +3,13 @@ import axios from 'axios';
 import classNames from 'classnames';
 import React, { Component } from 'react';
 import { RouteComponentProps } from 'react-router';
+import { baseURL, cigarsAttrURL, cigarsURL } from '../../data';
 import { AttrDataWindow } from '../AttrDataWindow';
 import { CigarCardDisplay } from '../CigarCard/CigarCardDisplay';
 import { CigarCardEdit } from '../CigarCard/CigarCardEdit';
 import { Filter } from '../Filter';
 import { Footer } from '../Footer';
-import { AttrDataItemType, Image, FilterMenuType } from '../FormComponents';
+import { AttrDataItemType, FilterMenuType, Image } from '../FormComponents';
 import { Navigationbar } from '../Navigationbar';
 import { Sidemenu } from '../Sidemenu';
 import CigarReplacement from './../../images/Cigar-replacement.svg';
@@ -141,7 +142,7 @@ export class Cigars extends Component<CigarsProps, CigarsState> {
         };
 
         axios
-            .post('http://localhost:4000/cigars', { ...newPost })
+            .post(`${baseURL}${cigarsURL}`, { ...newPost })
             .then((response) => {
                 console.log(response.headers['location']);
                 const location: string = response.headers['location'];
@@ -160,14 +161,14 @@ export class Cigars extends Component<CigarsProps, CigarsState> {
     };
 
     public initiateData() {
-        const cigarsPromise = axios.get<CigarEntry[]>('http://localhost:4000/cigars');
-        const anschnittPromise = axios.get<AttrDataItemType[]>('http://localhost:4000/cigarAttrs/anschnitt');
-        const aromaradPromise = axios.get<AttrDataItemType[]>('http://localhost:4000/cigarAttrs/aromarad');
-        const deckBlattPromise = axios.get<AttrDataItemType[]>('http://localhost:4000/cigarAttrs/deckblatt');
-        const einlagePromise = axios.get<AttrDataItemType[]>('http://localhost:4000/cigarAttrs/einlage');
-        const originPromise = axios.get<AttrDataItemType[]>('http://localhost:4000/cigarAttrs/origin');
-        const producerPromise = axios.get<AttrDataItemType[]>('http://localhost:4000/cigarAttrs/producer');
-        const umblattPromise = axios.get<AttrDataItemType[]>('http://localhost:4000/cigarAttrs/umblatt');
+        const cigarsPromise = axios.get<CigarEntry[]>(`${baseURL}${cigarsURL}`);
+        const anschnittPromise = axios.get<AttrDataItemType[]>(`${baseURL}${cigarsAttrURL}/anschnitt`);
+        const aromaradPromise = axios.get<AttrDataItemType[]>(`${baseURL}${cigarsAttrURL}/aromarad`);
+        const deckBlattPromise = axios.get<AttrDataItemType[]>(`${baseURL}${cigarsAttrURL}/deckblatt`);
+        const einlagePromise = axios.get<AttrDataItemType[]>(`${baseURL}${cigarsAttrURL}/einlage`);
+        const originPromise = axios.get<AttrDataItemType[]>(`${baseURL}${cigarsAttrURL}/origin`);
+        const producerPromise = axios.get<AttrDataItemType[]>(`${baseURL}${cigarsAttrURL}/producer`);
+        const umblattPromise = axios.get<AttrDataItemType[]>(`${baseURL}${cigarsAttrURL}/umblatt`);
 
         Promise.all([
             cigarsPromise,
@@ -226,7 +227,7 @@ export class Cigars extends Component<CigarsProps, CigarsState> {
                 break;
         }
 
-        this.setState({filteredPosts: newPosts});
+        this.setState({ filteredPosts: newPosts });
     };
 
     // tslint:disable-next-line: max-func-body-length
@@ -303,31 +304,31 @@ export class Cigars extends Component<CigarsProps, CigarsState> {
         const filterMenuData: FilterMenuType[] = [
             {
                 name: 'Anschnitte',
-                items: cigarAnschnitt.map(item => (item.name)),
+                items: cigarAnschnitt.map((item) => item.name),
             },
             {
                 name: 'Aromarad',
-                items: cigarAromarad.map(item => (item.name)),
+                items: cigarAromarad.map((item) => item.name),
             },
             {
                 name: 'Deckblätter',
-                items: cigarDeckblatt.map(item => (item.name)),
+                items: cigarDeckblatt.map((item) => item.name),
             },
             {
                 name: 'Einlagen',
-                items: cigarEinlage.map(item => (item.name)),
+                items: cigarEinlage.map((item) => item.name),
             },
             {
                 name: 'Umblätter',
-                items: cigarUmblatt.map(item => (item.name)),
+                items: cigarUmblatt.map((item) => item.name),
             },
             {
                 name: 'Herkunft',
-                items: cigarsOrigin.map(item => (item.name)),
+                items: cigarsOrigin.map((item) => item.name),
             },
             {
                 name: 'Hersteller',
-                items: cigarsProducer.map(item => (item.name)),
+                items: cigarsProducer.map((item) => item.name),
             },
             {
                 name: 'Bewertung',
@@ -340,49 +341,54 @@ export class Cigars extends Component<CigarsProps, CigarsState> {
                 <div className={GeneralStyles.BackgroundHelper} />
                 <Navigationbar />
                 <div className={classNames(editCard && LocalStyles.EditBackground)}>
-                <div className={classNames(`container`, GeneralStyles.Container, 'pageContainer')}>
-                    <div className={classNames('row', GeneralStyles.MobileHeader)}>
-                        <FontAwesomeIcon icon="smoking" size="4x" color="#8B572A" />
-                        <h1>Smoke of fame</h1>
-                    </div>
-                    <div className="row">
-                        <Sidemenu filter={filterMenuData} image={Tabak} filterAction={this.filterPosts} activeFilter={activeFilter} />
-                        <div className={classNames(`col-12 col-lg-9`)}>
-                            <Filter
-                                addAction={this.createCard}
-                                dataAction={this.toggleAttrMenu}
-                                orderAction={() => {}}
-                                orderItems={filterMenuData}
+                    <div className={classNames(`container`, GeneralStyles.Container, 'pageContainer')}>
+                        <div className={classNames('row', GeneralStyles.MobileHeader)}>
+                            <FontAwesomeIcon icon="smoking" size="4x" color="#8B572A" />
+                            <h1>Smoke of fame</h1>
+                        </div>
+                        <div className="row">
+                            <Sidemenu
+                                filter={filterMenuData}
+                                image={Tabak}
+                                filterAction={this.filterPosts}
+                                activeFilter={activeFilter}
                             />
+                            <div className={classNames(`col-12 col-lg-9`)}>
+                                <Filter
+                                    addAction={this.createCard}
+                                    dataAction={this.toggleAttrMenu}
+                                    orderAction={() => {}}
+                                    orderItems={filterMenuData}
+                                />
 
-                            <div className={GeneralStyles.Introtext}>
-                                <h2>Zigarren raucht man überall</h2>
-                                <p>Irgend was schlaues über Zigarren.</p>
-                            </div>
-                            <div className={`${GeneralStyles.CardsContainer}`}>
-                                {posts.length === 0 ? (
-                                    <div className={GeneralStyles.ReplImg}>
-                                        <img src={CigarReplacement} />
-                                        <p>No cigars to display</p>
-                                    </div>
-                                ) : (
-                                    filteredPosts.map((post) => {
-                                        return (
-                                            <CigarCardDisplay
-                                                entry={post}
-                                                key={post.id}
-                                                deleteFunction={this.deletePost}
-                                                editFunction={this.setEditCard}
-                                            />
-                                        );
-                                    })
-                                )}
+                                <div className={GeneralStyles.Introtext}>
+                                    <h2>Zigarren raucht man überall</h2>
+                                    <p>Irgend was schlaues über Zigarren.</p>
+                                </div>
+                                <div className={`${GeneralStyles.CardsContainer}`}>
+                                    {posts.length === 0 ? (
+                                        <div className={GeneralStyles.ReplImg}>
+                                            <img src={CigarReplacement} />
+                                            <p>No cigars to display</p>
+                                        </div>
+                                    ) : (
+                                        filteredPosts.map((post) => {
+                                            return (
+                                                <CigarCardDisplay
+                                                    entry={post}
+                                                    key={post.id}
+                                                    deleteFunction={this.deletePost}
+                                                    editFunction={this.setEditCard}
+                                                />
+                                            );
+                                        })
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                {displayAttrMenu && <AttrDataWindow content={attrData} toggleFunktion={this.toggleAttrMenu} />}
-                <Footer year="2019" version="0.1" />
+                    {displayAttrMenu && <AttrDataWindow content={attrData} toggleFunktion={this.toggleAttrMenu} />}
+                    <Footer year="2019" version="0.1" />
                 </div>
                 {editCard && (
                     <div className={LocalStyles.EditFrame}>
@@ -400,7 +406,6 @@ export class Cigars extends Component<CigarsProps, CigarsState> {
                                         cigarUmblatt={cigarUmblatt}
                                         cigarsOrigin={cigarsOrigin}
                                         cigarsProducer={cigarsProducer}
-
                                     />
                                 </div>
                             </div>

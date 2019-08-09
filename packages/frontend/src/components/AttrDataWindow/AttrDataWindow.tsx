@@ -88,7 +88,7 @@ export class AttrDataWindow extends Component<AttrDataProps, AttrDataState> {
         if (e.key === 'Enter') {
             this.addNewItem();
         }
-      }
+    };
 
     public render() {
         const { selectedCategory, newItemName, error } = this.state;
@@ -96,11 +96,10 @@ export class AttrDataWindow extends Component<AttrDataProps, AttrDataState> {
 
         return (
             <>
-                <div className={LocalStyles.AttrDataBackground} />
                 <div className={LocalStyles.AttrDataWindow}>
                     <Row>
                         <div className={LocalStyles.AttrList}>
-                            <FontAwesomeIcon icon="mug-hot" size="3x" color="#8B572A" />
+                            {/* <FontAwesomeIcon icon="mug-hot" size="3x" color="#8B572A" /> */}
                             <h2>Kaffee Daten</h2>
                             <ul>
                                 {content.map((item) => (
