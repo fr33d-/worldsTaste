@@ -1,12 +1,13 @@
-import { BaseEntity, Column, Entity, Index, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToOne, OneToMany } from 'typeorm';
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import {
-    CoffeeOriginEntity,
     CoffeeKindEntity,
-    CoffeeRoastedEntity,
+    CoffeeOriginEntity,
     CoffeeProcessEntity,
+    CoffeeRoastedEntity,
     CoffeeSpeciesEntity,
 } from './CoffeeAttrsEntity';
 import { CoffeeBrewingEntity } from './CoffeeBrewingEntity';
+import { User } from '../../../../frontend/src/components/User';
 
 export type Image = {
     name: string;
@@ -22,6 +23,9 @@ export class CoffeeEntity extends BaseEntity {
 
     @Column()
     public name!: string;
+
+    // @Column()
+    // public owner!: User;
 
     @Column()
     public description!: string;

@@ -102,18 +102,19 @@ export const LikeSliderAttrField = ({ name, value, maxValue, onChange }: LikeSli
 type AttrFieldProps = {
     name: string;
     value: string;
-    icon: IconProp;
-    color: string;
+    icon?: IconProp;
+    color?: string;
+    className?: string;
 };
 
-export const AttrField = ({ name, value, icon, color }: AttrFieldProps) => (
-    <>
+export const AttrField = ({ name, value, icon, color, className }: AttrFieldProps) => (
+    <div className={classNames(className && className)}>
         <label className={LocalStyles.AttrFieldLabel}>{name}</label>
         <div className={LocalStyles.AttrField}>
-            <FontAwesomeIcon icon={icon} color={color} size="sm" />
+            {icon && <FontAwesomeIcon icon={icon} color={color} size="sm" />}
             <span className={LocalStyles.Value}>{value}</span>
         </div>
-    </>
+    </ div>
 );
 
 type AttrFieldSliderProps = {

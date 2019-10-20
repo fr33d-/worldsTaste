@@ -1,9 +1,9 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { ChangeEvent, Dispatch, SetStateAction } from 'react';
-import { grayDarker, blue } from '../../style/colors';
-import LocalStyles from './FormElements.module.scss';
+import { blue, grayDarker } from '../../style/colors';
 import { AttrDataItemType } from '../FormComponents';
+import LocalStyles from './FormElements.module.scss';
 
 type textInputProps = {
     name: string;
@@ -19,6 +19,18 @@ export const TextInput = ({ name, onChange, value }: textInputProps) => {
         <div className={LocalStyles.TextInput}>
             <span className={LocalStyles.Name}>{name}</span>
             <input type="text" placeholder={name} value={value} onChange={handleChange} />
+        </div>
+    );
+};
+
+export const PasswordInput = ({ name, onChange, value }: textInputProps) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        onChange(e.target.value);
+    };
+    return (
+        <div className={LocalStyles.TextInput}>
+            <span className={LocalStyles.Name}>{name}</span>
+            <input type="password" placeholder={name} value={value} onChange={handleChange} />
         </div>
     );
 };

@@ -11,6 +11,10 @@
     padding-top: 10px;
 }
 
+.ContainerLight {
+    background: none;
+}
+
 .Navbar {
     background: none;
     box-shadow: none;
@@ -23,6 +27,11 @@
         background: none;
         margin-right: 10px;
         color: $white;
+
+        width: 30px;
+        height: 30px;
+        border-radius: 15px;
+        background: $new-gray;
     }
 
     .Burger {

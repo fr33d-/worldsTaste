@@ -47,7 +47,7 @@ h3,
 h4,
 .h4 {
     font-size: 21x;
-    line-height: calc(#{$line_height}* 3);
+    line-height: calc(#{$line_height}* 4);
     font-weight: 700;
     margin-bottom: $default-space-s;
 }
@@ -55,7 +55,7 @@ h4,
 h5,
 .h5 {
     font-size: 21x;
-    line-height: calc(#{$line_height}* 3);
+    line-height: calc(#{$line_height}* 4);
     font-weight: 400;
     margin-bottom: $default-space-s;
 }

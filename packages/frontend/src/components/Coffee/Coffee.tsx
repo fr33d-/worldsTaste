@@ -16,6 +16,7 @@ import { Sidemenu } from '../Sidemenu';
 import { default as chemexSVG, default as CoffeeReplacement } from './../../images/Chemex.svg';
 import GeneralStyles from './../../style/GeneralStyles.module.scss';
 import LocalStyles from './Coffee.module.scss';
+import { useJwt } from '../User';
 
 export type CoffeeProps = RouteComponentProps;
 
@@ -344,6 +345,8 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
             },
         ];
 
+        const user = useJwt();
+        
         return (
             <>
                 <div className={LocalStyles.BackgroundHelper} />

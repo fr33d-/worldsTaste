@@ -7,6 +7,7 @@ import Beer from './images/Beer.svg';
 
 export const baseURL = 'http://localhost:4000/api';
 export const userURL = '/user';
+export const authURL = '/auth';
 export const coffeeURL = '/coffee';
 export const brewingURL = '/coffeebrewings';
 export const coffeeAttrURL = '/coffeeAttrs';

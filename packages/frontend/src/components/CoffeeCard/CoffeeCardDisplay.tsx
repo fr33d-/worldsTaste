@@ -129,7 +129,6 @@ export const CoffeeCardDisplay = (props: CoffeeCardDisplayProps) => {
                                     />
                                 ))
                             ) : (
-                                // <img src={`${baseURL}${imageStrings[0]}`} />
                                 <div
                                     className={LocalStyles.Img}
                                     style={{ backgroundImage: `url(${baseURL}${imageStrings[0]})` }}

@@ -7,6 +7,13 @@
 }
 
 .card {
+    &:hover {
+        @extend .cardActive;
+    }
+}
+
+.card,
+.card-now-hover {
     width: 100%;
     z-index: 1;
 
@@ -24,10 +31,6 @@
         box-shadow 300ms cubic-bezier(0.5, 0, 0.5, 0.99),
         // ease-in-out,
             margin 300ms cubic-bezier(0.5, 0, 0.5, 0.99); //ease-in-out;
-
-    &:hover {
-        @extend .cardActive;
-    }
 
     &GoTo {
         background: radial-gradient(circle at top, #0ebdff 0%, #1414ae 100%);
@@ -68,11 +71,11 @@
 
 @keyframes slidein {
     from {
-        transform:translate(0, 100vh)
+        transform: translate(0, 100vh);
     }
 
     to {
-        transform:translate(0, 0%)
+        transform: translate(0, 0%);
     }
 }
 

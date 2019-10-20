@@ -12,6 +12,7 @@ import { coffeeAttrsRoute } from './routes/CoffeeAttrsRouts';
 import { coffeeBrewingRoute } from './routes/CoffeeBrewingRoute';
 import { coffeeRoute } from './routes/CoffeeRoute';
 import { usersRoute } from './routes/UsersRoute';
+import { authRouter } from './routes/AuthRoute';
 import { errorLoggerMiddleware, errorMiddleware } from './utils/ErrorHandlerUtil';
 import { createLogger } from './utils/LoggerUtil';
 
@@ -44,7 +45,8 @@ createConnection()
         server.get('/', (_, result) => result.sendStatus(httpStatusCodes.FORBIDDEN));
 
         // Application routes
-        server.use('/api/users', usersRoute);
+        server.use('/api/auth', authRouter);
+        server.use('/api/user', usersRoute);
         server.use('/api/coffee', coffeeRoute);
         server.use('/api/coffeeAttrs', coffeeAttrsRoute);
         server.use('/api/coffeebrewings', coffeeBrewingRoute);

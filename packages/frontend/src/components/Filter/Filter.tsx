@@ -1,8 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import React, { ChangeEvent } from 'react';
+import { FilterMenuType } from '../FormComponents';
+import { useJwt } from '../User';
 import LocalStyles from './Filter.module.scss';
-import { AttrDataType, FilterMenuType } from '../FormComponents';
 
 type FilterProps = {
     orderItems: FilterMenuType[];
@@ -12,6 +13,7 @@ type FilterProps = {
 };
 
 export const Filter = ({ orderItems, orderAction, dataAction, addAction }: FilterProps) => {
+    const user = useJwt();
     return (
         <div className={LocalStyles.Filter}>
             <div className={LocalStyles.Search}>
@@ -33,9 +35,11 @@ export const Filter = ({ orderItems, orderAction, dataAction, addAction }: Filte
             <button className={classNames('add-button big', LocalStyles.Button)} onClick={dataAction}>
                 <FontAwesomeIcon icon="database" />
             </button>
-            <button className={classNames('add-button big', LocalStyles.Button)} onClick={addAction}>
-                <FontAwesomeIcon icon="plus" />
-            </button>
+            {user && (
+                <button className={classNames('add-button big', LocalStyles.Button)} onClick={addAction}>
+                    <FontAwesomeIcon icon="plus" />
+                </button>
+            )}
         </div>
     );
 };

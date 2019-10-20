@@ -37,6 +37,7 @@ import {
     faSearch,
     faTrash,
     faCalendar,
+    faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
@@ -81,7 +82,8 @@ library.add(
     faCarrot,
     faSearch,
     faTrash,
-    faCalendar
+    faCalendar,
+    faUser,
 );
 
 // The App component hosts all components of our application. It does so by rendering the BrowserRouter component at
