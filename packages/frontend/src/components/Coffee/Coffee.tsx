@@ -16,7 +16,7 @@ import { Sidemenu } from '../Sidemenu';
 import { default as chemexSVG, default as CoffeeReplacement } from './../../images/Chemex.svg';
 import GeneralStyles from './../../style/GeneralStyles.module.scss';
 import LocalStyles from './Coffee.module.scss';
-import { useJwt } from '../User';
+import { useJwt } from '../User/LoginWindwo';
 
 export type CoffeeProps = RouteComponentProps;
 

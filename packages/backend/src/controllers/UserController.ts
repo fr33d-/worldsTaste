@@ -29,6 +29,8 @@ export const getOneById: RequestHandler = async (req: Request, res: Response) =>
     } catch (error) {
         res.status(404).send('User not found');
     }
+
+    // Todo? Müsste ich hier nicht die userliste verschicken? 
 };
 
 export const newUser: RequestHandler = async (req: Request, res: Response) => {

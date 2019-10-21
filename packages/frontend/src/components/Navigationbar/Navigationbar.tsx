@@ -3,7 +3,7 @@ import { default as classnames, default as classNames } from 'classnames';
 import React, { Component } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { black, grayDark } from '../../style/colors';
-import { useJwt } from '../User';
+import { useJwt } from '../User/LoginWindwo';
 import LocalStyles from './Navigationbar.module.scss';
 
 type NavbarProps = RouteComponentProps & {

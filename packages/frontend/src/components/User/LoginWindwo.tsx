@@ -2,17 +2,19 @@ import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
+import { User } from '.';
 import { authURL, baseURL } from '../../data';
 import { PasswordInput, TextInput } from '../FormElements';
 import LocalStyles from './User.module.scss';
 
-export const useJwt = () => {
+export const useJwt = (): User | undefined => {
     const jwtObj = sessionStorage.getItem('auth');
 
     if (jwtObj == null && typeof jwtObj !== 'string') {
         return;
     } else {
         const jwtJson = jwt.decode(jwtObj);
+        console.log(jwtJson);
 
         if (
             jwtJson !== null &&

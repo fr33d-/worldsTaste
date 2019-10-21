@@ -7,7 +7,6 @@ import {
     CoffeeSpeciesEntity,
 } from './CoffeeAttrsEntity';
 import { CoffeeBrewingEntity } from './CoffeeBrewingEntity';
-import { User } from '../../../../frontend/src/components/User';
 
 export type Image = {
     name: string;

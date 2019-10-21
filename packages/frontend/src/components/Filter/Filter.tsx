@@ -2,8 +2,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import React, { ChangeEvent } from 'react';
 import { FilterMenuType } from '../FormComponents';
-import { useJwt } from '../User';
 import LocalStyles from './Filter.module.scss';
+import { useJwt } from '../User/LoginWindwo';
 
 type FilterProps = {
     orderItems: FilterMenuType[];

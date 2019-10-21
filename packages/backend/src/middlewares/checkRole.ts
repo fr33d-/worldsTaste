@@ -14,13 +14,14 @@ export const checkRole = (roles: Array<string>) => {
         try {
             user = await userRepository.findOneOrFail(id);
             //Check if array of authorized roles includes the user's role
-            if (roles.indexOf(user.role) > -1) {
+            if (roles.includes(user.role)) {
                 next();
+            } else {
+                res.status(401).send();
             }
-        } catch (id) {
+            return;
+        } catch (error) {
             res.status(401).send();
         }
-
-        res.status(401).send();
     };
 };

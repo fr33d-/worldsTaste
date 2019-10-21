@@ -11,6 +11,9 @@
         "no-angle-bracket-type-assertion": true,
         "newline-before-return": false,
         "max-line-length": [true, 120],
+        "max-func-body-length": 120,
+        "no-null-keyword": false,
+        "no-string-literal": false, 
 
         "quotemark": false,
         "export-name": false,
