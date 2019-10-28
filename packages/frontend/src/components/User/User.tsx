@@ -3,15 +3,16 @@ import classNames from 'classnames';
 import jwt from 'jsonwebtoken';
 import React, { FC, useEffect, useState } from 'react';
 import { Button, Container, Row } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import { baseURL, userURL } from '../../data';
 import userAvatar from '../../images/avatar-frederic.png';
 import { green, white } from '../../style/colors';
 import { AttrDataItemType } from '../FormComponents';
-import { DropdownInput, TextInput } from '../FormElements';
+import { DropdownInput, NewDropdownInput, NewTextInput, TextInput } from '../FormElements';
 import { AttrField } from '../FormElements/AttrFields';
 import { IconButton } from '../IconButton';
 import { Navigationbar } from '../Navigationbar';
-import { LoginWindow, useJwt } from './LoginWindwo';
+import { LoginWindow } from './LoginWindwo';
 import LocalStyles from './User.module.scss';
 
 export type User = {
@@ -63,47 +64,129 @@ export const UserDataWindow: FC<{ user: FullUser }> = ({ user }) => {
 
 export const UserAdminWindow: FC<{ user: FullUser }> = ({ user }) => {
     //New User Data
-    const [newUserName, setNewUserName] = useState('');
-    const [newUserMail, setNewUserMail] = useState('');
-    const [newUserPassword, setNewUserPassword] = useState('');
-    const [newUserRole, setNewUserRole] = useState(UserRoles[0]);
-    const [createUserError, setCreateUserError] = useState(false);
-    const [savePWError, SetSavePWError] = useState(false);
-    const [listOfAllUsers, setListOfAllUsers] = useState<User[]>([]);
 
-    const createUser = () => {
-        setCreateUserError(true);
+    const [saveingError, setSaveingError] = useState(false);
+    const [listOfAllUsers, setListOfAllUsers] = useState<FullUser[]>([]);
+    const [selectedUser, setSelectedUser] = useState<User>();
+    const [newUserRole, setNewUserRole] = useState<AttrDataItemType>();
+
+    const changeUser = () => {
+        //Fire put request here
+        const jwtObj = sessionStorage.getItem('auth');
+        if (selectedUser) {
+            axios
+                .patch(`${baseURL}${userURL}/${selectedUser.id}`, selectedUser, { headers: { auth: jwtObj } })
+                .then((response) => {
+                    console.log('user updated');
+                    console.log(response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    setSaveingError(true);
+                });
+        }
     };
 
-    const getAllUsers = () => {
-        console.log(user);
+    const sendResetPasswordLink = () => {
+        //do some magic here
+    };
+
+    useEffect(() => {
         const jwtObj = sessionStorage.getItem('auth');
 
         axios
-            .get<User[]>(`${baseURL}${userURL}/`, {headers: {auth: jwtObj }})
+            .get<FullUser[]>(`${baseURL}${userURL}/`, { headers: { auth: jwtObj } })
             .then((response) => {
-                console.log("Got user list");
-                console.log(response);
-
+                console.log('Got user list');
                 setListOfAllUsers(response.data);
             })
             .catch((error) => {
                 console.log(error);
             });
-    };
+    }, [user]);
 
-    useEffect(() => {
-        getAllUsers();
-    }, []);
+    const userClicked = (userItem: User) => {
+        setSelectedUser(userItem);
+    };
 
     return (
         <>
             <h2>All users</h2>
             <ul>
                 {listOfAllUsers.map((item) => (
-                    <li>{item.username}</li>
+                    <li onClick={() => userClicked(item)}>
+                        <Link to={`/user/${item.id}`}>{item.username}</Link>
+                    </li>
                 ))}
             </ul>
+            {selectedUser && (
+                <>
+                    <h2>Details</h2>
+                    <NewTextInput name="Name" obj={selectedUser} propPath="name" onChange={setSelectedUser} />
+                    <NewTextInput name="User Name" obj={selectedUser} propPath="username" onChange={setSelectedUser} />
+                    <NewTextInput name="E-Mail" obj={selectedUser} propPath="email" onChange={setSelectedUser} />
+                    <NewDropdownInput
+                        items={UserRoles}
+                        iconColor={green}
+                        label="Rolle"
+                        selectedItem={selectedUser}
+                        onChange={setSelectedUser}
+                        propPath="role"
+                    />
+                    <IconButton
+                        icon={saveingError ? 'ban' : 'save'}
+                        name={saveingError ? 'Error while saving' : 'Update User'}
+                        color={white}
+                        onClick={changeUser}
+                        className={saveingError ? LocalStyles.RedFull : LocalStyles.GreenFull}
+                    />
+                    <IconButton
+                        icon="envelope-open"
+                        name="Send user password reset link"
+                        color={white}
+                        onClick={sendResetPasswordLink}
+                        className={LocalStyles.GreenFull}
+                    />
+                </>
+            )}
+        </>
+    );
+};
+
+export const UserCreateNewWindow: FC<{ user: FullUser }> = ({ user }) => {
+    //New User Data
+    const [newUserName, setNewUserName] = useState('');
+    const [newUserMail, setNewUserMail] = useState('');
+    const [newUserPassword, setNewUserPassword] = useState('');
+    const [newUserRole, setNewUserRole] = useState(UserRoles[0]);
+    const [createUserError, setCreateUserError] = useState(false);
+    const [savePWError, SetSavePWError] = useState(false);
+
+    const createUser = () => {
+        const jwtObj = sessionStorage.getItem('auth');
+
+        const newUser = {
+            name: newUserName,
+            email: newUserMail,
+            role: newUserRole,
+            password: newUserPassword,
+            username: newUserName,
+        };
+
+        axios
+            .post(`${baseURL}${userURL}/`, newUser, { headers: { auth: jwtObj } })
+            .then((response) => {
+                console.log('user created');
+                console.log(response);
+            })
+            .catch((error) => {
+                console.log(error);
+                setCreateUserError(true);
+            });
+    };
+
+    return (
+        <>
             <h2>Crate User</h2>
             <TextInput name="Name" value={newUserName} onChange={setNewUserName} />
             <TextInput name="E-Mail" value={newUserMail} onChange={setNewUserMail} />
@@ -168,7 +251,7 @@ export const User = () => {
         }
         const data = jwt.decode(jwtObj);
 
-        console.log(data);
+        // console.log(data);
         if (data != null && typeof data !== 'string') {
             setUser({
                 id: data['userId'],
@@ -179,11 +262,13 @@ export const User = () => {
                 created: 'sice 07.08.1989',
                 role: data['role'],
             });
-            console.log('user set!');
+            // console.log('user set!');
         }
     };
 
-    useEffect(setUserFromStr, []);
+    useEffect(() => {
+        setUserFromStr();
+    }, []);
 
     const logout = () => {
         console.log('logout');
@@ -230,11 +315,11 @@ export const User = () => {
                                                 Change Password
                                             </li>
                                             <li className={LocalStyles.ListHeader}>Admin</li>
-                                            <li
-                                                className={classNames(activeMenu === 3 && LocalStyles.active)}
-                                                onClick={() => setActiveMenu(3)}
-                                            >
-                                                All users
+                                            <li className={classNames(activeMenu === 3 && LocalStyles.active)}>
+                                                <span onClick={() => setActiveMenu(3)}>All users</span>
+                                            </li>
+                                            <li className={classNames(activeMenu === 4 && LocalStyles.active)}>
+                                                <span onClick={() => setActiveMenu(4)}>Create new user</span>
                                             </li>
                                         </ul>
                                         <Button className={LocalStyles.TestButton} onClick={logout}>
@@ -247,6 +332,7 @@ export const User = () => {
                                     {activeMenu === 1 && <UserDataWindow user={user} />}
                                     {activeMenu === 2 && <UserChangePasswordWindow user={user} />}
                                     {activeMenu === 3 && <UserAdminWindow user={user} />}
+                                    {activeMenu === 4 && <UserCreateNewWindow user={user} />}
                                 </div>
                             </>
                         )}

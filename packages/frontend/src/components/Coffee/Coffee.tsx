@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import classNames from 'classnames';
+import jwt from 'jsonwebtoken';
 import React, { Component } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { baseURL, coffeeAttrURL, coffeeURL } from '../../data';
@@ -13,10 +14,11 @@ import { Footer } from '../Footer';
 import { AttrDataType, BrewingEntry, CoffeeEntry, FilterMenuType } from '../FormComponents';
 import { Navigationbar } from '../Navigationbar';
 import { Sidemenu } from '../Sidemenu';
+import { User } from '../User';
+import { useJwt } from '../User/LoginWindwo';
 import { default as chemexSVG, default as CoffeeReplacement } from './../../images/Chemex.svg';
 import GeneralStyles from './../../style/GeneralStyles.module.scss';
 import LocalStyles from './Coffee.module.scss';
-import { useJwt } from '../User/LoginWindwo';
 
 export type CoffeeProps = RouteComponentProps;
 
@@ -36,6 +38,7 @@ export type CoffeeBaseState = {
     editCard?: CoffeeEntry;
     activeFilter?: string;
     brewingCard?: CoffeeEntry;
+    user?: User;
 };
 
 export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
@@ -73,47 +76,55 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
     };
 
     public createCard = () => {
-        const newPost: CoffeeEntry = {
-            id: 0,
-            imageFiles: [],
-            imageStrings: [],
-            name: 'Neue Karte',
-            description: '',
-            origin: this.state.coffeeOrigins[0],
-            rating: 0,
-            kind: this.state.coffeeKinds[0],
-            roasted: this.state.coffeeRoateds[0],
-            bitter: 0,
-            ownDescription: '',
-            sour: 0,
-            taste: 0,
-            tasteKind: 0,
-            woody: 0,
-            buyDate: new Date(),
-            dateAdded: new Date(),
-            process: this.state.coffeeProcesses[0],
-            species: this.state.coffeeSpecies[0],
-        };
+        if (this.state.user) {
+            const newPost: CoffeeEntry = {
+                id: 0,
+                imageFiles: [],
+                imageStrings: [],
+                name: 'Neue Karte',
+                description: '',
+                origin: this.state.coffeeOrigins[0],
+                rating: 0,
+                kind: this.state.coffeeKinds[0],
+                roasted: this.state.coffeeRoateds[0],
+                bitter: 0,
+                ownDescription: '',
+                sour: 0,
+                taste: 0,
+                tasteKind: 0,
+                woody: 0,
+                buyDate: new Date(),
+                dateAdded: new Date(),
+                process: this.state.coffeeProcesses[0],
+                species: this.state.coffeeSpecies[0],
+                owner: this.state.user ? this.state.user : { name: '', id: 0, role: 'guest', username: '' },
+            };
 
-        axios
-            .post(`${baseURL}${coffeeURL}`, { ...newPost })
-            .then((response) => {
-                console.log(response.headers['location']);
-                const location: string = response.headers['location'];
-                const [id] = location.split('/').slice(-1);
-                newPost.id = Number(id);
+            const jwtObj = sessionStorage.getItem('auth');
 
-                console.log('Coffee created');
-                this.setState((state) => ({
-                    posts: [newPost, ...state.posts],
-                }));
+            axios
+                .post(`${baseURL}${coffeeURL}`, { ...newPost }, { headers: { auth: jwtObj } })
+                .then((response) => {
+                    console.log(response.headers['location']);
+                    const location: string = response.headers['location'];
+                    const [id] = location.split('/').slice(-1);
+                    newPost.id = Number(id);
 
-                this.setEditCard(Number(newPost.id));
-            })
-            .catch((error) => {
-                console.log(error);
-                console.log('Cant create coffee');
-            });
+                    console.log('Coffee created');
+                    this.setState((state) => ({
+                        posts: [newPost, ...state.posts],
+                    }));
+
+                    this.setEditCard(Number(newPost.id));
+                })
+                .catch((error) => {
+                    console.log(error);
+                    console.log('Cant create coffee');
+                });
+        } else {
+            console.log('your are not logged in');
+            // console.log(this.state.user);
+        }
     };
 
     public toggleAttrMenu = () => {
@@ -163,6 +174,24 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
             .catch((error) => {
                 console.log(error);
             });
+
+        const jwtObj = sessionStorage.getItem('auth');
+
+        if (jwtObj != null) {
+            const data = jwt.decode(jwtObj);
+
+            if (data != null && typeof data !== 'string') {
+                const actuallUser: User = {
+                    id: data['userId'],
+                    username: data['username'],
+                    name: data['name'],
+                    role: data['role'],
+                };
+                this.setState({ user: actuallUser });
+                // console.log('user logged in');
+                // console.log(actuallUser);
+            }
+        }
     }
 
     public setEditCard = (id: number) => {
@@ -346,7 +375,7 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
         ];
 
         const user = useJwt();
-        
+
         return (
             <>
                 <div className={LocalStyles.BackgroundHelper} />
@@ -366,12 +395,16 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                             />
                             <div className={classNames(`col-12 col-lg-9`, LocalStyles.CoffeeContent)}>
                                 <div className={LocalStyles.CoffeeContentScrollable}>
-                                    <Filter
-                                        addAction={this.createCard}
-                                        dataAction={this.toggleAttrMenu}
-                                        orderAction={() => {}}
-                                        orderItems={filterMenu}
-                                    />
+                                    {user ? (
+                                        <Filter
+                                            addAction={this.createCard}
+                                            dataAction={this.toggleAttrMenu}
+                                            orderAction={() => {}}
+                                            orderItems={filterMenu}
+                                        />
+                                    ) : (
+                                        <Filter orderAction={() => {}} orderItems={filterMenu} />
+                                    )}
 
                                     <div className={GeneralStyles.Introtext}>
                                         <h2>Kaffee - Genuss und Wissenschaft</h2>
@@ -433,14 +466,13 @@ export class CoffeeBase extends Component<CoffeeProps, CoffeeBaseState> {
                                 <div className={LocalStyles.EditCard}>
                                     <CoffeeCardEdit
                                         entry={editCard}
-                                        deleteFunction={this.deletePost}
                                         kinds={coffeeKinds}
                                         roasteds={coffeeRoateds}
                                         origins={coffeeOrigins}
                                         processes={coffeeProcesses}
                                         specieses={coffeeSpecies}
                                         close={this.cardUpdated}
-                                        cardDeleted={() => {}}
+                                        cardDeleted={this.deletePost}
                                     />
                                 </div>
                             </div>

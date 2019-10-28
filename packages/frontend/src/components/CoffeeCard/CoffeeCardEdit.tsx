@@ -18,7 +18,6 @@ type CoffeeCardEditProps = {
     roasteds: AttrDataItemType[];
     processes: AttrDataItemType[];
     specieses: AttrDataItemType[];
-    deleteFunction(id: number): void;
     close(post: CoffeeEntry): void;
     cardDeleted(id: number): void;
 };
@@ -48,6 +47,7 @@ export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
     const [process, setProcess] = useState(props.entry.process);
     const [buyDate, setBuyDate] = useState(props.entry.buyDate);
     const [species, setSpecies] = useState(props.entry.species);
+    const [owner, setOwner] = useState(props.entry.owner);
 
     const { kinds, roasteds, origins, close, processes, specieses } = props;
 
@@ -70,6 +70,7 @@ export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
             dateAdded,
             process,
             species,
+            owner,
         };
 
         props.close(newObject);
@@ -94,6 +95,7 @@ export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
             dateAdded,
             process,
             species,
+            owner,
         };
 
         if (props.entry.id === 0) {
@@ -122,27 +124,6 @@ export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
     };
 
     const deleteCard = () => {
-        props.deleteFunction(props.entry.id);
-        const newObject: CoffeeEntry = {
-            id: id,
-            name: name,
-            description: description,
-            origin: origin,
-            rating: rating,
-            roasted: roasted,
-            kind: kind,
-            taste: taste,
-            tasteKind: tasteKind,
-            woody: woody,
-            bitter: bitter,
-            sour: sour,
-            ownDescription: ownDescription,
-            buyDate: buyDate,
-            dateAdded: dateAdded,
-            process: process,
-            species: species,
-        };
-
         props.cardDeleted(id);
     };
 

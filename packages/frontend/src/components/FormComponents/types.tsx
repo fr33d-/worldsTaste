@@ -1,3 +1,5 @@
+import { User } from "../User";
+
 export type Image = {
     name: string;
     url?: string;
@@ -26,6 +28,7 @@ export type CoffeeEntry = {
     buyDate: Date;
     species: AttrDataItemType; //Arabica, Robusta
     brewings?: BrewingEntry[];
+    owner: User;
 };
 
 export type BrewingEntry = {

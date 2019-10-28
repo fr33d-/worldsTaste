@@ -1,5 +1,6 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { cloneDeep, get, set } from 'lodash';
 import React, { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { blue, grayDarker } from '../../style/colors';
 import { AttrDataItemType } from '../FormComponents';
@@ -15,10 +16,36 @@ export const TextInput = ({ name, onChange, value }: textInputProps) => {
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         onChange(e.target.value);
     };
+
     return (
         <div className={LocalStyles.TextInput}>
             <span className={LocalStyles.Name}>{name}</span>
             <input type="text" placeholder={name} value={value} onChange={handleChange} />
+        </div>
+    );
+};
+
+type newTextInputProps = {
+    name: string;
+    obj: any;
+    propPath: string | string[];
+    onChange: Dispatch<SetStateAction<any>>;
+};
+
+export const NewTextInput = ({ name, onChange, obj, propPath }: newTextInputProps) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        onChange(cloneDeep(set(obj, propPath, e.target.value)));
+    };
+
+    return (
+        <div className={LocalStyles.TextInput}>
+            <span className={LocalStyles.Name}>{name}</span>
+            <input
+                type="text"
+                placeholder={name}
+                value={get(obj, propPath)}
+                onChange={handleChange}
+            />
         </div>
     );
 };
@@ -62,6 +89,65 @@ export const NumberInput = ({ name, onChange, value, unit }: numberInputProps) =
     );
 };
 
+type NewDropdownInputProps = {
+    label: string;
+    icon?: IconProp;
+    iconColor?: string;
+    items: AttrDataItemType[];
+    selectedItem?: AttrDataItemType;
+    onChange: Dispatch<SetStateAction<any>>;
+    propPath: string | string[];
+};
+
+export const NewDropdownInput = ({
+    label,
+    selectedItem,
+    icon,
+    iconColor,
+    onChange,
+    propPath,
+    items,
+}: NewDropdownInputProps) => {
+    // const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    //     const newItem = items.find(({ name }) => name === e.target.value);
+    //     if (newItem !== undefined) {
+    //         onChange(newItem);
+    //     }
+    // };
+    const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
+        if (selectedItem) {
+            onChange(cloneDeep(set(selectedItem, propPath, e.target.value)));
+        }
+    };
+
+    // const items: AttrDataItemType[] = get(obj, propPath);
+
+    return (
+        <div className={LocalStyles.DropdownInput}>
+            <label>{label}</label>
+            <div className={LocalStyles.select}>
+                {icon && <FontAwesomeIcon icon={icon} color={iconColor} className={LocalStyles.Icon} size="sm" />}
+                <select onChange={handleChange}>
+                    {items.map((item, i) => {
+                        if (selectedItem && item.name === selectedItem.name) {
+                            return (
+                                <option key={i} value={item.name} selected>
+                                    {item.name}
+                                </option>
+                            );
+                        } else {
+                            return (
+                                <option key={i} value={item.name}>
+                                    {item.name}
+                                </option>
+                            );
+                        }
+                    })}
+                </select>
+            </div>
+        </div>
+    );
+};
 type DropdownInputProps = {
     label: string;
     icon?: IconProp;
