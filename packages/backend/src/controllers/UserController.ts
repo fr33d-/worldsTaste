@@ -9,7 +9,7 @@ export const listAll: RequestHandler = async (_, res) => {
     //Get users from database
     const userRepository = getRepository(UserEntity);
     const users = await userRepository.find({
-        select: ['id', 'username', 'role'], //We dont want to send the passwords on response
+        select: ['id', 'name', 'email', 'username', 'role'], //We dont want to send the passwords on response
     });
 
     //Send the users object
@@ -35,11 +35,14 @@ export const getOneById: RequestHandler = async (req: Request, res: Response) =>
 
 export const newUser: RequestHandler = async (req: Request, res: Response) => {
 //Get parameters from the body
-    let { username, password, role } = req.body;
+    let { username, password, role, email, name } = req.body;
     let user = new UserEntity();
     user.username = username;
     user.password = password;
     user.role = role;
+    user.createdAt = new Date();
+    user.email = email;
+    user.name = name;
 
     //Validade if the parameters are ok
     const errors = await validate(user);

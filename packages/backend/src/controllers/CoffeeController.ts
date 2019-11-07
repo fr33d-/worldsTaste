@@ -20,7 +20,9 @@ const log = createLogger('api:controllers:coffee');
 export const getAllCoffees: RequestHandler = async (_, result) => {
     log(`GET /coffee`);
 
-    const coffeeEntities = await CoffeeEntity.find({ relations: ['origin', 'kind', 'roasted', 'process', 'species'] });
+    const coffeeEntities = await CoffeeEntity.find({
+        relations: ['origin', 'kind', 'roasted', 'process', 'species', 'owner'],
+    });
 
     //Append images
     const uploadsFolder = path.join(__dirname, '../../uploads/coffee-images');
@@ -48,7 +50,7 @@ export const getCoffeeById: RequestHandler = async (request, result) => {
 
     const coffeeEntity = await CoffeeEntity.findOne({
         where: { id: requestParams.id },
-        relations: ['origin', 'kind', 'roasted', 'process', 'species'],
+        relations: ['origin', 'kind', 'roasted', 'process', 'species', 'owner'],
     });
 
     if (coffeeEntity !== undefined) {
@@ -120,19 +122,6 @@ export const updateCoffeeById: RequestHandler = async (request, result) => {
         result.sendStatus(httpStatusCodes.NOT_FOUND);
     }
 };
-
-// TEST
-
-// export const uploadImage: RequestHandler = async (request, result) => {
-//     log(`UploadImage`);
-//     console.log(request.files);
-
-//     if (request.files !== undefined) {
-//         await (request.files.singleImage as UploadedFile).mv("./foo.png");
-//     }
-
-//     result.sendStatus(200);
-// };
 
 //GET Assets
 

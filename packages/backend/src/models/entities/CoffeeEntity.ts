@@ -7,6 +7,7 @@ import {
     CoffeeSpeciesEntity,
 } from './CoffeeAttrsEntity';
 import { CoffeeBrewingEntity } from './CoffeeBrewingEntity';
+import { UserEntity } from './UserEntity';
 
 export type Image = {
     name: string;
@@ -22,9 +23,6 @@ export class CoffeeEntity extends BaseEntity {
 
     @Column()
     public name!: string;
-
-    // @Column()
-    // public owner!: User;
 
     @Column()
     public description!: string;
@@ -55,6 +53,10 @@ export class CoffeeEntity extends BaseEntity {
 
     @Column()
     public buyDate!: Date;
+
+    @ManyToOne((type) => UserEntity, (user) => user.id)
+    @JoinColumn({ name: 'owner' })
+    public owner!: UserEntity;
 
     @ManyToOne((type) => CoffeeOriginEntity, (coffeeOrigin) => coffeeOrigin.id)
     @JoinColumn({ name: 'origin' })

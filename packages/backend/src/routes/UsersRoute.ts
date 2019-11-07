@@ -22,7 +22,6 @@ const usersRoute = Router();
 
 // von tutorial
 //Get all users
-console.log('failes here');
 usersRoute.get('/', [checkJwt, checkRole(['ADMIN'])], listAll);
 
 // Get one user
