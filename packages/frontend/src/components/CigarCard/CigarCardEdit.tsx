@@ -3,14 +3,14 @@ import axios from 'axios';
 import classNames from 'classnames';
 import React, { ChangeEvent, useState } from 'react';
 import { baseURL, cigarsURL } from '../../data';
-import { brown, grayDarker, greenAccent, yellowAccent } from '../../style/colors';
-import { CigarEntry } from '../Cigars';
+import { brown, grayDarker, greenAccent, yellowAccent } from '../../styles/colors';
 import { AttrDataItemType } from '../FormComponents';
 import { BoolInput, DropdownInput, NumberInput, TextareaInput, TextInput } from '../FormElements';
 import { LikeSliderAttrField, SliderAttrField } from '../FormElements/AttrFields';
 import { AdvancedCancelButton, AdvancedDeleteButton, AdvancedSaveButton } from '../IconButton';
-import GeneralStyles from './../../style/GeneralStyles.module.scss';
+import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import LocalStyles from './CigarCardEdit.module.scss';
+import { CigarEntry } from '../../pages/Cigars';
 
 type CigarCardEditProps = {
     entry: CigarEntry;

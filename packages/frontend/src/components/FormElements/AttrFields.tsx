@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import GeneralStyles from './../../style/GeneralStyles.module.scss';
 import LocalStyles from './AttrFields.module.scss';
-import { red, gray, yellow, grayDark, grayDarker } from '../../style/colors';
+import { red, gray, yellow, grayDark, grayDarker } from '../../styles/colors';
 
 type dateFormatProps = {
     date: Date;

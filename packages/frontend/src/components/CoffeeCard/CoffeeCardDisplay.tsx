@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { default as classnames, default as classNames } from 'classnames';
 import React, { useState } from 'react';
 import { baseURL } from '../../data';
-import { blue, cyan, green, yellow, black, brown } from '../../style/colors';
+import { blue, cyan, green, yellow, black, brown } from '../../styles/colors';
 import { CoffeeEntry, BrewingEntry } from '../FormComponents';
 import {
     AttrField,
@@ -14,7 +14,7 @@ import {
     LikeSliderAttrField,
 } from '../FormElements/AttrFields';
 import coffeePlacement from './../../images/coffeePlacement.svg';
-import GeneralStyles from './../../style/GeneralStyles.module.scss';
+import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import LocalStyles from './CoffeeCard.module.scss';
 import axios from 'axios';
 

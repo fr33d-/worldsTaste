@@ -2,7 +2,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { cloneDeep, get, set } from 'lodash';
 import React, { ChangeEvent, Dispatch, SetStateAction } from 'react';
-import { blue, grayDarker } from '../../style/colors';
+import { blue, grayDarker } from '../../styles/colors';
 import { AttrDataItemType } from '../FormComponents';
 import LocalStyles from './FormElements.module.scss';
 

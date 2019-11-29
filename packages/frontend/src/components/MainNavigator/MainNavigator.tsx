@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import React, { Component } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { MainMenuItem } from '../../data';
-import { UsersRouteParams } from '../../Routes';
 // import arrowBlue from './arrowLeftBlue.svg';
 import { ArrowLeft } from './ArrowLeft';
 import { Shape } from './Shape';
@@ -17,7 +16,7 @@ import tastes from './Tastes.svg';
 
 type MainNavigatorProps = {
     menu: MainMenuItem[];
-} & RouteComponentProps<UsersRouteParams>;
+} & RouteComponentProps;
 
 type MainNavigatorState = {
     activeMenuItem?: MainMenuItem;

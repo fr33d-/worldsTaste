@@ -1,13 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import React, { Component } from 'react';
-import { blue, blueAccent, brown, grayDarker, green, greenAccent, red, yellow, yellowAccent } from '../../style/colors';
-import { CigarEntry } from '../Cigars';
+import { blue, blueAccent, brown, grayDarker, green, greenAccent, red, yellow, yellowAccent } from '../../styles/colors';
 import { AttrField, AttrFieldLikeList, AttrFieldSlider, AttrFieldDescription } from '../FormElements/AttrFields';
 import CigarReplacement from './../../images/Cigar-replacement.svg';
 import LocalStyles from './CigarCard.module.scss';
-import GeneralStyles from './../../style/GeneralStyles.module.scss';
+import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import { baseURL } from '../../data';
+import { CigarEntry } from '../../pages/Cigars';
 
 type CigarCardDisplayProps = {
     entry: CigarEntry;

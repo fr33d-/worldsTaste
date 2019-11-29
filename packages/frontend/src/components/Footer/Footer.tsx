@@ -2,7 +2,7 @@ import { faFacebook, faFlickr, faGithub, faInstagram } from '@fortawesome/free-b
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { Container, Row } from 'react-bootstrap';
-import { grayDark } from '../../style/colors';
+import { grayDark } from '../../styles/colors';
 import LocalStyles from './Footer.module.scss';
 
 type FooterProps = {

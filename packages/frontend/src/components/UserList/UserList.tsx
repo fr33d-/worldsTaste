@@ -3,8 +3,11 @@ import { UserDto } from "backend";
 import * as httpStatusCodes from "http-status-codes";
 import React, { Component } from "react";
 import { RouteComponentProps, withRouter } from "react-router";
-import { UsersRouteParams } from "../../Routes";
 import Styles from "./UserList.module.scss";
+
+export type UsersRouteParams = {
+    id?: string;
+};
 
 // In contrast to the Home component we are using the generic version of the RouteComponentProps and attach our
 // previously defined UsersRouteParams type to it. This allows us to get typed route parameters.

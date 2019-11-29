@@ -1,16 +1,17 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { baseURL, coffeeAttrURL, coffeeURL } from '../../data';
 import Beans from '../../images/beans.svg';
 import Cup from '../../images/cup-bw.svg';
-import { black, blue, blueAccent, green, yellow } from '../../style/colors';
+import { black, blue, blueAccent, green, yellow } from '../../styles/colors';
 import { AttrDataType, BrewingEntry, CoffeeEntry } from '../FormComponents';
 import { BoolInput, DateInput, DropdownInput, NumberInput, TextareaInput } from '../FormElements';
 import { LikeSliderAttrField, SingleSliderAttrField, SliderAttrField } from '../FormElements/AttrFields';
 import { AdvancedSaveButton, DeleteButton } from '../IconButton';
 import LocalStyles from './CoffeeBrewingCard.module.scss';
+import { useParams, useHistory } from 'react-router';
 
 type CoffeeBrewingCardProps = {
     entry: BrewingEntry;
@@ -147,25 +148,45 @@ export const CoffeeBrewingCard = (props: CoffeeBrewingCardProps) => {
 };
 
 type CoffeeBrewingWindowProps = {
-    entry: CoffeeEntry;
     methods: AttrDataType[];
-    close(): void;
+    basePath: string;
 };
 
 // tslint:disable-next-line: max-func-body-length
-export const CoffeeBrewingWindow = (props: CoffeeBrewingWindowProps) => {
-    const { id, name } = props.entry;
-    const { methods } = props;
+export const CoffeeBrewingWindow = ({ methods, basePath }: CoffeeBrewingWindowProps) => {
+    
 
     const [selectedBrewing, setSelectedBrewing] = useState<BrewingEntry | undefined>();
-    const [brewings, setBrewings] = useState(props.entry.brewings);
+    const [coffee, setCoffee] = useState<CoffeeEntry>();
+    
+    //Todo: get id from pageprops and get coffee from api, then set brewings 
+    const {id} = useParams();
+    const history = useHistory();
+
+    useEffect(() => {
+        axios
+            .get(`${baseURL}${coffeeURL}/${id}`)
+            .then((response) => {
+
+                let res = response.data as BrewingEntry[];
+                setCoffee(res);
+            })
+            .catch((error) => {
+                console.log(error);
+                // Todo: Toast
+            });
+    }, [id]);
+
+    const goBack = () => {
+        history.push(`${basePath}`)
+    }
 
     const createBrewing = () => {
         let newBrewing: BrewingEntry = {
             id: 0,
             bitter: 0,
             brewDate: new Date(),
-            method: props.methods[0],
+            method: methods[0],
             ownDescription: '',
             rating: 0,
             sour: 0,
@@ -199,16 +220,16 @@ export const CoffeeBrewingWindow = (props: CoffeeBrewingWindowProps) => {
             });
     };
 
-    return (
+    return (!coffee || !id || typeof id !== 'number') ? <p>Error loading coffee</p> : (
         <div className={LocalStyles.BrewingWindow}>
-            <h6>{name}</h6>
+            <h6>{coffee.name}</h6>
             <div className="container">
                 <div className="row">
                     <div className={classNames(LocalStyles.BrewList, 'col-4')}>
                         <h4>Brewings</h4>
                         <ul>
-                            {brewings && brewings.length > 0 ? (
-                                brewings.map((brewing) => (
+                            {coffee && coffee.brewings.length > 0 ? (
+                                coffee.brewings.map((brewing) => (
                                     <li
                                         className={classNames(
                                             selectedBrewing && brewing.id === selectedBrewing.id && LocalStyles.Active

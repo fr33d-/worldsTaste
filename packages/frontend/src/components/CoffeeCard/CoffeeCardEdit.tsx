@@ -3,12 +3,12 @@ import axios from 'axios';
 import classNames from 'classnames';
 import React, { ChangeEvent, useState } from 'react';
 import { baseURL, coffeeURL } from '../../data';
-import { blue, brown, cyan, grayDarker, green, yellow } from '../../style/colors';
+import { blue, brown, cyan, grayDarker, green, yellow } from '../../styles/colors';
 import { AttrDataItemType, CoffeeEntry } from '../FormComponents';
 import { DropdownInput, TextareaInput, TextInput } from '../FormElements';
 import { LikeSliderAttrField, SingleSliderAttrField, SliderAttrField } from '../FormElements/AttrFields';
 import { AdvancedCancelButton, AdvancedDeleteButton, AdvancedSaveButton } from '../IconButton';
-import GeneralStyles from './../../style/GeneralStyles.module.scss';
+import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import LocalStyles from './CoffeeCardEdit.module.scss';
 
 type CoffeeCardEditProps = {

@@ -2,7 +2,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { FormEvent, Component } from 'react';
 import { Col, FormControlProps } from 'react-bootstrap';
-import { grayDark } from '../../style/colors';
+import { grayDark } from '../../styles/colors';
 import LocalStyles from './IconSelectColumn.module.scss';
 
 type IconSelectComponentProps = {

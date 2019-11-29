@@ -2,8 +2,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { default as classnames, default as classNames } from 'classnames';
 import React, { Component } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { black, grayDark } from '../../style/colors';
-import { useJwt } from '../User/LoginWindwo';
+import { black, grayDark } from '../../styles/colors';
+import { useJwt } from '../../pages/User/LoginWindwo';
 import LocalStyles from './Navigationbar.module.scss';
 
 type NavbarProps = RouteComponentProps & {

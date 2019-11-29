@@ -1,4 +1,4 @@
-import { User } from "../User";
+import { User } from "../../pages/User";
 
 export type Image = {
     name: string;
@@ -27,7 +27,7 @@ export type CoffeeEntry = {
     process: AttrDataItemType;
     buyDate: Date;
     species: AttrDataItemType; //Arabica, Robusta
-    brewings?: BrewingEntry[];
+    brewings: BrewingEntry[];
     owner: User;
 };
 

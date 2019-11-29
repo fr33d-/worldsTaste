@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import './bootstrap.scss';
+import './styles/barel.scss';
 import './index.module.scss';
 
-import { App } from './components/App';
 import * as serviceWorker from './serviceWorker';
+import { App } from './App';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

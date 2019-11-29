@@ -2,7 +2,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import React, { Component } from 'react';
-import { grayDarker, red, white } from '../../style/colors';
+import { grayDarker, red, white } from '../../styles/colors';
 import LocalStyles from './IconButton.module.scss';
 
 type IconButtonProps = Partial<{
