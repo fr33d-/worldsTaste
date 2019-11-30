@@ -44,7 +44,7 @@ export const getAllCoffees: RequestHandler = async (_, result) => {
 type GetUserByIdRequestParams = WithId;
 
 export const getCoffeeById: RequestHandler = async (request, result) => {
-    const requestParams = request.params as GetUserByIdRequestParams;
+    const requestParams = request.params as unknown as GetUserByIdRequestParams;
 
     log(`GET /coffee/:id (id = ${requestParams.id})`);
 
@@ -84,7 +84,7 @@ export const createCoffee: RequestHandler = async (request, result) => {
 type DeleteCoffeeByIdRequestParams = WithId;
 
 export const deleteCoffeeById: RequestHandler = async (request, result) => {
-    const { id } = request.params as DeleteCoffeeByIdRequestParams;
+    const { id } = request.params as unknown as DeleteCoffeeByIdRequestParams;
     log(`DELETE /coffee/:id (id = ${id})`);
     const coffeeEntity = await CoffeeEntity.findOne({ where: { id } });
 
@@ -101,7 +101,7 @@ type UpdateCoffeeByIdRequestParams = WithId;
 type UpdateCoffeeByIdRequestBody = CoffeeDto;
 
 export const updateCoffeeById: RequestHandler = async (request, result) => {
-    const { id } = request.params as UpdateCoffeeByIdRequestParams;
+    const { id } = request.params as unknown as UpdateCoffeeByIdRequestParams;
     log(`PUT /coffee/:id (id = ${id})`);
     const requestBody = request.body as UpdateCoffeeByIdRequestBody;
     const coffeeEntity = await CoffeeEntity.findOne({ where: { id } });
@@ -149,7 +149,7 @@ export const postCoffeesAssets: RequestHandler = async (request, result) => {
         return;
     }
 
-    const { id } = request.params as PostCoffeeRequestParams;
+    const { id } = request.params as unknown as PostCoffeeRequestParams;
     const images = request.files.images as UploadedFile[];
     const imagesArray = Array.isArray(images) ? images : [images];
     const imageStrings = [];
@@ -175,7 +175,7 @@ type DeleteCoffeeImageByIdRequestBody = { url: string };
 export const deleteCoffeeImageByURL: RequestHandler = async (request, result) => {
     log('Delete coffee by url');
 
-    const { id } = request.params as DeleteCoffeeImageByIdRequestParams;
+    const { id } = request.params as unknown as DeleteCoffeeImageByIdRequestParams;
     const { url } = request.body as DeleteCoffeeImageByIdRequestBody;
 
     const fileName = url.split('/').slice(-1)[0];

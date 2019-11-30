@@ -18,7 +18,7 @@ export const listAll: RequestHandler = async (_, res) => {
 
 export const getOneById: RequestHandler = async (req: Request, res: Response) => {
     //Get the ID from the url
-    const id: number = req.params.id;
+    const id: number = Number(req.params.id);
 
     //Get the user from database
     const userRepository = getRepository(UserEntity);
@@ -69,7 +69,7 @@ export const newUser: RequestHandler = async (req: Request, res: Response) => {
 
 export const editUser: RequestHandler = async (req: Request, res: Response) => {
     //Get the ID from the url
-    const id: number = req.params.id;
+    const id: number = Number(req.params.id);
 
     //Get values from the body
     const { username, role } = req.body;

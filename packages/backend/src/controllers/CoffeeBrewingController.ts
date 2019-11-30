@@ -18,7 +18,7 @@ const log = createLogger('api:controllers:coffeeBrewing');
 type GetBrewingByIdRequestParams = WithId;
 
 export const getCoffeeBrewings: RequestHandler = async (request, result) => {
-    const requestParams = request.params as GetBrewingByIdRequestParams;
+    const requestParams = request.params as unknown as GetBrewingByIdRequestParams;
     log(`GET /coffee/:id/brewings/ (id = ${requestParams.id})`);
 
     const coffeeBrewingEntity = await CoffeeBrewingEntity.find({
@@ -52,7 +52,7 @@ type CreateCoffeeBrewingRequestBody = Omit<CoffeeBrewingDto, 'id'>;
 export const createCoffeeBrewing: RequestHandler = async (request, result) => {
     log(`POST /coffee/id/brewing`);
     log(request.body);
-    const { id } = request.params as PostCoffeeBrewingByIdRequestParams;
+    const { id } = request.params as unknown as PostCoffeeBrewingByIdRequestParams;
     const requestBody = request.body as CreateCoffeeBrewingRequestBody;
     let coffeeEntity = await CoffeeEntity.findOne({ where: { id }, relations: ['brewings'] });
 
@@ -88,7 +88,7 @@ type DeleteCoffeeBrewingByIdRequestParams = {
 };
 
 export const deleteCoffeeBrewingById: RequestHandler = async (request, result) => {
-    const { id } = request.params as DeleteCoffeeBrewingByIdRequestParams;
+    const { id } = request.params as unknown as DeleteCoffeeBrewingByIdRequestParams;
     log(`DELETE /coffeeBrewing/:id (id = ${id})`);
     const coffeeBrewingEntity = await CoffeeBrewingEntity.findOne({ where: { id } });
 
@@ -109,7 +109,7 @@ type UpdateCoffeeBrewingByIdRequestParams = {
 type UpdateCoffeeBrewingByIdRequestBody = CoffeeBrewingDto;
 
 export const updateCoffeeBrewingById: RequestHandler = async (request, result) => {
-    const { id, brewId } = request.params as UpdateCoffeeBrewingByIdRequestParams;
+    const { id, brewId } = request.params as unknown as UpdateCoffeeBrewingByIdRequestParams;
     const requestBody = request.body as UpdateCoffeeBrewingByIdRequestBody;
     log(`PUT /coffee/${id}/brewing/:${brewId}`);
 

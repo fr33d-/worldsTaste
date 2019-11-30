@@ -45,7 +45,7 @@ export const getAllCigars: RequestHandler = async (_, result) => {
 type GetUserByIdRequestParams = WithId;
 
 export const getCigarById: RequestHandler = async (request, result) => {
-    const requestParams = request.params as GetUserByIdRequestParams;
+    const requestParams = request.params as unknown as GetUserByIdRequestParams;
 
     log(`GET /cigar/:id (id = ${requestParams.id})`);
 
@@ -87,7 +87,7 @@ export const createCigar: RequestHandler = async (request, result) => {
 type DeleteCigarByIdRequestParams = WithId;
 
 export const deleteCigarById: RequestHandler = async (request, result) => {
-    const { id } = request.params as DeleteCigarByIdRequestParams;
+    const { id } = request.params as unknown as DeleteCigarByIdRequestParams;
     log(`DELETE /cigar/:id (id = ${id})`);
     const cigarEntity = await CigarEntity.findOne({ where: { id } });
 
@@ -104,7 +104,7 @@ type UpdateCigarByIdRequestParams = WithId;
 type UpdateCigarByIdRequestBody = CigarDto;
 
 export const updateCigarById: RequestHandler = async (request, result) => {
-    const { id } = request.params as UpdateCigarByIdRequestParams;
+    const { id } = request.params as unknown as UpdateCigarByIdRequestParams;
     log(`PUT /cigar/:id (id = ${id})`);
     const requestBody = request.body as UpdateCigarByIdRequestBody;
     const cigarEntity = await CigarEntity.findOne({ where: { id } });
@@ -148,7 +148,7 @@ export const postCigarAssets: RequestHandler = async (request, result) => {
         return;
     }
 
-    const { id } = request.params as PostCigarRequestParams;
+    const { id } = request.params as unknown as PostCigarRequestParams;
     const images = request.files.images as UploadedFile[];
     const imagesArray = Array.isArray(images) ? images : [images];
     const imageStrings = [];
@@ -174,7 +174,7 @@ type DeleteCigarImageByIdRequestBody = { url: string };
 export const deleteCigarImageByURL: RequestHandler = async (request, result) => {
     log('Delete coffee by url');
 
-    const { id } = request.params as DeleteCigarImageByIdRequestParams;
+    const { id } = request.params as unknown as DeleteCigarImageByIdRequestParams;
     const { url } = request.body as DeleteCigarImageByIdRequestBody;
 
     const fileName = url.split('/').slice(-1)[0];

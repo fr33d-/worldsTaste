@@ -154,7 +154,7 @@ export const createCoffeeMethod: RequestHandler = async (request, result) => {
 type DeleteCoffeeRoastedsByIdRequestParams = WithId;
 
 export const deleteCoffeeRoastedsById: RequestHandler = async (request, result) => {
-    const { id } = request.params as DeleteCoffeeRoastedsByIdRequestParams;
+    const { id } = request.params as unknown as DeleteCoffeeRoastedsByIdRequestParams;
     log(`DELETE /coffeeAttrs/Roasteds/:id (id = ${id})`);
     const coffeeRoastedEntity = await CoffeeRoastedEntity.findOne({ where: { id } });
 
@@ -170,7 +170,7 @@ export const deleteCoffeeRoastedsById: RequestHandler = async (request, result) 
 type DeleteCoffeeKindsByIdRequestParams = WithId;
 
 export const deleteCoffeeKindsById: RequestHandler = async (request, result) => {
-    const { id } = request.params as DeleteCoffeeKindsByIdRequestParams;
+    const { id } = request.params as unknown as DeleteCoffeeKindsByIdRequestParams;
     log(`DELETE /coffeeAttrs/kinds/:id (id = ${id})`);
     const coffeeKindEntity = await CoffeeKindEntity.findOne({ where: { id } });
 
@@ -186,7 +186,7 @@ export const deleteCoffeeKindsById: RequestHandler = async (request, result) => 
 type DeleteCoffeeOriginsByIdRequestParams = WithId;
 
 export const deleteCoffeeOriginById: RequestHandler = async (request, result) => {
-    const { id } = request.params as DeleteCoffeeOriginsByIdRequestParams;
+    const { id } = request.params as unknown as DeleteCoffeeOriginsByIdRequestParams;
     log(`DELETE /coffeeAttrs/origins/:id (id = ${id})`);
     const coffeeOriginEntity = await CoffeeOriginEntity.findOne({ where: { id } });
 
@@ -201,7 +201,7 @@ export const deleteCoffeeOriginById: RequestHandler = async (request, result) =>
 type DeleteCoffeeSpeciesByIdRequestParams = WithId;
 
 export const deleteCoffeeSpeciesById: RequestHandler = async (request, result) => {
-    const { id } = request.params as DeleteCoffeeSpeciesByIdRequestParams;
+    const { id } = request.params as unknown as DeleteCoffeeSpeciesByIdRequestParams;
     log(`DELETE /coffeeAttrs/species/:id (id = ${id})`);
     const coffeeSpeciesEntity = await CoffeeSpeciesEntity.findOne({ where: { id } });
 
@@ -216,7 +216,7 @@ export const deleteCoffeeSpeciesById: RequestHandler = async (request, result) =
 type DeleteCoffeeProcessByIdRequestParams = WithId;
 
 export const deleteCoffeeProcessById: RequestHandler = async (request, result) => {
-    const { id } = request.params as DeleteCoffeeProcessByIdRequestParams;
+    const { id } = request.params as unknown as DeleteCoffeeProcessByIdRequestParams;
     log(`DELETE /coffeeAttrs/process/:id (id = ${id})`);
     const coffeeProcessEntity = await CoffeeProcessEntity.findOne({ where: { id } });
 
@@ -231,7 +231,7 @@ export const deleteCoffeeProcessById: RequestHandler = async (request, result) =
 type DeleteCoffeeMethodByIdRequestParams = WithId;
 
 export const deleteCoffeeMethodById: RequestHandler = async (request, result) => {
-    const { id } = request.params as DeleteCoffeeMethodByIdRequestParams;
+    const { id } = request.params as unknown as DeleteCoffeeMethodByIdRequestParams;
     log(`DELETE /coffeeAttrs/method/:id (id = ${id})`);
     const coffeeMethodEntity = await CoffeeMethodEntity.findOne({ where: { id } });
 
