@@ -6,10 +6,10 @@ import { baseURL, coffeeAttrURL, coffeeURL } from '../../data';
 import Beans from '../../images/beans.svg';
 import Cup from '../../images/cup-bw.svg';
 import { black, blue, blueAccent, green, yellow } from '../../styles/colors';
-import { AttrDataType, BrewingEntry, CoffeeEntry } from '../FormComponents';
-import { BoolInput, DateInput, DropdownInput, NumberInput, TextareaInput } from '../FormElements';
-import { LikeSliderAttrField, SingleSliderAttrField, SliderAttrField } from '../FormElements/AttrFields';
-import { AdvancedSaveButton, DeleteButton } from '../IconButton';
+import { AttrDataType, BrewingEntry, CoffeeEntry } from '../../components/FormComponents';
+import { BoolInput, DateInput, DropdownInput, NumberInput, TextareaInput } from '../../components/FormElements';
+import { LikeSliderAttrField, SingleSliderAttrField, SliderAttrField } from '../../components/FormElements/AttrFields';
+import { AdvancedSaveButton, DeleteButton } from '../../components/IconButton';
 import LocalStyles from './CoffeeBrewingCard.module.scss';
 import { useParams, useHistory } from 'react-router';
 
@@ -17,30 +17,27 @@ type CoffeeBrewingCardProps = {
     entry: BrewingEntry;
     coffeeId: number;
     methods: AttrDataType[];
+    deleteCoffee(id: number): void;
 };
 
 // tslint:disable-next-line: max-func-body-length
-export const CoffeeBrewingCard = (props: CoffeeBrewingCardProps) => {
-    const [id, setId] = useState(props.entry.id);
-    const [bitter, setBitter] = useState(props.entry.bitter);
-    const [brewDate, setBrewDate] = useState(props.entry.brewDate);
-    const [method, setMethod] = useState(props.entry.method);
-    const [ownDescription, setOwnDescription] = useState(props.entry.ownDescription);
-    const [rating, setRating] = useState(props.entry.rating);
-    const [sour, setSour] = useState(props.entry.sour);
-    const [strength, setStrength] = useState(props.entry.strength);
-    const [taste, setTaste] = useState(props.entry.tasteKind);
-    const [tasteKind, setTasteKind] = useState(props.entry.tasteKind);
-    const [useforcalculation, setUseforcalculation] = useState(props.entry.useforcalculation);
-    const [woody, setWoody] = useState(props.entry.woody);
-    const [waterAmount, setWaterAmount] = useState(props.entry.waterAmount);
-    const [coffeeAmount, setCoffeeAmount] = useState(props.entry.coffeeAmount);
+export const CoffeeBrewingCard = ({entry, coffeeId, deleteCoffee, methods}: CoffeeBrewingCardProps) => {
+    const [id, setId] = useState(entry.id);
+    const [bitter, setBitter] = useState(entry.bitter);
+    const [brewDate, setBrewDate] = useState(entry.brewDate);
+    const [method, setMethod] = useState(entry.method);
+    const [ownDescription, setOwnDescription] = useState(entry.ownDescription);
+    const [rating, setRating] = useState(entry.rating);
+    const [sour, setSour] = useState(entry.sour);
+    const [strength, setStrength] = useState(entry.strength);
+    const [taste, setTaste] = useState(entry.tasteKind);
+    const [tasteKind, setTasteKind] = useState(entry.tasteKind);
+    const [useforcalculation, setUseforcalculation] = useState(entry.useforcalculation);
+    const [woody, setWoody] = useState(entry.woody);
+    const [waterAmount, setWaterAmount] = useState(entry.waterAmount);
+    const [coffeeAmount, setCoffeeAmount] = useState(entry.coffeeAmount);
 
     const [saveError, setSaveError] = useState(false);
-
-    const deleteCard = () => {};
-
-    const cancleEdit = () => {};
 
     const saveBrewing = () => {
         const requestObject: BrewingEntry = {
@@ -63,7 +60,7 @@ export const CoffeeBrewingCard = (props: CoffeeBrewingCardProps) => {
         console.log(requestObject);
 
         axios
-            .put(`${baseURL}${coffeeURL}/${props.coffeeId}/brewings/${props.entry.id}`, { ...requestObject })
+            .put(`${baseURL}${coffeeURL}/${coffeeId}/brewings/${entry.id}`, { ...requestObject })
             .then((response) => {
                 console.log(response);
             })
@@ -82,7 +79,7 @@ export const CoffeeBrewingCard = (props: CoffeeBrewingCardProps) => {
                 </div>
                 <div className="col-12 col-md-6">
                     <DropdownInput
-                        items={props.methods}
+                        items={methods}
                         label="Brühmethode"
                         onChange={setMethod}
                         selectedItem={method}
@@ -139,7 +136,7 @@ export const CoffeeBrewingCard = (props: CoffeeBrewingCardProps) => {
             </div>
             <div className="row">
                 <div className={classNames(LocalStyles.ButtonSection, 'col-12')}>
-                    <DeleteButton onClick={deleteCard} withText />
+                    <DeleteButton onClick={() => console.log('not implemented')} withText />
                     <AdvancedSaveButton save={saveBrewing} error={saveError} changes={true} />
                 </div>
             </div>
@@ -150,77 +147,73 @@ export const CoffeeBrewingCard = (props: CoffeeBrewingCardProps) => {
 type CoffeeBrewingWindowProps = {
     methods: AttrDataType[];
     basePath: string;
+    coffees: CoffeeEntry[];
+    saveCoffee(coffee: CoffeeEntry): void;
+    delteCoffee(id: number): void;
 };
 
 // tslint:disable-next-line: max-func-body-length
-export const CoffeeBrewingWindow = ({ methods, basePath }: CoffeeBrewingWindowProps) => {
-    
-
-    const [selectedBrewing, setSelectedBrewing] = useState<BrewingEntry | undefined>();
-    const [coffee, setCoffee] = useState<CoffeeEntry>();
+export const CoffeeBrewingWindow = ({ methods, basePath, coffees, saveCoffee, delteCoffee }: CoffeeBrewingWindowProps) => {
     
     //Todo: get id from pageprops and get coffee from api, then set brewings 
     const {id} = useParams();
     const history = useHistory();
+    const coffee = coffees.find(elm => elm.id === Number(id));
+    const [selectedBrewing, setSelectedBrewing] = useState<BrewingEntry>();
 
     useEffect(() => {
-        axios
-            .get(`${baseURL}${coffeeURL}/${id}`)
-            .then((response) => {
+        if (coffees.length > 0 ) {
+            setSelectedBrewing(coffee && coffee.brewings[0])
+        }
+    }, [coffees])
 
-                let res = response.data as BrewingEntry[];
-                setCoffee(res);
-            })
-            .catch((error) => {
-                console.log(error);
-                // Todo: Toast
-            });
-    }, [id]);
 
     const goBack = () => {
         history.push(`${basePath}`)
     }
 
     const createBrewing = () => {
-        let newBrewing: BrewingEntry = {
-            id: 0,
-            bitter: 0,
-            brewDate: new Date(),
-            method: methods[0],
-            ownDescription: '',
-            rating: 0,
-            sour: 0,
-            strength: 0,
-            taste: 0,
-            tasteKind: 0,
-            useforcalculation: false,
-            woody: 0,
-            waterAmount: 0,
-            coffeeAmount: 0,
-        };
+        if (coffee) {
 
-        axios
-            .post(`${baseURL}${coffeeURL}/${id}/brewings/`, { ...newBrewing })
-            .then((response) => {
-                console.log(response);
-                const location: string = response.headers['location'];
-                const [newId] = location.split('/').slice(-1);
-                newBrewing.id = Number(newId);
-
-                if (brewings) {
-                    setBrewings([newBrewing, ...brewings]);
-                } else {
-                    setBrewings([newBrewing]);
-                }
-
-                setSelectedBrewing(newBrewing);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+            let newBrewing: BrewingEntry = {
+                id: 0,
+                bitter: 0,
+                brewDate: new Date(),
+                method: methods[0],
+                ownDescription: '',
+                rating: 0,
+                sour: 0,
+                strength: 0,
+                taste: 0,
+                tasteKind: 0,
+                useforcalculation: false,
+                woody: 0,
+                waterAmount: 0,
+                coffeeAmount: 0,
+            };
+    
+            axios
+                .post(`${baseURL}${coffeeURL}/${coffee.id}/brewings/`, { ...newBrewing })
+                .then((response) => {
+                    console.log(response);
+                    const location: string = response.headers['location'];
+                    const [newId] = location.split('/').slice(-1);
+                    newBrewing.id = Number(newId);
+                    
+                    saveCoffee({...coffee, brewings: [newBrewing, ...coffee.brewings]});
+    
+                    setSelectedBrewing(newBrewing);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            }
     };
 
-    return (!coffee || !id || typeof id !== 'number') ? <p>Error loading coffee</p> : (
+
+    if (!coffee) return <p>Error, coffee not found with this id</p>;
+
+    return (
         <div className={LocalStyles.BrewingWindow}>
             <h6>{coffee.name}</h6>
             <div className="container">
@@ -258,7 +251,8 @@ export const CoffeeBrewingWindow = ({ methods, basePath }: CoffeeBrewingWindowPr
                                 entry={selectedBrewing}
                                 key={selectedBrewing.id}
                                 methods={methods}
-                                coffeeId={id}
+                                coffeeId={coffee.id}
+                                deleteCoffee={delteCoffee}
                             />
                         ) : (
                             <div className={LocalStyles.NoContent}>
@@ -270,7 +264,7 @@ export const CoffeeBrewingWindow = ({ methods, basePath }: CoffeeBrewingWindowPr
                 </div>
             </div>
             <div className={LocalStyles.CloseButton}>
-                <button onClick={props.close}>
+                <button onClick={() => goBack()}>
                     <FontAwesomeIcon icon="times-circle" size="lg" />
                 </button>
             </div>

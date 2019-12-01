@@ -4,10 +4,10 @@ import classNames from 'classnames';
 import React, { ChangeEvent, useState } from 'react';
 import { baseURL, coffeeURL } from '../../data';
 import { blue, brown, cyan, grayDarker, green, yellow } from '../../styles/colors';
-import { AttrDataItemType, CoffeeEntry } from '../FormComponents';
-import { DropdownInput, TextareaInput, TextInput } from '../FormElements';
-import { LikeSliderAttrField, SingleSliderAttrField, SliderAttrField } from '../FormElements/AttrFields';
-import { AdvancedCancelButton, AdvancedDeleteButton, AdvancedSaveButton } from '../IconButton';
+import { AttrDataItemType, CoffeeEntry } from '../../components/FormComponents';
+import { DropdownInput, TextareaInput, TextInput } from '../../components/FormElements';
+import { LikeSliderAttrField, SingleSliderAttrField, SliderAttrField } from '../../components/FormElements/AttrFields';
+import { AdvancedCancelButton, AdvancedDeleteButton, AdvancedSaveButton } from '../../components/IconButton';
 import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import LocalStyles from './CoffeeCardEdit.module.scss';
 
@@ -18,89 +18,75 @@ type CoffeeCardEditProps = {
     roasteds: AttrDataItemType[];
     processes: AttrDataItemType[];
     specieses: AttrDataItemType[];
-    close(post: CoffeeEntry): void;
-    cardDeleted(id: number): void;
+    close(): void;
+    deleteCoffee(id: number): void;
+    saveCoffee(coffee: CoffeeEntry): void;
 };
 
 // tslint:disable-next-line: max-func-body-length
-export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
+export const CoffeeCardEdit = ({entry, kinds, roasteds, origins, close, processes, specieses, deleteCoffee, saveCoffee}: CoffeeCardEditProps) => {
     const [saveError, setSaveError] = useState(false);
     const [edited, setEdited] = useState(false);
     const [tab, setTab] = useState(0);
 
-    const [id, setId] = useState(props.entry.id);
-    const [imageFiles, setImageFiles] = useState(props.entry.imageFiles);
-    const [imageStrings, setImageStrings] = useState(props.entry.imageStrings);
-    const [name, setName] = useState(props.entry.name);
-    const [description, setDescription] = useState(props.entry.description);
-    const [origin, setOrigin] = useState(props.entry.origin);
-    const [rating, setRating] = useState(props.entry.rating);
-    const [roasted, setRoasted] = useState(props.entry.roasted);
-    const [kind, setKind] = useState(props.entry.kind);
-    const [taste, setTaste] = useState(props.entry.taste);
-    const [tasteKind, setTasteKind] = useState(props.entry.tasteKind);
-    const [woody, setWoody] = useState(props.entry.woody);
-    const [bitter, setBitter] = useState(props.entry.bitter);
-    const [sour, setSour] = useState(props.entry.sour);
-    const [ownDescription, setOwnDescription] = useState(props.entry.ownDescription);
-    const [dateAdded, setDateAdded] = useState(props.entry.dateAdded);
-    const [process, setProcess] = useState(props.entry.process);
-    const [buyDate, setBuyDate] = useState(props.entry.buyDate);
-    const [species, setSpecies] = useState(props.entry.species);
-    const [owner, setOwner] = useState(props.entry.owner);
+    const [formCoffee, setFormCoffee] = useState<CoffeeEntry>(entry);
 
-    const { kinds, roasteds, origins, close, processes, specieses } = props;
+    // const [id, setId] = useState(props.entry.id);
+    const [imageFiles, setImageFiles] = useState(entry.imageFiles);
+    const [imageStrings, setImageStrings] = useState(entry.imageStrings);
+    // const [name, setName] = useState(props.entry.name);
+    // const [description, setDescription] = useState(props.entry.description);
+    // const [origin, setOrigin] = useState(props.entry.origin);
+    // const [rating, setRating] = useState(props.entry.rating);
+    // const [roasted, setRoasted] = useState(props.entry.roasted);
+    // const [kind, setKind] = useState(props.entry.kind);
+    // const [taste, setTaste] = useState(props.entry.taste);
+    // const [tasteKind, setTasteKind] = useState(props.entry.tasteKind);
+    // const [woody, setWoody] = useState(props.entry.woody);
+    // const [bitter, setBitter] = useState(props.entry.bitter);
+    // const [sour, setSour] = useState(props.entry.sour);
+    // const [ownDescription, setOwnDescription] = useState(props.entry.ownDescription);
+    // const [dateAdded, setDateAdded] = useState(props.entry.dateAdded);
+    // const [process, setProcess] = useState(props.entry.process);
+    // const [buyDate, setBuyDate] = useState(props.entry.buyDate);
+    // const [brewings, setBrewings] = useState(props.entry.brewings);
+    // const [species, setSpecies] = useState(props.entry.species);
+    // const [owner, setOwner] = useState(props.entry.owner);
 
-    const closeCard = () => {
-        const newObject: CoffeeEntry = {
-            id,
-            name,
-            description,
-            origin,
-            rating,
-            roasted,
-            kind,
-            taste,
-            tasteKind,
-            woody,
-            bitter,
-            sour,
-            ownDescription,
-            buyDate,
-            dateAdded,
-            process,
-            species,
-            owner,
-        };
+    // const { kinds, roasteds, origins, close, processes, specieses } = props;
 
-        props.close(newObject);
-    };
+    // const closeCard = () => {
+    //     const newObject: CoffeeEntry = {
+    //         id,
+    //         name,
+    //         description,
+    //         origin,
+    //         rating,
+    //         roasted,
+    //         kind,
+    //         taste,
+    //         tasteKind,
+    //         woody,
+    //         bitter,
+    //         sour,
+    //         ownDescription,
+    //         buyDate,
+    //         dateAdded,
+    //         process,
+    //         species,
+    //         owner,
+    //         brewings,
+    //     };
+
+    //     props.close(newObject);
+    // };
 
     const saveCard = () => {
-        const requestObject: CoffeeEntry = {
-            id,
-            name,
-            description,
-            origin,
-            rating,
-            roasted,
-            kind,
-            taste,
-            tasteKind,
-            woody,
-            bitter,
-            sour,
-            ownDescription,
-            buyDate,
-            dateAdded,
-            process,
-            species,
-            owner,
-        };
-
-        if (props.entry.id === 0) {
+        
+        if (formCoffee.id === 0) {
+            //create new card
             axios
-                .post(`${baseURL}${coffeeURL}`, { ...requestObject })
+                .post(`${baseURL}${coffeeURL}`, { ...formCoffee })
                 .then((response) => {
                     console.log(response);
                     setEdited(false);
@@ -111,8 +97,9 @@ export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
                     setSaveError(true);
                 });
         } else {
+            // save card
             axios
-                .put(`${baseURL}${coffeeURL}/${props.entry.id}`, { ...requestObject })
+                .put(`${baseURL}${coffeeURL}/${formCoffee.id}`, { ...formCoffee })
                 .then((response) => {
                     setEdited(false);
                     setSaveError(false);
@@ -121,10 +108,6 @@ export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
                     console.log(error);
                 });
         }
-    };
-
-    const deleteCard = () => {
-        props.cardDeleted(id);
     };
 
     const deleteImageByURL = (url: string, id: number) => {
@@ -153,7 +136,7 @@ export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
         });
 
         axios
-            .post(`${baseURL}${coffeeURL}/assets/${props.entry.id}`, formData)
+            .post(`${baseURL}${coffeeURL}/assets/${entry.id}`, formData)
             .then((response) => {
                 console.log('... sucessfully');
                 setEdited(false);
@@ -161,7 +144,7 @@ export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
 
                 let newImageString: string = response.headers.location;
                 newImageString = newImageString.split('/').slice(-1)[0];
-                newImageString = `/coffee/assets/${props.entry.id}/${newImageString}`;
+                newImageString = `/coffee/assets/${entry.id}/${newImageString}`;
                 console.log(newImageString);
 
                 if (typeof newImageString === 'string' && imageStrings !== undefined) {
@@ -194,7 +177,6 @@ export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
         handleFileUpload(eventFiles);
     };
 
-    //tslint:disable-next-line: max-func-body-length
     return (
         <>
             <div className={LocalStyles.CoffeeCardEdit}>
@@ -331,7 +313,7 @@ export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
                                 imageStrings.map((url, i) => (
                                     <>
                                         <div className={LocalStyles.Image}>
-                                            <button onClick={() => deleteImageByURL(url, id)}>
+                                            <button onClick={() => deleteImageByURL(url, formCoffee.id)}>
                                                 <FontAwesomeIcon icon="trash" color={grayDarker} />
                                             </button>
                                             <img src={`${baseURL}${url}`} key={i} />
@@ -344,7 +326,6 @@ export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
                                     <FontAwesomeIcon icon="upload" />
                                 </label>
                                 <br />
-                                {/* tslint:disable-next-line: react-a11y-input-elements */}
                                 <input
                                     type="file"
                                     name="pic"
@@ -362,9 +343,9 @@ export const CoffeeCardEdit = (props: CoffeeCardEditProps) => {
                 {tab === 3 && <></>}
 
                 <div className={LocalStyles.ButtonSection}>
-                    <AdvancedDeleteButton changes={edited} onClick={deleteCard} />
-                    <AdvancedCancelButton changes={edited} onClick={closeCard} />
-                    <AdvancedSaveButton save={saveCard} close={closeCard} error={saveError} changes={edited} />
+                    <AdvancedDeleteButton changes={edited} onClick={() => deleteCoffee(formCoffee.id)} />
+                    <AdvancedCancelButton changes={edited} onClick={() => close()} />
+                    <AdvancedSaveButton save={saveCard} close={() => close()} error={saveError} changes={edited} />
                 </div>
             </div>
         </>

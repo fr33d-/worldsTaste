@@ -2,9 +2,9 @@ import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import React, { useEffect, useState, FC } from 'react';
 import { AttrDataWindow } from '../../components/AttrDataWindow';
-import { CoffeeBrewingWindow } from '../../components/CoffeeCard/CoffeeBrewingCard';
-import { CoffeeCardDisplay } from '../../components/CoffeeCard/CoffeeCardDisplay';
-import { CoffeeCardEdit } from '../../components/CoffeeCard/CoffeeCardEdit';
+import { CoffeeBrewingWindow } from '../../windows/CoffeeCard/CoffeeBrewingCard';
+import { CoffeeCardDisplay } from '../../windows/CoffeeCard/CoffeeCardDisplay';
+import { CoffeeCardEdit } from '../../windows/CoffeeCard/CoffeeCardEdit';
 import { AddButton, DataButton, Filter, IntroText } from '../../components/Filter';
 import { AttrDataType, BrewingEntry, CoffeeEntry, FilterMenuType } from '../../components/FormComponents';
 import { Sidemenu } from '../../components/Sidemenu';
@@ -15,7 +15,7 @@ import { useJwt } from '../User/LoginWindwo';
 import { default as chemexSVG, default as CoffeeReplacement } from './../../images/Chemex.svg';
 import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import LocalStyles from './Coffee.module.scss';
-import { Route, useLocation, RouteComponentProps, withRouter } from 'react-router';
+import { Route, useLocation, RouteComponentProps, withRouter, useParams } from 'react-router';
 import OverlayFrame from '../../windows/OverlayFrame/OverlayFrame';
 
 const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
@@ -36,6 +36,8 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
     const [brewingCard, setBrewingCard] = useState<CoffeeEntry>();
     const [user, setUser] = useState<User>();
 
+    const jwtObj = sessionStorage.getItem('auth');
+
     // const location = useLocation();
     // console.log('location in coffeeBase', location);
     // console.log('match in coffeeBase', match);
@@ -47,7 +49,25 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
         initiateData();
     }, []);
 
-    const deletePost = (id: number) => {
+    //Todo: eigentlich müsste diese funkton asyncron sein und dann via then später das fenster schließen 
+    const saveCoffee = (coffee: CoffeeEntry) => {
+        axios
+            .put(`${baseURL}${coffeeURL}`, { ...coffee }, { headers: { auth: jwtObj } })
+            .then((response) => {
+                console.log(response.headers['location']);
+                const location: string = response.headers['location'];
+                const [id] = location.split('/').slice(-1);
+
+                setPosts((posts) => (!posts ? posts : [{ ...coffee, id: Number(id) }, ...posts]));
+                return true;
+            })
+            .catch((error) => {
+                console.log(error);
+                console.log('Cant create coffee');
+            });
+    }
+
+    const deleteCoffee = (id: number) => {
         axios
             .delete(`http://localhost:4000/coffee/${id}`)
             .then((response) => {
@@ -65,7 +85,7 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
             });
     };
 
-    const createCard = () => {
+    const createCoffee = () => {
         if (user && coffeeOrigins && coffeeKinds && coffeeRoateds && coffeeProcesses && coffeeSpecies) {
             const newPost: CoffeeEntry = {
                 id: 0,
@@ -118,9 +138,6 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
     };
 
     const toggleAttrMenu = () => {
-        // if (displayAttrMenu) {
-        //     initiateData();
-        // }
         setDisplayAttrMenu((old) => !old);
     };
 
@@ -346,8 +363,8 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
                 }
             >
                 <div className={GeneralStyles.FilterRow}>
-                    <Filter orderAction={() => {}} orderItems={filterMenu} />
-                    {user && <AddButton onClick={createCard} />}
+                    <Filter orderAction={() => { }} orderItems={filterMenu} />
+                    {user && <AddButton onClick={createCoffee} />}
                     {user && <DataButton onClick={toggleAttrMenu} />}
                 </div>
 
@@ -366,22 +383,23 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
                             <p>No coffees to display</p>
                         </div>
                     ) : (
-                        filteredPosts.map((post) => (
-                            <CoffeeCardDisplay
-                                entry={post}
-                                deleteFunction={deletePost}
-                                editFunction={loadEditCard}
-                                openBrewings={openBrewingWindow}
-                            />
-                        ))
-                    )}
+                            filteredPosts.map((post) => (
+                                <CoffeeCardDisplay
+                                    entry={post}
+                                    deleteFunction={deleteCoffee}
+                                    editFunction={loadEditCard}
+                                    openBrewings={openBrewingWindow}
+                                />
+                            ))
+                        )}
                 </div>
             </AppWindow>
             <Route path={`${basePath}/:id`}>
-            <OverlayFrame>
-                    <CoffeeBrewingWindow methods={coffeeBrewMethod} />
+                <OverlayFrame>
+                    <CoffeeBrewingWindow methods={coffeeBrewMethod} basePath={basePath} coffees={posts} saveCoffee={saveCoffee} delteCoffee={deleteCoffee} />
                 </OverlayFrame>
             </Route>
+
             <Route path={`${basePath}/attrDataWindow`}>
                 <AttrDataWindow content={attrData} toggleFunktion={toggleAttrMenu} />
             </Route>
@@ -396,7 +414,7 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
                         processes={coffeeProcesses}
                         specieses={coffeeSpecies}
                         close={cardUpdated}
-                        cardDeleted={deletePost}
+                        cardDeleted={deleteCoffee}
                     />
                 </OverlayFrame>
             )}

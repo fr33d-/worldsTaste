@@ -3,7 +3,7 @@ import { default as classnames, default as classNames } from 'classnames';
 import React, { useState } from 'react';
 import { baseURL } from '../../data';
 import { blue, cyan, green, yellow, black, brown } from '../../styles/colors';
-import { CoffeeEntry, BrewingEntry } from '../FormComponents';
+import { CoffeeEntry, BrewingEntry } from '../../components/FormComponents';
 import {
     AttrField,
     AttrFieldDescription,
@@ -12,7 +12,7 @@ import {
     AttrFieldSliderSingle,
     DateFormat,
     LikeSliderAttrField,
-} from '../FormElements/AttrFields';
+} from '../../components/FormElements/AttrFields';
 import coffeePlacement from './../../images/coffeePlacement.svg';
 import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import LocalStyles from './CoffeeCard.module.scss';

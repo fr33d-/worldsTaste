@@ -251,7 +251,7 @@ export const User = () => {
         }
         const data = jwt.decode(jwtObj);
 
-        // console.log(data);
+        console.log(data);
         if (data != null && typeof data !== 'string') {
             setUser({
                 id: data['userId'],
