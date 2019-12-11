@@ -8,33 +8,105 @@ import LocalStyles from './FormElements.module.scss';
 
 type textInputProps = {
     name: string;
-    value: string;
-    onChange: Dispatch<SetStateAction<string>>;
+    obj: any;
+    propPath: string | Array<string>;
+    setStateHandler: Dispatch<SetStateAction<any>>;
 };
 
-export const TextInput = ({ name, onChange, value }: textInputProps) => {
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        onChange(e.target.value);
-    };
-
+export const TextInput = ({ name, obj, propPath, setStateHandler }: textInputProps) => {
     return (
         <div className={LocalStyles.TextInput}>
             <span className={LocalStyles.Name}>{name}</span>
-            <input type="text" placeholder={name} value={value} onChange={handleChange} />
+            <input
+                type="text"
+                placeholder={name}
+                value={get(obj, propPath)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setStateHandler(cloneDeep(set(obj, propPath, e.target.value)))
+                }
+            />
         </div>
     );
 };
 
-type newTextInputProps = {
+type SimpleInputProps = {
     name: string;
-    obj: any;
-    propPath: string | string[];
-    onChange: Dispatch<SetStateAction<any>>;
+    value: string;
+    onChange: Dispatch<SetStateAction<string>>;
 };
 
-export const NewTextInput = ({ name, onChange, obj, propPath }: newTextInputProps) => {
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        onChange(cloneDeep(set(obj, propPath, e.target.value)));
+export const SimpleTextInput = ({ name, onChange, value }: SimpleInputProps) => {
+    return (
+        <div className={LocalStyles.TextInput}>
+            <span className={LocalStyles.Name}>{name}</span>
+            <input
+                type="text"
+                placeholder={name}
+                value={value}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
+            />
+        </div>
+    );
+};
+
+// type newTextInputProps = {
+//     name: string;
+//     obj: any;
+//     propPath: string | string[];
+//     onChange: Dispatch<SetStateAction<any>>;
+// };
+
+// export const NewTextInput = ({ name, onChange, obj, propPath }: newTextInputProps) => {
+//     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+//         onChange(cloneDeep(set(obj, propPath, e.target.value)));
+//     };
+
+//     return (
+//         <div className={LocalStyles.TextInput}>
+//             <span className={LocalStyles.Name}>{name}</span>
+//             <input type="text" placeholder={name} value={get(obj, propPath)} onChange={handleChange} />
+//         </div>
+//     );
+// };
+
+export const PasswordInput = ({ name, obj, propPath, setStateHandler }: textInputProps) => (
+    <div className={LocalStyles.TextInput}>
+        <span className={LocalStyles.Name}>{name}</span>
+        <input
+            type="password"
+            placeholder={name}
+            value={get(obj, propPath)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setStateHandler(cloneDeep(set(obj, propPath, e.target.value)))
+            }
+        />
+    </div>
+);
+
+export const SimplePasswordInput = ({ name, onChange, value }: SimpleInputProps) => (
+    <div className={LocalStyles.TextInput}>
+        <span className={LocalStyles.Name}>{name}</span>
+        <input
+            type="password"
+            placeholder={name}
+            value={value}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
+        />
+    </div>
+);
+
+type numberInputProps = {
+    name: string;
+    unit: string;
+    obj: any;
+    propPath: string | Array<string>;
+    setStateHandler: Dispatch<SetStateAction<any>>;
+};
+
+export const NumberInput = ({ name, unit, obj, propPath, setStateHandler }: numberInputProps) => {
+    const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+        // Todo: if e is number oder sonderzeichen
+        setStateHandler(cloneDeep(set(obj, propPath, e.target.value)));
     };
 
     return (
@@ -44,44 +116,7 @@ export const NewTextInput = ({ name, onChange, obj, propPath }: newTextInputProp
                 type="text"
                 placeholder={name}
                 value={get(obj, propPath)}
-                onChange={handleChange}
-            />
-        </div>
-    );
-};
-
-export const PasswordInput = ({ name, onChange, value }: textInputProps) => {
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        onChange(e.target.value);
-    };
-    return (
-        <div className={LocalStyles.TextInput}>
-            <span className={LocalStyles.Name}>{name}</span>
-            <input type="password" placeholder={name} value={value} onChange={handleChange} />
-        </div>
-    );
-};
-
-type numberInputProps = {
-    name: string;
-    value: number;
-    unit: string;
-    onChange: Dispatch<SetStateAction<number>>;
-};
-
-export const NumberInput = ({ name, onChange, value, unit }: numberInputProps) => {
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        onChange(Number(e.target.value));
-    };
-
-    return (
-        <div className={LocalStyles.TextInput}>
-            <span className={LocalStyles.Name}>{name}</span>
-            <input
-                type="text"
-                placeholder={name}
-                value={value}
-                onChange={handleChange}
+                onChange={onChange}
                 className={LocalStyles.NumberInput}
             />
             <span className={LocalStyles.Unit}>{unit}</span>
@@ -89,7 +124,7 @@ export const NumberInput = ({ name, onChange, value, unit }: numberInputProps) =
     );
 };
 
-type NewDropdownInputProps = {
+type DropdownInputProps = {
     label: string;
     icon?: IconProp;
     iconColor?: string;
@@ -99,7 +134,7 @@ type NewDropdownInputProps = {
     propPath: string | string[];
 };
 
-export const NewDropdownInput = ({
+export const DropdownInput = ({
     label,
     selectedItem,
     icon,
@@ -107,20 +142,12 @@ export const NewDropdownInput = ({
     onChange,
     propPath,
     items,
-}: NewDropdownInputProps) => {
-    // const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    //     const newItem = items.find(({ name }) => name === e.target.value);
-    //     if (newItem !== undefined) {
-    //         onChange(newItem);
-    //     }
-    // };
+}: DropdownInputProps) => {
     const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
         if (selectedItem) {
             onChange(cloneDeep(set(selectedItem, propPath, e.target.value)));
         }
     };
-
-    // const items: AttrDataItemType[] = get(obj, propPath);
 
     return (
         <div className={LocalStyles.DropdownInput}>
@@ -148,66 +175,70 @@ export const NewDropdownInput = ({
         </div>
     );
 };
-type DropdownInputProps = {
-    label: string;
-    icon?: IconProp;
-    iconColor?: string;
-    items: AttrDataItemType[];
-    selectedItem: AttrDataItemType;
-    onChange: Dispatch<SetStateAction<AttrDataItemType>>;
-};
+// type DropdownInputProps = {
+//     label: string;
+//     icon?: IconProp;
+//     iconColor?: string;
+//     items: AttrDataItemType[];
+//     selectedItem: AttrDataItemType;
+//     onChange: Dispatch<SetStateAction<AttrDataItemType>>;
+// };
 
-export const DropdownInput = ({ items, label, selectedItem, icon, iconColor, onChange }: DropdownInputProps) => {
-    const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-        const newItem = items.find(({ name }) => name === e.target.value);
-        if (newItem !== undefined) {
-            onChange(newItem);
-        }
-    };
+// export const DropdownInput = ({ items, label, selectedItem, icon, iconColor, onChange }: DropdownInputProps) => {
+//     const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
+//         const newItem = items.find(({ name }) => name === e.target.value);
+//         if (newItem !== undefined) {
+//             onChange(newItem);
+//         }
+//     };
 
-    return (
-        <div className={LocalStyles.DropdownInput}>
-            <label>{label}</label>
-            <div className={LocalStyles.select}>
-                {icon && <FontAwesomeIcon icon={icon} color={iconColor} className={LocalStyles.Icon} size="sm" />}
-                <select onChange={handleChange}>
-                    {items.map((item, i) => {
-                        if (item.name === selectedItem.name) {
-                            return (
-                                <option key={i} value={item.name} selected>
-                                    {item.name}
-                                </option>
-                            );
-                        } else {
-                            return (
-                                <option key={i} value={item.name}>
-                                    {item.name}
-                                </option>
-                            );
-                        }
-                    })}
-                </select>
-            </div>
-        </div>
-    );
-};
+//     return (
+//         <div className={LocalStyles.DropdownInput}>
+//             <label>{label}</label>
+//             <div className={LocalStyles.select}>
+//                 {icon && <FontAwesomeIcon icon={icon} color={iconColor} className={LocalStyles.Icon} size="sm" />}
+//                 <select onChange={handleChange}>
+//                     {items.map((item, i) => {
+//                         if (item.name === selectedItem.name) {
+//                             return (
+//                                 <option key={i} value={item.name} selected>
+//                                     {item.name}
+//                                 </option>
+//                             );
+//                         } else {
+//                             return (
+//                                 <option key={i} value={item.name}>
+//                                     {item.name}
+//                                 </option>
+//                             );
+//                         }
+//                     })}
+//                 </select>
+//             </div>
+//         </div>
+//     );
+// };
 
 type TextareaProps = {
     label: string;
-    value: string;
-    onChange: Dispatch<SetStateAction<string>>;
+    obj: any;
+    propPath: string | Array<string>;
+    setStateHandler: Dispatch<SetStateAction<any>>;
 };
 
-export const TextareaInput = ({ label, value, onChange }: TextareaProps) => {
-    const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        onChange(e.target.value);
-    };
-
+export const TextareaInput = ({ label, obj, propPath, setStateHandler }: TextareaProps) => {
     return (
         <>
             <div className={LocalStyles.TextareaInput}>
                 <FontAwesomeIcon icon="bars" size="lg" color={grayDarker} />
-                <textarea placeholder={label} value={value} onChange={handleChange} className="formElement" />
+                <textarea
+                    placeholder={label}
+                    value={get(obj, propPath)}
+                    onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+                        setStateHandler(cloneDeep(set(obj, propPath, e.target.value)))
+                    }
+                    className="formElement"
+                />
             </div>
         </>
     );
@@ -215,15 +246,14 @@ export const TextareaInput = ({ label, value, onChange }: TextareaProps) => {
 
 type DateInputProps = {
     label: string;
-    value: Date;
-    onChange: Dispatch<React.SetStateAction<Date>>;
+    // value: Date;
+    // onChange: Dispatch<React.SetStateAction<Date>>;
+    obj: any;
+    propPath: string | Array<string>;
+    setStateHandler: Dispatch<SetStateAction<any>>;
 };
 
-export const DateInput = ({ label, value, onChange }: DateInputProps) => {
-    // const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    //     onChange(e.target.value);
-    // };
-
+export const DateInput = ({ label, obj, propPath, setStateHandler }: DateInputProps) => {
     return (
         <div className={LocalStyles.DateInput}>
             <label>{label}</label>
@@ -232,7 +262,12 @@ export const DateInput = ({ label, value, onChange }: DateInputProps) => {
                 <input
                     type="text"
                     placeholder={label}
-                    value={`${value.getDate()}.${value.getMonth()}.${value.getFullYear()} - ${value.getUTCHours()}:${value.getUTCMinutes()} Uhr`}
+                    // value={`${value.getDate()}.${value.getMonth()}.${value.getFullYear()} - ${value.getUTCHours()}:${value.getUTCMinutes()} Uhr`}
+
+                    value={get(obj, propPath)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        setStateHandler(cloneDeep(set(obj, propPath, e.target.value)))
+                    }
                 />
             </div>
         </div>
@@ -241,23 +276,27 @@ export const DateInput = ({ label, value, onChange }: DateInputProps) => {
 
 type BoolInputProps = {
     label: string;
-    value: boolean;
-    onChange: Dispatch<SetStateAction<boolean>>;
+    // value: boolean;
+    // onChange: Dispatch<SetStateAction<boolean>>;
+    obj: any;
+    propPath: string | Array<string>;
+    setStateHandler: Dispatch<SetStateAction<any>>;
 };
 
-export const BoolInput = ({ label, value, onChange }: BoolInputProps) => {
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        onChange(e.target.checked);
-    };
-
-    return (
-        <>
-            <label>Boolean</label>
-            <div className={LocalStyles.BoolInput}>
-                <label>{label}</label>
-                {value && <input type="checkbox" name={label} value={label} checked onChange={handleChange} />}
-                {!value && <input type="checkbox" name={label} value={label} onChange={handleChange} />}
-            </div>
-        </>
-    );
-};
+export const BoolInput = ({ label, obj, propPath, setStateHandler }: BoolInputProps) => (
+    <>
+        <label>Boolean</label>
+        <div className={LocalStyles.BoolInput}>
+            <label>{label}</label>
+            <input
+                type="checkbox"
+                name={label}
+                value={label}
+                checked={get(obj, propPath)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setStateHandler(cloneDeep(set(obj, propPath, e.target.value)))
+                }
+            />
+        </div>
+    </>
+);

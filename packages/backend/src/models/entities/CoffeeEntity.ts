@@ -64,11 +64,11 @@ export class CoffeeEntity extends BaseEntity {
 
     @ManyToOne((type) => CoffeeKindEntity, (coffeeKind) => coffeeKind.id)
     @JoinColumn({ name: 'kind' })
-    public kind!: CoffeeOriginEntity;
+    public kind!: CoffeeOriginEntity; // Todo: Coffe Kind Entry? 
 
     @ManyToOne((type) => CoffeeRoastedEntity, (coffeeRoasted) => coffeeRoasted.id)
     @JoinColumn({ name: 'roasted' })
-    public roasted!: CoffeeOriginEntity;
+    public roasted!: CoffeeOriginEntity; // Todo: Coffe Roasted Entry? Also die Rösterei oder? 
 
     @ManyToOne((type) => CoffeeProcessEntity, (coffeeProcess) => coffeeProcess.id)
     @JoinColumn({ name: 'process' })

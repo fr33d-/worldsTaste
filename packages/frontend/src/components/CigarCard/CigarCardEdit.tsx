@@ -3,14 +3,14 @@ import axios from 'axios';
 import classNames from 'classnames';
 import React, { ChangeEvent, useState } from 'react';
 import { baseURL, cigarsURL } from '../../data';
+import { CigarEntry } from '../../pages/Cigars';
 import { brown, grayDarker, greenAccent, yellowAccent } from '../../styles/colors';
 import { AttrDataItemType } from '../FormComponents';
 import { BoolInput, DropdownInput, NumberInput, TextareaInput, TextInput } from '../FormElements';
-import { LikeSliderAttrField, SliderAttrField } from '../FormElements/AttrFields';
+import { ObjLikeSliderAttrField, ObjSliderAttrField } from '../FormElements/AttrFields';
 import { AdvancedCancelButton, AdvancedDeleteButton, AdvancedSaveButton } from '../IconButton';
 import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import LocalStyles from './CigarCardEdit.module.scss';
-import { CigarEntry } from '../../pages/Cigars';
 
 type CigarCardEditProps = {
     entry: CigarEntry;
@@ -21,79 +21,93 @@ type CigarCardEditProps = {
     cigarDeckblatt: AttrDataItemType[];
     cigarAnschnitt: AttrDataItemType[];
     cigarAromarad: AttrDataItemType[];
-    deleteFunction(id: number): void;
+    deleteCigar(id: number): void;
     close(): void;
 };
 
 //tslint:disable-next-line: max-func-body-length
-export const CigarCardEdit = (props: CigarCardEditProps) => {
+export const CigarCardEdit = ({
+    cigarAnschnitt,
+    cigarAromarad,
+    cigarDeckblatt,
+    cigarEinlage,
+    cigarUmblatt,
+    cigarsOrigin,
+    cigarsProducer,
+    close,
+    deleteCigar,
+    entry,
+}: CigarCardEditProps) => {
+    const [formCigar, setFormCigar] = useState<CigarEntry>(entry);
+
     const [saveError, setSaveError] = useState(false);
     const [edited, setEdited] = useState(false);
-    const [id, setId] = useState(props.entry.id);
-    const [imageStrings, setImageStrings] = useState(props.entry.imageStrings);
-    const [imageFiles, setImageFiles] = useState(props.entry.imageFiles);
-    const [name, setName] = useState(props.entry.name);
-    const [description, setDescription] = useState(props.entry.description);
-    const [origin, setOrigin] = useState(props.entry.origin);
-    const [rating, setRating] = useState(props.entry.rating);
-    const [abbrand, setAbbrand] = useState(props.entry.abbrand);
-    const [anschnitt, setAnschnitt] = useState(props.entry.anschnitt);
-    const [aromarad, setAromarad] = useState(props.entry.aromarad);
-    const [aromaentwicklung, setAromaentwicklung] = useState(props.entry.aromaentwicklung);
-    const [aromavielfalt, setAromavielfalt] = useState(props.entry.aromavielfalt);
-    const [buydate, setBuydate] = useState(props.entry.buydate);
-    const [deckblatt, setDeckblatt] = useState(props.entry.deckblatt);
-    const [einlage, setEinlage] = useState(props.entry.einlage);
-    const [lenght, setLenght] = useState(props.entry.lenght);
-    const [producer, setProducer] = useState(props.entry.producer);
-    const [ringmas, setRingmas] = useState(props.entry.ringmas);
-    const [smokedate, setSmokedate] = useState(props.entry.smokedate);
-    const [smokeduration, setSmokeduration] = useState(props.entry.smokeduration);
-    const [strength, setStrength] = useState(props.entry.strength);
-    const [umblatt, setUmblatt] = useState(props.entry.umblatt);
-    const [zugwiederstand, setZugwiederstand] = useState(props.entry.zugwiederstand);
-    const [smokeagain, setSmokeagain] = useState(props.entry.smokeagain);
     const [tab, setTab] = useState(0);
 
-    const {
-        close,
-        cigarAnschnitt,
-        cigarAromarad,
-        cigarDeckblatt,
-        cigarEinlage,
-        cigarUmblatt,
-        cigarsOrigin,
-        cigarsProducer,
-    } = props;
+    // const [id, setId] = useState(props.entry.id);
+    // const [imageStrings, setImageStrings] = useState(props.entry.imageStrings);
+    // const [imageFiles, setImageFiles] = useState(props.entry.imageFiles);
+    // const [name, setName] = useState(props.entry.name);
+    // const [description, setDescription] = useState(props.entry.description);
+    // const [origin, setOrigin] = useState(props.entry.origin);
+    // const [rating, setRating] = useState(props.entry.rating);
+    // const [abbrand, setAbbrand] = useState(props.entry.abbrand);
+    // const [anschnitt, setAnschnitt] = useState(props.entry.anschnitt);
+    // const [aromarad, setAromarad] = useState(props.entry.aromarad);
+    // const [aromaentwicklung, setAromaentwicklung] = useState(props.entry.aromaentwicklung);
+    // const [aromavielfalt, setAromavielfalt] = useState(props.entry.aromavielfalt);
+    // const [buydate, setBuydate] = useState(props.entry.buydate);
+    // const [deckblatt, setDeckblatt] = useState(props.entry.deckblatt);
+    // const [einlage, setEinlage] = useState(props.entry.einlage);
+    // const [lenght, setLenght] = useState(props.entry.lenght);
+    // const [producer, setProducer] = useState(props.entry.producer);
+    // const [ringmas, setRingmas] = useState(props.entry.ringmas);
+    // const [smokedate, setSmokedate] = useState(props.entry.smokedate);
+    // const [smokeduration, setSmokeduration] = useState(props.entry.smokeduration);
+    // const [strength, setStrength] = useState(props.entry.strength);
+    // const [umblatt, setUmblatt] = useState(props.entry.umblatt);
+    // const [zugwiederstand, setZugwiederstand] = useState(props.entry.zugwiederstand);
+    // const [smokeagain, setSmokeagain] = useState(props.entry.smokeagain);
+
+    // const {
+    //     close,
+    //     cigarAnschnitt,
+    //     cigarAromarad,
+    //     cigarDeckblatt,
+    //     cigarEinlage,
+    //     cigarUmblatt,
+    //     cigarsOrigin,
+    //     cigarsProducer,
+    // } = props;
 
     const saveCard = () => {
-        const requestObject: CigarEntry = {
-            id: id,
-            name: name,
-            description: description,
-            origin: origin,
-            rating: rating,
-            abbrand: abbrand,
-            anschnitt: anschnitt,
-            aromaentwicklung: aromaentwicklung,
-            aromarad: aromarad,
-            aromavielfalt: aromavielfalt,
-            buydate: buydate,
-            deckblatt: deckblatt,
-            einlage: einlage,
-            lenght: lenght,
-            producer: producer,
-            ringmas: ringmas,
-            smokeagain: smokeagain,
-            smokedate: smokedate,
-            smokeduration: smokeduration,
-            strength: strength,
-            umblatt: umblatt,
-            zugwiederstand: zugwiederstand,
-        };
+        // const requestObject: CigarEntry = {
+        //     id: id,
+        //     name: name,
+        //     description: description,
+        //     origin: origin,
+        //     rating: rating,
+        //     abbrand: abbrand,
+        //     anschnitt: anschnitt,
+        //     aromaentwicklung: aromaentwicklung,
+        //     aromarad: aromarad,
+        //     aromavielfalt: aromavielfalt,
+        //     buydate: buydate,
+        //     deckblatt: deckblatt,
+        //     einlage: einlage,
+        //     lenght: lenght,
+        //     producer: producer,
+        //     ringmas: ringmas,
+        //     smokeagain: smokeagain,
+        //     smokedate: smokedate,
+        //     smokeduration: smokeduration,
+        //     strength: strength,
+        //     umblatt: umblatt,
+        //     zugwiederstand: zugwiederstand,
+        // };
 
         axios
-            .put(`${baseURL}${cigarsURL}/${props.entry.id}`, { ...requestObject })
+            .put(`${baseURL}${cigarsURL}/${entry.id}`, { ...formCigar })
             .then((response) => {
                 setEdited(false);
                 setSaveError(false);
@@ -103,9 +117,9 @@ export const CigarCardEdit = (props: CigarCardEditProps) => {
             });
     };
 
-    const deleteCard = () => {
-        props.deleteFunction(id);
-    };
+    // const deleteCard = () => {
+    //     props.deleteFunction(id);
+    // };
 
     const deleteImageByURL = (url: string, id: number) => {
         axios
@@ -114,8 +128,12 @@ export const CigarCardEdit = (props: CigarCardEditProps) => {
                 console.log('... sucessfully');
                 setSaveError(false);
 
-                if (imageStrings !== undefined && imageStrings.length > 0) {
-                    setImageStrings(imageStrings.filter((image) => image !== url));
+                if (formCigar.imageStrings !== undefined && formCigar.imageStrings.length > 0) {
+                    // setImageStrings(imageStrings.filter((image) => image !== url));
+                    setFormCigar({
+                        ...formCigar,
+                        imageStrings: formCigar.imageStrings.filter((image) => image !== url),
+                    });
                 }
             })
             .catch((error) => {
@@ -139,7 +157,7 @@ export const CigarCardEdit = (props: CigarCardEditProps) => {
         });
 
         axios
-            .post(`${baseURL}${cigarsURL}/assets/${props.entry.id}`, formData)
+            .post(`${baseURL}${cigarsURL}/assets/${entry.id}`, formData)
             .then((response) => {
                 console.log('... sucessfully');
                 setEdited(false);
@@ -147,13 +165,14 @@ export const CigarCardEdit = (props: CigarCardEditProps) => {
 
                 let newImageString: string = response.headers.location;
                 newImageString = newImageString.split('/').slice(-1)[0];
-                newImageString = `/coffee/assets/${props.entry.id}/${newImageString}`;
+                newImageString = `/cigars/assets/${entry.id}/${newImageString}`;
                 console.log(newImageString);
 
-                if (typeof newImageString === 'string' && imageStrings !== undefined) {
-                    imageStrings.push(newImageString);
-                    setImageStrings(imageStrings);
-                    console.log(imageStrings);
+                if (typeof newImageString === 'string' && formCigar.imageStrings !== undefined) {
+                    // imageStrings.push(newImageString);
+                    // setImageStrings(imageStrings);
+                    setFormCigar({ ...formCigar, imageStrings: [...formCigar.imageStrings, newImageString] });
+                    console.log(newImageString);
                 }
             })
             .catch((error) => {
@@ -167,7 +186,7 @@ export const CigarCardEdit = (props: CigarCardEditProps) => {
         <>
             <div className={LocalStyles.CigarCardEdit}>
                 <div className="col-12">
-                    <TextInput name="Name" value={name} onChange={setName} />
+                    <TextInput name="Name" obj={formCigar} propPath={['name']} setStateHandler={setFormCigar} />
                 </div>
                 <div className={GeneralStyles.TabBar}>
                     <ul>
@@ -192,8 +211,11 @@ export const CigarCardEdit = (props: CigarCardEditProps) => {
                                         icon="store"
                                         iconColor={yellowAccent}
                                         label="Hersteller"
-                                        selectedItem={producer}
-                                        onChange={setProducer}
+                                        selectedItem={formCigar.producer}
+                                        // onChange={setProducer}
+                                        // obj={formCigar}
+                                        propPath={['producer']}
+                                        onChange={setFormCigar}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
@@ -202,18 +224,38 @@ export const CigarCardEdit = (props: CigarCardEditProps) => {
                                         icon="globe-americas"
                                         iconColor={greenAccent}
                                         label="Herkunft"
-                                        selectedItem={origin}
-                                        onChange={setOrigin}
+                                        selectedItem={formCigar.origin}
+                                        // onChange={setOrigin}
+                                        propPath={['origin']}
+                                        onChange={setFormCigar}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
-                                    <LikeSliderAttrField maxValue={5} value={rating} onChange={setRating} />
+                                    <ObjLikeSliderAttrField
+                                        maxValue={5}
+                                        // value={rating} onChange={setRating}
+                                        obj={formCigar}
+                                        propPath={['rating']}
+                                        setStateHandler={setFormCigar}
+                                    />
                                 </div>
                                 <div className="col-12 col-md-6">
-                                    <BoolInput label="Nochmal rauchen?" onChange={setSmokeagain} value={smokeagain} />
+                                    <BoolInput
+                                        label="Nochmal rauchen?"
+                                        obj={formCigar}
+                                        propPath={['smokeagain']}
+                                        setStateHandler={setFormCigar}
+                                        // onChange={setSmokeagain} value={smokeagain}
+                                    />
                                 </div>
                                 <div className="col-12">
-                                    <TextareaInput label="Beschreibung" onChange={setDescription} value={description} />
+                                    <TextareaInput
+                                        label="Beschreibung"
+                                        obj={formCigar}
+                                        propPath={['description']}
+                                        setStateHandler={setFormCigar}
+                                        // onChange={setDescription} value={description}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -234,8 +276,9 @@ export const CigarCardEdit = (props: CigarCardEditProps) => {
                                         icon="leaf"
                                         iconColor={greenAccent}
                                         label="Einlage"
-                                        selectedItem={einlage}
-                                        onChange={setEinlage}
+                                        selectedItem={formCigar.einlage}
+                                        onChange={setFormCigar}
+                                        propPath={['einlage']}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
@@ -244,8 +287,9 @@ export const CigarCardEdit = (props: CigarCardEditProps) => {
                                         icon="leaf"
                                         iconColor={greenAccent}
                                         label="Umblatt"
-                                        selectedItem={umblatt}
-                                        onChange={setUmblatt}
+                                        selectedItem={formCigar.umblatt}
+                                        onChange={setFormCigar}
+                                        propPath={['umblatt']}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
@@ -254,8 +298,9 @@ export const CigarCardEdit = (props: CigarCardEditProps) => {
                                         icon="leaf"
                                         iconColor={greenAccent}
                                         label="Deckblatt"
-                                        selectedItem={deckblatt}
-                                        onChange={setDeckblatt}
+                                        selectedItem={formCigar.deckblatt}
+                                        onChange={setFormCigar}
+                                        propPath={['deckblatt']}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
@@ -264,74 +309,103 @@ export const CigarCardEdit = (props: CigarCardEditProps) => {
                                         icon="leaf"
                                         iconColor={greenAccent}
                                         label="Anschnitt"
-                                        selectedItem={anschnitt}
-                                        onChange={setAnschnitt}
+                                        selectedItem={formCigar.anschnitt}
+                                        onChange={setFormCigar}
+                                        propPath={['anschnitt']}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
-                                    <NumberInput name="Länge:" value={lenght} onChange={setLenght} unit="cm" />
+                                    <NumberInput
+                                        name="Länge:"
+                                        obj={formCigar}
+                                        setStateHandler={setFormCigar}
+                                        propPath={['lenght']}
+                                        unit="cm"
+                                    />
                                 </div>
                                 <div className="col-12 col-md-6">
-                                    <NumberInput name="Ringmas:" value={ringmas} onChange={setRingmas} unit="cm" />
+                                    <NumberInput
+                                        name="Ringmas:"
+                                        unit="cm"
+                                        obj={formCigar}
+                                        setStateHandler={setFormCigar}
+                                        propPath={['ringmas']}
+                                    />
                                 </div>
                             </div>
                             <div className={LocalStyles.Row}>
                                 <div className="col-12 col-md-6">
-                                    <TextInput name="Gekauft am:" value={buydate} onChange={setBuydate} />
+                                    <TextInput
+                                        name="Gekauft am:"
+                                        obj={formCigar}
+                                        setStateHandler={setFormCigar}
+                                        propPath={['buydate']}
+                                    />
                                 </div>
                                 <div className="col-12 col-md-6">
-                                    <TextInput name="Geraucht am:" value={smokedate} onChange={setSmokedate} />
+                                    <TextInput
+                                        name="Geraucht am:"
+                                        obj={formCigar}
+                                        setStateHandler={setFormCigar}
+                                        propPath={['smokedate']}
+                                    />
                                 </div>
                             </div>
                             <div className={LocalStyles.Row}>
                                 <div className="col-12 col-md-6">
                                     <NumberInput
                                         name="Rauchdauer:"
-                                        value={smokeduration}
-                                        onChange={setSmokeduration}
                                         unit="min"
+                                        obj={formCigar}
+                                        setStateHandler={setFormCigar}
+                                        propPath={['smokeduration']}
                                     />
                                 </div>
                             </div>
                             <div className={LocalStyles.Row}>
                                 <div className="col-12 col-md-6">
-                                    <SliderAttrField
+                                    <ObjSliderAttrField
                                         color={brown}
                                         name="Stärke:"
-                                        value={strength}
-                                        onChange={setStrength}
+                                        obj={formCigar}
+                                        setStateHandler={setFormCigar}
+                                        propPath={['strength']}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
-                                    <SliderAttrField
+                                    <ObjSliderAttrField
                                         color={brown}
                                         name="Zugwiederstand:"
-                                        value={zugwiederstand}
-                                        onChange={setZugwiederstand}
+                                        obj={formCigar}
+                                        setStateHandler={setFormCigar}
+                                        propPath={['zugwiederstand']}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
-                                    <SliderAttrField
+                                    <ObjSliderAttrField
                                         color={brown}
                                         name="Aromavielfalt:"
-                                        value={aromavielfalt}
-                                        onChange={setAromavielfalt}
+                                        obj={formCigar}
+                                        setStateHandler={setFormCigar}
+                                        propPath={['aromavielfalt']}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
-                                    <SliderAttrField
+                                    <ObjSliderAttrField
                                         color={brown}
                                         name="Aromaentwicklung:"
-                                        value={aromaentwicklung}
-                                        onChange={setAromaentwicklung}
+                                        obj={formCigar}
+                                        setStateHandler={setFormCigar}
+                                        propPath={['aromaentwicklung']}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
-                                    <SliderAttrField
+                                    <ObjSliderAttrField
                                         color={brown}
                                         name="Abbrand:"
-                                        value={abbrand}
-                                        onChange={setAbbrand}
+                                        obj={formCigar}
+                                        setStateHandler={setFormCigar}
+                                        propPath={['abbrand']}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
@@ -340,8 +414,9 @@ export const CigarCardEdit = (props: CigarCardEditProps) => {
                                         icon="cog"
                                         iconColor={greenAccent}
                                         label="Aromarad"
-                                        selectedItem={aromarad}
-                                        onChange={setAromarad}
+                                        selectedItem={formCigar.aromarad}
+                                        onChange={setFormCigar}
+                                        propPath={['aromarad']}
                                     />
                                 </div>
                             </div>
@@ -351,11 +426,11 @@ export const CigarCardEdit = (props: CigarCardEditProps) => {
                 {tab === 2 && (
                     <>
                         <div className={LocalStyles.ImageSection}>
-                            {imageStrings !== undefined &&
-                                imageStrings.map((url, i) => (
+                            {formCigar.imageStrings !== undefined &&
+                                formCigar.imageStrings.map((url, i) => (
                                     <>
                                         <div className={LocalStyles.Image}>
-                                            <button onClick={() => deleteImageByURL(url, id)}>
+                                            <button onClick={() => deleteImageByURL(url, formCigar.id)}>
                                                 <FontAwesomeIcon icon="trash" color={grayDarker} />
                                             </button>
                                             <img src={`${baseURL}${url}`} key={i} />
@@ -385,7 +460,7 @@ export const CigarCardEdit = (props: CigarCardEditProps) => {
 
                 <div className={LocalStyles.Row}>
                     <div className={LocalStyles.ButtonSection}>
-                        <AdvancedDeleteButton changes={edited} onClick={deleteCard} />
+                        <AdvancedDeleteButton changes={edited} onClick={() => deleteCigar(formCigar.id)} />
                         <AdvancedCancelButton changes={edited} onClick={close} />
                         <AdvancedSaveButton save={saveCard} close={close} error={saveError} changes={edited} />
                     </div>

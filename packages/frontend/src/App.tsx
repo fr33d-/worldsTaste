@@ -47,6 +47,7 @@ import CoffeeBase from './pages/Coffee/Coffee';
 import { User } from './pages/User';
 import { Cigars } from './pages/Cigars';
 import { Blog } from './pages/Blog';
+import { match } from 'minimatch';
 
 library.add(
     faTrashAlt,
@@ -100,9 +101,9 @@ export const App = () => (
         <MainNavigator menu={MainMenu} /> */}
         <BrowserRouter>
             <Switch>
-                <Route path="/user/:id?">
+                <Route path="/user/:extention?" render={(match) => 
                     <User />
-                </Route>
+                } />
                 <Route path="/coffee/:id?">
                     <CoffeeBase />
                 </Route>

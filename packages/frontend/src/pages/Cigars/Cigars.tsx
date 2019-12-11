@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import classNames from 'classnames';
-import React, { Component } from 'react';
-import { RouteComponentProps } from 'react-router';
+import React, { Component, useState, useEffect } from 'react';
+import { RouteComponentProps, Route, useHistory, useLocation } from 'react-router';
 import { baseURL, cigarsAttrURL, cigarsURL } from '../../data';
 import CigarReplacement from './../../images/Cigar-replacement.svg';
 import Tabak from './../../images/Tabak.svg';
@@ -45,8 +45,6 @@ export type CigarEntry = {
     zugwiederstand: number;
 };
 
-export type CigarsProps = {}
-
 export type CigarsState = {
     posts: CigarEntry[];
     filteredPosts: CigarEntry[];
@@ -65,56 +63,78 @@ export type CigarsState = {
     activeFilter?: string;
 };
 
-export class Cigars extends Component<CigarsProps, CigarsState> {
-    public readonly state: CigarsState = {
-        posts: [],
-        filteredPosts: [],
-        menu: [],
-        filter: '',
-        loading: false,
-        cigarsProducer: [{ id: 0, name: 'unknown' }],
-        cigarsOrigin: [{ id: 0, name: 'unknown' }],
-        displayAttrMenu: false,
-        cigarAnschnitt: [{ id: 0, name: 'unknown' }],
-        cigarDeckblatt: [{ id: 0, name: 'unknown' }],
-        cigarEinlage: [{ id: 0, name: 'unknown' }],
-        cigarUmblatt: [{ id: 0, name: 'unknown' }],
-        cigarAromarad: [{ id: 0, name: 'unknown' }],
-    };
+export const Cigars = () =>  {
+    const [posts, setPosts] = useState<CigarEntry[]>([]);
+    const [filteredPosts, setFilteredPosts] = useState<CigarEntry[]>([]);
+    const [menu, setMenu] = useState<AttrDataItemType[]>([]);
+    const [filter, setFilter] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
+    const [displayAttrMenu, setDisplayAttrMenu] = useState<boolean>(false);
+    const [cigarsProducer, setCigarsProducer] = useState<AttrDataItemType[]>([{ id: 0, name: 'unknown' }]);
+    const [cigarsOrigin, setCigarsOrigin] = useState<AttrDataItemType[]>([{ id: 0, name: 'unknown' }]);
+    const [cigarEinlage, setCigarEinlage] = useState<AttrDataItemType[]>([{ id: 0, name: 'unknown' }]);
+    const [cigarUmblatt, setCigarUmblatt] = useState<AttrDataItemType[]>([{ id: 0, name: 'unknown' }]);
+    const [cigarDeckblatt, setCigarDeckblatt] = useState<AttrDataItemType[]>([{ id: 0, name: 'unknown' }]);
+    const [cigarAnschnitt, setCigarAnschnitt] = useState<AttrDataItemType[]>([{ id: 0, name: 'unknown' }]);
+    const [cigarAromarad, setCigarAromarad] = useState<AttrDataItemType[]>([{ id: 0, name: 'unknown' }]);
+    const [editCard, setEditCard] = useState<CigarEntry>();
+    const [activeFilter, setActiveFilter] = useState<string>();
 
-    public deletePost = (id: number) => {
+    // public readonly state: CigarsState = {
+    //     posts: [],
+    //     filteredPosts: [],
+    //     menu: [],
+    //     filter: '',
+    //     loading: false,
+    //     cigarsProducer: [{ id: 0, name: 'unknown' }],
+    //     cigarsOrigin: [{ id: 0, name: 'unknown' }],
+    //     displayAttrMenu: false,
+    //     cigarAnschnitt: [{ id: 0, name: 'unknown' }],
+    //     cigarDeckblatt: [{ id: 0, name: 'unknown' }],
+    //     cigarEinlage: [{ id: 0, name: 'unknown' }],
+    //     cigarUmblatt: [{ id: 0, name: 'unknown' }],
+    //     cigarAromarad: [{ id: 0, name: 'unknown' }],
+    // };
+
+    const history = useHistory();
+    const {pathname} = useLocation();
+    const basePath = '/cigars';
+
+    const openAttrWindow = () => {
+        history.push('attrDataWindow/')
+    }
+    
+    const closeAttrWindow = () => {
+        history.push(pathname.replace('attrDataWindow/', ''))
+    }
+
+    const deletePost = (id: number) => {
         axios
             .delete(`http://localhost:4000/cigars/${id}`)
             .then((response) => {
                 console.log(response);
 
-                this.setState((oldState) => ({
-                    posts: oldState.posts.filter((item) => item.id !== id),
-                    loading: false,
-                }));
+                // this.setState((oldState) => ({
+                //     posts: oldState.posts.filter((item) => item.id !== id),
+                //     loading: false,
+                // }));
+                setLoading(false);
+                setPosts(posts => posts.filter((item) => item.id !== id))
             })
             .catch((error) => {
                 console.log(error);
             });
     };
 
-    public setEditCard = (id: number) => {
-        const card = this.state.posts.find((item) => item.id === id);
-
-        if (card !== undefined) {
-            this.setState({
-                editCard: card,
-            });
-        }
+    const openEditCard = (id: number) => {
+        setEditCard(posts.find((item) => item.id === id));
     };
 
-    public clearEditCard = () => {
-        this.setState({
-            editCard: undefined,
-        });
+    const clearEditCard = () => {
+        setEditCard(undefined)
     };
 
-    public createCard = () => {
+    const createCard = () => {
         const newPost: CigarEntry = {
             id: 0,
             imageFiles: [],
@@ -122,23 +142,23 @@ export class Cigars extends Component<CigarsProps, CigarsState> {
             name: 'Neue Zigarre',
             description: 'Lorem ipsum...',
             abbrand: 1,
-            anschnitt: this.state.cigarAnschnitt[0],
+            anschnitt: cigarAnschnitt[0],
             aromaentwicklung: 1,
-            aromarad: this.state.cigarAromarad[0],
+            aromarad: cigarAromarad[0],
             aromavielfalt: 1,
             buydate: '01.01.1970',
-            deckblatt: this.state.cigarDeckblatt[0],
-            einlage: this.state.cigarEinlage[0],
+            deckblatt: cigarDeckblatt[0],
+            einlage: cigarEinlage[0],
             lenght: 10,
-            origin: this.state.cigarsOrigin[0],
-            producer: this.state.cigarsProducer[0],
+            origin: cigarsOrigin[0],
+            producer: cigarsProducer[0],
             rating: 1,
             ringmas: 10,
             smokeagain: true,
             smokeduration: 10,
             smokedate: '01.01.1970',
             strength: 1,
-            umblatt: this.state.cigarUmblatt[0],
+            umblatt: cigarUmblatt[0],
             zugwiederstand: 1,
         };
 
@@ -150,18 +170,16 @@ export class Cigars extends Component<CigarsProps, CigarsState> {
                 const [id] = location.split('/').slice(-1);
                 newPost.id = Number(id);
 
-                this.setState((state) => ({
-                    posts: [newPost, ...state.posts],
-                }));
+                setPosts(post => ([newPost, ...posts]))
 
-                this.setEditCard(Number(id));
+                openEditCard(Number(id));
             })
             .catch((error) => {
                 console.log(error);
             });
     };
 
-    public initiateData() {
+    const initiateData = () => {
         const cigarsPromise = axios.get<CigarEntry[]>(`${baseURL}${cigarsURL}`);
         const anschnittPromise = axios.get<AttrDataItemType[]>(`${baseURL}${cigarsAttrURL}/anschnitt`);
         const aromaradPromise = axios.get<AttrDataItemType[]>(`${baseURL}${cigarsAttrURL}/aromarad`);
@@ -183,73 +201,91 @@ export class Cigars extends Component<CigarsProps, CigarsState> {
         ])
             .then((responses) => {
                 console.log(responses[0].data);
-                this.setState({
-                    posts: responses[0].data,
-                    filteredPosts: responses[0].data,
-                    cigarAnschnitt: responses[1].data,
-                    cigarAromarad: responses[2].data,
-                    cigarDeckblatt: responses[3].data,
-                    cigarEinlage: responses[4].data,
-                    cigarsOrigin: responses[5].data,
-                    cigarsProducer: responses[6].data,
-                    cigarUmblatt: responses[7].data,
-                    loading: false,
-                    filter: 'origin',
-                    menu: responses[5].data,
-                });
+                // this.setState({
+                //     posts: responses[0].data,
+                //     filteredPosts: responses[0].data,
+                //     cigarAnschnitt: responses[1].data,
+                //     cigarAromarad: responses[2].data,
+                //     cigarDeckblatt: responses[3].data,
+                //     cigarEinlage: responses[4].data,
+                //     cigarsOrigin: responses[5].data,
+                //     cigarsProducer: responses[6].data,
+                //     cigarUmblatt: responses[7].data,
+                //     loading: false,
+                //     filter: 'origin',
+                //     menu: responses[5].data,
+                // });
+                setPosts(responses[0].data);
+                setFilteredPosts(responses[0].data);
+                setCigarAnschnitt(responses[1].data);
+                setCigarAromarad(responses[2].data);
+                setCigarDeckblatt(responses[3].data);
+                setCigarEinlage(responses[4].data);
+                setCigarsOrigin(responses[5].data);
+                setCigarsProducer(responses[6].data);
+                setCigarUmblatt(responses[7].data);
+                setLoading(false);
+                setFilter('origin');
+                setMenu(responses[5].data);
             })
             .catch((error) => {
                 console.log(error);
             });
     }
 
-    public componentDidMount() {
-        this.initiateData();
-    }
+    // public componentDidMount() {
+    //     this.initiateData();
+    // }
 
-    public toggleAttrMenu = () => {
-        if (this.state.displayAttrMenu === true) {
-            this.initiateData();
+    useEffect(() => {
+        initiateData();
+    }, [pathname])
+
+    const toggleAttrMenu = () => {
+        if (displayAttrMenu === true) {
+            initiateData();
         }
-        this.setState((oldState) => ({
-            displayAttrMenu: !oldState.displayAttrMenu,
-        }));
+        // this.setState((oldState) => ({
+        //     displayAttrMenu: !oldState.displayAttrMenu,
+        // }));
+        setDisplayAttrMenu(old => !old);
     };
 
-    public filterPosts = (filterName: string, filterAttr: string) => {
+    const filterPosts = (filterName: string, filterAttr: string) => {
         let newPosts = [];
 
         switch (filterName) {
             case 'Herkunft':
-                newPosts = this.state.posts.filter((post) => post.origin.name === filterAttr);
+                newPosts = posts.filter((post) => post.origin.name === filterAttr);
                 break;
             default:
-                newPosts = this.state.posts;
+                newPosts = posts;
                 break;
         }
 
-        this.setState({ filteredPosts: newPosts });
+        // this.setState({ filteredPosts: newPosts });
+        setFilteredPosts(newPosts)
     };
 
     // tslint:disable-next-line: max-func-body-length
-    public render() {
-        const {
-            posts,
-            displayAttrMenu,
-            cigarAnschnitt,
-            cigarAromarad,
-            cigarDeckblatt,
-            cigarEinlage,
-            cigarUmblatt,
-            cigarsOrigin,
-            cigarsProducer,
-            filter,
-            loading,
-            menu,
-            editCard,
-            filteredPosts,
-            activeFilter,
-        } = this.state;
+    // public render() {
+    //     const {
+    //         posts,
+    //         displayAttrMenu,
+    //         cigarAnschnitt,
+    //         cigarAromarad,
+    //         cigarDeckblatt,
+    //         cigarEinlage,
+    //         cigarUmblatt,
+    //         cigarsOrigin,
+    //         cigarsProducer,
+    //         filter,
+    //         loading,
+    //         menu,
+    //         editCard,
+    //         filteredPosts,
+    //         activeFilter,
+    //     } = this.state;
         const attrData = [
             {
                 description: 'So schneidet man eine Zigarre an',
@@ -353,14 +389,14 @@ export class Cigars extends Component<CigarsProps, CigarsState> {
                             <Sidemenu
                                 filter={filterMenuData}
                                 image={Tabak}
-                                filterAction={this.filterPosts}
+                                filterAction={filterPosts}
                                 activeFilter={activeFilter}
                             />
                             <div className={classNames(`col-12 col-lg-9`)}>
 
                                 <Filter orderAction={() => {}} orderItems={filterMenuData} />
-                                {user && <AddButton onClick={this.createCard} />}
-                                {user && <DataButton onClick={this.toggleAttrMenu} />}
+                                {user && <AddButton onClick={createCard} />}
+                                {user && <DataButton onClick={toggleAttrMenu} />}
                                 <IntroText header='Zigarren raucht man überall'>
                                     Irgend was schlaues über Zigarren.
                                 </IntroText>
@@ -378,8 +414,8 @@ export class Cigars extends Component<CigarsProps, CigarsState> {
                                                 <CigarCardDisplay
                                                     entry={post}
                                                     key={post.id}
-                                                    deleteFunction={this.deletePost}
-                                                    editFunction={this.setEditCard}
+                                                    deleteFunction={deletePost}
+                                                    editFunction={openEditCard}
                                                 />
                                             );
                                         })
@@ -388,7 +424,10 @@ export class Cigars extends Component<CigarsProps, CigarsState> {
                             </div>
                         </div>
                     </div>
-                    {displayAttrMenu && <AttrDataWindow content={attrData} toggleFunktion={this.toggleAttrMenu} />}
+                    {/* {displayAttrMenu && <AttrDataWindow content={attrData} toggleFunktion={this.toggleAttrMenu} />} */}
+                    <Route path={`${basePath}/attrDataWindow`}>
+                        <AttrDataWindow content={attrData} close={() => closeAttrWindow()} />
+                    </Route>
                     <Footer year="2019" version="0.1" />
                 </div>
                 {editCard && (
@@ -398,8 +437,8 @@ export class Cigars extends Component<CigarsProps, CigarsState> {
                                 <div className={LocalStyles.EditCard}>
                                     <CigarCardEdit
                                         entry={editCard}
-                                        deleteFunction={this.deletePost}
-                                        close={this.clearEditCard}
+                                        deleteCigar={deletePost}
+                                        close={clearEditCard}
                                         cigarAnschnitt={cigarAnschnitt}
                                         cigarAromarad={cigarAromarad}
                                         cigarDeckblatt={cigarDeckblatt}
@@ -416,4 +455,4 @@ export class Cigars extends Component<CigarsProps, CigarsState> {
             </>
         );
     }
-}
+// }

@@ -8,7 +8,7 @@ import { baseURL, userURL } from '../../data';
 import userAvatar from '../../images/avatar-frederic.png';
 import { green, white } from '../../styles/colors';
 import { AttrDataItemType } from '../../components/FormComponents';
-import { DropdownInput, NewDropdownInput, NewTextInput, TextInput } from '../../components/FormElements';
+import { DropdownInput, TextInput, SimpleTextInput } from '../../components/FormElements';
 import { AttrField } from '../../components/FormElements/AttrFields';
 import { IconButton } from '../../components/IconButton';
 import { Navigationbar } from '../../components/Navigationbar';
@@ -30,6 +30,17 @@ export type FullUser = {
     image: string;
     created: string;
     role: string;
+};
+
+export type ExtendedUser = {
+    id: number;
+    name: string;
+    username: string;
+    email: string;
+    image: string;
+    created: string;
+    role: string;
+    password: string;
 };
 
 export const UserRoles: AttrDataItemType[] = [
@@ -122,10 +133,10 @@ export const UserAdminWindow: FC<{ user: FullUser }> = ({ user }) => {
             {selectedUser && (
                 <>
                     <h2>Details</h2>
-                    <NewTextInput name="Name" obj={selectedUser} propPath="name" onChange={setSelectedUser} />
-                    <NewTextInput name="User Name" obj={selectedUser} propPath="username" onChange={setSelectedUser} />
-                    <NewTextInput name="E-Mail" obj={selectedUser} propPath="email" onChange={setSelectedUser} />
-                    <NewDropdownInput
+                    <TextInput name="Name" obj={selectedUser} propPath="name" setStateHandler={setSelectedUser} />
+                    <TextInput name="User Name" obj={selectedUser} propPath="username" setStateHandler={setSelectedUser} />
+                    <TextInput name="E-Mail" obj={selectedUser} propPath="email" setStateHandler={setSelectedUser}  />
+                    <DropdownInput
                         items={UserRoles}
                         iconColor={green}
                         label="Rolle"
@@ -155,26 +166,30 @@ export const UserAdminWindow: FC<{ user: FullUser }> = ({ user }) => {
 
 export const UserCreateNewWindow: FC<{ user: FullUser }> = ({ user }) => {
     //New User Data
-    const [newUserName, setNewUserName] = useState('');
-    const [newUserMail, setNewUserMail] = useState('');
-    const [newUserPassword, setNewUserPassword] = useState('');
-    const [newUserRole, setNewUserRole] = useState(UserRoles[0]);
+    // const [newUserName, setNewUserName] = useState('');
+    // const [newUserMail, setNewUserMail] = useState('');
+    // const [newUserPassword, setNewUserPassword] = useState('');
+    // const [newUserRole, setNewUserRole] = useState(UserRoles[0]);
     const [createUserError, setCreateUserError] = useState(false);
     const [savePWError, SetSavePWError] = useState(false);
+
+    const [newUser, setNewUser] = useState<ExtendedUser>(
+        {
+            id: 0, 
+            name: 'New User', 
+            role: UserRoles[1].name, 
+            username: 'newUser', 
+            password: 'test', 
+            email: 'test@test.de',
+            created: String(new Date()),
+            image: '',
+        })
 
     const createUser = () => {
         const jwtObj = sessionStorage.getItem('auth');
 
-        const newUser = {
-            name: newUserName,
-            email: newUserMail,
-            role: newUserRole,
-            password: newUserPassword,
-            username: newUserName,
-        };
-
         axios
-            .post(`${baseURL}${userURL}/`, newUser, { headers: { auth: jwtObj } })
+            .post(`${baseURL}${userURL}/`, {...newUser}, { headers: { auth: jwtObj } })
             .then((response) => {
                 console.log('user created');
                 console.log(response);
@@ -188,16 +203,19 @@ export const UserCreateNewWindow: FC<{ user: FullUser }> = ({ user }) => {
     return (
         <>
             <h2>Crate User</h2>
-            <TextInput name="Name" value={newUserName} onChange={setNewUserName} />
-            <TextInput name="E-Mail" value={newUserMail} onChange={setNewUserMail} />
-            <TextInput name="Passwort" value={newUserPassword} onChange={setNewUserPassword} />
+            <TextInput name="Name" obj={newUser} propPath={['name']} setStateHandler={setNewUser} />
+            <TextInput name="E-Mail" obj={newUser} propPath={['email']} setStateHandler={setNewUser} />
+            <TextInput name="Passwort" obj={newUser} propPath={['password']} setStateHandler={setNewUser}/>
             <DropdownInput
                 items={UserRoles}
                 icon="leaf"
                 iconColor={green}
                 label="Rolle"
-                selectedItem={newUserRole}
-                onChange={setNewUserRole}
+                // selectedItem={newUserRole}
+                // onChange={setNewUserRole}
+                // obj={newUser} 
+                propPath={['userrole']} 
+                onChange={setNewUser}
             />
             <IconButton
                 icon={savePWError ? 'ban' : 'save'}
@@ -224,9 +242,9 @@ export const UserChangePasswordWindow: FC<{ user: FullUser }> = ({ user }) => {
     return (
         <>
             <h2>Change Password</h2>
-            <TextInput name="Altes Passwort" value={oldPW} onChange={setOldPW} />
-            <TextInput name="Neues Passwort" value={newPW} onChange={setNewPW} />
-            <TextInput name="Neues Passwort wiederholen" value={repNewPW} onChange={setRepNewPW} />
+            <SimpleTextInput name="Altes Passwort" value={oldPW} onChange={setOldPW} />
+            <SimpleTextInput name="Neues Passwort" value={newPW} onChange={setNewPW} />
+            <SimpleTextInput name="Neues Passwort wiederholen" value={repNewPW} onChange={setRepNewPW} />
             {/* <SaveButton withText={true} error={savePWError} save={saveNewPW} /> */}
             <IconButton
                 icon={savePWError ? 'ban' : 'save'}

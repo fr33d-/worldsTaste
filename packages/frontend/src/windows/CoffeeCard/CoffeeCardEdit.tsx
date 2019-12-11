@@ -6,10 +6,18 @@ import { baseURL, coffeeURL } from '../../data';
 import { blue, brown, cyan, grayDarker, green, yellow } from '../../styles/colors';
 import { AttrDataItemType, CoffeeEntry } from '../../components/FormComponents';
 import { DropdownInput, TextareaInput, TextInput } from '../../components/FormElements';
-import { LikeSliderAttrField, SingleSliderAttrField, SliderAttrField } from '../../components/FormElements/AttrFields';
+import {
+    LikeSliderAttrField,
+    SingleSliderAttrField,
+    SliderAttrField,
+    ObjLikeSliderAttrField,
+    ObjSliderAttrField,
+    ObjSingleSliderAttrField,
+} from '../../components/FormElements/AttrFields';
 import { AdvancedCancelButton, AdvancedDeleteButton, AdvancedSaveButton } from '../../components/IconButton';
 import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import LocalStyles from './CoffeeCardEdit.module.scss';
+import { useHistory } from 'react-router';
 
 type CoffeeCardEditProps = {
     entry: CoffeeEntry;
@@ -18,13 +26,23 @@ type CoffeeCardEditProps = {
     roasteds: AttrDataItemType[];
     processes: AttrDataItemType[];
     specieses: AttrDataItemType[];
-    close(): void;
     deleteCoffee(id: number): void;
     saveCoffee(coffee: CoffeeEntry): void;
+    basePath: string;
 };
 
 // tslint:disable-next-line: max-func-body-length
-export const CoffeeCardEdit = ({entry, kinds, roasteds, origins, close, processes, specieses, deleteCoffee, saveCoffee}: CoffeeCardEditProps) => {
+export const CoffeeCardEdit = ({
+    entry,
+    kinds,
+    roasteds,
+    origins,
+    processes,
+    specieses,
+    deleteCoffee,
+    saveCoffee,
+    basePath,
+}: CoffeeCardEditProps) => {
     const [saveError, setSaveError] = useState(false);
     const [edited, setEdited] = useState(false);
     const [tab, setTab] = useState(0);
@@ -81,40 +99,17 @@ export const CoffeeCardEdit = ({entry, kinds, roasteds, origins, close, processe
     //     props.close(newObject);
     // };
 
-    const saveCard = () => {
-        
-        if (formCoffee.id === 0) {
-            //create new card
-            axios
-                .post(`${baseURL}${coffeeURL}`, { ...formCoffee })
-                .then((response) => {
-                    console.log(response);
-                    setEdited(false);
-                    setSaveError(false);
-                })
-                .catch((error) => {
-                    console.log(error);
-                    setSaveError(true);
-                });
-        } else {
-            // save card
-            axios
-                .put(`${baseURL}${coffeeURL}/${formCoffee.id}`, { ...formCoffee })
-                .then((response) => {
-                    setEdited(false);
-                    setSaveError(false);
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        }
+    const history = useHistory();
+
+    const goBack = () => {
+        history.push(`${basePath}`);
     };
 
     const deleteImageByURL = (url: string, id: number) => {
         axios
             .delete(`${baseURL}${coffeeURL}/assets/${id}`, { data: { url: url } })
             .then((response) => {
-                console.log('... sucessfully');
+                console.log('... sucessfully', response);
                 setSaveError(false);
 
                 if (imageStrings !== undefined && imageStrings.length > 0) {
@@ -181,7 +176,7 @@ export const CoffeeCardEdit = ({entry, kinds, roasteds, origins, close, processe
         <>
             <div className={LocalStyles.CoffeeCardEdit}>
                 <div className="col-12">
-                    <TextInput name="Name" value={name} onChange={setName} />
+                    <TextInput name="Name" obj={formCoffee} propPath={['name']} setStateHandler={setFormCoffee} />
                 </div>
                 <div className={GeneralStyles.TabBar}>
                     <ul>
@@ -210,8 +205,9 @@ export const CoffeeCardEdit = ({entry, kinds, roasteds, origins, close, processe
                                         icon="globe-americas"
                                         iconColor={green}
                                         label="Herkunft"
-                                        selectedItem={origin}
-                                        onChange={setOrigin}
+                                        selectedItem={formCoffee.origin}
+                                        onChange={setFormCoffee}
+                                        propPath={['origin']}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
@@ -220,8 +216,9 @@ export const CoffeeCardEdit = ({entry, kinds, roasteds, origins, close, processe
                                         icon="mug-hot"
                                         iconColor={brown}
                                         label="Art"
-                                        selectedItem={kind}
-                                        onChange={setKind}
+                                        selectedItem={formCoffee.kind}
+                                        onChange={setFormCoffee}
+                                        propPath={['kind']}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
@@ -230,8 +227,9 @@ export const CoffeeCardEdit = ({entry, kinds, roasteds, origins, close, processe
                                         icon="flask"
                                         iconColor={blue}
                                         label="Rösterei"
-                                        selectedItem={roasted}
-                                        onChange={setRoasted}
+                                        selectedItem={formCoffee.roasted}
+                                        onChange={setFormCoffee}
+                                        propPath={['roasted']}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
@@ -240,8 +238,9 @@ export const CoffeeCardEdit = ({entry, kinds, roasteds, origins, close, processe
                                         icon="leaf"
                                         iconColor={green}
                                         label="Prozess"
-                                        selectedItem={process}
-                                        onChange={setProcess}
+                                        selectedItem={formCoffee.process}
+                                        onChange={setFormCoffee}
+                                        propPath={['process']}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
@@ -250,20 +249,27 @@ export const CoffeeCardEdit = ({entry, kinds, roasteds, origins, close, processe
                                         icon="leaf"
                                         iconColor={green}
                                         label="Bohnenart"
-                                        selectedItem={species}
-                                        onChange={setSpecies}
+                                        selectedItem={formCoffee.species}
+                                        onChange={setFormCoffee}
+                                        propPath={['species']}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
-                                    <LikeSliderAttrField
+                                    <ObjLikeSliderAttrField
                                         maxValue={5}
-                                        value={rating}
-                                        onChange={setRating}
                                         name="Gesamtbewertung:"
+                                        obj={formCoffee}
+                                        propPath={['rating']}
+                                        setStateHandler={setFormCoffee}
                                     />
                                 </div>
                                 <div className="col-12">
-                                    <TextareaInput label="Beschreibung" onChange={setDescription} value={description} />
+                                    <TextareaInput
+                                        label="Beschreibung"
+                                        obj={formCoffee}
+                                        propPath={['description']}
+                                        setStateHandler={setFormCoffee}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -275,30 +281,57 @@ export const CoffeeCardEdit = ({entry, kinds, roasteds, origins, close, processe
                         <div className={LocalStyles.TextSection}>
                             <div className="row">
                                 <div className="col-12 col-md-6">
-                                    <SliderAttrField color={blue} name="Geschmack:" value={taste} onChange={setTaste} />
-                                </div>
-                                <div className="col-12 col-md-6">
-                                    <SingleSliderAttrField
-                                        color={green}
-                                        name="Schokolade/Frucht:"
-                                        value={tasteKind}
-                                        onChange={setTasteKind}
+                                    <ObjSliderAttrField
+                                        color={blue}
+                                        name="Geschmack:"
+                                        obj={formCoffee}
+                                        setStateHandler={setFormCoffee}
+                                        propPath={['taste']}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
-                                    <SliderAttrField color={yellow} name="Säure:" value={sour} onChange={setSour} />
+                                    <ObjSingleSliderAttrField
+                                        color={green}
+                                        name="Schokolade/Frucht:"
+                                        obj={formCoffee}
+                                        setStateHandler={setFormCoffee}
+                                        propPath={['tasteKind']}
+                                    />
                                 </div>
                                 <div className="col-12 col-md-6">
-                                    <SliderAttrField color={green} name="Erbisg:" value={woody} onChange={setWoody} />
+                                    <ObjSliderAttrField
+                                        color={yellow}
+                                        name="Säure:"
+                                        obj={formCoffee}
+                                        setStateHandler={setFormCoffee}
+                                        propPath={['sour']}
+                                    />
                                 </div>
                                 <div className="col-12 col-md-6">
-                                    <SliderAttrField color={cyan} name="Bitter:" value={bitter} onChange={setBitter} />
+                                    <ObjSliderAttrField
+                                        color={green}
+                                        name="Erbisg:"
+                                        obj={formCoffee}
+                                        setStateHandler={setFormCoffee}
+                                        propPath={['woody']}
+                                    />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <ObjSliderAttrField
+                                        color={cyan}
+                                        name="Bitter:"
+                                        obj={formCoffee}
+                                        setStateHandler={setFormCoffee}
+                                        propPath={['bitter']}
+                                    />
                                 </div>
                                 <div className="col-12">
                                     <TextareaInput
                                         label="Eigene Beschreibung"
-                                        onChange={setOwnDescription}
-                                        value={ownDescription}
+                                        obj={formCoffee}
+                                        propPath={['ownDescription']}
+                                        setStateHandler={setFormCoffee}
+                                    />
                                     />
                                 </div>
                             </div>
@@ -344,8 +377,13 @@ export const CoffeeCardEdit = ({entry, kinds, roasteds, origins, close, processe
 
                 <div className={LocalStyles.ButtonSection}>
                     <AdvancedDeleteButton changes={edited} onClick={() => deleteCoffee(formCoffee.id)} />
-                    <AdvancedCancelButton changes={edited} onClick={() => close()} />
-                    <AdvancedSaveButton save={saveCard} close={() => close()} error={saveError} changes={edited} />
+                    <AdvancedCancelButton changes={edited} onClick={() => goBack()} />
+                    <AdvancedSaveButton
+                        save={() => saveCoffee(formCoffee)}
+                        close={() => goBack()}
+                        error={saveError}
+                        changes={edited}
+                    />
                 </div>
             </div>
         </>

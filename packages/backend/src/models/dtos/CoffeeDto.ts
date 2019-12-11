@@ -7,6 +7,7 @@ import {
 } from '../entities/CoffeeAttrsEntity';
 import { CoffeeEntity } from '../entities/CoffeeEntity';
 import { UserEntity } from '../entities/UserEntity';
+import { CoffeeBrewingEntity } from '../entities/CoffeeBrewingEntity';
 
 // This Dto class is used to omit certain data from the actual UserEntity class, in our case the password field. When
 // we send any user as a result to a client we'd like to keep some data only on the server and hidden. Hence we use the
@@ -31,6 +32,8 @@ export class CoffeeDto {
     public buyDate: Date;
     public species: CoffeeSpeciesEntity;
     public owner: UserEntity;
+    public brewings: CoffeeBrewingEntity[];
+
 
     // This constructs a UserDto from a given UserEntity via new UserDto(userEntity).
     public constructor({
@@ -52,6 +55,7 @@ export class CoffeeDto {
         process,
         species,
         owner,
+        brewings,
     }: CoffeeEntity) {
         this.id = id;
         this.name = name;
@@ -72,6 +76,7 @@ export class CoffeeDto {
         this.process = process;
         this.species = species;
         this.owner = owner;
+        this.brewings = brewings;
     }
 
     // This is mostly used in combination with Array.map, since you cannot map a constructor.

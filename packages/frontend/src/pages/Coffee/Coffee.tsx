@@ -15,7 +15,7 @@ import { useJwt } from '../User/LoginWindwo';
 import { default as chemexSVG, default as CoffeeReplacement } from './../../images/Chemex.svg';
 import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import LocalStyles from './Coffee.module.scss';
-import { Route, useLocation, RouteComponentProps, withRouter, useParams } from 'react-router';
+import { Route, useLocation, RouteComponentProps, withRouter, useParams, useHistory } from 'react-router';
 import OverlayFrame from '../../windows/OverlayFrame/OverlayFrame';
 
 const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
@@ -30,7 +30,7 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
     const [coffeeProcesses, setCoffeeProcesses] = useState<AttrDataType[]>([]);
     const [coffeeSpecies, setCoffeeSpecies] = useState<AttrDataType[]>([]);
     const [coffeeBrewMethod, setCoffeeBrewMethod] = useState<AttrDataType[]>([]);
-    const [displayAttrMenu, setDisplayAttrMenu] = useState<boolean>();
+    // const [displayAttrMenu, setDisplayAttrMenu] = useState<boolean>();
     const [editCard, setEditCard] = useState<CoffeeEntry>();
     const [activeFilter, setActiveFilter] = useState<string>();
     const [brewingCard, setBrewingCard] = useState<CoffeeEntry>();
@@ -38,10 +38,11 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
 
     const jwtObj = sessionStorage.getItem('auth');
 
-    // const location = useLocation();
+    const history = useHistory();
+    const {pathname} = useLocation();
+    const basePath = '/coffee';
     // console.log('location in coffeeBase', location);
     // console.log('match in coffeeBase', match);
-    const basePath = '/coffee';
 
     // Todo: vill sollte man das schlauer machen
     useEffect(() => {
@@ -49,23 +50,45 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
         initiateData();
     }, []);
 
-    //Todo: eigentlich müsste diese funkton asyncron sein und dann via then später das fenster schließen 
-    const saveCoffee = (coffee: CoffeeEntry) => {
-        axios
-            .put(`${baseURL}${coffeeURL}`, { ...coffee }, { headers: { auth: jwtObj } })
-            .then((response) => {
-                console.log(response.headers['location']);
-                const location: string = response.headers['location'];
-                const [id] = location.split('/').slice(-1);
+    //Todo: eigentlich müsste diese funkton asyncron sein und dann via then später das fenster schließen
+    const saveCoffee = (coffee: CoffeeEntry): boolean => {
+        if (coffee.id === 0) {
+            //Create new coffee
+            axios
+                .post(`${baseURL}${coffeeURL}`, { ...coffee }, { headers: { auth: jwtObj } })
+                .then((response) => {
+                    console.log(response.headers['location']);
+                    const location: string = response.headers['location'];
+                    const [id] = location.split('/').slice(-1);
 
-                setPosts((posts) => (!posts ? posts : [{ ...coffee, id: Number(id) }, ...posts]));
-                return true;
-            })
-            .catch((error) => {
-                console.log(error);
-                console.log('Cant create coffee');
-            });
-    }
+                    setPosts((posts) => (!posts ? posts : [{ ...coffee, id: Number(id) }, ...posts]));
+                    return true;
+                })
+                .catch((error) => {
+                    console.log(error);
+                    console.log('Cant create coffee');
+                });
+            return false;
+        } else {
+            // Save existing coffee
+            axios
+                .put(`${baseURL}${coffeeURL}/${coffee.id}`, { ...coffee }, { headers: { auth: jwtObj } })
+                .then((response) => {
+                    console.log(response.headers['location']);
+                    // const location: string = response.headers['location'];
+                    // const [id] = location.split('/').slice(-1);
+
+                    setPosts((posts) => (!posts ? posts : posts.map((elm) => (elm.id === coffee.id ? coffee : elm))));
+                    return true;
+                })
+                .catch((error) => {
+                    console.log(error);
+                    console.log('Cant save coffee');
+                });
+            return false;
+        }
+    };
+
 
     const deleteCoffee = (id: number) => {
         axios
@@ -137,9 +160,17 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
         }
     };
 
-    const toggleAttrMenu = () => {
-        setDisplayAttrMenu((old) => !old);
-    };
+    // const toggleAttrMenu = () => {
+    //     setDisplayAttrMenu((old) => !old);
+    // };
+
+    const openAttrWindow = () => {
+        history.push('attrDataWindow/')
+    }
+    
+    const closeAttrWindow = () => {
+        history.push(pathname.replace('attrDataWindow/', ''))
+    }
 
     const initiateData = () => {
         const coffeesPromise = axios.get<CoffeeEntry[]>(`${baseURL}${coffeeURL}`);
@@ -348,10 +379,18 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
         },
     ];
 
+    console.log('match', match.params);
+    // const {extention} =  match.params;
+    const params: any =  match.params;
+
     return (
         <>
+        <Route path={`${basePath}/:extention?`}>
+            
+        
             <AppWindow
-                editState={editCard != undefined || displayAttrMenu === true || brewingCard != undefined}
+                editState={params.extention }
+                // editState={editCard != undefined || displayAttrMenu === true || brewingCard != undefined}
                 loading={loading}
                 sidebar={
                     <Sidemenu
@@ -363,9 +402,10 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
                 }
             >
                 <div className={GeneralStyles.FilterRow}>
-                    <Filter orderAction={() => { }} orderItems={filterMenu} />
+                    <Filter orderAction={() => {}} orderItems={filterMenu} />
                     {user && <AddButton onClick={createCoffee} />}
-                    {user && <DataButton onClick={toggleAttrMenu} />}
+                    {/* {user && <DataButton onClick={toggleAttrMenu} />} */}
+                    {user && <DataButton onClick={openAttrWindow} />}
                 </div>
 
                 <IntroText header={'Kaffee - Genuss und Wissenschaft'}>
@@ -383,25 +423,32 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
                             <p>No coffees to display</p>
                         </div>
                     ) : (
-                            filteredPosts.map((post) => (
-                                <CoffeeCardDisplay
-                                    entry={post}
-                                    deleteFunction={deleteCoffee}
-                                    editFunction={loadEditCard}
-                                    openBrewings={openBrewingWindow}
-                                />
-                            ))
-                        )}
+                        filteredPosts.map((post) => (
+                            <CoffeeCardDisplay
+                                entry={post}
+                                deleteFunction={deleteCoffee}
+                                editFunction={loadEditCard}
+                                openBrewings={openBrewingWindow}
+                            />
+                        ))
+                    )}
                 </div>
             </AppWindow>
+            </Route>
             <Route path={`${basePath}/:id`}>
                 <OverlayFrame>
-                    <CoffeeBrewingWindow methods={coffeeBrewMethod} basePath={basePath} coffees={posts} saveCoffee={saveCoffee} delteCoffee={deleteCoffee} />
+                    <CoffeeBrewingWindow
+                        methods={coffeeBrewMethod}
+                        basePath={basePath}
+                        coffees={posts}
+                        saveCoffee={saveCoffee}
+                        delteCoffee={deleteCoffee}
+                    />
                 </OverlayFrame>
             </Route>
 
             <Route path={`${basePath}/attrDataWindow`}>
-                <AttrDataWindow content={attrData} toggleFunktion={toggleAttrMenu} />
+                <AttrDataWindow content={attrData} close={() => closeAttrWindow()} />
             </Route>
             {/* {displayAttrMenu && <AttrDataWindow content={attrData} toggleFunktion={toggleAttrMenu} />} */}
             {editCard && (
@@ -413,8 +460,9 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
                         origins={coffeeOrigins}
                         processes={coffeeProcesses}
                         specieses={coffeeSpecies}
-                        close={cardUpdated}
-                        cardDeleted={deleteCoffee}
+                        deleteCoffee={deleteCoffee}
+                        saveCoffee={saveCoffee}
+                        basePath={basePath}
                     />
                 </OverlayFrame>
             )}

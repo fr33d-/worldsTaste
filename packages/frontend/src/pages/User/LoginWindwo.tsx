@@ -3,8 +3,8 @@ import jwt from 'jsonwebtoken';
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { User } from '.';
+import { SimplePasswordInput, SimpleTextInput } from '../../components/FormElements';
 import { authURL, baseURL } from '../../data';
-import { PasswordInput, TextInput } from '../../components/FormElements';
 import LocalStyles from './User.module.scss';
 
 export const useJwt = (): User | undefined => {
@@ -75,8 +75,8 @@ export const LoginWindow = (props: LoginWindwoProps) => {
                         You are currently not logged in. If you wish to sign up please send me a mail.
                     </div>
                     <div className={LocalStyles.Form}>
-                        <TextInput onChange={setMail} name="Mail" value={mail} />
-                        <PasswordInput onChange={setPassword} name="Password" value={password} />
+                        <SimpleTextInput onChange={setMail} name="Mail" value={mail} />
+                        <SimplePasswordInput onChange={setPassword} name="Password" value={password} />
                     </div>
                     <div className={LocalStyles.ButtonSection}>
                         <Button className={LocalStyles.Login} onClick={login}>
