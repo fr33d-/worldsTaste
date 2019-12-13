@@ -37,31 +37,31 @@ export const MainMenu: MainMenuItem[] = [
         submenu: [
             {
                 name: 'Latest',
-                link: '/latest',
+                link: '/?filter=latest',
                 active: false,
                 submenu: [],
             },
             {
                 name: 'Regions',
-                link: '/regions',
+                link: '/?filter=regions',
                 active: false,
                 submenu: [],
             },
             {
                 name: 'Roastaries',
-                link: '/rostaries',
+                link: '/?filter=rostaries',
                 active: false,
                 submenu: [],
             },
             {
                 name: 'Flavors',
-                link: '/flavors',
+                link: '/?filter=flavors',
                 active: false,
                 submenu: [],
             },
             {
                 name: 'Ratings',
-                link: '/ratings',
+                link: '/?filter=ratings',
                 active: false,
                 submenu: [],
             },

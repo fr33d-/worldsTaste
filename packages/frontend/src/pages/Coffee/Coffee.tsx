@@ -435,7 +435,7 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
                 </div>
             </AppWindow>
             </Route>
-            <Route path={`${basePath}/:id`}>
+            <Route exact path={`${basePath}/:id`}>
                 <OverlayFrame>
                     <CoffeeBrewingWindow
                         methods={coffeeBrewMethod}
