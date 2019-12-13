@@ -1,23 +1,30 @@
-import bodyParser from "body-parser";
-import cors from "cors";
-import express from "express";
-import helmet from "helmet";
-import * as httpStatusCodes from "http-status-codes";
-import "reflect-metadata";
-import { createConnection } from "typeorm";
-import { usersRoute } from "./routes/UsersRoute";
-import { errorLoggerMiddleware, errorMiddleware } from "./utils/ErrorHandlerUtil";
-import { createLogger } from "./utils/LoggerUtil";
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import express from 'express';
+import fileUpload from 'express-fileupload';
+import helmet from 'helmet';
+import * as httpStatusCodes from 'http-status-codes';
+import 'reflect-metadata';
+import { createConnection } from 'typeorm';
+import { cigarAttrsRoute } from './routes/CigarAttrsRouts';
+import { cigarRoute } from './routes/CigarsRoute';
+import { coffeeAttrsRoute } from './routes/CoffeeAttrsRouts';
+import { coffeeBrewingRoute } from './routes/CoffeeBrewingRoute';
+import { coffeeRoute } from './routes/CoffeeRoute';
+import { usersRoute } from './routes/UsersRoute';
+import { authRouter } from './routes/AuthRoute';
+import { errorLoggerMiddleware, errorMiddleware } from './utils/ErrorHandlerUtil';
+import { createLogger } from './utils/LoggerUtil';
 
 // Export all necessary Dtos to make them accessible from the frontend
-export * from "./models/dtos/UserDto";
+export * from './models/dtos/UserDto';
 
 // Track diagnostic messages
-const log = createLogger("api:core");
-log("Server starting...");
+const log = createLogger('api:core');
+log('Server starting...');
 
-process.on("unhandledRejection", (error) => {
-    log("Unhandled Rejection", error);
+process.on('unhandledRejection', (error) => {
+    log('Unhandled Rejection', error);
 });
 
 // Create TypeORM connection
@@ -28,16 +35,23 @@ createConnection()
         // 3rd party middleware
         server.use(helmet());
         server.use(bodyParser.json());
+        server.use(fileUpload());
         // This enables CORS for ALL (!) origins. Before moving to production you MUST restrict this with a proper and
         // safe configuration!
         // https://expressjs.com/en/resources/middleware/cors.html
-        server.use(cors());
+        server.use(cors({ exposedHeaders: ['Location'] }));
 
         // Root route
-        server.get("/", (_, result) => result.sendStatus(httpStatusCodes.FORBIDDEN));
+        server.get('/', (_, result) => result.sendStatus(httpStatusCodes.FORBIDDEN));
 
         // Application routes
-        server.use("/users", usersRoute);
+        server.use('/api/auth', authRouter);
+        server.use('/api/user', usersRoute);
+        server.use('/api/coffee', coffeeRoute);
+        server.use('/api/coffeeAttrs', coffeeAttrsRoute);
+        server.use('/api/coffeebrewings', coffeeBrewingRoute);
+        server.use('/api/cigars', cigarRoute);
+        server.use('/api/cigarAttrs', cigarAttrsRoute);
 
         // 404 - Not Found
         server.use((_, result) => result.sendStatus(httpStatusCodes.NOT_FOUND));

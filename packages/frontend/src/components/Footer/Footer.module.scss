@@ -1,0 +1,19 @@
+@import '../../styles/barel.scss';
+
+.Footer {
+    position: fixed;
+    bottom: 10px;
+    width: 100vw;
+
+    font-size: 14px;
+    color: $new-darker-gray;
+
+    a, :hover, :visited  {
+        text-decoration: underline;
+        color: $new-darker-gray;
+    }
+
+    svg {
+        margin-right: 10px;
+    }
+}

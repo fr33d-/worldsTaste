@@ -1,0 +1,47 @@
+@import '../../bootstrap.scss';
+@import '../../style/card.scss';
+
+.IconSelect {
+    width: 100%;
+    padding: 10px;
+    display: flex;
+
+    .LabelIcon {
+        margin-right: 10px;
+        flex-grow: 1;
+    }
+
+    .IconList {
+        display: inline;
+        flex-grow: 100;
+        text-align: center;
+
+        span {
+            position: relative;
+            display: inline-block;
+            height: fit-content;
+            width: fit-content;
+    
+            .Hover {
+                // display: inline;
+                position: absolute;
+                background: transparent;
+                height: 20px;
+                width : 20px;
+                top: 0;
+                left: 0;
+            }
+    
+            svg {
+                margin: 0 2px;
+            }
+        }
+    }
+}
+
+.FormElement {
+    @extend .formElement;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+}

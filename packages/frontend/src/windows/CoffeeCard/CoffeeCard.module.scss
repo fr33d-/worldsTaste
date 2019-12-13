@@ -1,0 +1,141 @@
+@import '../../styles/barel.scss';
+
+.CoffeeCard {
+    @extend .card;
+
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    position: relative;
+    border: none;
+    padding: 40px;
+
+    animation-duration: 1s;
+    animation-name: slidein;
+
+    @include media-breakpoint-down(sm) {
+        flex-direction: column;
+    }
+
+    &.Extended,
+    &.Edit {
+        @extend .cardActive;
+        max-height: 900px;
+    }
+
+    &ActionSection {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+
+        @include media-breakpoint-down(sm) {
+            top: 265px;
+        }
+
+        button {
+            @extend .icon-button;
+        }
+
+        .IconButton {
+            @extend .icon-button;
+
+            border-radius: 15px;
+            height: 30px;
+            padding: 4px 12px;
+            margin-right: 5px;
+            font-size: 14px;
+            color: $new-darker-gray;
+            outline: 0;
+
+            &:hover,
+            &:focus {
+                outline: 0;
+            }
+
+            svg {
+                margin-right: 8px;
+            }
+
+            &.HoverGreen:hover {
+                background-color: $green;
+                color: $white;
+            }
+
+            &.HoverBlue:hover {
+                background-color: $blue;
+                color: $white;
+            }
+
+            &.HoverRed:hover {
+                background-color: $red;
+                color: $white;
+            }
+        }
+    }
+
+    &ImageSection {
+        width: 250px;
+
+        @include media-breakpoint-down(sm) {
+            width: 100%;
+            background: $new-darker-gray;
+            min-width: 250px;
+            text-align: center;
+        }
+
+        img,
+        .Img {
+            width: 100px;
+            height: 100px;
+            border-radius: $border-radius-min;
+            margin: $default-space-small $default-space-small 0 0;
+            display: inline-block;
+
+            background-size: cover;
+            background-position: center;
+
+            &:first-of-type {
+                width: 220px;
+                height: 220px;
+                border-radius: $border-radius;
+                margin-top: 0;
+            }
+        }
+    }
+
+    &TextSection {
+        margin-left: $default-space-small;
+        padding-left: $default-space-small;
+        border-left: 1px solid $new-dark-gray;
+
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        align-items: flex-start;
+
+        @include media-breakpoint-down(md) {
+            flex-direction: column;
+        }
+
+        width: 100%;
+
+        .BrewingTab {
+            height: 500px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+
+        .Description {
+            width: 100%;
+        }
+
+        h2 {
+            width: 100%;
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0 0 15px 5px;
+            line-height: 24xp;
+        }
+    }
+}

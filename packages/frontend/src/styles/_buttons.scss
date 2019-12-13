@@ -1,0 +1,96 @@
+.icon-button {
+    border: none;
+    background: none;
+    color: $icon-button-color;
+}
+
+.add-button, .btn-add {
+    border: 1px solid $icon-button-color;
+    color: $icon-button-color;
+    margin-left: 10px;
+
+    &.btn-ls, &.big {
+        height: 48px;
+        width: 48px;
+        border-radius: 28px;
+        font-size: 20px;
+    }
+
+    &.btn-sm, &.small {
+        height: 28px;
+        width: 28px;
+        border-radius: 14px;
+        font-size: 16px;
+    }
+}
+
+.color-button {
+    height: 45px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: $border-radius;
+    margin-bottom: $default-space-small;
+    margin-right: $default-space-small;
+    background: $new-gray;
+
+    svg {
+        margin-right: 10px;
+    }
+
+    &.blue-full {
+        color: $white;
+        background: $blue-accent;
+    }
+
+    &.red-full {
+        color: $white;
+        background: $red-accent;
+    }
+
+    &.green-full {
+        color: $white;
+        background: $green-accent;
+    }
+
+    &.yellow-full {
+        color: $white;
+        background: $yellow-accent;
+    }
+
+    &.gray-full {
+        color: $white;
+        background: $new-dark-gray;
+        border: 1px solid $new-dark-gray;
+    }
+
+    &.blue {
+        color: $blue-accent;
+        background: transparent;
+        border: 1px solid $blue-accent;
+    }
+
+    &.red {
+        color: $red-accent;
+        background: transparent;
+        border: 1px solid $red-accent;
+    }
+
+    &.green {
+        color: $green-accent;
+        background: transparent;
+        border: 1px solid $green-accent;
+    }
+
+    &.yellow {
+        color: $yellow-accent;
+        background: transparent;
+        border: 1px solid $yellow-accent;
+    }
+
+    &.gray {
+        color: $new-darker-gray;
+        background: transparent;
+        border: 1px solid $new-dark-gray;
+    }
+
+}

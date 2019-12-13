@@ -1,0 +1,100 @@
+@import '../../styles/barel.scss';
+
+.CigarCardEdit {
+    @extend .card;
+    @extend .cardActive;
+
+    overflow: hidden;
+    position: relative;
+    border: none;
+    padding: 45px;
+
+    .EditSection {
+        display: flex;
+        flex-direction: row;
+
+        @include media-breakpoint-down(md) {
+            flex-direction: column;
+        }
+    }
+
+    .Fileupload {
+        display: none;
+    }
+    
+    .ImageSection {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: $default-space-small;
+
+        .Image {
+            position: relative;
+            margin: $default-space-small $default-space-small 0 0;
+
+            button {
+                position: absolute;
+                height: 32px;
+                width: 32px;
+                top: 0;
+                right: 0px;
+                background: $new-dark-gray;
+                border-radius: 16px;
+            }
+            img {
+                width: 120px;
+            }
+        }
+
+        .UploadArea {
+            height: 120px;
+            width: 120px;
+            border: 1px dashed $new-dark-gray;
+            border-radius: $border-radius;
+            margin: $default-space-small $default-space-small 0 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            button {
+                margin: auto;
+            }
+        }
+    }
+
+    .ButtonSection {
+        margin-top: $default-space;
+        display: flex;
+        width: 100%;
+
+        button:last-of-type {
+            margin-left: auto;
+            margin-right: 0;
+        }
+    }
+
+    .TextSection {
+        width: 100%;
+
+        h3 {
+            font-size: 20px;
+            margin-top: $default-space;
+        }
+
+        .Row {
+            @extend .row;
+            margin-bottom: $default-space-small;
+        }
+    }
+
+    .Header {
+        width: 100%;
+        h2 {
+            width: 100%;
+            text-align: center;
+            margin-bottom: $default-space;
+        }
+    }
+}

@@ -1,0 +1,80 @@
+
+//Font
+
+$font-family-sans-serif: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+//Colors: 
+$brand-white: #fff;
+$brand-black: #000;
+$brand-white-blue: #F4F4F6;
+$brand-white-clay: #FDFBF9;
+$brand-light-gray: #D0D1D5;
+$brand-gray: #929292;
+$brand-dark-gray: #4A4A4A;
+
+$brand-text-dark-gray: #2c3340;
+
+$gray-darkest: rgba(48, 48, 48, 0.9);
+$new-light-gray: #F9F9FF;
+$new-light-gray2: #F2F2F2;
+$new-gray: #ECEDF6;
+$new-dark-gray: #C6C7D1;
+$new-darker-gray: #929292;
+$gray-darkest: rgba(48, 48, 48, 0.9); 
+
+$blue-gray: #F5F7FD; 
+
+$white: #fff;
+$black: #000;
+
+
+//Override variables:
+$body-bg: $white; //$new-gray; //$brand-white-clay;
+$body-color: $brand-text-dark-gray;
+
+$border-radius-min: 5px;
+$border-radius: 10px;
+$border-radius-lg: 20px;
+
+$line-space: 15px;
+
+$activ-box-shadow-height: 3px;
+
+$box-shadow-sm:  0px 0px 10px 0px rgba(0,0,0,0.1);
+$box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+$box-shadow-lg: 0px 10px 30px 0px rgba(0,0,0,0.15);
+
+$navbar-padding-y: 15px;
+$navbar-padding-x: 0;
+
+//Custom variables:
+
+$navbar-bg-color: $brand-white-blue;
+$card-bg-color: $brand-white;
+
+$brand-blue: #254CFB;
+$brand-blue-light: #0097FF;
+
+$container-margin-big: 50px;
+$default-space-small: 15px;
+$default-space: 30px;
+$default-space-large: 60px;
+
+$icon-button-color: $brand-gray;
+
+$main-menu-with: 360px;
+$sub-menu-with: 340px;
+$teaser-with: 250px;
+$menu-margin: 20px;
+
+$red: #DC3545;
+$red-accent: #BB5959;
+
+$green: #28A745;
+$green-accent: #80B76A;
+
+$yellow: #FFC108;
+$yellow-accent: #EBAD64;
+
+$blue: #007BFF;
+$blue-accent: #6792BA; //#17A2B8;

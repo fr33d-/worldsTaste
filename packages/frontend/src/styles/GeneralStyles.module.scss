@@ -1,0 +1,108 @@
+@import './barel.scss';
+
+.Introtext {
+    margin-top: $default-space;
+    margin-left: $default-space;
+    padding: $default-space;
+    width: 80%;
+
+    p {
+        color: $new-darker-gray;
+        font-size: 14px;
+        padding-left: 20px;
+        font-weight: 300;
+
+        border-left: 1px solid $new-dark-gray;
+    }
+
+    h2 {
+        padding-bottom: $default-space-small;
+        color: $black;
+        font-size: 32px;
+        font-weight: 400;
+    }
+}
+
+.ReplImg {
+    width: 100%;
+    text-align: center;
+
+    img {
+        width: 200px;
+        margin-bottom: $default-space;
+    }
+
+    p {
+        font-weight: 800px;
+        color: $new-dark-gray;
+        font-size: 32px;
+    }
+}
+
+.Container {
+    margin-top: 100px;
+}
+
+.MobileHeader {
+    margin-bottom: $default-space;
+
+    @include media-breakpoint-up(lg) {
+        display: none;
+    }
+
+    svg {
+        margin-right: 20px;
+    }
+}
+
+.BackgroundHelper {
+    @extend .backgroundHelper;
+    position: fixed;
+
+    @include media-breakpoint-down(md) {
+        display: none;
+    }
+}
+
+.CardsContainer {
+    margin-top: 50px;
+    margin-left: -60px;
+
+    @include media-breakpoint-down(md) {
+        margin-left: 0;
+    }
+}
+
+.FilterRow {
+    width: fit-content;
+    text-align: right;
+    margin-left: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: $default-space;
+}
+
+
+.TabBar {
+    width: 100%;
+    text-align: center;
+    padding: $default-space 0;
+
+    ul {
+        padding: 0;
+        
+        li {
+            display: inline;
+            padding: 9px 20px;
+            font-size: 16px;
+            color: $new-darker-gray;
+
+            &.Active {
+                background: $blue;
+                color: $white;
+                border-radius: 18px;
+            }
+        }
+    }
+}
