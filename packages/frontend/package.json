@@ -35,6 +35,7 @@
         "not op_mini all"
     ],
     "dependencies": {
+        "@blueprintjs/core": "^3.22.2",
         "@fortawesome/fontawesome-free": "^5.8.1",
         "@fortawesome/fontawesome-svg-core": "prerelease",
         "@fortawesome/free-brands-svg-icons": "prerelease",
@@ -50,7 +51,9 @@
         "jsonwebtoken": "^8.5.1",
         "lerna": "^3.13.1",
         "lodash": "^4.17.15",
+        "react": "^16.12.0",
         "react-bootstrap": "^1.0.0-beta.8",
+        "react-dom": "^16.12.0",
         "react-router-dom": "^5.0.0"
     }
 }

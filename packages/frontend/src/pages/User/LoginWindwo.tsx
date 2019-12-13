@@ -39,13 +39,13 @@ type LoginWindwoProps = {
 };
 
 export const LoginWindow = (props: LoginWindwoProps) => {
-    const [mail, setMail] = useState('');
+    const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [msg, setMsg] = useState('');
 
     const login = () => {
         axios
-            .post<string>(`${baseURL}${authURL}/login`, { username: mail, password })
+            .post<string>(`${baseURL}${authURL}/login`, { username, password })
             .then((response) => {
                 // console.log(response);
                 sessionStorage.setItem('auth', response.data);
@@ -75,7 +75,7 @@ export const LoginWindow = (props: LoginWindwoProps) => {
                         You are currently not logged in. If you wish to sign up please send me a mail.
                     </div>
                     <div className={LocalStyles.Form}>
-                        <SimpleTextInput onChange={setMail} name="Mail" value={mail} />
+                        <SimpleTextInput onChange={setUserName} name="Username" value={username} />
                         <SimplePasswordInput onChange={setPassword} name="Password" value={password} />
                     </div>
                     <div className={LocalStyles.ButtonSection}>

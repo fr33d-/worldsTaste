@@ -14,6 +14,8 @@ import { IconButton } from '../../components/IconButton';
 import { Navigationbar } from '../../components/Navigationbar';
 import { LoginWindow } from './LoginWindwo';
 import LocalStyles from './User.module.scss';
+import { Toaster, Position } from "@blueprintjs/core";
+import { createUser } from './userHelperFunctions';
 
 export type User = {
     id: number;
@@ -38,15 +40,15 @@ export type ExtendedUser = {
     username: string;
     email: string;
     image: string;
-    created: string;
+    // created: string;
     role: string;
     password: string;
 };
 
 export const UserRoles: AttrDataItemType[] = [
-    { id: 0, name: 'Admin' },
-    { id: 1, name: 'User' },
-    { id: 2, name: 'Guest' },
+    { id: 0, name: 'ADMIN' },
+    { id: 1, name: 'USER' },
+    { id: 2, name: 'GUEST' },
 ];
 
 export const UserDetailWindow: FC<{ user: FullUser }> = ({ user }) => {
@@ -165,45 +167,37 @@ export const UserAdminWindow: FC<{ user: FullUser }> = ({ user }) => {
 };
 
 export const UserCreateNewWindow: FC<{ user: FullUser }> = ({ user }) => {
-    //New User Data
-    // const [newUserName, setNewUserName] = useState('');
-    // const [newUserMail, setNewUserMail] = useState('');
-    // const [newUserPassword, setNewUserPassword] = useState('');
-    // const [newUserRole, setNewUserRole] = useState(UserRoles[0]);
-    const [createUserError, setCreateUserError] = useState(false);
-    const [savePWError, SetSavePWError] = useState(false);
-
     const [newUser, setNewUser] = useState<ExtendedUser>(
         {
             id: 0, 
             name: 'New User', 
-            role: UserRoles[1].name, 
+            role: UserRoles[0].name, 
             username: 'newUser', 
             password: 'test', 
             email: 'test@test.de',
-            created: String(new Date()),
             image: '',
         })
 
-    const createUser = () => {
-        const jwtObj = sessionStorage.getItem('auth');
-
-        axios
-            .post(`${baseURL}${userURL}/`, {...newUser}, { headers: { auth: jwtObj } })
-            .then((response) => {
-                console.log('user created');
-                console.log(response);
-            })
-            .catch((error) => {
-                console.log(error);
-                setCreateUserError(true);
-            });
+    const innerCreateUser = () => {
+        createUser(newUser).then((res) => {
+            console.log('res', res);
+            Toaster.create({
+                position: Position.TOP_RIGHT,
+            }).show({ message: 'user created', intent: 'success' });  
+        }).catch((e) => {
+            console.log('error', e);
+            Toaster.create({
+                position: Position.TOP_RIGHT,
+            }).show({ message: 'can not create user', intent: 'danger' });
+        });
     };
 
     return (
         <>
-            <h2>Crate User</h2>
+            <h2>Create User</h2>
+            <p>All fields must me longer than 4 charecters</p>
             <TextInput name="Name" obj={newUser} propPath={['name']} setStateHandler={setNewUser} />
+            <TextInput name="User name" obj={newUser} propPath={['username']} setStateHandler={setNewUser} />
             <TextInput name="E-Mail" obj={newUser} propPath={['email']} setStateHandler={setNewUser} />
             <TextInput name="Passwort" obj={newUser} propPath={['password']} setStateHandler={setNewUser}/>
             <DropdownInput
@@ -211,18 +205,16 @@ export const UserCreateNewWindow: FC<{ user: FullUser }> = ({ user }) => {
                 icon="leaf"
                 iconColor={green}
                 label="Rolle"
-                // selectedItem={newUserRole}
-                // onChange={setNewUserRole}
-                // obj={newUser} 
                 propPath={['userrole']} 
                 onChange={setNewUser}
             />
+            {/* Todo: Das sollte besser so ein magic save button sein */}
             <IconButton
-                icon={savePWError ? 'ban' : 'save'}
-                name={savePWError ? 'Error while saving' : 'Save new User'}
+                icon={'save'}
+                name={'Save new User'}
                 color={white}
-                onClick={createUser}
-                className={createUserError ? LocalStyles.RedFull : LocalStyles.GreenFull}
+                onClick={innerCreateUser}
+                className={LocalStyles.GreenFull}
             />
         </>
     );
