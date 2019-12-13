@@ -2,6 +2,7 @@ import { validate } from 'class-validator';
 import { Request, RequestHandler, Response } from 'express';
 import { getRepository } from 'typeorm';
 import { UserEntity } from '../models/entities/UserEntity';
+import { error } from 'util';
 
 // class UserController {
 // export const getAllCoffees: RequestHandler = async (_, result) => {
@@ -48,6 +49,7 @@ export const newUser: RequestHandler = async (req: Request, res: Response) => {
     const errors = await validate(user);
     if (errors.length > 0) {
         res.status(400).send(errors);
+        console.log(errors);
         return;
     }
 
@@ -60,6 +62,7 @@ export const newUser: RequestHandler = async (req: Request, res: Response) => {
         await userRepository.save(user);
     } catch (e) {
         res.status(409).send('username already in use');
+        console.log('username already in use', e)
         return;
     }
 
