@@ -92,7 +92,7 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
 
     const deleteCoffee = (id: number) => {
         axios
-            .delete(`http://localhost:4000/coffee/${id}`)
+            .delete(`${baseURL}${coffeeURL}/${id}`)
             .then((response) => {
                 // console.log(response);
                 // console.log('Post deleted');
@@ -139,7 +139,7 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
             axios
                 .post(`${baseURL}${coffeeURL}`, { ...newPost }, { headers: { auth: jwtObj } })
                 .then((response) => {
-                    console.log(response.headers['location']);
+                    // console.log(response.headers['location']);
                     const location: string = response.headers['location'];
                     const [id] = location.split('/').slice(-1);
                     newPost.id = Number(id);
@@ -147,7 +147,7 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
                     // console.log('Coffee created');
                     setPosts((posts) => (!posts ? posts : [newPost, ...posts]));
 
-                    // this.setEditCard(Number(newPost.id));
+                    // setEditCard(Number(newPost.id));
                     loadEditCard(Number(newPost.id));
                 })
                 .catch((error) => {
@@ -230,8 +230,11 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
 
     const loadEditCard = (id: number) => {
         if (posts) {
-            setEditCard(posts.find((item) => item.id === id));
-            console.log('set edit card', id);
+            const post = posts.find((item) => item.id === id-1);
+            setEditCard(post);
+            console.log('set edit card', post);
+            console.log('with id', id);
+            console.log('in posts ', posts);
         } else {
             console.log('post not found for edit');
             // Todo: Error toast
@@ -379,8 +382,6 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
         },
     ];
 
-    console.log('match', match.params);
-    // const {extention} =  match.params;
     const params: any =  match.params;
 
     return (
@@ -435,7 +436,7 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
                 </div>
             </AppWindow>
             </Route>
-            <Route exact path={`${basePath}/:id`}>
+            <Route path={`${basePath}/:id`}>
                 <OverlayFrame>
                     <CoffeeBrewingWindow
                         methods={coffeeBrewMethod}
@@ -450,7 +451,7 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
             <Route path={`${basePath}/attrDataWindow`}>
                 <AttrDataWindow content={attrData} close={() => closeAttrWindow()} />
             </Route>
-            {/* {displayAttrMenu && <AttrDataWindow content={attrData} toggleFunktion={toggleAttrMenu} />} */}
+
             {editCard && (
                 <OverlayFrame>
                     <CoffeeCardEdit

@@ -1,9 +1,8 @@
-import { FontawesomeObject, IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon, Props as FontAwesomeProps } from "@fortawesome/react-fontawesome";
-import React, { ComponentType, ReactElement } from "react";
+import React, { ReactElement } from "react";
+import Beer from './images/Beer.svg';
 import ChemexSVG from './images/Chemex.svg';
 import Tabak from './images/Tabak.svg';
-import Beer from './images/Beer.svg';
 
 export const baseURL = 'http://localhost:4000/api';
 export const userURL = '/user';

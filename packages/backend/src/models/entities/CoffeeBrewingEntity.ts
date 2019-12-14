@@ -48,6 +48,6 @@ export class CoffeeBrewingEntity extends BaseEntity {
     @JoinColumn({ name: "method" })
     public method!: CoffeeMethodEntity;
 
-    @ManyToOne(type => CoffeeEntity, coffee => coffee.brewings)
+    @ManyToOne(type => CoffeeEntity, coffee => coffee.brewings, { onDelete: 'CASCADE' })
     public coffee!: CoffeeEntity;
 }

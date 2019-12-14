@@ -78,7 +78,7 @@ export class CoffeeEntity extends BaseEntity {
     @JoinColumn({ name: 'species' })
     public species!: CoffeeSpeciesEntity;
 
-    @OneToMany((type) => CoffeeBrewingEntity, (coffeeBrewings) => coffeeBrewings.coffee)
+    @OneToMany((type) => CoffeeBrewingEntity, (coffeeBrewings) => coffeeBrewings.coffee )
     // @JoinColumn({ name: 'brewings' })
     public brewings!: CoffeeBrewingEntity[];
 }
