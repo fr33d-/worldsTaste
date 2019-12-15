@@ -74,6 +74,8 @@ This method runs the backend server and the client in debug mode without product
 
 4. Run `yarn start:frontend` in a separate terminal to boot up the React client in the browser and watch for file changes.
 
+5. Run `yarn start:adminer` for adminer runing on localhost:8080. Login here with server: postgres and the login data you used.
+
 ### Stopping
 
 1. Just Ctrl+C the `frontend`, `backend` and `postgres` processes.

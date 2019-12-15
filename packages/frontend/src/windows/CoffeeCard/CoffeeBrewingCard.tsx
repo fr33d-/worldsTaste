@@ -8,59 +8,68 @@ import Cup from '../../images/cup-bw.svg';
 import { black, blue, blueAccent, green, yellow } from '../../styles/colors';
 import { AttrDataType, BrewingEntry, CoffeeEntry } from '../../components/FormComponents';
 import { BoolInput, DateInput, DropdownInput, NumberInput, TextareaInput } from '../../components/FormElements';
-import { LikeSliderAttrField, SingleSliderAttrField, SliderAttrField } from '../../components/FormElements/AttrFields';
+import {
+    LikeSliderAttrField,
+    SingleSliderAttrField,
+    SliderAttrField,
+    ObjLikeSliderAttrField,
+    ObjSingleSliderAttrField,
+    ObjSliderAttrField,
+} from '../../components/FormElements/AttrFields';
 import { AdvancedSaveButton, DeleteButton } from '../../components/IconButton';
 import LocalStyles from './CoffeeBrewingCard.module.scss';
 import { useParams, useHistory } from 'react-router';
 
 type CoffeeBrewingCardProps = {
-    entry: BrewingEntry;
+    brewing: BrewingEntry;
     coffeeId: number;
     methods: AttrDataType[];
     deleteCoffee(id: number): void;
 };
 
 // tslint:disable-next-line: max-func-body-length
-export const CoffeeBrewingCard = ({entry, coffeeId, deleteCoffee, methods}: CoffeeBrewingCardProps) => {
-    const [id, setId] = useState(entry.id);
-    const [bitter, setBitter] = useState(entry.bitter);
-    const [brewDate, setBrewDate] = useState(entry.brewDate);
-    const [method, setMethod] = useState(entry.method);
-    const [ownDescription, setOwnDescription] = useState(entry.ownDescription);
-    const [rating, setRating] = useState(entry.rating);
-    const [sour, setSour] = useState(entry.sour);
-    const [strength, setStrength] = useState(entry.strength);
-    const [taste, setTaste] = useState(entry.tasteKind);
-    const [tasteKind, setTasteKind] = useState(entry.tasteKind);
-    const [useforcalculation, setUseforcalculation] = useState(entry.useforcalculation);
-    const [woody, setWoody] = useState(entry.woody);
-    const [waterAmount, setWaterAmount] = useState(entry.waterAmount);
-    const [coffeeAmount, setCoffeeAmount] = useState(entry.coffeeAmount);
+export const CoffeeBrewingCard = ({ brewing, coffeeId, deleteCoffee, methods }: CoffeeBrewingCardProps) => {
+    const [formBrewing, setFormBrewing] = useState<BrewingEntry>(brewing);
+
+    // const [id, setId] = useState(entry.id);
+    // const [bitter, setBitter] = useState(entry.bitter);
+    // const [brewDate, setBrewDate] = useState(entry.brewDate);
+    // const [method, setMethod] = useState(entry.method);
+    // const [ownDescription, setOwnDescription] = useState(entry.ownDescription);
+    // const [rating, setRating] = useState(entry.rating);
+    // const [sour, setSour] = useState(entry.sour);
+    // const [strength, setStrength] = useState(entry.strength);
+    // const [taste, setTaste] = useState(entry.tasteKind);
+    // const [tasteKind, setTasteKind] = useState(entry.tasteKind);
+    // const [useforcalculation, setUseforcalculation] = useState(entry.useforcalculation);
+    // const [woody, setWoody] = useState(entry.woody);
+    // const [waterAmount, setWaterAmount] = useState(entry.waterAmount);
+    // const [coffeeAmount, setCoffeeAmount] = useState(entry.coffeeAmount);
 
     const [saveError, setSaveError] = useState(false);
 
     const saveBrewing = () => {
-        const requestObject: BrewingEntry = {
-            id,
-            bitter,
-            brewDate,
-            method,
-            ownDescription,
-            rating,
-            sour,
-            strength,
-            taste,
-            tasteKind,
-            useforcalculation,
-            woody,
-            waterAmount,
-            coffeeAmount,
-        };
+        // const requestObject: BrewingEntry = {
+        //     id,
+        //     bitter,
+        //     brewDate,
+        //     method,
+        //     ownDescription,
+        //     rating,
+        //     sour,
+        //     strength,
+        //     taste,
+        //     tasteKind,
+        //     useforcalculation,
+        //     woody,
+        //     waterAmount,
+        //     coffeeAmount,
+        // };
 
-        console.log(requestObject);
+        // console.log(requestObject);
 
         axios
-            .put(`${baseURL}${coffeeURL}/${coffeeId}/brewings/${entry.id}`, { ...requestObject })
+            .put(`${baseURL}${coffeeURL}/${coffeeId}/brewings/${coffeeId}`, { ...formBrewing })
             .then((response) => {
                 console.log(response);
             })
@@ -74,64 +83,126 @@ export const CoffeeBrewingCard = ({entry, coffeeId, deleteCoffee, methods}: Coff
             <div className="row">
                 <div className="col-12">
                     <h4>
-                        {method.name} am {brewDate.getDate()}.{brewDate.getMonth()}.{brewDate.getFullYear()}
+                        {formBrewing.method.name} am {formBrewing.brewDate.getDate()}.{formBrewing.brewDate.getMonth()}.
+                        {formBrewing.brewDate.getFullYear()}
                     </h4>
                 </div>
                 <div className="col-12 col-md-6">
                     <DropdownInput
                         items={methods}
                         label="Brühmethode"
-                        onChange={setMethod}
-                        selectedItem={method}
+                        onChange={setFormBrewing}
+                        selectedItem={formBrewing.method}
                         icon={'flask'}
                         iconColor={blue}
+                        propPath={['method']}
                     />
                 </div>
                 <div className="col-12 col-md-6">
-                    <DateInput label="Brühmethode" onChange={setBrewDate} value={brewDate} />
+                    <DateInput
+                        label="Brühmethode"
+                        obj={formBrewing}
+                        setStateHandler={setFormBrewing}
+                        propPath={['brewDate']}
+                    />
                 </div>
                 <div className="col-12 col-md-6">
-                    <NumberInput onChange={setWaterAmount} name="Wassermänge:" unit="ml" value={waterAmount} />
+                    <NumberInput
+                        name="Wassermänge:"
+                        unit="ml"
+                        obj={formBrewing}
+                        setStateHandler={setFormBrewing}
+                        propPath={['waterAmount']}
+                    />
                 </div>
                 <div className="col-12 col-md-6">
-                    <NumberInput onChange={setCoffeeAmount} name="Kaffeemänge:" unit="g" value={coffeeAmount} />
+                    <NumberInput
+                        name="Kaffeemänge:"
+                        unit="g"
+                        obj={formBrewing}
+                        setStateHandler={setFormBrewing}
+                        propPath={['coffeeAmount']}
+                    />
                 </div>
                 <div className="col-12 col-md-6">
-                    <LikeSliderAttrField maxValue={5} value={rating} onChange={setRating} name="Gesamtbewertung:" />
+                    <ObjLikeSliderAttrField
+                        maxValue={5}
+                        name="Gesamtbewertung:"
+                        obj={formBrewing}
+                        setStateHandler={setFormBrewing}
+                        propPath={['rating']}
+                    />
                 </div>
                 <div className="col-12 col-md-6">
                     <BoolInput
                         label="Für Berechnung verwenden:"
-                        value={useforcalculation}
-                        onChange={setUseforcalculation}
+                        obj={formBrewing}
+                        setStateHandler={setFormBrewing}
+                        propPath={['useforcalculation']}
                     />
                 </div>
                 <div className="col-12 col-md-6">
-                    <SliderAttrField color={black} name="Stärke" value={strength} onChange={setStrength} />
+                    <ObjSliderAttrField
+                        color={black}
+                        name="Stärke"
+                        obj={formBrewing}
+                        setStateHandler={setFormBrewing}
+                        propPath={['strength']}
+                    />
                 </div>
                 <div className="col-12 col-md-6">
-                    <SliderAttrField color={blue} name="Geschmack:" value={taste} onChange={setTaste} />
+                    <ObjSliderAttrField
+                        color={blue}
+                        name="Geschmack:"
+                        obj={formBrewing}
+                        setStateHandler={setFormBrewing}
+                        propPath={['taste']}
+                    />
                 </div>
                 <div className="col-12 col-md-6">
-                    <SingleSliderAttrField
+                    <ObjSingleSliderAttrField
                         color={blue}
                         name="Frucht/Schokolade:"
-                        value={tasteKind}
-                        onChange={setTasteKind}
+                        obj={formBrewing}
+                        setStateHandler={setFormBrewing}
+                        propPath={['tasteKind']}
                     />
                 </div>
 
                 <div className="col-12 col-md-6">
-                    <SliderAttrField color={yellow} name="Säure:" value={sour} onChange={setSour} />
+                    <ObjSliderAttrField
+                        color={yellow}
+                        name="Säure:"
+                        obj={formBrewing}
+                        setStateHandler={setFormBrewing}
+                        propPath={['sour']}
+                    />
                 </div>
                 <div className="col-12 col-md-6">
-                    <SliderAttrField color={blueAccent} name="Bitter:" value={bitter} onChange={setBitter} />
+                    <ObjSliderAttrField
+                        color={blueAccent}
+                        name="Bitter:"
+                        obj={formBrewing}
+                        setStateHandler={setFormBrewing}
+                        propPath={['bitter']}
+                    />
                 </div>
                 <div className="col-12 col-md-6">
-                    <SliderAttrField color={green} name="Erbsig:" value={woody} onChange={setWoody} />
+                    <ObjSliderAttrField
+                        color={green}
+                        name="Erbsig:"
+                        obj={formBrewing}
+                        setStateHandler={setFormBrewing}
+                        propPath={['woody']}
+                    />
                 </div>
                 <div className="col-12">
-                    <TextareaInput label="Beschreibung" onChange={setOwnDescription} value={ownDescription} />
+                    <TextareaInput
+                        label="Beschreibung"
+                        obj={formBrewing}
+                        setStateHandler={setFormBrewing}
+                        propPath={['ownDescription']}
+                    />
                 </div>
             </div>
             <div className="row">
@@ -153,28 +224,35 @@ type CoffeeBrewingWindowProps = {
 };
 
 // tslint:disable-next-line: max-func-body-length
-export const CoffeeBrewingWindow = ({ methods, basePath, coffees, saveCoffee, delteCoffee }: CoffeeBrewingWindowProps) => {
-    
-    //Todo: get id from pageprops and get coffee from api, then set brewings 
-    const {id} = useParams();
+export const CoffeeBrewingWindow = ({
+    methods,
+    basePath,
+    coffees,
+    saveCoffee,
+    delteCoffee,
+}: CoffeeBrewingWindowProps) => {
+    //Todo: get id from pageprops and get coffee from api, then set brewings
+    const { id } = useParams();
     const history = useHistory();
-    const coffee = coffees.find(elm => elm.id === Number(id));
+    const coffee = coffees.find((elm) => elm.id === Number(id));
     const [selectedBrewing, setSelectedBrewing] = useState<BrewingEntry>();
 
-    useEffect(() => {
-        if (coffees.length > 0 ) {
-            setSelectedBrewing(coffee && coffee.brewings[0])
-        }
-    }, [coffees])
+    // Da das hier eher eine Detailansicht ist beinhaltet der geladene Kaffee nicht alle einträge, wie zum beispiel die Brewings. Daher müssen die details nachgeladen werden... 
+    // Todo: load coffee or bewings seperat
 
+
+    useEffect(() => {
+        if (coffees.length > 0) {
+            setSelectedBrewing(coffee && coffee.brewings[0]);
+        }
+    }, [coffees]);
 
     const goBack = () => {
-        history.push(`${basePath}`)
-    }
+        history.push(`${basePath}`);
+    };
 
     const createBrewing = () => {
         if (coffee) {
-
             let newBrewing: BrewingEntry = {
                 id: 0,
                 bitter: 0,
@@ -191,7 +269,6 @@ export const CoffeeBrewingWindow = ({ methods, basePath, coffees, saveCoffee, de
                 waterAmount: 0,
                 coffeeAmount: 0,
             };
-    
             axios
                 .post(`${baseURL}${coffeeURL}/${coffee.id}/brewings/`, { ...newBrewing })
                 .then((response) => {
@@ -199,17 +276,16 @@ export const CoffeeBrewingWindow = ({ methods, basePath, coffees, saveCoffee, de
                     const location: string = response.headers['location'];
                     const [newId] = location.split('/').slice(-1);
                     newBrewing.id = Number(newId);
-                    
-                    saveCoffee({...coffee, brewings: [newBrewing, ...coffee.brewings]});
-    
+
+                    saveCoffee({ ...coffee, brewings: [newBrewing, ...coffee.brewings] });
+
                     setSelectedBrewing(newBrewing);
                 })
                 .catch((error) => {
                     console.log(error);
                 });
-            }
+        }
     };
-
 
     if (!coffee) return <p>Error, coffee not found with this id</p>;
 
@@ -248,11 +324,11 @@ export const CoffeeBrewingWindow = ({ methods, basePath, coffees, saveCoffee, de
                     <div className={classNames(LocalStyles.BrewingCard, 'col-8')}>
                         {selectedBrewing ? (
                             <CoffeeBrewingCard
-                                entry={selectedBrewing}
+                                brewing={selectedBrewing}
                                 key={selectedBrewing.id}
                                 methods={methods}
                                 coffeeId={coffee.id}
-                                deleteCoffee={delteCoffee       ^}
+                                deleteCoffee={delteCoffee}
                             />
                         ) : (
                             <div className={LocalStyles.NoContent}>
