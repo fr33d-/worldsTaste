@@ -1,64 +1,37 @@
-import axios from 'axios';
-import jwt from 'jsonwebtoken';
-import React, { useState, FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
-import { SimplePasswordInput, SimpleTextInput, DropdownInput, TextInput } from '../../components/FormElements';
-import { authURL, baseURL } from '../../data';
-import LocalStyles from './User.module.scss';
-import { User, ExtendedUser, FullUser, UserRoles } from '../../pages/User';
-import { IconButton } from '../../components/IconButton';
-import { createUser, throDataSucess, newExtendedUser, throDataError, getUserList, changeUser } from '../../pages/User/userHelperFunctions';
-import { green, white } from '../../styles/colors';
 import { Link } from 'react-router-dom';
-import { AttrDataItemType } from '../../components/FormComponents';
+import { DropdownInput, SimplePasswordInput, SimpleTextInput, TextInput } from '../../components/FormElements';
 import { AttrField } from '../../components/FormElements/AttrFields';
+import { IconButton } from '../../components/IconButton';
+import { AttrDataItemType, ExtendedUser, FullUser, User } from '../../helpers/types';
+import { UserRoles } from '../../pages/User';
+import {
+    changeUser,
+    createUser,
+    getUserList,
+    newExtendedUser,
+    throwDataError,
+    throwDataSucess,
+} from '../../pages/User/userHelperFunctions';
+import { green, white } from '../../styles/colors';
+import LocalStyles from './User.module.scss';
+import { login } from './UserHelperFunctions';
 
-export const useJwt = (): User | undefined => {
-    const jwtObj = sessionStorage.getItem('auth');
-
-    if (jwtObj == null && typeof jwtObj !== 'string') {
-        return;
-    } else {
-        const jwtJson = jwt.decode(jwtObj);
-        // console.log(jwtJson);
-
-        if (
-            jwtJson !== null &&
-            typeof jwtJson !== 'string' &&
-            jwtJson['userId'] !== null &&
-            jwtJson['username'] !== null &&
-            jwtJson['name'] !== null &&
-            jwtJson['role'] !== null
-        ) {
-            return {
-                id: jwtJson['userId'],
-                username: jwtJson['username'],
-                name: jwtJson['name'],
-                role: jwtJson['role'],
-            };
-        }
-    }
+type LoginWindowProps = {
+    setUser(): void;
 };
 
-type LoginWindwoProps = {
-    setUserFromStr(): void;
-};
-
-export const LoginWindow = (props: LoginWindwoProps) => {
+export const LoginWindow = ({ setUser }: LoginWindowProps) => {
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [msg, setMsg] = useState('');
 
-    const login = () => {
-        axios
-            .post<string>(`${baseURL}${authURL}/login`, { username, password })
-            .then((response) => {
-                // console.log(response);
-                sessionStorage.setItem('auth', response.data);
-
+    const innerLogin = () => {
+        login(username, password)
+            .then((res) => {
                 setMsg('Logged in!');
-                // location.reload();
-                props.setUserFromStr();
+                setUser();
             })
             .catch((error) => {
                 console.log(error);
@@ -85,7 +58,7 @@ export const LoginWindow = (props: LoginWindwoProps) => {
                         <SimplePasswordInput onChange={setPassword} name="Password" value={password} />
                     </div>
                     <div className={LocalStyles.ButtonSection}>
-                        <Button className={LocalStyles.Login} onClick={login}>
+                        <Button className={LocalStyles.Login} onClick={innerLogin}>
                             Login
                         </Button>
                     </div>
@@ -95,7 +68,6 @@ export const LoginWindow = (props: LoginWindwoProps) => {
         </>
     );
 };
-
 
 export const UserDetailWindow: FC<{ user: FullUser }> = ({ user }) => {
     return (
@@ -222,10 +194,10 @@ export const UserCreateNewWindow: FC<{ user: FullUser }> = () => {
     const innerCreateUser = () => {
         createUser(newUser)
             .then((res) => {
-                throDataSucess('user created');
+                throwDataSucess('user created');
             })
             .catch((e) => {
-                throDataError('can not create user', e);
+                throwDataError('can not create user', e);
             });
     };
 

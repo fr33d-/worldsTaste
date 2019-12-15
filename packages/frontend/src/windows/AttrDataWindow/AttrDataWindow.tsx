@@ -1,14 +1,70 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import axios from 'axios';
 import classnames from 'classnames';
 import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
 import { Row } from 'react-bootstrap';
-import { baseURL } from '../../data';
-import { AttrDataType } from '../../components/FormComponents';
-import LocalStyles from './AttrDataWindow.module.scss';
-import { addNewItem, deleteItem } from './AttrDataHelperFunctions';
-import { async } from 'q';
 import { throwDataError, throwDataSucess } from '../../pages/User/userHelperFunctions';
+import { addNewItem, deleteItem } from './AttrDataHelperFunctions';
+import LocalStyles from './AttrDataWindow.module.scss';
+import { AttrDataType, CoffeeAttrData } from '../../helpers/types';
+
+type CoffeeAttrDataWindowProps = {
+    coffeeAttrData: CoffeeAttrData;
+    close(): void;
+}
+
+export const CoffeeAttrDataWindow = ({close, coffeeAttrData}: CoffeeAttrDataWindowProps) => {
+
+    // Todo: warum fällt das nicht aus der API raus
+    const attrData = [
+        {
+            id: 1,
+            name: 'Röstarten',
+            urlSubstring: 'coffeeAttrs/kinds',
+            description: 'Kaffee Arten, zB Filter Kaffee oder Espresso',
+            items: coffeeAttrData.kinds,
+        },
+        {
+            id: 2,
+            name: 'Herkünfte',
+            urlSubstring: 'coffeeAttrs/origins',
+            description: 'Kaffee herkunfts Länder',
+            items: coffeeAttrData.origins,
+        },
+        {
+            id: 3,
+            name: 'Röstereien',
+            urlSubstring: 'coffeeAttrs/roasteds',
+            description: 'Kaffee Röstereien',
+            items: coffeeAttrData.roasteds,
+        },
+        {
+            id: 4,
+            name: 'Bohnenart',
+            urlSubstring: 'coffeeAttrs/species',
+            description: 'Art der Bohne, zB Arabica oder Robusta',
+            items: coffeeAttrData.specieses,
+        },
+        {
+            id: 5,
+            name: 'Prozess',
+            urlSubstring: 'coffeeAttrs/processes',
+            description: 'Verarbeitungsprozess, zB Washed oder Natural',
+            items: coffeeAttrData.processes,
+        },
+        {
+            id: 6,
+            name: 'Brühmethoden',
+            urlSubstring: 'coffeeAttrs/method',
+            description: 'Brühmethoden, zB. V60, French Press oder AeroPress',
+            items: coffeeAttrData.brewMethods,
+        },
+    ];
+
+    return (
+        <AttrDataWindow close={close} content={attrData} />
+    )
+
+}
 
 export type AttrDataProps = {
     content: AttrDataType[];

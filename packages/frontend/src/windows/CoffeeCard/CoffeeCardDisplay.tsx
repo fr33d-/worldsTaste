@@ -1,93 +1,94 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { default as classnames, default as classNames } from 'classnames';
 import React, { useState } from 'react';
-import { baseURL } from '../../data';
-import { blue, cyan, green, yellow, black, brown } from '../../styles/colors';
-import { CoffeeEntry, BrewingEntry } from '../../components/FormComponents';
 import {
     AttrField,
     AttrFieldDescription,
     AttrFieldLikeList,
     AttrFieldSlider,
     AttrFieldSliderSingle,
-    DateFormat,
-    LikeSliderAttrField,
 } from '../../components/FormElements/AttrFields';
+import { baseURL } from '../../data';
+import { CoffeeEntry } from '../../helpers/types';
+import { blue, cyan, green, yellow } from '../../styles/colors';
 import coffeePlacement from './../../images/coffeePlacement.svg';
 import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import LocalStyles from './CoffeeCard.module.scss';
-import axios from 'axios';
 
-type CoffeeCardDisplayProps = {
+type InlineCoffeeCardDisplayProps = {
     entry: CoffeeEntry;
     active?: boolean;
-    deleteFunction(id: number): void;
-    editFunction(id: number): void;
-    openBrewings(coffeeEntry: CoffeeEntry): void;
+    // deleteFunction(id: number): void;
+    // editFunction(id: number): void;
+    // openBrewings(coffeeEntry: CoffeeEntry): void;
 };
 
 // tslint:disable-next-line: max-func-body-length
-export const CoffeeCardDisplay = (props: CoffeeCardDisplayProps) => {
+export const InlineCoffeeCardDisplay = ({ entry, active }: InlineCoffeeCardDisplayProps) => {
     const [expanded, setExpanded] = useState(false);
-    const [id, setId] = useState(props.entry.id);
-    const [imageStrings, setImageStrings] = useState(props.entry.imageStrings);
-    const [name, setName] = useState(props.entry.name);
-    const [description, setDescription] = useState(props.entry.description);
-    const [origin, setOrigin] = useState(props.entry.origin);
-    const [rating, setRating] = useState(props.entry.rating);
-    const [roasted, setRoasted] = useState(props.entry.roasted);
-    const [kind, setKind] = useState(props.entry.kind);
-    const [taste, setTaste] = useState(props.entry.taste);
-    const [tasteKind, setTasteKind] = useState(props.entry.tasteKind);
-    const [woody, setWoody] = useState(props.entry.woody);
-    const [bitter, setBitter] = useState(props.entry.bitter);
-    const [sour, setSour] = useState(props.entry.sour);
-    const [ownDescription, setOwnDescription] = useState(props.entry.ownDescription);
-    const [dateAdded, setDateAdded] = useState(props.entry.dateAdded);
-    const [process, setProcess] = useState(props.entry.process);
-    const [buyDate, setBuyDate] = useState(props.entry.buyDate);
-    const [species, setSpecies] = useState(props.entry.species);
-    const [brewings, setBrewings] = useState(props.entry.brewings);
+
+    // const [id, setId] = useState(props.entry.id);
+    // const [imageStrings, setImageStrings] = useState(props.entry.imageStrings);
+    // const [name, setName] = useState(props.entry.name);
+    // const [description, setDescription] = useState(props.entry.description);
+    // const [origin, setOrigin] = useState(props.entry.origin);
+    // const [rating, setRating] = useState(props.entry.rating);
+    // const [roasted, setRoasted] = useState(props.entry.roasted);
+    // const [kind, setKind] = useState(props.entry.kind);
+    // const [taste, setTaste] = useState(props.entry.taste);
+    // const [tasteKind, setTasteKind] = useState(props.entry.tasteKind);
+    // const [woody, setWoody] = useState(props.entry.woody);
+    // const [bitter, setBitter] = useState(props.entry.bitter);
+    // const [sour, setSour] = useState(props.entry.sour);
+    // const [ownDescription, setOwnDescription] = useState(props.entry.ownDescription);
+    // const [dateAdded, setDateAdded] = useState(props.entry.dateAdded);
+    // const [process, setProcess] = useState(props.entry.process);
+    // const [buyDate, setBuyDate] = useState(props.entry.buyDate);
+    // const [species, setSpecies] = useState(props.entry.species);
+    // const [brewings, setBrewings] = useState(props.entry.brewings);
     const [tab, setTab] = useState(0);
 
-    const { openBrewings, entry } = props;
+    // const { openBrewings, entry } = props;
 
     const toggleCard = () => {
         setExpanded(!expanded);
-        console.log('toggled');
+        // console.log('toggled');
     };
 
     const editCard = () => {
-        props.editFunction(id);
+        // props.editFunction(id);
     };
 
     const deleteCard = () => {
-        props.deleteFunction(id);
+        // props.deleteFunction(id);
     };
 
-    const { active } = props;
+    const openBrewings = () => {};
 
-    const openBrewingsForCoffee = (coffeeId: number) => {
-        axios
-            .get(`http://localhost:4000/coffee/${coffeeId}/brewings`)
-            .then((response) => {
-                console.log('Got brewings');
-                let loadedBrewings = response.data as BrewingEntry[];
-                // console.log(loadedBrewings);
-                loadedBrewings = loadedBrewings.map((brewing) => {
-                    brewing.brewDate = new Date(brewing.brewDate);
-                    return brewing;
-                });
-                console.log(loadedBrewings);
-                setBrewings(loadedBrewings);
-            })
-            .catch((error) => {
-                console.log(error);
-                console.log('Cant get brewings');
-            });
+    // const { active } = props;
 
-        setTab(2);
-    };
+    // Todo: das muss umgebaut werden mit neue id
+    // const openBrewingsForCoffee = (coffeeId: number) => {
+    //     axios
+    //         .get<BrewingEntry[]>(`http://localhost:4000/coffee/${coffeeId}/brewings`)
+    //         .then((response) => {
+    //             console.log('Got brewings');
+    //             let loadedBrewings = response.data;
+    //             // console.log(loadedBrewings);
+    //             loadedBrewings = loadedBrewings.map((brewing) => {
+    //                 brewing.brewDate = new Date(brewing.brewDate);
+    //                 return brewing;
+    //             });
+    //             console.log(loadedBrewings);
+    //             setBrewings(loadedBrewings);
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //             console.log('Cant get brewings');
+    //         });
+
+    //     setTab(2);
+    // };
     return (
         <>
             <div
@@ -99,7 +100,7 @@ export const CoffeeCardDisplay = (props: CoffeeCardDisplayProps) => {
             >
                 <div className={LocalStyles.CoffeeCardActionSection}>
                     <button
-                        onClick={() => openBrewings(entry)}
+                        onClick={openBrewings}
                         className={classNames(LocalStyles.IconButton, LocalStyles.HoverGreen)}
                     >
                         <FontAwesomeIcon icon="flask" />
@@ -118,10 +119,10 @@ export const CoffeeCardDisplay = (props: CoffeeCardDisplayProps) => {
                     </button>
                 </div>
                 <div className={LocalStyles.CoffeeCardImageSection}>
-                    {imageStrings !== undefined && imageStrings.length > 0 ? (
+                    {entry.imageStrings !== undefined && entry.imageStrings.length > 0 ? (
                         <>
                             {expanded ? (
-                                imageStrings.map((img, i) => (
+                                entry.imageStrings.map((img, i) => (
                                     <div
                                         className={LocalStyles.Img}
                                         style={{ backgroundImage: `url(${baseURL}${img})` }}
@@ -131,18 +132,18 @@ export const CoffeeCardDisplay = (props: CoffeeCardDisplayProps) => {
                             ) : (
                                 <div
                                     className={LocalStyles.Img}
-                                    style={{ backgroundImage: `url(${baseURL}${imageStrings[0]})` }}
+                                    style={{ backgroundImage: `url(${baseURL}${entry.imageStrings[0]})` }}
                                 />
                             )}
                         </>
                     ) : (
-                        <img src={coffeePlacement} />
+                        <img src={coffeePlacement} alt="no coffees" />
                     )}
                 </div>
                 <div className={LocalStyles.CoffeeCardTextSection}>
                     <div className="container">
                         <div className="row">
-                            <h2>{name}</h2>
+                            <h2>{entry.name}</h2>
                             {expanded && (
                                 <div className={GeneralStyles.TabBar}>
                                     <ul>
@@ -158,12 +159,12 @@ export const CoffeeCardDisplay = (props: CoffeeCardDisplayProps) => {
                                         >
                                             Details
                                         </li>
-                                        <li
+                                        {/* <li
                                             className={classNames(tab === 2 && GeneralStyles.Active)}
-                                            onClick={() => openBrewingsForCoffee(id)}
+                                            onClick={() => openBrewingsForCoffee(entry.id)}
                                         >
                                             Bewings
-                                        </li>
+                                        </li> */}
                                     </ul>
                                 </div>
                             )}
@@ -173,31 +174,46 @@ export const CoffeeCardDisplay = (props: CoffeeCardDisplayProps) => {
                                         <AttrField
                                             color={yellow}
                                             icon="globe-americas"
-                                            value={origin.name}
+                                            value={entry.origin.name}
                                             name="Herkunft:"
                                         />
                                     </div>
                                     <div className="col-12 col-md-6">
-                                        <AttrField color={blue} icon="flask" value={kind.name} name="Art:" />
+                                        <AttrField color={blue} icon="flask" value={entry.kind.name} name="Art:" />
                                     </div>
                                     <div className="col-12 col-md-6">
-                                        <AttrField color={yellow} icon="store" value={roasted.name} name="Rösterei:" />
+                                        <AttrField
+                                            color={yellow}
+                                            icon="store"
+                                            value={entry.roasted.name}
+                                            name="Rösterei:"
+                                        />
                                     </div>
 
                                     <div className="col-12 col-md-6">
-                                        <AttrField color={green} icon="leaf" value={process.name} name="Prozess:" />
+                                        <AttrField
+                                            color={green}
+                                            icon="leaf"
+                                            value={entry.process.name}
+                                            name="Prozess:"
+                                        />
                                     </div>
                                     <div className="col-12 col-md-6">
-                                        <AttrField color={green} icon="leaf" value={species.name} name="Bohnenart:" />
+                                        <AttrField
+                                            color={green}
+                                            icon="leaf"
+                                            value={entry.species.name}
+                                            name="Bohnenart:"
+                                        />
                                     </div>
                                     <div className="col-12 col-md-6">
-                                        <AttrFieldLikeList value={rating} name="Gesammtbewertung:" />
+                                        <AttrFieldLikeList value={entry.rating} name="Gesammtbewertung:" />
                                     </div>
                                     <div className="col-12">
                                         <AttrFieldDescription
                                             expanded={expanded}
                                             name="Beschreibung:"
-                                            value={description}
+                                            value={entry.description}
                                         />
                                     </div>
                                 </>
@@ -207,38 +223,38 @@ export const CoffeeCardDisplay = (props: CoffeeCardDisplayProps) => {
                         {tab === 1 && (
                             <div className="row">
                                 <div className="col-12 col-md-6">
-                                    <AttrFieldSlider color={blue} name="Geschmack:" value={taste} />
+                                    <AttrFieldSlider color={blue} name="Geschmack:" value={entry.taste} />
                                 </div>
                                 <div className="col-12 col-md-6">
                                     <AttrFieldSliderSingle
                                         color={green}
                                         textLeft="Schokoloade"
                                         textRight="Frucht"
-                                        value={tasteKind}
+                                        value={entry.tasteKind}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
-                                    <AttrFieldSlider color={green} name="Erbsig:" value={woody} />
+                                    <AttrFieldSlider color={green} name="Erbsig:" value={entry.woody} />
                                 </div>
                                 <div className="col-12 col-md-6">
-                                    <AttrFieldSlider color={cyan} name="Bitter:" value={bitter} />
+                                    <AttrFieldSlider color={cyan} name="Bitter:" value={entry.bitter} />
                                 </div>
                                 <div className="col-12 col-md-6">
-                                    <AttrFieldSlider color={yellow} name="Säure:" value={sour} />
+                                    <AttrFieldSlider color={yellow} name="Säure:" value={entry.sour} />
                                 </div>
                                 <div className="col-12">
                                     <AttrFieldDescription
                                         expanded={true}
                                         name="Eigene Beschreibung"
-                                        value={ownDescription}
+                                        value={entry.ownDescription}
                                     />
                                 </div>
                             </div>
                         )}
 
-                        {tab === 2 && brewings && (
+                        {/* {tab === 2 && entry.brewings && (
                             <div className={LocalStyles.BrewingTab}>
-                                {brewings.map((brewing) => (
+                                {entry.brewings.map((brewing) => (
                                     <>
                                         <h4>
                                             {brewing.method.name} am <DateFormat date={brewing.brewDate} />
@@ -309,7 +325,7 @@ export const CoffeeCardDisplay = (props: CoffeeCardDisplayProps) => {
                                     </>
                                 ))}
                             </div>
-                        )}
+                        )} */}
                     </div>
                 </div>
             </div>

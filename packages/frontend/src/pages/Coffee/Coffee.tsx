@@ -1,48 +1,49 @@
-import axios from 'axios';
-import jwt from 'jsonwebtoken';
-import React, { useEffect, useState, FC } from 'react';
-import { AttrDataWindow } from '../../windows/AttrDataWindow';
-import { CoffeeBrewingWindow } from '../../windows/CoffeeCard/CoffeeBrewingCard';
-import { CoffeeCardDisplay } from '../../windows/CoffeeCard/CoffeeCardDisplay';
-import { CoffeeCardEdit } from '../../windows/CoffeeCard/CoffeeCardEdit';
+import React, { FC, useEffect, useState } from 'react';
+import { Route, RouteComponentProps, Switch, useHistory, useLocation, withRouter } from 'react-router';
 import { AddButton, DataButton, Filter, IntroText } from '../../components/Filter';
-import { AttrDataType, BrewingEntry, CoffeeEntry, FilterMenuType } from '../../components/FormComponents';
 import { Sidemenu } from '../../components/Sidemenu';
-import { baseURL, coffeeAttrURL, coffeeURL } from '../../data';
+import { CoffeeAttrData, CoffeeEntry, FilterMenuType, User } from '../../helpers/types';
 import { AppWindow } from '../../windows/AppWindow';
-import { User } from '../User';
-import { useJwt } from '../../windows/UserWindows/';
+import { AttrDataWindow, CoffeeAttrDataWindow } from '../../windows/AttrDataWindow';
+import { CoffeeCardDisplay } from '../../windows/CoffeeCard/CoffeeCardDisplay';
+import { CoffeeDetailWindow } from '../../windows/CoffeeCard/CoffeeDetailWindow';
+import { setUserFromSessionStorage } from '../User';
+import { throwDataError, throwDataSucess } from '../User/userHelperFunctions';
 import { default as chemexSVG, default as CoffeeReplacement } from './../../images/Chemex.svg';
 import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import LocalStyles from './Coffee.module.scss';
-import { Route, useLocation, RouteComponentProps, withRouter, useParams, useHistory } from 'react-router';
-import OverlayFrame from '../../windows/OverlayFrame/OverlayFrame';
+import { deleteCoffee, getCoffeAttrData, getCoffees, saveNewCoffee, updateCoffee } from './CoffeeHelperFunctions';
+import { useJwt } from '../../windows/UserWindows/UserHelperFunctions';
 
 const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
     const [posts, setPosts] = useState<CoffeeEntry[]>([]);
     const [filteredPosts, setFilteredPosts] = useState<CoffeeEntry[]>([]);
-    const [menu, setMenu] = useState<AttrDataType[]>([]);
-    const [filter, setFilter] = useState<string>();
+    // const [menu, setMenu] = useState<AttrDataType[]>([]);
+    // const [filter, setFilter] = useState<string>();
+
+    // Maybe we dont need this
     const [loading, setLoading] = useState(false);
-    const [coffeeKinds, setCoffeeKinds] = useState<AttrDataType[]>([]);
-    const [coffeeRoateds, setCoffeeRoateds] = useState<AttrDataType[]>([]);
-    const [coffeeOrigins, setCoffeeOrigins] = useState<AttrDataType[]>([]);
-    const [coffeeProcesses, setCoffeeProcesses] = useState<AttrDataType[]>([]);
-    const [coffeeSpecies, setCoffeeSpecies] = useState<AttrDataType[]>([]);
-    const [coffeeBrewMethod, setCoffeeBrewMethod] = useState<AttrDataType[]>([]);
+
+    // new
+    const [coffeeAttrData, setCoffeeAttrData] = useState<CoffeeAttrData>();
+
+    // old
+    // const [coffeeKinds, setCoffeeKinds] = useState<AttrDataType[]>([]);
+    // const [coffeeRoateds, setCoffeeRoateds] = useState<AttrDataType[]>([]);
+    // const [coffeeOrigins, setCoffeeOrigins] = useState<AttrDataType[]>([]);
+    // const [coffeeProcesses, setCoffeeProcesses] = useState<AttrDataType[]>([]);
+    // const [coffeeSpecies, setCoffeeSpecies] = useState<AttrDataType[]>([]);
+    // const [coffeeBrewMethod, setCoffeeBrewMethod] = useState<AttrDataType[]>([]);
+
     // const [displayAttrMenu, setDisplayAttrMenu] = useState<boolean>();
-    const [editCard, setEditCard] = useState<CoffeeEntry>();
+    // const [editCard, setEditCard] = useState<CoffeeEntry>();
     const [activeFilter, setActiveFilter] = useState<string>();
-    const [brewingCard, setBrewingCard] = useState<CoffeeEntry>();
+    // const [brewingCard, setBrewingCard] = useState<CoffeeEntry>();
     const [user, setUser] = useState<User>();
 
-    const jwtObj = sessionStorage.getItem('auth');
-
     const history = useHistory();
-    const {pathname} = useLocation();
+    const { pathname } = useLocation();
     const basePath = '/coffee';
-    // console.log('location in coffeeBase', location);
-    // console.log('match in coffeeBase', match);
 
     // Todo: vill sollte man das schlauer machen
     useEffect(() => {
@@ -50,208 +51,185 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
         initiateData();
     }, []);
 
-    //Todo: eigentlich müsste diese funkton asyncron sein und dann via then später das fenster schließen
-    const saveCoffee = (coffee: CoffeeEntry): boolean => {
+    const innerSaveCoffee = async (coffee: CoffeeEntry): Promise<void> => {
         if (coffee.id === 0) {
             //Create new coffee
-            axios
-                .post(`${baseURL}${coffeeURL}`, { ...coffee }, { headers: { auth: jwtObj } })
-                .then((response) => {
-                    console.log(response.headers['location']);
-                    const location: string = response.headers['location'];
-                    const [id] = location.split('/').slice(-1);
-
+            saveNewCoffee(coffee)
+                .then((id) => {
                     setPosts((posts) => (!posts ? posts : [{ ...coffee, id: Number(id) }, ...posts]));
-                    return true;
+                    throwDataSucess('new coffee saved');
                 })
                 .catch((error) => {
                     console.log(error);
                     console.log('Cant create coffee');
+                    throwDataError('sorry, cant create new coffe', error);
                 });
-            return false;
         } else {
             // Save existing coffee
-            axios
-                .put(`${baseURL}${coffeeURL}/${coffee.id}`, { ...coffee }, { headers: { auth: jwtObj } })
-                .then((response) => {
-                    console.log(response.headers['location']);
-                    // const location: string = response.headers['location'];
-                    // const [id] = location.split('/').slice(-1);
-
+            updateCoffee(coffee)
+                .then((res) => {
+                    console.log('updated coffee with id:', res);
+                    throwDataSucess('coffee updated!');
                     setPosts((posts) => (!posts ? posts : posts.map((elm) => (elm.id === coffee.id ? coffee : elm))));
-                    return true;
                 })
                 .catch((error) => {
                     console.log(error);
                     console.log('Cant save coffee');
+                    throwDataError('sorry, cant update coffee', error);
                 });
-            return false;
         }
     };
 
-
-    const deleteCoffee = (id: number) => {
-        axios
-            .delete(`${baseURL}${coffeeURL}/${id}`)
-            .then((response) => {
-                // console.log(response);
-                // console.log('Post deleted');
+    const innerDeleteCoffee = (id: number) => {
+        deleteCoffee(id)
+            .then((res) => {
+                console.log('Post deleted');
                 setPosts((posts) => (!posts ? posts : posts.filter((elm) => elm.id !== id)));
                 setFilteredPosts((posts) => (!posts ? posts : posts.filter((elm) => elm.id !== id)));
                 setLoading(false);
-                // Todo: Toasts
+                throwDataSucess('coffee deleted');
             })
             .catch((error) => {
                 console.log(error);
                 console.log('Cant delete Post');
-                // Todo: Toasts
+                throwDataError('cant delete coffee', error);
             });
     };
 
-    const createCoffee = () => {
-        if (user && coffeeOrigins && coffeeKinds && coffeeRoateds && coffeeProcesses && coffeeSpecies) {
-            const newPost: CoffeeEntry = {
-                id: 0,
-                imageFiles: [],
-                imageStrings: [],
-                name: 'Neue Karte',
-                description: '',
-                origin: coffeeOrigins[0],
-                rating: 0,
-                kind: coffeeKinds[0],
-                roasted: coffeeRoateds[0],
-                bitter: 0,
-                ownDescription: '',
-                sour: 0,
-                taste: 0,
-                tasteKind: 0,
-                woody: 0,
-                buyDate: new Date(),
-                dateAdded: new Date(),
-                process: coffeeProcesses[0],
-                species: coffeeSpecies[0],
-                owner: user,
-                brewings: [],
-            };
+    // const createCoffee = () => {
+    //     if (user && coffeeOrigins && coffeeKinds && coffeeRoateds && coffeeProcesses && coffeeSpecies) {
+    //         const newPost: CoffeeEntry = {
+    //             id: 0,
+    //             imageFiles: [],
+    //             imageStrings: [],
+    //             name: 'Neue Karte',
+    //             description: '',
+    //             origin: coffeeOrigins[0],
+    //             rating: 0,
+    //             kind: coffeeKinds[0],
+    //             roasted: coffeeRoateds[0],
+    //             bitter: 0,
+    //             ownDescription: '',
+    //             sour: 0,
+    //             taste: 0,
+    //             tasteKind: 0,
+    //             woody: 0,
+    //             buyDate: new Date(),
+    //             dateAdded: new Date(),
+    //             process: coffeeProcesses[0],
+    //             species: coffeeSpecies[0],
+    //             owner: user,
+    //             brewings: [],
+    //         };
 
-            const jwtObj = sessionStorage.getItem('auth');
+    //         const jwtObj = sessionStorage.getItem('auth');
 
-            axios
-                .post(`${baseURL}${coffeeURL}`, { ...newPost }, { headers: { auth: jwtObj } })
-                .then((response) => {
-                    // console.log(response.headers['location']);
-                    const location: string = response.headers['location'];
-                    const [id] = location.split('/').slice(-1);
-                    newPost.id = Number(id);
+    //         axios
+    //             .post(`${baseURL}${coffeeURL}`, { ...newPost }, { headers: { auth: jwtObj } })
+    //             .then((response) => {
+    //                 // console.log(response.headers['location']);
+    //                 const location: string = response.headers['location'];
+    //                 const [id] = location.split('/').slice(-1);
+    //                 newPost.id = Number(id);
 
-                    // console.log('Coffee created');
-                    setPosts((posts) => (!posts ? posts : [newPost, ...posts]));
+    //                 // console.log('Coffee created');
+    //                 setPosts((posts) => (!posts ? posts : [newPost, ...posts]));
 
-                    // setEditCard(Number(newPost.id));
-                    loadEditCard(Number(newPost.id));
-                })
-                .catch((error) => {
-                    console.log(error);
-                    console.log('Cant create coffee');
-                });
-        } else {
-            console.log('your are not logged in or some data are missing');
-            // Todo: Toasts
-        }
-    };
-
-    // const toggleAttrMenu = () => {
-    //     setDisplayAttrMenu((old) => !old);
+    //                 // setEditCard(Number(newPost.id));
+    //                 loadEditCard(Number(newPost.id));
+    //             })
+    //             .catch((error) => {
+    //                 console.log(error);
+    //                 console.log('Cant create coffee');
+    //             });
+    //     } else {
+    //         console.log('your are not logged in or some data are missing');
+    //         // Todo: Toasts
+    //     }
     // };
 
     const openAttrWindow = () => {
-        history.push('attrDataWindow/')
-    }
+        history.push('attrDataWindow/');
+    };
+
+    const openBrewingWindow = (id: number) => {
+        history.push(`${id}?view=brewings`);
+    };
 
     const closeAttrWindow = () => {
-        history.push(pathname.replace('attrDataWindow/', ''))
+        history.push(pathname.replace('attrDataWindow/', ''));
+    };
+
+    // Das wird noch nicht funktionieren
+    const goToCreateCoffee = () => {
+        history.push('new/');
     }
 
     const initiateData = () => {
-        const coffeesPromise = axios.get<CoffeeEntry[]>(`${baseURL}${coffeeURL}`);
-        const kindsPromise = axios.get<AttrDataType[]>(`${baseURL}${coffeeAttrURL}/kinds`);
-        const originsPromise = axios.get<AttrDataType[]>(`${baseURL}${coffeeAttrURL}/origins`);
-        const roastedsPromise = axios.get<AttrDataType[]>(`${baseURL}${coffeeAttrURL}/roasteds`);
-        const processedPromise = axios.get<AttrDataType[]>(`${baseURL}${coffeeAttrURL}/processes`);
-        const speciesPromise = axios.get<AttrDataType[]>(`${baseURL}${coffeeAttrURL}/species`);
-        const brewMethodPromise = axios.get<AttrDataType[]>(`${baseURL}${coffeeAttrURL}/method`);
+        getCoffeAttrData()
+            .then((coffeeAttrData) => {
+                // setCoffeeKinds(coffeeAttrData.kinds);
+                // setCoffeeOrigins(coffeeAttrData.roasteds);
+                // setCoffeeRoateds(coffeeAttrData.roasteds);
+                // setCoffeeProcesses(coffeeAttrData.processes);
+                // setCoffeeSpecies(coffeeAttrData.specieses);
+                // setCoffeeBrewMethod(coffeeAttrData.brewMethods);
 
-        Promise.all([
-            coffeesPromise,
-            kindsPromise,
-            originsPromise,
-            roastedsPromise,
-            processedPromise,
-            speciesPromise,
-            brewMethodPromise,
-        ])
-            .then((responses) => {
-                console.log('got response', responses[0].data);
-                setPosts(responses[0].data);
-                setFilteredPosts(responses[0].data);
-                setCoffeeKinds(responses[1].data);
-                setCoffeeOrigins(responses[2].data);
-                setCoffeeRoateds(responses[3].data);
-                setCoffeeProcesses(responses[4].data);
-                setCoffeeSpecies(responses[5].data);
-                setCoffeeBrewMethod(responses[6].data);
+                setCoffeeAttrData({
+                    brewMethods: coffeeAttrData.brewMethods,
+                    kinds: coffeeAttrData.kinds,
+                    origins: coffeeAttrData.origins,
+                    processes: coffeeAttrData.processes,
+                    roasteds: coffeeAttrData.processes,
+                    specieses: coffeeAttrData.specieses,
+                });
+
+                // setMenu(coffeeAttrData.origins);
                 setLoading(false);
-                setFilter('origin');
-                setMenu(responses[2].data);
-                // console.log(this.state.filteredPosts);
-                // Todo: Toasts
+                // setFilter('origin');
+
+                throwDataSucess('got coffee data');
             })
             .catch((error) => {
-                console.log(error);
-                // Todo: Toasts
+                throwDataError('cant get data from data', error);
             });
 
-        const jwtObj = sessionStorage.getItem('auth');
+        getCoffees()
+            .then((coffees) => {
+                throwDataSucess('got coffees');
+                setPosts(coffees);
+            })
+            .catch((error) => {
+                throwDataError('cant get coffees', error);
+            });
 
-        if (jwtObj != null) {
-            const data = jwt.decode(jwtObj);
-
-            if (data != null && typeof data !== 'string') {
-                const actuallUser: User = {
-                    id: data['userId'],
-                    username: data['username'],
-                    name: data['name'],
-                    role: data['role'],
-                };
-                setUser(actuallUser);
-            }
-        }
+        setUserFromSessionStorage();
     };
 
-    const loadEditCard = (id: number) => {
-        if (posts) {
-            const post = posts.find((item) => item.id === id-1);
-            setEditCard(post);
-            console.log('set edit card', post);
-            console.log('with id', id);
-            console.log('in posts ', posts);
-        } else {
-            console.log('post not found for edit');
-            // Todo: Error toast
-        }
-    };
+    // const loadEditCard = (id: number) => {
+    //     if (posts) {
+    //         const post = posts.find((item) => item.id === id - 1);
+    //         setEditCard(post);
+    //         console.log('set edit card', post);
+    //         console.log('with id', id);
+    //         console.log('in posts ', posts);
+    //     } else {
+    //         console.log('post not found for edit');
+    //         // Todo: Error toast
+    //     }
+    // };
 
-    const cardUpdated = (newPost: CoffeeEntry) => {
-        console.log('new Post', newPost);
+    // const cardUpdated = (newPost: CoffeeEntry) => {
+    //     console.log('new Post', newPost);
 
-        const newPosts = posts.map((post) => {
-            return post.id === newPost.id ? newPost : post;
-        });
+    //     const newPosts = posts.map((post) => {
+    //         return post.id === newPost.id ? newPost : post;
+    //     });
 
-        setEditCard(undefined);
-        setPosts(newPosts);
-        setFilteredPosts(newPosts);
-    };
+    //     setEditCard(undefined);
+    //     setPosts(newPosts);
+    //     setFilteredPosts(newPosts);
+    // };
 
     const filterPosts = (filterName: string, filterAttr: string) => {
         let newPosts = [];
@@ -295,164 +273,169 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
         setActiveFilter(filterAttr);
     };
 
-    const closeBrewingWindow = () => {
-        setBrewingCard(undefined);
-    };
+    // const closeBrewingWindow = () => {
+    //     setBrewingCard(undefined);
+    // };
 
-    const openBrewingWindow = (coffeeEntry: CoffeeEntry) => {
-        //Add brewings to coffee card
-        axios
-            .get(`${baseURL}${coffeeURL}/${coffeeEntry.id}/brewings`)
-            .then((response) => {
-                console.log('Got brewings');
-                let loadedBrewings = response.data as BrewingEntry[];
-                loadedBrewings = loadedBrewings.map((brewing) => {
-                    brewing.brewDate = new Date(brewing.brewDate);
-                    return brewing;
-                });
-                console.log(loadedBrewings);
-                setBrewingCard({ brewings: loadedBrewings, ...coffeeEntry });
-            })
-            .catch((error) => {
-                console.log(error);
-                console.log('Cant get brewings');
-            });
-    };
+    // const openBrewingWindow = (coffeeEntry: CoffeeEntry) => {
+    //     //Add brewings to coffee card
+    //     axios
+    //         .get<BrewingEntry[]>(`${baseURL}${coffeeURL}/${coffeeEntry.id}/brewings`)
+    //         .then((response) => {
+    //             console.log('Got brewings');
+    //             let loadedBrewings = response.data;
+    //             loadedBrewings = loadedBrewings.map((brewing) => {
+    //                 brewing.brewDate = new Date(brewing.brewDate);
+    //                 return brewing;
+    //             });
+    //             console.log(loadedBrewings);
+    //             setBrewingCard({ brewings: loadedBrewings, ...coffeeEntry });
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //             console.log('Cant get brewings');
+    //         });
+    // };
 
-    const attrData = [
-        {
-            id: 1,
-            name: 'Röstarten',
-            urlSubstring: 'coffeeAttrs/kinds',
-            description: 'Kaffee Arten, zB Filter Kaffee oder Espresso',
-            items: coffeeKinds,
-        },
-        {
-            id: 2,
-            name: 'Herkünfte',
-            urlSubstring: 'coffeeAttrs/origins',
-            description: 'Kaffee herkunfts Länder',
-            items: coffeeOrigins,
-        },
-        {
-            id: 3,
-            name: 'Röstereien',
-            urlSubstring: 'coffeeAttrs/roasteds',
-            description: 'Kaffee Röstereien',
-            items: coffeeRoateds,
-        },
-        {
-            id: 4,
-            name: 'Bohnenart',
-            urlSubstring: 'coffeeAttrs/species',
-            description: 'Art der Bohne, zB Arabica oder Robusta',
-            items: coffeeSpecies,
-        },
-        {
-            id: 5,
-            name: 'Prozess',
-            urlSubstring: 'coffeeAttrs/processes',
-            description: 'Verarbeitungsprozess, zB Washed oder Natural',
-            items: coffeeProcesses,
-        },
-        {
-            id: 6,
-            name: 'Brühmethoden',
-            urlSubstring: 'coffeeAttrs/method',
-            description: 'Brühmethoden, zB. V60, French Press oder AeroPress',
-            items: coffeeBrewMethod,
-        },
-    ];
-    const filterMenu: FilterMenuType[] = [
+    // Todo: warum fällt das nicht aus der API raus
+    // const attrData = coffeeAttrData ? [
+    //     {
+    //         id: 1,
+    //         name: 'Röstarten',
+    //         urlSubstring: 'coffeeAttrs/kinds',
+    //         description: 'Kaffee Arten, zB Filter Kaffee oder Espresso',
+    //         items: coffeeAttrData.kinds,
+    //     },
+    //     {
+    //         id: 2,
+    //         name: 'Herkünfte',
+    //         urlSubstring: 'coffeeAttrs/origins',
+    //         description: 'Kaffee herkunfts Länder',
+    //         items: coffeeAttrData.origins,
+    //     },
+    //     {
+    //         id: 3,
+    //         name: 'Röstereien',
+    //         urlSubstring: 'coffeeAttrs/roasteds',
+    //         description: 'Kaffee Röstereien',
+    //         items: coffeeAttrData.roasteds,
+    //     },
+    //     {
+    //         id: 4,
+    //         name: 'Bohnenart',
+    //         urlSubstring: 'coffeeAttrs/species',
+    //         description: 'Art der Bohne, zB Arabica oder Robusta',
+    //         items: coffeeAttrData.specieses,
+    //     },
+    //     {
+    //         id: 5,
+    //         name: 'Prozess',
+    //         urlSubstring: 'coffeeAttrs/processes',
+    //         description: 'Verarbeitungsprozess, zB Washed oder Natural',
+    //         items: coffeeAttrData.processes,
+    //     },
+    //     {
+    //         id: 6,
+    //         name: 'Brühmethoden',
+    //         urlSubstring: 'coffeeAttrs/method',
+    //         description: 'Brühmethoden, zB. V60, French Press oder AeroPress',
+    //         items: coffeeAttrData.brewMethods,
+    //     },
+    // ] : [];
+
+    const filterMenu: FilterMenuType[] = coffeeAttrData ? [
         {
             name: 'Arten',
-            items: coffeeKinds.map((item) => item.name),
+            items: coffeeAttrData.kinds.map((item) => item.name),
         },
         {
             name: 'Herkunft',
-            items: coffeeOrigins.map((item) => item.name),
+            items: coffeeAttrData.origins.map((item) => item.name),
         },
         {
             name: 'Röstereien',
-            items: coffeeRoateds.map((item) => item.name),
+            items: coffeeAttrData.roasteds.map((item) => item.name),
         },
         {
             name: 'Bewertung',
             items: ['1', '2', '3', '4', '5'],
         },
-    ];
+    ] : [];
 
-    const params: any =  match.params;
+    const params: any = match.params;
 
     return (
         <>
-        <Route path={`${basePath}/:extention?`}>
+            <Route path={`${basePath}/:extention?`}>
+                <AppWindow
+                    editState={params.extention}
+                    loading={loading}
+                    sidebar={
+                        <Sidemenu
+                            filter={filterMenu}
+                            image={chemexSVG}
+                            filterAction={filterPosts}
+                            activeFilter={activeFilter}
+                        />
+                    }
+                >
+                    <div className={GeneralStyles.FilterRow}>
+                        <Filter orderAction={() => {}} orderItems={filterMenu} />
+                        {user && <AddButton onClick={goToCreateCoffee} />}
+                        {user && <DataButton onClick={openAttrWindow} />}
+                    </div>
 
+                    <IntroText header={'Kaffee - Genuss und Wissenschaft'}>
+                        Kaffee macht nicht nur wach sondern kann viel mehr. Es ist eine Wissenschaft ihn zuzbereiten, es
+                        gibt hunderte, wenn nicht tausende von Arten, Varianten, Geschmäcker und alles an Nerdkram den
+                        man sich vorstellen kann. Außerdem bedient er eine gewisse Sammelleidenschaft. Fast jede größere
+                        Stadt bietet heute mehr als eine kleine Rösterei mit viel verschiedenen Sorten. Ein kleiner
+                        Überblick über meine persönlichen Erfahrungen soll nun hier entstehen.
+                    </IntroText>
 
-            <AppWindow
-                editState={params.extention }
-                // editState={editCard != undefined || displayAttrMenu === true || brewingCard != undefined}
-                loading={loading}
-                sidebar={
-                    <Sidemenu
-                        filter={filterMenu}
-                        image={chemexSVG}
-                        filterAction={filterPosts}
-                        activeFilter={activeFilter}
-                    />
-                }
-            >
-                <div className={GeneralStyles.FilterRow}>
-                    <Filter orderAction={() => {}} orderItems={filterMenu} />
-                    {user && <AddButton onClick={createCoffee} />}
-                    {/* {user && <DataButton onClick={toggleAttrMenu} />} */}
-                    {user && <DataButton onClick={openAttrWindow} />}
-                </div>
-
-                <IntroText header={'Kaffee - Genuss und Wissenschaft'}>
-                    Kaffee macht nicht nur wach sondern kann viel mehr. Es ist eine Wissenschaft ihn zuzbereiten, es
-                    gibt hunderte, wenn nicht tausende von Arten, Varianten, Geschmäcker und alles an Nerdkram den man
-                    sich vorstellen kann. Außerdem bedient er eine gewisse Sammelleidenschaft. Fast jede größere Stadt
-                    bietet heute mehr als eine kleine Rösterei mit viel verschiedenen Sorten. Ein kleiner Überblick über
-                    meine persönlichen Erfahrungen soll nun hier entstehen.
-                </IntroText>
-
-                <div className={`${LocalStyles.CoffeeContainer}`}>
-                    {posts.length === 0 ? (
-                        <div className={GeneralStyles.ReplImg}>
-                            <img src={CoffeeReplacement} />
-                            <p>No coffees to display</p>
-                        </div>
-                    ) : (
-                        filteredPosts.map((post) => (
-                            <CoffeeCardDisplay
-                                entry={post}
-                                deleteFunction={deleteCoffee}
-                                editFunction={loadEditCard}
-                                openBrewings={openBrewingWindow}
-                            />
-                        ))
-                    )}
-                </div>
-            </AppWindow>
+                    <div className={`${LocalStyles.CoffeeContainer}`}>
+                        {posts.length === 0 ? (
+                            <div className={GeneralStyles.ReplImg}>
+                                <img src={CoffeeReplacement} alt="no content" />
+                                <p>No coffees to display</p>
+                            </div>
+                        ) : (
+                            filteredPosts.map((post) => (
+                                <CoffeeCardDisplay
+                                    entry={post}
+                                    deleteFunction={deleteCoffee}
+                                    editFunction={loadEditCard}
+                                    openBrewings={openBrewingWindow}
+                                />
+                            ))
+                        )}
+                    </div>
+                </AppWindow>
             </Route>
-            <Route path={`${basePath}/:id`}>
-                <OverlayFrame>
-                    <CoffeeBrewingWindow
-                        methods={coffeeBrewMethod}
+            <Switch>
+                <Route path={`${basePath}/:id/edit?`}>
+                    <CoffeeDetailWindow
                         basePath={basePath}
                         coffees={posts}
-                        saveCoffee={saveCoffee}
-                        delteCoffee={deleteCoffee}
+                        coffeeAttrData={coffeeAttrData}
+                        saveCoffee={innerSaveCoffee}
+                        deleteCoffee={innerDeleteCoffee}
                     />
-                </OverlayFrame>
-            </Route>
+                    {/* <CoffeeBrewingWindow
+                            methods={coffeeBrewMethod}
+                            basePath={basePath}
+                            coffees={posts}
+                            saveCoffee={innerSaveCoffee}
+                            delteCoffee={deleteCoffee}
+                        /> */}
+                </Route>
 
-            <Route path={`${basePath}/attrDataWindow`}>
-                <AttrDataWindow content={attrData} close={() => closeAttrWindow()} />
-            </Route>
+                <Route path={`${basePath}/attrDataWindow`}>
+                    <CoffeeAttrDataWindow close={() => closeAttrWindow()} />
+                </Route>
+            </Switch>
 
-            {editCard && (
+            {/* {editCard && (
                 <OverlayFrame>
                     <CoffeeCardEdit
                         entry={editCard}
@@ -466,7 +449,7 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
                         basePath={basePath}
                     />
                 </OverlayFrame>
-            )}
+            )} */}
         </>
     );
 };

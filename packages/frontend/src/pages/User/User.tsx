@@ -2,7 +2,6 @@ import classNames from 'classnames';
 import jwt from 'jsonwebtoken';
 import React, { useEffect, useState } from 'react';
 import { Button, Container, Row } from 'react-bootstrap';
-import { AttrDataItemType } from '../../components/FormComponents';
 import { Navigationbar } from '../../components/Navigationbar';
 import userAvatar from '../../images/avatar-frederic.png';
 import {
@@ -14,33 +13,8 @@ import {
     UserDetailWindow,
 } from '../../windows/UserWindows/';
 import LocalStyles from './User.module.scss';
-
-export type User = {
-    id: number;
-    name: string;
-    username: string;
-    role: string;
-};
-
-export type FullUser = {
-    id: number;
-    name: string;
-    username: string;
-    email: string;
-    image: string;
-    created: string;
-    role: string;
-};
-
-export type ExtendedUser = {
-    id: number;
-    name: string;
-    username: string;
-    email: string;
-    image: string;
-    role: string;
-    password: string;
-};
+import { AttrDataItemType, FullUser } from '../../helpers/types';
+import { throwDataError, throwDataSucess } from './userHelperFunctions';
 
 export const UserRoles: AttrDataItemType[] = [
     { id: 0, name: 'ADMIN' },
@@ -48,35 +22,46 @@ export const UserRoles: AttrDataItemType[] = [
     { id: 2, name: 'GUEST' },
 ];
 
+export const setUserFromSessionStorage = async (): Promise<FullUser> => {
+    const jwtObj = sessionStorage.getItem('auth');
+
+    if (jwtObj == null) {
+        throwDataError('cant set user from session strorage, your not logged in ')
+        throw new Error('not logged in')
+    }
+    const data = jwt.decode(jwtObj);
+
+    if (data != null && typeof data !== 'string') {
+        const user: FullUser = {
+            id: data['userId'],
+            username: data['username'],
+            name: data['name'],
+            email: data['email'],
+            image: 'avatar_frederic.png',
+            created: 'sice 07.08.1989',
+            role: data['role'],
+        }
+        return user;
+    }
+
+    throw new Error('not logged in')
+};
+
 export const UserPage = () => {
     const [user, setUser] = useState<FullUser | undefined>();
     const [activeMenu, setActiveMenu] = useState(0);
 
-    const setUserFromStr = () => {
-        const jwtObj = sessionStorage.getItem('auth');
-
-        if (jwtObj == null) {
-            return;
-        }
-        const data = jwt.decode(jwtObj);
-
-        console.log(data);
-        if (data != null && typeof data !== 'string') {
-            setUser({
-                id: data['userId'],
-                username: data['username'],
-                name: data['name'],
-                email: data['email'],
-                image: 'avatar_frederic.png',
-                created: 'sice 07.08.1989',
-                role: data['role'],
-            });
-            // console.log('user set!');
-        }
-    };
+    const innerSetUserFromSessionStorage = () => {
+        setUserFromSessionStorage().then((user) => {
+            throwDataSucess('user set from sessio storeage')
+            setUser(user);
+        }).catch((error) => {
+            throwDataError('cant set user from session strorage, your not logged in ', error)
+        })
+    }
 
     useEffect(() => {
-        setUserFromStr();
+        innerSetUserFromSessionStorage();
     }, []);
 
     const logout = () => {
@@ -145,7 +130,7 @@ export const UserPage = () => {
                                 </div>
                             </>
                         )}
-                        {!user && <LoginWindow setUserFromStr={setUserFromStr} />}
+                        {!user && <LoginWindow setUser={innerSetUserFromSessionStorage} />}
                     </Row>
                 </Container>
             </div>

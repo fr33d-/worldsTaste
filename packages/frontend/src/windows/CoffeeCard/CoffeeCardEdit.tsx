@@ -2,30 +2,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import classNames from 'classnames';
 import React, { ChangeEvent, useState } from 'react';
+import { useHistory } from 'react-router';
+import { DropdownInput, TextareaInput, TextInput } from '../../components/FormElements';
+import { ObjLikeSliderAttrField, ObjSingleSliderAttrField, ObjSliderAttrField } from '../../components/FormElements/AttrFields';
+import { AdvancedCancelButton, AdvancedDeleteButton, AdvancedSaveButton } from '../../components/IconButton';
 import { baseURL, coffeeURL } from '../../data';
 import { blue, brown, cyan, grayDarker, green, yellow } from '../../styles/colors';
-import { AttrDataItemType, CoffeeEntry } from '../../components/FormComponents';
-import { DropdownInput, TextareaInput, TextInput } from '../../components/FormElements';
-import {
-    LikeSliderAttrField,
-    SingleSliderAttrField,
-    SliderAttrField,
-    ObjLikeSliderAttrField,
-    ObjSliderAttrField,
-    ObjSingleSliderAttrField,
-} from '../../components/FormElements/AttrFields';
-import { AdvancedCancelButton, AdvancedDeleteButton, AdvancedSaveButton } from '../../components/IconButton';
 import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import LocalStyles from './CoffeeCardEdit.module.scss';
-import { useHistory } from 'react-router';
+import { CoffeeEntry, CoffeeAttrData } from '../../helpers/types';
 
 type CoffeeCardEditProps = {
     entry: CoffeeEntry;
-    kinds: AttrDataItemType[];
-    origins: AttrDataItemType[];
-    roasteds: AttrDataItemType[];
-    processes: AttrDataItemType[];
-    specieses: AttrDataItemType[];
+    coffeeAttrData: CoffeeAttrData;
     deleteCoffee(id: number): void;
     saveCoffee(coffee: CoffeeEntry): void;
     basePath: string;
@@ -34,70 +23,26 @@ type CoffeeCardEditProps = {
 // tslint:disable-next-line: max-func-body-length
 export const CoffeeCardEdit = ({
     entry,
-    kinds,
-    roasteds,
-    origins,
-    processes,
-    specieses,
     deleteCoffee,
     saveCoffee,
     basePath,
+    coffeeAttrData
 }: CoffeeCardEditProps) => {
     const [saveError, setSaveError] = useState(false);
     const [edited, setEdited] = useState(false);
     const [tab, setTab] = useState(0);
 
+    const kinds = coffeeAttrData.kinds;
+    const roasteds = coffeeAttrData.roasteds;
+    const origins = coffeeAttrData.origins;
+    const processes = coffeeAttrData.processes;
+    const specieses = coffeeAttrData.specieses;
+
     const [formCoffee, setFormCoffee] = useState<CoffeeEntry>(entry);
 
-    // const [id, setId] = useState(props.entry.id);
+    // Not realy used by now
     const [imageFiles, setImageFiles] = useState(entry.imageFiles);
-    const [imageStrings, setImageStrings] = useState(entry.imageStrings);
-    // const [name, setName] = useState(props.entry.name);
-    // const [description, setDescription] = useState(props.entry.description);
-    // const [origin, setOrigin] = useState(props.entry.origin);
-    // const [rating, setRating] = useState(props.entry.rating);
-    // const [roasted, setRoasted] = useState(props.entry.roasted);
-    // const [kind, setKind] = useState(props.entry.kind);
-    // const [taste, setTaste] = useState(props.entry.taste);
-    // const [tasteKind, setTasteKind] = useState(props.entry.tasteKind);
-    // const [woody, setWoody] = useState(props.entry.woody);
-    // const [bitter, setBitter] = useState(props.entry.bitter);
-    // const [sour, setSour] = useState(props.entry.sour);
-    // const [ownDescription, setOwnDescription] = useState(props.entry.ownDescription);
-    // const [dateAdded, setDateAdded] = useState(props.entry.dateAdded);
-    // const [process, setProcess] = useState(props.entry.process);
-    // const [buyDate, setBuyDate] = useState(props.entry.buyDate);
-    // const [brewings, setBrewings] = useState(props.entry.brewings);
-    // const [species, setSpecies] = useState(props.entry.species);
-    // const [owner, setOwner] = useState(props.entry.owner);
-
-    // const { kinds, roasteds, origins, close, processes, specieses } = props;
-
-    // const closeCard = () => {
-    //     const newObject: CoffeeEntry = {
-    //         id,
-    //         name,
-    //         description,
-    //         origin,
-    //         rating,
-    //         roasted,
-    //         kind,
-    //         taste,
-    //         tasteKind,
-    //         woody,
-    //         bitter,
-    //         sour,
-    //         ownDescription,
-    //         buyDate,
-    //         dateAdded,
-    //         process,
-    //         species,
-    //         owner,
-    //         brewings,
-    //     };
-
-    //     props.close(newObject);
-    // };
+    const [imageStrings, setImageStrings] = useState(entry.imageStrings);∏
 
     const history = useHistory();
 

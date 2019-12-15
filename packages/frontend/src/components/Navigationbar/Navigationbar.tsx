@@ -1,28 +1,19 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { default as classnames, default as classNames } from 'classnames';
 import React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router';
+import { useLocation } from 'react-router';
+import { Link } from 'react-router-dom';
 import { black, grayDark } from '../../styles/colors';
 import { useJwt } from '../../windows/UserWindows/UserWindwos';
 import LocalStyles from './Navigationbar.module.scss';
 
-type NavbarProps = RouteComponentProps & {
-    // items: NavigationItem[];
+type NavbarProps = {
     light?: boolean;
 };
 
-export const NavigationbarBase = ({ location, light, history }: NavbarProps) => {
-    // const { location: { pathname: path } } = this.props;
-    const { pathname } = location;
+export const Navigationbar = ({ light }: NavbarProps) => {
+    const { pathname } = useLocation();
     const path = pathname.split('/').filter(Boolean);
-
-    const gotoUser = () => {
-        history.push('/user');
-    };
-
-    const goHome = () => () => {
-        history.push(`/`);
-    };
 
     const user = useJwt();
 
@@ -52,20 +43,19 @@ export const NavigationbarBase = ({ location, light, history }: NavbarProps) => 
                             </ul>
                         </div>
                         <div className={classnames(LocalStyles.Navbar, LocalStyles.Burger)}>
-                            <button className={LocalStyles.User} onClick={gotoUser}>
-                                {user && <FontAwesomeIcon icon="user" color={black} />}
-                                {!user && <FontAwesomeIcon icon="user" color={grayDark} />}
-                            </button>
+                            <Link to="/user">
+                                <button className={LocalStyles.User}>
+                                    <FontAwesomeIcon icon="user" color={user ? black : grayDark} />
+                                </button>
+                            </Link>
                             <FontAwesomeIcon icon="bars" size="lg" />
                         </div>
-                        <div className={classnames(LocalStyles.Navbar, LocalStyles.Logo)} onClick={() => goHome()}>
-                            Logo
-                        </div>
+                        <Link to="/">
+                            <div className={classnames(LocalStyles.Navbar, LocalStyles.Logo)}>Logo</div>
+                        </Link>
                     </div>
                 </div>
             </div>
         </div>
     );
 };
-
-export const Navigationbar = withRouter(NavigationbarBase);

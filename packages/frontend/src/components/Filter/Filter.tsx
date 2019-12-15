@@ -1,9 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import React, { ChangeEvent, FC } from 'react';
-import { FilterMenuType } from '../FormComponents';
 import LocalStyles from './Filter.module.scss';
 import GeneralStyles from './../../styles/GeneralStyles.module.scss';
+import { Link } from 'react-router-dom';
+import { FilterMenuType } from '../../helpers/types';
 
 type FilterProps = {
     orderItems: FilterMenuType[];
@@ -35,6 +36,14 @@ export const AddButton: FC<{ onClick(): void }> = ({ onClick }) => (
     <button className={classNames('add-button big', LocalStyles.Button)} onClick={onClick}>
         <FontAwesomeIcon icon="plus" />
     </button>
+);
+
+export const AddButtonLink: FC<{ link: string }> = ({ link }) => (
+    <Link to={link}>
+        <button className={classNames('add-button big', LocalStyles.Button)}>
+            <FontAwesomeIcon icon="plus" />
+        </button>
+    </Link>
 );
 
 export const DataButton: FC<{ onClick(): void }> = ({ onClick }) => (
