@@ -29,25 +29,26 @@ export const CoffeeBrewingWindow = ({
 
     // Todo: this needs to be called when the cared opens
     // also handle what happens if you habent selected a bewing
-    const openBrewingWindow = (coffeeEntry: CoffeeEntry) => {
-        //Add brewings to coffee card
-        axios
-            .get<BrewingEntry[]>(`${baseURL}${coffeeURL}/${coffeeEntry.id}/brewings`)
-            .then((response) => {
-                console.log('Got brewings');
-                let loadedBrewings = response.data;
-                loadedBrewings = loadedBrewings.map((brewing) => {
-                    brewing.brewDate = new Date(brewing.brewDate);
-                    return brewing;
-                });
-                console.log(loadedBrewings);
-                setBrewingCard({ brewings: loadedBrewings, ...coffeeEntry });
-            })
-            .catch((error) => {
-                console.log(error);
-                console.log('Cant get brewings');
-            });
-    };
+
+    // const openBrewingWindow = (coffeeEntry: CoffeeEntry) => {
+    //     //Add brewings to coffee card
+    //     axios
+    //         .get<BrewingEntry[]>(`${baseURL}${coffeeURL}/${coffeeEntry.id}/brewings`)
+    //         .then((response) => {
+    //             console.log('Got brewings');
+    //             let loadedBrewings = response.data;
+    //             loadedBrewings = loadedBrewings.map((brewing) => {
+    //                 brewing.brewDate = new Date(brewing.brewDate);
+    //                 return brewing;
+    //             });
+    //             console.log(loadedBrewings);
+    //             setBrewingCard({ brewings: loadedBrewings, ...coffeeEntry });
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //             console.log('Cant get brewings');
+    //         });
+    // };
 
     const createBrewing = () => {
         if (coffee) {

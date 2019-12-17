@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { AttrDataType, FilterMenuType } from '../FormComponents';
 import LocalStyles from './Sidemenu.module.scss';
 import classNames from 'classnames';
+import { FilterMenuType } from '../../helpers/types';
 
 export type SidemenuProps = {
     filter: FilterMenuType[];

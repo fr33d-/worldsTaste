@@ -3,8 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { cloneDeep, get, set } from 'lodash';
 import React, { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { blue, grayDarker } from '../../styles/colors';
-import { AttrDataItemType } from '../FormComponents';
 import LocalStyles from './FormElements.module.scss';
+import { AttrDataItemType } from '../../helpers/types';
 
 type textInputProps = {
     name: string;

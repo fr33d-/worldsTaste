@@ -5,12 +5,12 @@ import React, { ChangeEvent, useState } from 'react';
 import { baseURL, cigarsURL } from '../../data';
 import { CigarEntry } from '../../pages/Cigars';
 import { brown, grayDarker, greenAccent, yellowAccent } from '../../styles/colors';
-import { AttrDataItemType } from '../FormComponents';
 import { BoolInput, DropdownInput, NumberInput, TextareaInput, TextInput } from '../FormElements';
 import { ObjLikeSliderAttrField, ObjSliderAttrField } from '../FormElements/AttrFields';
 import { AdvancedCancelButton, AdvancedDeleteButton, AdvancedSaveButton } from '../IconButton';
 import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import LocalStyles from './CigarCardEdit.module.scss';
+import { AttrDataItemType } from '../../helpers/types';
 
 type CigarCardEditProps = {
     entry: CigarEntry;
@@ -433,7 +433,7 @@ export const CigarCardEdit = ({
                                             <button onClick={() => deleteImageByURL(url, formCigar.id)}>
                                                 <FontAwesomeIcon icon="trash" color={grayDarker} />
                                             </button>
-                                            <img src={`${baseURL}${url}`} key={i} />
+                                            <img src={`${baseURL}${url}`} key={i} alt={'cigar'} />
                                         </div>
                                     </>
                                 ))}

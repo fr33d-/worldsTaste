@@ -1,5 +1,5 @@
 import React, { createContext, PropsWithChildren, useState } from 'react';
-import { CoffeeEntry } from '../components/FormComponents';
+import { CoffeeEntry } from '../helpers/types';
 
 type CoffeeContextType = {
 	posts: CoffeeEntry[];

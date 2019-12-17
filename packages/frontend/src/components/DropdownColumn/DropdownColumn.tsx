@@ -2,8 +2,8 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { ChangeEvent } from 'react';
 import { Col } from 'react-bootstrap';
-import { AttrDataItemType } from '../FormComponents';
 import LocalStyles from './DropdownColumn.module.scss';
+import { AttrDataItemType } from '../../helpers/types';
 
 type DropdownComponentProps = {
     label?: string;

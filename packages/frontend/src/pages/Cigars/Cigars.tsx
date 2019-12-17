@@ -8,15 +8,15 @@ import { CigarCardDisplay } from '../../components/CigarCard';
 import { CigarCardEdit } from '../../components/CigarCard/CigarCardEdit';
 import { AddButton, DataButton, Filter, IntroText } from '../../components/Filter';
 import { Footer } from '../../components/Footer';
-import { AttrDataItemType, FilterMenuType } from '../../components/FormComponents';
 import { Navigationbar } from '../../components/Navigationbar';
 import { Sidemenu } from '../../components/Sidemenu';
 import { baseURL, cigarsAttrURL, cigarsURL } from '../../data';
-import { useJwt } from '../../windows/UserWindows';
 import CigarReplacement from './../../images/Cigar-replacement.svg';
 import Tabak from './../../images/Tabak.svg';
 import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import LocalStyles from './Cigars.module.scss';
+import { AttrDataItemType, FilterMenuType } from '../../helpers/types';
+import { useJwt } from '../../windows/UserWindows/UserHelperFunctions';
 
 export type CigarEntry = {
     abbrand: number;
@@ -369,7 +369,7 @@ export const Cigars = () => {
                             <div className={`${GeneralStyles.CardsContainer}`}>
                                 {posts.length === 0 ? (
                                     <div className={GeneralStyles.ReplImg}>
-                                        <img src={CigarReplacement} />
+                                        <img src={CigarReplacement} alt="no cards"/>
                                         <p>No cigars to display</p>
                                     </div>
                                 ) : (

@@ -4,8 +4,8 @@ import React from 'react';
 import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
 import { black, grayDark } from '../../styles/colors';
-import { useJwt } from '../../windows/UserWindows/UserWindwos';
 import LocalStyles from './Navigationbar.module.scss';
+import { useJwt } from '../../windows/UserWindows/UserHelperFunctions';
 
 type NavbarProps = {
     light?: boolean;

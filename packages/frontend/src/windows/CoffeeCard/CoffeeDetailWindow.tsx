@@ -9,9 +9,11 @@ type CoffeeDetailWindowProps = {
     basePath: string;
     coffeeAttrData: CoffeeAttrData;
     coffees: CoffeeEntry[];
+    deleteCoffee(id: number): void;
+    saveCoffee(coffee: CoffeeEntry): void;
 };
 
-export const CoffeeDetailWindow = ({ basePath, coffeeAttrData, coffees }: CoffeeDetailWindowProps) => {
+export const CoffeeDetailWindow = ({ basePath, coffeeAttrData, coffees, deleteCoffee, saveCoffee }: CoffeeDetailWindowProps) => {
     const { id, edit } = useParams();
     const coffee = coffees.find((elm) => elm.id === Number(id));
 
@@ -29,7 +31,7 @@ export const CoffeeDetailWindow = ({ basePath, coffeeAttrData, coffees }: Coffee
         <OverlayFrame>
             <CoffeeBrewingWindow
                 coffee={coffee}
-                methods={coffeeAttrData.methods}
+                methods={coffeeAttrData.brewMethods}
                 basePath={basePath}
                 saveCoffee={saveCoffee}
                 delteCoffee={deleteCoffee}

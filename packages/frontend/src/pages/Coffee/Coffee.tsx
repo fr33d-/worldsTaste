@@ -4,16 +4,16 @@ import { AddButton, DataButton, Filter, IntroText } from '../../components/Filte
 import { Sidemenu } from '../../components/Sidemenu';
 import { CoffeeAttrData, CoffeeEntry, FilterMenuType, User } from '../../helpers/types';
 import { AppWindow } from '../../windows/AppWindow';
-import { AttrDataWindow, CoffeeAttrDataWindow } from '../../windows/AttrDataWindow';
-import { CoffeeCardDisplay } from '../../windows/CoffeeCard/CoffeeCardDisplay';
+import { CoffeeAttrDataWindow } from '../../windows/AttrDataWindow';
+import { InlineCoffeeCardDisplay } from '../../windows/CoffeeCard/CoffeeCardDisplay';
 import { CoffeeDetailWindow } from '../../windows/CoffeeCard/CoffeeDetailWindow';
+import { useJwt } from '../../windows/UserWindows/UserHelperFunctions';
 import { setUserFromSessionStorage } from '../User';
 import { throwDataError, throwDataSucess } from '../User/userHelperFunctions';
 import { default as chemexSVG, default as CoffeeReplacement } from './../../images/Chemex.svg';
 import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import LocalStyles from './Coffee.module.scss';
 import { deleteCoffee, getCoffeAttrData, getCoffees, saveNewCoffee, updateCoffee } from './CoffeeHelperFunctions';
-import { useJwt } from '../../windows/UserWindows/UserHelperFunctions';
 
 const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
     const [posts, setPosts] = useState<CoffeeEntry[]>([]);
@@ -163,7 +163,7 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
     // Das wird noch nicht funktionieren
     const goToCreateCoffee = () => {
         history.push('new/');
-    }
+    };
 
     const initiateData = () => {
         getCoffeAttrData()
@@ -343,24 +343,26 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
     //     },
     // ] : [];
 
-    const filterMenu: FilterMenuType[] = coffeeAttrData ? [
-        {
-            name: 'Arten',
-            items: coffeeAttrData.kinds.map((item) => item.name),
-        },
-        {
-            name: 'Herkunft',
-            items: coffeeAttrData.origins.map((item) => item.name),
-        },
-        {
-            name: 'Röstereien',
-            items: coffeeAttrData.roasteds.map((item) => item.name),
-        },
-        {
-            name: 'Bewertung',
-            items: ['1', '2', '3', '4', '5'],
-        },
-    ] : [];
+    const filterMenu: FilterMenuType[] = coffeeAttrData
+        ? [
+              {
+                  name: 'Arten',
+                  items: coffeeAttrData.kinds.map((item) => item.name),
+              },
+              {
+                  name: 'Herkunft',
+                  items: coffeeAttrData.origins.map((item) => item.name),
+              },
+              {
+                  name: 'Röstereien',
+                  items: coffeeAttrData.roasteds.map((item) => item.name),
+              },
+              {
+                  name: 'Bewertung',
+                  items: ['1', '2', '3', '4', '5'],
+              },
+          ]
+        : [];
 
     const params: any = match.params;
 
@@ -400,38 +402,31 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
                                 <p>No coffees to display</p>
                             </div>
                         ) : (
-                            filteredPosts.map((post) => (
-                                <CoffeeCardDisplay
-                                    entry={post}
-                                    deleteFunction={deleteCoffee}
-                                    editFunction={loadEditCard}
-                                    openBrewings={openBrewingWindow}
-                                />
-                            ))
+                            filteredPosts.map((post) => <InlineCoffeeCardDisplay entry={post} />)
                         )}
                     </div>
                 </AppWindow>
             </Route>
             <Switch>
                 <Route path={`${basePath}/:id/edit?`}>
-                    <CoffeeDetailWindow
-                        basePath={basePath}
-                        coffees={posts}
-                        coffeeAttrData={coffeeAttrData}
-                        saveCoffee={innerSaveCoffee}
-                        deleteCoffee={innerDeleteCoffee}
-                    />
-                    {/* <CoffeeBrewingWindow
+                    {coffeeAttrData && (
+                        <CoffeeDetailWindow basePath={basePath} coffees={posts} coffeeAttrData={coffeeAttrData} deleteCoffee={innerDeleteCoffee} saveCoffee={innerSaveCoffee} />
+                    )}
+                </Route>{' '}
+                : <p>Error loading attr data</p>}
+                {/* <CoffeeBrewingWindow
                             methods={coffeeBrewMethod}
                             basePath={basePath}
                             coffees={posts}
                             saveCoffee={innerSaveCoffee}
                             delteCoffee={deleteCoffee}
                         /> */}
-                </Route>
-
                 <Route path={`${basePath}/attrDataWindow`}>
-                    <CoffeeAttrDataWindow close={() => closeAttrWindow()} />
+                    {coffeeAttrData ? (
+                        <CoffeeAttrDataWindow close={closeAttrWindow} coffeeAttrData={coffeeAttrData} />
+                    ) : (
+                        <p>Error, loading attr data</p>
+                    )}
                 </Route>
             </Switch>
 

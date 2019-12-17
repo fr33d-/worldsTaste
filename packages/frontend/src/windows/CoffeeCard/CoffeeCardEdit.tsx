@@ -42,7 +42,7 @@ export const CoffeeCardEdit = ({
 
     // Not realy used by now
     const [imageFiles, setImageFiles] = useState(entry.imageFiles);
-    const [imageStrings, setImageStrings] = useState(entry.imageStrings);∏
+    const [imageStrings, setImageStrings] = useState(entry.imageStrings);
 
     const history = useHistory();
 
