@@ -19,43 +19,16 @@ import { useHistory } from 'react-router';
 type InlineCoffeeCardDisplayProps = {
     entry: CoffeeEntry;
     active?: boolean;
-    // deleteFunction(id: number): void;
-    // editFunction(id: number): void;
-    // openBrewings(coffeeEntry: CoffeeEntry): void;
 };
 
-// tslint:disable-next-line: max-func-body-length
 export const InlineCoffeeCardDisplay = ({ entry, active }: InlineCoffeeCardDisplayProps) => {
     const [expanded, setExpanded] = useState(false);
 
     const history = useHistory();
-
-    // const [id, setId] = useState(props.entry.id);
-    // const [imageStrings, setImageStrings] = useState(props.entry.imageStrings);
-    // const [name, setName] = useState(props.entry.name);
-    // const [description, setDescription] = useState(props.entry.description);
-    // const [origin, setOrigin] = useState(props.entry.origin);
-    // const [rating, setRating] = useState(props.entry.rating);
-    // const [roasted, setRoasted] = useState(props.entry.roasted);
-    // const [kind, setKind] = useState(props.entry.kind);
-    // const [taste, setTaste] = useState(props.entry.taste);
-    // const [tasteKind, setTasteKind] = useState(props.entry.tasteKind);
-    // const [woody, setWoody] = useState(props.entry.woody);
-    // const [bitter, setBitter] = useState(props.entry.bitter);
-    // const [sour, setSour] = useState(props.entry.sour);
-    // const [ownDescription, setOwnDescription] = useState(props.entry.ownDescription);
-    // const [dateAdded, setDateAdded] = useState(props.entry.dateAdded);
-    // const [process, setProcess] = useState(props.entry.process);
-    // const [buyDate, setBuyDate] = useState(props.entry.buyDate);
-    // const [species, setSpecies] = useState(props.entry.species);
-    // const [brewings, setBrewings] = useState(props.entry.brewings);
     const [tab, setTab] = useState(0);
-
-    // const { openBrewings, entry } = props;
 
     const toggleCard = () => {
         setExpanded(!expanded);
-        // console.log('toggled');
     };
 
     const editCard = () => {
@@ -69,30 +42,6 @@ export const InlineCoffeeCardDisplay = ({ entry, active }: InlineCoffeeCardDispl
 
     const openBrewings = () => {};
 
-    // const { active } = props;
-
-    // Todo: das muss umgebaut werden mit neue id
-    // const openBrewingsForCoffee = (coffeeId: number) => {
-    //     axios
-    //         .get<BrewingEntry[]>(`http://localhost:4000/coffee/${coffeeId}/brewings`)
-    //         .then((response) => {
-    //             console.log('Got brewings');
-    //             let loadedBrewings = response.data;
-    //             // console.log(loadedBrewings);
-    //             loadedBrewings = loadedBrewings.map((brewing) => {
-    //                 brewing.brewDate = new Date(brewing.brewDate);
-    //                 return brewing;
-    //             });
-    //             console.log(loadedBrewings);
-    //             setBrewings(loadedBrewings);
-    //         })
-    //         .catch((error) => {
-    //             console.log(error);
-    //             console.log('Cant get brewings');
-    //         });
-
-    //     setTab(2);
-    // };
     return (
         <>
             <div
