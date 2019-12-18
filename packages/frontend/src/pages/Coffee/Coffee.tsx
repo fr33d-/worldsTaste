@@ -1,36 +1,43 @@
-import React, { FC, useEffect, useState } from 'react';
-import { Route, RouteComponentProps, Switch, useHistory, useLocation, withRouter, useParams } from 'react-router';
-import { AddButton, DataButton, Filter, IntroText } from '../../components/Filter';
+import React, { useContext, useEffect } from 'react';
+import { Route, Switch, useHistory, useLocation, useParams } from 'react-router';
+import { AddButton, DataButton, Filter, IntroText, Search } from '../../components/Filter';
 import { Sidemenu } from '../../components/Sidemenu';
-import { CoffeeAttrData, CoffeeEntry, FilterMenuType, User } from '../../helpers/types';
+import { CoffeeEntry, FilterMenuType } from '../../helpers/types';
 import { AppWindow } from '../../windows/AppWindow';
 import { CoffeeAttrDataWindow } from '../../windows/AttrDataWindow';
 import { InlineCoffeeCardDisplay } from '../../windows/CoffeeCard/CoffeeCardDisplay';
 import { CoffeeDetailWindow } from '../../windows/CoffeeCard/CoffeeDetailWindow';
-import { useJwt } from '../../windows/UserWindows/UserHelperFunctions';
+import OverlayFrame from '../../windows/OverlayFrame/OverlayFrame';
 import { setUserFromSessionStorage } from '../User';
 import { throwDataError, throwDataSucess } from '../User/userHelperFunctions';
 import { default as chemexSVG, default as CoffeeReplacement } from './../../images/Chemex.svg';
 import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import LocalStyles from './Coffee.module.scss';
 import { deleteCoffee, getCoffeAttrData, getCoffees, saveNewCoffee, updateCoffee } from './CoffeeHelperFunctions';
-import OverlayFrame from '../../windows/OverlayFrame/OverlayFrame';
+import { CoffeeContext } from '../../Contexts/CoffeeContext';
 
 export const Coffee = () => {
-    const [posts, setPosts] = useState<CoffeeEntry[]>([]);
-
-    const [filteredPosts, setFilteredPosts] = useState<CoffeeEntry[]>([]);
-    const [filterName, setFilterName] = useState<string>();
-    const [filterAttr, setFilterAttr] = useState<string>();
-    const [searchString, setSearchString] = useState<string>();
-    const [postOrderBy, setPostOrderBy] = useState<string>();
-
-    const [coffeeAttrData, setCoffeeAttrData] = useState<CoffeeAttrData>();
-    const [user] = useState<User | undefined>(useJwt());
+    const {
+        basePath,
+        coffeeAttrData,
+        filterAttr,
+        filterName,
+        filteredPosts,
+        postOrderBy,
+        posts,
+        searchString,
+        setCoffeeAttrData,
+        setFilterAttr,
+        setFilterName,
+        setFilteredPosts,
+        setPostOrderBy,
+        setPosts,
+        setSearchString,
+        user,
+    } = useContext(CoffeeContext);
 
     const history = useHistory();
     const { pathname } = useLocation();
-    const basePath = '/coffee';
 
     // Todo: vill sollte man das schlauer machen
     useEffect(() => {
@@ -225,6 +232,7 @@ export const Coffee = () => {
                 }
             >
                 <div className={GeneralStyles.FilterRow}>
+                    <Search searchString={searchString} setSearchString={setSearchString} />
                     <Filter orderItems={filterMenu} orderString={postOrderBy} setOrderString={setPostOrderBy} />
                     {user && <AddButton onClick={goToCreateCoffee} />}
                     {user && <DataButton onClick={openAttrWindow} />}

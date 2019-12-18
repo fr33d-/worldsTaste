@@ -47,6 +47,7 @@ import { Cigars } from './pages/Cigars';
 import { Coffee } from './pages/Coffee/Coffee';
 import { Home } from './pages/Home';
 import { UserPage } from './pages/User';
+import { CoffeeContextProvider } from './Contexts/CoffeeContext';
 
 library.add(
     faTrashAlt,
@@ -104,7 +105,9 @@ export const App = () => (
                     <UserPage />
                 </Route>
                 <Route path="/coffee/:extention?">
-                    <Coffee />
+                    <CoffeeContextProvider>
+                        <Coffee />
+                    </CoffeeContextProvider>
                 </Route>
                 <Route path="/cigars/:id?">
                     <Cigars />
