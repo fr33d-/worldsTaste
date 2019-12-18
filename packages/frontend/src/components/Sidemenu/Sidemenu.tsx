@@ -39,7 +39,7 @@ export class Sidemenu extends Component<SidemenuProps, SidemenuState> {
                     </div>
                     <ul className={LocalStyles.MenuList}>
                         {filter.length === 0 ? (
-                            <li>nothing here</li>
+                            <li key={'noContent'}>nothing here</li>
                         ) : (
                             filter.map((filterItem, i) => (
                                 <>
@@ -49,7 +49,7 @@ export class Sidemenu extends Component<SidemenuProps, SidemenuState> {
                                         className={`${i === openFilter && LocalStyles.active}`}
                                     >
                                         {filterItem.name}
-                                        <ul key={i} className={`${LocalStyles.MenuSubList}`}>
+                                        <ul key={`${filterItem.name}_${i}`} className={`${LocalStyles.MenuSubList}`}>
                                             {filterItem.items.map((item, i) => (
                                                 <li
                                                     key={item}

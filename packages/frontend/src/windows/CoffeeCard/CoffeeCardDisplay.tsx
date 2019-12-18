@@ -14,6 +14,7 @@ import { blue, cyan, green, yellow } from '../../styles/colors';
 import coffeePlacement from './../../images/coffeePlacement.svg';
 import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import LocalStyles from './CoffeeCard.module.scss';
+import { useHistory } from 'react-router';
 
 type InlineCoffeeCardDisplayProps = {
     entry: CoffeeEntry;
@@ -26,6 +27,8 @@ type InlineCoffeeCardDisplayProps = {
 // tslint:disable-next-line: max-func-body-length
 export const InlineCoffeeCardDisplay = ({ entry, active }: InlineCoffeeCardDisplayProps) => {
     const [expanded, setExpanded] = useState(false);
+
+    const history = useHistory();
 
     // const [id, setId] = useState(props.entry.id);
     // const [imageStrings, setImageStrings] = useState(props.entry.imageStrings);
@@ -56,7 +59,8 @@ export const InlineCoffeeCardDisplay = ({ entry, active }: InlineCoffeeCardDispl
     };
 
     const editCard = () => {
-        // props.editFunction(id);
+        // Todo: routing ist noch echt ungeil
+        history.push(`card/${entry.id}?view=edit`)
     };
 
     const deleteCard = () => {

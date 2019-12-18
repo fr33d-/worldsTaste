@@ -50,6 +50,8 @@ export const CoffeeCardEdit = ({
         history.push(`${basePath}`);
     };
 
+    console.log('render coffee card edit with id', formCoffee.id);
+
     const deleteImageByURL = (url: string, id: number) => {
         axios
             .delete(`${baseURL}${coffeeURL}/assets/${id}`, { data: { url: url } })

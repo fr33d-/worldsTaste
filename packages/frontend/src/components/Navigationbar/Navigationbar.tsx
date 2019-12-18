@@ -24,16 +24,16 @@ export const Navigationbar = ({ light }: NavbarProps) => {
                     <div className={classNames('col-12', LocalStyles.Navbar)}>
                         <div className={classnames(LocalStyles.Navbar, LocalStyles.Breadcrupm)}>
                             <ul>
-                                <li>
+                                <li key={'chevron-right'}>
                                     Home
-                                    <FontAwesomeIcon icon="chevron-right" className={LocalStyles.svg} />
+                                    <FontAwesomeIcon icon="chevron-right" className={LocalStyles.svg}  />
                                 </li>
                                 {path.map((item, i) => {
                                     if (path.length === i + 1) {
-                                        return <li>{item}</li>;
+                                        return <li key={`${item}_${i}`}>{item}</li>;
                                     } else {
                                         return (
-                                            <li>
+                                            <li key={`${item}_${i}`}>
                                                 {item}
                                                 <FontAwesomeIcon icon="chevron-right" className={LocalStyles.svg} />
                                             </li>

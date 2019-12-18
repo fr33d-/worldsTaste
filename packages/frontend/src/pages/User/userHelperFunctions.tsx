@@ -51,16 +51,17 @@ export const newExtendedUser: ExtendedUser = {
     image: '',
 };
 
+export const AppToaster = Toaster.create({
+    className: "coffee-toaster",
+    position: Position.TOP_RIGHT,
+});
+
 export const throwDataSucess = (message: string) => {
     console.log('success', message);
-    Toaster.create({
-        position: Position.TOP_RIGHT,
-    }).show({ message: message, intent: 'success' });
+    AppToaster.show({ message: message, intent: 'success' });
 };
 
 export const throwDataError = (message: string, error?: any) => {
     console.log('error', message, error);
-    Toaster.create({
-        position: Position.TOP_RIGHT,
-    }).show({ message: message, intent: 'danger' });
+    AppToaster.show({ message: message, intent: 'danger' });
 };
