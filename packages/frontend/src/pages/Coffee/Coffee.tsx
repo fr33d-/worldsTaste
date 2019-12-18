@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Route, RouteComponentProps, Switch, useHistory, useLocation, withRouter } from 'react-router';
+import { Route, RouteComponentProps, Switch, useHistory, useLocation, withRouter, useParams } from 'react-router';
 import { AddButton, DataButton, Filter, IntroText } from '../../components/Filter';
 import { Sidemenu } from '../../components/Sidemenu';
 import { CoffeeAttrData, CoffeeEntry, FilterMenuType, User } from '../../helpers/types';
@@ -16,16 +16,17 @@ import LocalStyles from './Coffee.module.scss';
 import { deleteCoffee, getCoffeAttrData, getCoffees, saveNewCoffee, updateCoffee } from './CoffeeHelperFunctions';
 import OverlayFrame from '../../windows/OverlayFrame/OverlayFrame';
 
-const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
+export const Coffee = () => {
     const [posts, setPosts] = useState<CoffeeEntry[]>([]);
+
     const [filteredPosts, setFilteredPosts] = useState<CoffeeEntry[]>([]);
     const [filterName, setFilterName] = useState<string>();
     const [filterAttr, setFilterAttr] = useState<string>();
-    // const [menu, setMenu] = useState<AttrDataType[]>([]);
-    // const [filter, setFilter] = useState<string>();
+    const [searchString, setSearchString] = useState<string>();
+    const [postOrderBy, setPostOrderBy] = useState<string>();
+
     const [coffeeAttrData, setCoffeeAttrData] = useState<CoffeeAttrData>();
-    const [activeFilter, setActiveFilter] = useState<string>();
-    const [user, setUser] = useState<User>();
+    const [user] = useState<User | undefined>(useJwt());
 
     const history = useHistory();
     const { pathname } = useLocation();
@@ -33,13 +34,12 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
 
     // Todo: vill sollte man das schlauer machen
     useEffect(() => {
-        setUser(useJwt());
         initiateData();
     }, []);
 
     useEffect(() => {
-        filterPosts(filterName, filterAttr);
-    }, [posts, filterName, filterAttr]);
+        filterPosts();
+    }, [posts, filterName, filterAttr, searchString, postOrderBy]);
 
     const innerSaveCoffee = async (coffee: CoffeeEntry): Promise<void> => {
         if (coffee.id === 0) {
@@ -90,7 +90,7 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
     };
 
     const openBrewingWindow = (id: number) => {
-        history.push(`card/${id}?view=brewings`);
+        history.push(`/coffee/card/${id}?view=brewings`);
     };
 
     const closeAttrWindow = () => {
@@ -99,7 +99,7 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
 
     const goToCreateCoffee = () => {
         //todo das sollte besser gehen, mach das mal so wie man das eigentlich macht
-        history.push('card/?view=new');
+        history.push('/coffee/card/?view=new');
     };
 
     const initiateData = () => {
@@ -113,10 +113,6 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
                     roasteds: coffeeAttrData.processes,
                     specieses: coffeeAttrData.specieses,
                 });
-
-                // setMenu(coffeeAttrData.origins);
-                // setFilter('origin');
-
                 throwDataSucess('got coffee data');
             })
             .catch((error) => {
@@ -137,7 +133,7 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
         });
     };
 
-    const filterPosts = (filterName?: string, filterAttr?: string) => {
+    const filterPosts = () => {
         let newPosts = [];
 
         switch (filterName) {
@@ -166,8 +162,28 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
                 break;
         }
 
+        if (searchString) {
+            newPosts = newPosts.filter((post) => post.name.includes(searchString));
+        }
+
+        if (postOrderBy) {
+            switch (filterName) {
+                case 'Arten':
+                    newPosts = newPosts.sort((a, b) => a.kind.name.localeCompare(b.kind.name));
+                    break;
+                case 'Herkunft':
+                    newPosts = newPosts.sort((a, b) => a.origin.name.localeCompare(b.origin.name));
+                    break;
+                case 'Röstereien':
+                    newPosts = newPosts.sort((a, b) => a.roasted.name.localeCompare(b.roasted.name));
+                    break;
+                case 'Bewertung':
+                    newPosts = newPosts.sort((a, b) => a.rating - b.rating);
+                    break;
+            }
+        }
+
         setFilteredPosts(newPosts);
-        setActiveFilter(filterAttr);
     };
 
     const filterMenu: FilterMenuType[] = coffeeAttrData
@@ -191,55 +207,57 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
           ]
         : [];
 
-    const params: any = match.params;
+    const { extention } = useParams();
 
     return (
         <>
-            <Route path={`${basePath}/:extention?`}>
-                <AppWindow
-                    editState={params.extention}
-                    sidebar={
-                        <Sidemenu
-                            filter={filterMenu}
-                            image={chemexSVG}
-                            filterAction={filterPosts}
-                            activeFilter={activeFilter}
-                        />
-                    }
-                >
-                    <div className={GeneralStyles.FilterRow}>
-                        <Filter orderAction={() => {}} orderItems={filterMenu} />
-                        {user && <AddButton onClick={goToCreateCoffee} />}
-                        {user && <DataButton onClick={openAttrWindow} />}
-                    </div>
+            <AppWindow
+                editState={extention ? true : false}
+                sidebar={
+                    <Sidemenu
+                        filter={filterMenu}
+                        image={chemexSVG}
+                        filterName={filterName}
+                        setFilterName={setFilterName}
+                        filterAttr={filterAttr}
+                        setFilterAttr={setFilterAttr}
+                    />
+                }
+            >
+                <div className={GeneralStyles.FilterRow}>
+                    <Filter orderItems={filterMenu} orderString={postOrderBy} setOrderString={setPostOrderBy} />
+                    {user && <AddButton onClick={goToCreateCoffee} />}
+                    {user && <DataButton onClick={openAttrWindow} />}
+                </div>
 
-                    <IntroText header={'Kaffee - Genuss und Wissenschaft'}>
-                        Kaffee macht nicht nur wach sondern kann viel mehr. Es ist eine Wissenschaft ihn zuzbereiten, es
-                        gibt hunderte, wenn nicht tausende von Arten, Varianten, Geschmäcker und alles an Nerdkram den
-                        man sich vorstellen kann. Außerdem bedient er eine gewisse Sammelleidenschaft. Fast jede größere
-                        Stadt bietet heute mehr als eine kleine Rösterei mit viel verschiedenen Sorten. Ein kleiner
-                        Überblick über meine persönlichen Erfahrungen soll nun hier entstehen.
-                    </IntroText>
+                <IntroText header={'Kaffee - Genuss und Wissenschaft'}>
+                    Kaffee macht nicht nur wach sondern kann viel mehr. Es ist eine Wissenschaft ihn zuzbereiten, es
+                    gibt hunderte, wenn nicht tausende von Arten, Varianten, Geschmäcker und alles an Nerdkram den man
+                    sich vorstellen kann. Außerdem bedient er eine gewisse Sammelleidenschaft. Fast jede größere Stadt
+                    bietet heute mehr als eine kleine Rösterei mit viel verschiedenen Sorten. Ein kleiner Überblick über
+                    meine persönlichen Erfahrungen soll nun hier entstehen.
+                </IntroText>
 
-                    <div className={`${LocalStyles.CoffeeContainer}`}>
-                        {posts.length === 0 ? (
-                            <div className={GeneralStyles.ReplImg}>
-                                <img src={CoffeeReplacement} alt="no content" />
-                                <p>No coffees to display</p>
-                            </div>
-                        ) : (
-                            filteredPosts.map((post, i) => (
-                                <InlineCoffeeCardDisplay entry={post} key={`${post.name}_${i}`} />
-                            ))
-                        )}
-                    </div>
-                </AppWindow>
-            </Route>
+                <div className={`${LocalStyles.CoffeeContainer}`}>
+                    {posts.length === 0 ? (
+                        <div className={GeneralStyles.ReplImg}>
+                            <img src={CoffeeReplacement} alt="no content" />
+                            <p>No coffees to display</p>
+                        </div>
+                    ) : (
+                        filteredPosts.map((post, i) => (
+                            <InlineCoffeeCardDisplay
+                                entry={post}
+                                key={`${post.name}_${i}`}
+                                deleteCoffee={innerDeleteCoffee}
+                            />
+                        ))
+                    )}
+                </div>
+            </AppWindow>
             <Switch>
                 <Route exact path={`${basePath}/attrDataWindow`}>
-                    <OverlayFrame>
-                        <CoffeeAttrDataWindow close={closeAttrWindow} coffeeAttrData={coffeeAttrData} />
-                    </OverlayFrame>
+                    <CoffeeAttrDataWindow close={closeAttrWindow} coffeeAttrData={coffeeAttrData} />
                 </Route>
                 <Route exact path={`${basePath}/card/:id?`}>
                     <OverlayFrame>
@@ -256,5 +274,3 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
         </>
     );
 };
-
-export default withRouter(CoffeeBase);

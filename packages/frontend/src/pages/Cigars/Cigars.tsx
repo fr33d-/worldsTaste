@@ -340,6 +340,10 @@ export const Cigars = () => {
     ];
 
     const user = useJwt();
+    const [filterName, setFilterName] = useState<string>();
+    const [filterAttr, setFilterAttr] = useState<string>();
+    const [searchString, setSearchString] = useState<string>();
+    const [postOrderBy, setPostOrderBy] = useState<string>();
 
     return (
         <>
@@ -355,11 +359,13 @@ export const Cigars = () => {
                         <Sidemenu
                             filter={filterMenuData}
                             image={Tabak}
-                            filterAction={filterPosts}
-                            activeFilter={activeFilter}
+                            filterAttr={filterAttr}
+                            filterName={filterName}
+                            setFilterAttr={setFilterAttr}
+                            setFilterName={setFilterName}
                         />
                         <div className={classNames(`col-12 col-lg-9`)}>
-                            <Filter orderAction={() => {}} orderItems={filterMenuData} />
+                            <Filter orderItems={filterMenuData} orderString={postOrderBy} setOrderString={setPostOrderBy} />
                             {user && <AddButton onClick={createCard} />}
                             {user && <DataButton onClick={toggleAttrMenu} />}
                             <IntroText header="Zigarren raucht man überall">

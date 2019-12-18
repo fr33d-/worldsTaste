@@ -19,9 +19,10 @@ import { useHistory } from 'react-router';
 type InlineCoffeeCardDisplayProps = {
     entry: CoffeeEntry;
     active?: boolean;
+    deleteCoffee(id: number): void;
 };
 
-export const InlineCoffeeCardDisplay = ({ entry, active }: InlineCoffeeCardDisplayProps) => {
+export const InlineCoffeeCardDisplay = ({ entry, active, deleteCoffee }: InlineCoffeeCardDisplayProps) => {
     const [expanded, setExpanded] = useState(false);
 
     const history = useHistory();
@@ -33,14 +34,12 @@ export const InlineCoffeeCardDisplay = ({ entry, active }: InlineCoffeeCardDispl
 
     const editCard = () => {
         // Todo: routing ist noch echt ungeil
-        history.push(`card/${entry.id}?view=edit`)
+        history.push(`card/${entry.id}?view=edit`);
     };
 
-    const deleteCard = () => {
-        // props.deleteFunction(id);
+    const openBrewings = () => {
+        history.push(`/coffee/card/${entry.id}?view=brewings`);
     };
-
-    const openBrewings = () => {};
 
     return (
         <>
@@ -63,7 +62,10 @@ export const InlineCoffeeCardDisplay = ({ entry, active }: InlineCoffeeCardDispl
                         <FontAwesomeIcon icon="edit" />
                         Edit
                     </button>
-                    <button onClick={deleteCard} className={classNames(LocalStyles.IconButton, LocalStyles.HoverRed)}>
+                    <button
+                        onClick={() => deleteCoffee(entry.id)}
+                        className={classNames(LocalStyles.IconButton, LocalStyles.HoverRed)}
+                    >
                         <FontAwesomeIcon icon="trash-alt" />
                         Delete
                     </button>

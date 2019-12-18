@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
-import React, { ChangeEvent, FC } from 'react';
+import React, { ChangeEvent, FC, SetStateAction, Dispatch } from 'react';
 import LocalStyles from './Filter.module.scss';
 import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import { Link } from 'react-router-dom';
@@ -8,18 +8,19 @@ import { FilterMenuType } from '../../helpers/types';
 
 type FilterProps = {
     orderItems: FilterMenuType[];
-    orderAction(event: ChangeEvent<HTMLSelectElement>): void;
+    orderString?: string;
+    setOrderString: Dispatch<SetStateAction<string | undefined>>
 };
 
-export const Filter = ({ orderItems, orderAction }: FilterProps) => (
+export const Filter = ({ orderItems, orderString, setOrderString}: FilterProps) => (
     <>
         <div className={LocalStyles.Search}>
             <input type="text" placeholder="Search" />
         </div>
 
         <div className={LocalStyles.Select}>
-            <select onChange={orderAction}>
-                <option value="unknown" disabled defaultValue={'unknown'}>
+            <select onChange={(e) => setOrderString(e.currentTarget.value)}>
+                <option value="" disabled defaultValue={''}>
                     Order by
                 </option>
                 {orderItems.map((item, i) => (

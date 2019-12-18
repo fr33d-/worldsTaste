@@ -5,48 +5,48 @@ import {
     faBars,
     faBeer,
     faBook,
+    faCalendar,
+    faCalendarAlt,
+    faCarrot,
     faChevronDown,
     faChevronRight,
     faChevronUp,
+    faClock,
+    faCog,
+    faCut,
     faDatabase,
     faEdit,
+    faEnvelopeOpen,
     faFlask,
     faGlobeAmericas,
     faHamburger,
     faHeart,
+    faLeaf,
     faLink,
     faMugHot,
     faPlus,
     faRocket,
+    faRuler,
     faSave,
+    faSearch,
+    faSmileBeam,
     faSmoking,
     faStar,
     faStore,
     faTimes,
     faTimesCircle,
+    faTrash,
     faTrashAlt,
     faUpload,
-    faLeaf,
-    faRuler,
-    faClock,
-    faCut,
-    faCog,
-    faCalendarAlt,
-    faSmileBeam,
-    faCarrot,
-    faSearch,
-    faTrash,
-    faCalendar,
     faUser,
-    faEnvelopeOpen,
 } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { Home } from './pages/Home';
-import CoffeeBase from './pages/Coffee/Coffee';
-import { UserPage } from './pages/User';
-import { Cigars } from './pages/Cigars';
 import { Blog } from './pages/Blog';
+import { Cigars } from './pages/Cigars';
+import { Coffee } from './pages/Coffee/Coffee';
+import { Home } from './pages/Home';
+import { UserPage } from './pages/User';
 
 library.add(
     faTrashAlt,
@@ -103,8 +103,8 @@ export const App = () => (
                 <Route path="/user/:extention?">
                     <UserPage />
                 </Route>
-                <Route path="/coffee/:id?">
-                    <CoffeeBase />
+                <Route path="/coffee/:extention?">
+                    <Coffee />
                 </Route>
                 <Route path="/cigars/:id?">
                     <Cigars />
