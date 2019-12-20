@@ -19,7 +19,7 @@ export const Filter = ({ orderItems, orderAction }: FilterProps) => (
 
         <div className={LocalStyles.Select}>
             <select onChange={orderAction}>
-                <option value="unknown" disabled selected>
+                <option value="unknown" disabled defaultValue={'unknown'}>
                     Order by
                 </option>
                 {orderItems.map((item, i) => (
@@ -36,6 +36,14 @@ export const AddButton: FC<{ onClick(): void }> = ({ onClick }) => (
     <button className={classNames('add-button big', LocalStyles.Button)} onClick={onClick}>
         <FontAwesomeIcon icon="plus" />
     </button>
+);
+
+export const AddLinkButton: FC<{ link: string }> = ({ link }) => (
+    <Link to={link}>
+        <button className={classNames('add-button big', LocalStyles.Button)}>
+            <FontAwesomeIcon icon="plus" />
+        </button>
+    </Link>
 );
 
 export const AddButtonLink: FC<{ link: string }> = ({ link }) => (

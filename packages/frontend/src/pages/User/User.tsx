@@ -22,29 +22,31 @@ export const UserRoles: AttrDataItemType[] = [
     { id: 2, name: 'GUEST' },
 ];
 
-export const setUserFromSessionStorage = async (): Promise<FullUser> => {
+export const setUserFromSessionStorage = async () => {
     const jwtObj = sessionStorage.getItem('auth');
 
-    if (jwtObj == null) {
-        throwDataError('cant set user from session strorage, your not logged in ')
-        throw new Error('not logged in')
-    }
-    const data = jwt.decode(jwtObj);
-
-    if (data != null && typeof data !== 'string') {
-        const user: FullUser = {
-            id: data['userId'],
-            username: data['username'],
-            name: data['name'],
-            email: data['email'],
-            image: 'avatar_frederic.png',
-            created: 'sice 07.08.1989',
-            role: data['role'],
+    try {
+        if (jwtObj == null) {
+            throwDataError('cant set user from session strorage, your not logged in ');
+            throw new Error('not logged in');
         }
-        return user;
-    }
+        const data = jwt.decode(jwtObj);
 
-    throw new Error('not logged in')
+        if (data != null && typeof data !== 'string') {
+            const user: FullUser = {
+                id: data['userId'],
+                username: data['username'],
+                name: data['name'],
+                email: data['email'],
+                image: 'avatar_frederic.png',
+                created: 'sice 07.08.1989',
+                role: data['role'],
+            };
+            return user;
+        }
+    } catch {}
+    
+    throw new Error('not logged in');
 };
 
 export const UserPage = () => {
@@ -52,13 +54,15 @@ export const UserPage = () => {
     const [activeMenu, setActiveMenu] = useState(0);
 
     const innerSetUserFromSessionStorage = () => {
-        setUserFromSessionStorage().then((user) => {
-            throwDataSucess('user set from sessio storeage')
-            setUser(user);
-        }).catch((error) => {
-            throwDataError('cant set user from session strorage, your not logged in ', error)
-        })
-    }
+        setUserFromSessionStorage()
+            .then((user) => {
+                throwDataSucess('user set from sessio storeage');
+                setUser(user);
+            })
+            .catch((error) => {
+                throwDataError('cant set user from session strorage, your not logged in ', error);
+            });
+    };
 
     useEffect(() => {
         innerSetUserFromSessionStorage();

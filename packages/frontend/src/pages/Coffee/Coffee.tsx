@@ -14,10 +14,13 @@ import { default as chemexSVG, default as CoffeeReplacement } from './../../imag
 import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import LocalStyles from './Coffee.module.scss';
 import { deleteCoffee, getCoffeAttrData, getCoffees, saveNewCoffee, updateCoffee } from './CoffeeHelperFunctions';
+import OverlayFrame from '../../windows/OverlayFrame/OverlayFrame';
 
 const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
     const [posts, setPosts] = useState<CoffeeEntry[]>([]);
     const [filteredPosts, setFilteredPosts] = useState<CoffeeEntry[]>([]);
+    const [filterName, setFilterName] = useState<string>();
+    const [filterAttr, setFilterAttr] = useState<string>();
     // const [menu, setMenu] = useState<AttrDataType[]>([]);
     // const [filter, setFilter] = useState<string>();
 
@@ -50,6 +53,10 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
         setUser(useJwt());
         initiateData();
     }, []);
+
+    useEffect(() => {
+        filterPosts(filterName, filterAttr);
+    }, [posts, filterName, filterAttr]);
 
     const innerSaveCoffee = async (coffee: CoffeeEntry): Promise<void> => {
         if (coffee.id === 0) {
@@ -153,16 +160,16 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
     };
 
     const openBrewingWindow = (id: number) => {
-        history.push(`${id}?view=brewings`);
+        history.push(`card/${id}?view=brewings`);
     };
 
     const closeAttrWindow = () => {
         history.push(pathname.replace('attrDataWindow/', ''));
     };
 
-    // Das wird noch nicht funktionieren
     const goToCreateCoffee = () => {
-        history.push('new/');
+        //todo das sollte besser gehen, mach das mal so wie man das eigentlich macht
+        history.push('card/?view=new');
     };
 
     const initiateData = () => {
@@ -203,7 +210,9 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
                 throwDataError('cant get coffees', error);
             });
 
-        setUserFromSessionStorage();
+        setUserFromSessionStorage().catch((error) => {
+            throwDataError('you are not logged in', error);
+        });
     };
 
     // const loadEditCard = (id: number) => {
@@ -231,35 +240,35 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
     //     setFilteredPosts(newPosts);
     // };
 
-    const filterPosts = (filterName: string, filterAttr: string) => {
+    const filterPosts = (filterName?: string, filterAttr?: string) => {
         let newPosts = [];
 
         switch (filterName) {
             case 'Arten':
                 newPosts = posts.filter((post) => {
-                    console.log(`Vergleich ${post.kind.name} === ${filterAttr}`);
+                    // console.log(`Vergleich ${post.kind.name} === ${filterAttr}`);
                     return post.kind.name === filterAttr;
                 });
                 break;
             case 'Herkunft':
                 newPosts = posts.filter((post) => {
-                    console.log(`Vergleich ${post.origin.name} === ${filterAttr}`);
+                    // console.log(`Vergleich ${post.origin.name} === ${filterAttr}`);
                     return post.origin.name === filterAttr;
                 });
                 break;
             case 'Röstereien':
                 newPosts = posts.filter((post) => {
-                    console.log(`Vergleich ${post.roasted.name} === ${filterAttr}`);
+                    // console.log(`Vergleich ${post.roasted.name} === ${filterAttr}`);
                     return post.roasted.name === filterAttr;
                 });
                 break;
             case 'Bewertung':
                 newPosts = posts.filter((post) => {
-                    console.log(post);
+                    // console.log(post);
                     if (String(post.rating) === filterAttr) {
-                        console.log(`Vergleich ${String(post.rating)} === ${filterAttr}`);
+                        // console.log(`Vergleich ${String(post.rating)} === ${filterAttr}`);
                     } else {
-                        console.log(`Vergleich ${String(post.rating)} != ${filterAttr}`);
+                        // console.log(`Vergleich ${String(post.rating)} != ${filterAttr}`);
                     }
                     return String(post.rating) === filterAttr;
                 });
@@ -402,34 +411,39 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
                                 <p>No coffees to display</p>
                             </div>
                         ) : (
-                            posts.map((post) => <InlineCoffeeCardDisplay entry={post} />)
+                            filteredPosts.map((post, i) => (
+                                <InlineCoffeeCardDisplay entry={post} key={`${post.name}_${i}`} />
+                            ))
                         )}
                     </div>
                 </AppWindow>
             </Route>
             <Switch>
-                <Route path={`${basePath}/:id/edit?`}>
-                    {coffeeAttrData && (
-                        <CoffeeDetailWindow basePath={basePath} coffees={posts} coffeeAttrData={coffeeAttrData} deleteCoffee={innerDeleteCoffee} saveCoffee={innerSaveCoffee} />
-                    )}
-                </Route>{' '}
-                : <p>Error loading attr data</p>}
-                {/* <CoffeeBrewingWindow
+                <Route exact path={`${basePath}/attrDataWindow`}>
+                    <OverlayFrame>
+                        <CoffeeAttrDataWindow close={closeAttrWindow} coffeeAttrData={coffeeAttrData} />
+                    </OverlayFrame>
+                </Route>
+                <Route exact path={`${basePath}/card/:id?`}>
+                    <OverlayFrame>
+                        <CoffeeDetailWindow
+                            basePath={basePath}
+                            coffees={posts}
+                            coffeeAttrData={coffeeAttrData}
+                            deleteCoffee={innerDeleteCoffee}
+                            saveCoffee={innerSaveCoffee}
+                        />
+                    </OverlayFrame>
+                </Route>
+            </Switch>
+
+            {/* <CoffeeBrewingWindow
                             methods={coffeeBrewMethod}
                             basePath={basePath}
                             coffees={posts}
                             saveCoffee={innerSaveCoffee}
                             delteCoffee={deleteCoffee}
                         /> */}
-                <Route path={`${basePath}/attrDataWindow`}>
-                    {coffeeAttrData ? (
-                        <CoffeeAttrDataWindow close={closeAttrWindow} coffeeAttrData={coffeeAttrData} />
-                    ) : (
-                        <p>Error, loading attr data</p>
-                    )}
-                </Route>
-            </Switch>
-
             {/* {editCard && (
                 <OverlayFrame>
                     <CoffeeCardEdit

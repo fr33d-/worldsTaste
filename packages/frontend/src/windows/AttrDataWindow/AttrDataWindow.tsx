@@ -8,11 +8,13 @@ import LocalStyles from './AttrDataWindow.module.scss';
 import { AttrDataType, CoffeeAttrData } from '../../helpers/types';
 
 type CoffeeAttrDataWindowProps = {
-    coffeeAttrData: CoffeeAttrData;
+    coffeeAttrData?: CoffeeAttrData;
     close(): void;
 }
 
 export const CoffeeAttrDataWindow = ({close, coffeeAttrData}: CoffeeAttrDataWindowProps) => {
+
+    if (!coffeeAttrData) return <p>Error, no coffee data loaded</p>;
 
     // Todo: warum fällt das nicht aus der API raus
     const attrData = [
