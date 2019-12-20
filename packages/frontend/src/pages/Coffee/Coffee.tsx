@@ -402,7 +402,7 @@ const CoffeeBase: FC<RouteComponentProps> = ({ match }) => {
                                 <p>No coffees to display</p>
                             </div>
                         ) : (
-                            filteredPosts.map((post) => <InlineCoffeeCardDisplay entry={post} />)
+                            posts.map((post) => <InlineCoffeeCardDisplay entry={post} />)
                         )}
                     </div>
                 </AppWindow>
