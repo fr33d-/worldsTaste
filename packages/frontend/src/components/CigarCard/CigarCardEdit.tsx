@@ -213,7 +213,7 @@ export const CigarCardEdit = ({
                                         label="Hersteller"
                                         selectedItem={formCigar.producer}
                                         // onChange={setProducer}
-                                        // obj={formCigar}
+                                        obj={formCigar}
                                         propPath={['producer']}
                                         onChange={setFormCigar}
                                     />
@@ -228,6 +228,7 @@ export const CigarCardEdit = ({
                                         // onChange={setOrigin}
                                         propPath={['origin']}
                                         onChange={setFormCigar}
+                                        obj={formCigar}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
@@ -279,6 +280,7 @@ export const CigarCardEdit = ({
                                         selectedItem={formCigar.einlage}
                                         onChange={setFormCigar}
                                         propPath={['einlage']}
+                                        obj={formCigar}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
@@ -290,6 +292,7 @@ export const CigarCardEdit = ({
                                         selectedItem={formCigar.umblatt}
                                         onChange={setFormCigar}
                                         propPath={['umblatt']}
+                                        obj={formCigar}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
@@ -301,6 +304,7 @@ export const CigarCardEdit = ({
                                         selectedItem={formCigar.deckblatt}
                                         onChange={setFormCigar}
                                         propPath={['deckblatt']}
+                                        obj={formCigar}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
@@ -312,6 +316,7 @@ export const CigarCardEdit = ({
                                         selectedItem={formCigar.anschnitt}
                                         onChange={setFormCigar}
                                         propPath={['anschnitt']}
+                                        obj={formCigar}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
@@ -417,6 +422,7 @@ export const CigarCardEdit = ({
                                         selectedItem={formCigar.aromarad}
                                         onChange={setFormCigar}
                                         propPath={['aromarad']}
+                                        obj={formCigar}
                                     />
                                 </div>
                             </div>

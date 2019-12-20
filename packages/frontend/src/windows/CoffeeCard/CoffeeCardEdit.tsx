@@ -155,6 +155,7 @@ export const CoffeeCardEdit = ({
                                         selectedItem={formCoffee.origin}
                                         onChange={setFormCoffee}
                                         propPath={['origin']}
+                                        obj={formCoffee}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
@@ -166,6 +167,7 @@ export const CoffeeCardEdit = ({
                                         selectedItem={formCoffee.kind}
                                         onChange={setFormCoffee}
                                         propPath={['kind']}
+                                        obj={formCoffee}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
@@ -177,6 +179,7 @@ export const CoffeeCardEdit = ({
                                         selectedItem={formCoffee.roasted}
                                         onChange={setFormCoffee}
                                         propPath={['roasted']}
+                                        obj={formCoffee}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
@@ -188,6 +191,7 @@ export const CoffeeCardEdit = ({
                                         selectedItem={formCoffee.process}
                                         onChange={setFormCoffee}
                                         propPath={['process']}
+                                        obj={formCoffee}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
@@ -199,6 +203,7 @@ export const CoffeeCardEdit = ({
                                         selectedItem={formCoffee.species}
                                         onChange={setFormCoffee}
                                         propPath={['species']}
+                                        obj={formCoffee}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">

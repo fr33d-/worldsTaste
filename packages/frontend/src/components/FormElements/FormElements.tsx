@@ -132,6 +132,7 @@ type DropdownInputProps = {
     selectedItem?: AttrDataItemType;
     onChange: Dispatch<SetStateAction<any>>;
     propPath: string | string[];
+    obj: any;
 };
 
 export const DropdownInput = ({
@@ -142,10 +143,13 @@ export const DropdownInput = ({
     onChange,
     propPath,
     items,
+    obj,
 }: DropdownInputProps) => {
     const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-        if (selectedItem) {
-            onChange(cloneDeep(set(selectedItem, propPath, e.target.value)));
+        if (obj) {
+            console.log('old item and changed path', obj, propPath)
+            onChange(cloneDeep(set(obj, propPath, items.filter(item => item.name === e.target.value)[0])));
+            console.log('new item', obj)
         }
     };
 

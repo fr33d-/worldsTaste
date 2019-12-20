@@ -1,14 +1,14 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import axios from 'axios';
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { baseURL, coffeeURL } from '../../data';
 import { AttrDataType, BrewingEntry, CoffeeEntry } from '../../helpers/types';
 import Beans from '../../images/beans.svg';
 import Cup from '../../images/cup-bw.svg';
+import { throwDataError, throwDataSucess } from '../../pages/User/userHelperFunctions';
 import { CoffeeBrewingCard } from './CoffeeBrewingCard';
 import LocalStyles from './CoffeeBrewingCard.module.scss';
+import { getCoffeeBrewings, saveCoffeeBrewing, newBrewing } from './CoffeeCardHelperFuctions';
 
 type CoffeeBrewingWindowProps = {
     coffee: CoffeeEntry;
@@ -26,64 +26,44 @@ export const CoffeeBrewingWindow = ({
     delteCoffee,
 }: CoffeeBrewingWindowProps) => {
     const [selectedBrewing, setSelectedBrewing] = useState<BrewingEntry>();
+    // When we have the context we have a setCoffee or so, then write the coffee therer
+    const [brewings, setBrewings] = useState<BrewingEntry[]>([]);
+    // const [stateCoffee, setStateCoffee] = useState<CoffeeEntry>(coffee);
 
-    // Todo: this needs to be called when the cared opens
-    // also handle what happens if you habent selected a bewing
+    useEffect(() => {
+        openBrewingWindow();
+    }, [coffee]);
 
-    // const openBrewingWindow = (coffeeEntry: CoffeeEntry) => {
-    //     //Add brewings to coffee card
-    //     axios
-    //         .get<BrewingEntry[]>(`${baseURL}${coffeeURL}/${coffeeEntry.id}/brewings`)
-    //         .then((response) => {
-    //             console.log('Got brewings');
-    //             let loadedBrewings = response.data;
-    //             loadedBrewings = loadedBrewings.map((brewing) => {
-    //                 brewing.brewDate = new Date(brewing.brewDate);
-    //                 return brewing;
-    //             });
-    //             console.log(loadedBrewings);
-    //             setBrewingCard({ brewings: loadedBrewings, ...coffeeEntry });
-    //         })
-    //         .catch((error) => {
-    //             console.log(error);
-    //             console.log('Cant get brewings');
-    //         });
-    // };
+    const openBrewingWindow = () => {
+        getCoffeeBrewings(coffee.id)
+            .then((res) => {
+                throwDataSucess('brewings loaded');
+                setBrewings(res);
+            })
+            .catch((error) => {
+                throwDataError('cant load brewings', error);
+            });
+    };
 
     const createBrewing = () => {
-        if (coffee) {
-            let newBrewing: BrewingEntry = {
-                id: 0,
-                bitter: 0,
-                brewDate: new Date(),
-                method: methods[0],
-                ownDescription: '',
-                rating: 0,
-                sour: 0,
-                strength: 0,
-                taste: 0,
-                tasteKind: 0,
-                useforcalculation: false,
-                woody: 0,
-                waterAmount: 0,
-                coffeeAmount: 0,
-            };
-            axios
-                .post(`${baseURL}${coffeeURL}/${coffee.id}/brewings/`, { ...newBrewing })
-                .then((response) => {
-                    console.log(response);
-                    const location: string = response.headers['location'];
-                    const [newId] = location.split('/').slice(-1);
-                    newBrewing.id = Number(newId);
+        setSelectedBrewing(newBrewing(methods[0]));
+    };
 
-                    saveCoffee({ ...coffee, brewings: [newBrewing, ...coffee.brewings] });
+    const innerDeleteBrewing = (brewing: BrewingEntry) => {
 
+    };
+
+    const innerSaveBrewing = (brewing: BrewingEntry) => {
+            saveCoffeeBrewing(coffee.id, brewing)
+                .then((newId) => {
+                    // Now save the new id, in case of save new if this works and display stuff
+                    const newBrewing: BrewingEntry = {...brewing, id: newId}
                     setSelectedBrewing(newBrewing);
+                    throwDataSucess(`saved brewing with id ${newId}`);
                 })
                 .catch((error) => {
-                    console.log(error);
+                    throwDataError('cant save brewing', error);
                 });
-        }
     };
 
     if (!coffee) return <p>Error, coffee not found with this id</p>;
@@ -96,7 +76,7 @@ export const CoffeeBrewingWindow = ({
                     <div className={classNames(LocalStyles.BrewList, 'col-4')}>
                         <h4>Brewings</h4>
                         <ul>
-                            {coffee && coffee.brewings.length > 0 ? (
+                            {coffee.brewings && coffee.brewings.length > 0 ? (
                                 coffee.brewings.map((brewing) => (
                                     <li
                                         className={classNames(
@@ -126,8 +106,8 @@ export const CoffeeBrewingWindow = ({
                                 brewing={selectedBrewing}
                                 key={selectedBrewing.id}
                                 methods={methods}
-                                coffeeId={coffee.id}
-                                deleteCoffee={delteCoffee}
+                                saveBrewing={innerSaveBrewing}
+                                deleteBrewing={innerDeleteBrewing}
                             />
                         ) : (
                             <div className={LocalStyles.NoContent}>

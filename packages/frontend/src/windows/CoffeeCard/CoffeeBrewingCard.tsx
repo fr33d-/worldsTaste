@@ -15,35 +15,43 @@ import LocalStyles from './CoffeeBrewingCard.module.scss';
 
 type CoffeeBrewingCardProps = {
     brewing: BrewingEntry;
-    coffeeId: number;
     methods: AttrDataType[];
-    deleteCoffee(id: number): void;
+    deleteBrewing(brewing: BrewingEntry): void;
+    saveBrewing(brewing: BrewingEntry): void;
 };
 
 // tslint:disable-next-line: max-func-body-length
-export const CoffeeBrewingCard = ({ brewing, coffeeId, deleteCoffee, methods }: CoffeeBrewingCardProps) => {
+export const CoffeeBrewingCard = ({ brewing, methods, saveBrewing, deleteBrewing }: CoffeeBrewingCardProps) => {
     const [formBrewing, setFormBrewing] = useState<BrewingEntry>(brewing);
 
     const [saveError, setSaveError] = useState(false);
 
-    const saveBrewing = () => {
-        axios
-            .put(`${baseURL}${coffeeURL}/${coffeeId}/brewings/${coffeeId}`, { ...formBrewing })
-            .then((response) => {
-                console.log(response);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    };
+    // const saveBrewing = () => {
+    //     axios
+    //         .put(`${baseURL}${coffeeURL}/${coffeeId}/brewings/${coffeeId}`, { ...formBrewing })
+    //         .then((response) => {
+    //             console.log(response);
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //         });
+    // };
+
+    console.log('initial brewing')
 
     return (
         <>
             <div className="row">
                 <div className="col-12">
                     <h4>
-                        {formBrewing.method.name} am {formBrewing.brewDate.getDate()}.{formBrewing.brewDate.getMonth()}.
-                        {formBrewing.brewDate.getFullYear()}
+                        {formBrewing.brewDate ? (
+                            <>
+                                {formBrewing.method.name} am {formBrewing.brewDate.getDate()}.
+                                {formBrewing.brewDate.getMonth()}.{formBrewing.brewDate.getFullYear()}
+                            </>
+                        ) : (
+                            <>{formBrewing.method.name} am ERROR</>
+                        )}
                     </h4>
                 </div>
                 <div className="col-12 col-md-6">
@@ -55,11 +63,12 @@ export const CoffeeBrewingCard = ({ brewing, coffeeId, deleteCoffee, methods }: 
                         icon={'flask'}
                         iconColor={blue}
                         propPath={['method']}
+                        obj={formBrewing}
                     />
                 </div>
                 <div className="col-12 col-md-6">
                     <DateInput
-                        label="Brühmethode"
+                        label="Datum"
                         obj={formBrewing}
                         setStateHandler={setFormBrewing}
                         propPath={['brewDate']}
@@ -166,8 +175,8 @@ export const CoffeeBrewingCard = ({ brewing, coffeeId, deleteCoffee, methods }: 
             </div>
             <div className="row">
                 <div className={classNames(LocalStyles.ButtonSection, 'col-12')}>
-                    <DeleteButton onClick={() => console.log('not implemented')} withText />
-                    <AdvancedSaveButton save={saveBrewing} error={saveError} changes={true} />
+                    <DeleteButton onClick={() => deleteBrewing(formBrewing)} withText />
+                    <AdvancedSaveButton save={() => saveBrewing(formBrewing)} error={saveError} changes={true} />
                 </div>
             </div>
         </>

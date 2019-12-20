@@ -167,6 +167,7 @@ export const UserAdminWindow: FC<{ user: FullUser }> = ({ user }) => {
                         selectedItem={selectedUser}
                         onChange={setSelectedUser}
                         propPath="role"
+                        obj={selectedUser}
                     />
                     <IconButton
                         icon={saveingError ? 'ban' : 'save'}
@@ -216,6 +217,7 @@ export const UserCreateNewWindow: FC<{ user: FullUser }> = () => {
                 label="Rolle"
                 propPath={['userrole']}
                 onChange={setNewUser}
+                obj={newUser}
             />
             {/* Todo: Das sollte besser so ein magic save button sein */}
             <IconButton
