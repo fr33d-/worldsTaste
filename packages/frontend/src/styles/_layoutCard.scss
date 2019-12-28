@@ -1,0 +1,6 @@
+@import '../../styles/barel.scss';
+
+// Hier sollte sich alles aus den coffee cards sammeln und vieleicht etwas einheitlich werden, da es an sehr vielen stellen verwendet wird
+.LayoutCard {
+    @extend .card;
+}

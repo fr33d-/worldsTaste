@@ -90,7 +90,8 @@ library.add(
     faTrash,
     faCalendar,
     faUser,
-    faEnvelopeOpen
+    faEnvelopeOpen,
+    faChevronRight
 );
 
 // The App component hosts all components of our application. It does so by rendering the BrowserRouter component at

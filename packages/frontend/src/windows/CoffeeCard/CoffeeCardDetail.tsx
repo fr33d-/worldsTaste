@@ -1,0 +1,194 @@
+import classNames from 'classnames';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router';
+import {
+    AttrField,
+    AttrFieldDescription,
+    AttrFieldLikeList,
+    AttrFieldSlider,
+} from '../../components/FormElements/AttrFields';
+import { AdvancedDeleteButton } from '../../components/IconButton';
+import { baseURL } from '../../data';
+import { CoffeeAttrData, CoffeeEntry } from '../../helpers/types';
+import { blue, cyan, green, yellow } from '../../styles/colors';
+import GeneralStyles from './../../styles/GeneralStyles.module.scss';
+import LocalStyles from './CoffeeCardEdit.module.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+type CoffeeCardDetailProps = {
+    coffee: CoffeeEntry;
+    coffeeAttrData: CoffeeAttrData;
+    deleteCoffee(id: number): void;
+    basePath: string;
+};
+
+export const CoffeeCardDetail = ({ coffee, deleteCoffee, basePath, coffeeAttrData }: CoffeeCardDetailProps) => {
+    const [tab, setTab] = useState(0);
+
+    const history = useHistory();
+
+    const goBack = () => {
+        history.push(`${basePath}`);
+    };
+
+    const openDetails = () => {
+        history.push(`/coffee/card/${coffee.id}?view=display`);
+    };
+    const editCard = () => {
+        // Todo: routing ist noch echt ungeil
+        history.push(`/coffee/card/${coffee.id}?view=edit`);
+    };
+
+    const openBrewings = () => {
+        history.push(`/coffee/card/${coffee.id}?view=brewings`);
+    };
+
+    return (
+        <>
+            <div className={LocalStyles.CoffeeCardEdit}>
+                <div className="col-12">
+                    <h2>{coffee.name}</h2>
+                </div>
+                <div className={LocalStyles.CoffeeCardActionSection}>
+                    <button
+                        onClick={openBrewings}
+                        className={classNames(LocalStyles.IconButton, LocalStyles.HoverGreen)}
+                    >
+                        <FontAwesomeIcon icon="flask" />
+                        Add brewing
+                    </button>
+                    <button onClick={editCard} className={classNames(LocalStyles.IconButton, LocalStyles.HoverBlue)}>
+                        <FontAwesomeIcon icon="edit" />
+                        Edit
+                    </button>
+                    <button
+                        onClick={() => deleteCoffee(coffee.id)}
+                        className={classNames(LocalStyles.IconButton, LocalStyles.HoverRed)}
+                    >
+                        <FontAwesomeIcon icon="trash-alt" />
+                        Delete
+                    </button>
+                    <button onClick={goBack}>
+                        <FontAwesomeIcon icon={'times'} />
+                    </button>
+                </div>
+                <div className={GeneralStyles.TabBar}>
+                    <ul>
+                        <li className={classNames(tab === 0 && GeneralStyles.Active)} onClick={() => setTab(0)}>
+                            Information
+                        </li>
+                        <li className={classNames(tab === 1 && GeneralStyles.Active)} onClick={() => setTab(1)}>
+                            Details
+                        </li>
+                        <li className={classNames(tab === 2 && GeneralStyles.Active)} onClick={() => setTab(2)}>
+                            Images
+                        </li>
+                        <li className={classNames(tab === 3 && GeneralStyles.Active)} onClick={() => setTab(3)}>
+                            Bewings
+                        </li>
+                    </ul>
+                </div>
+                {/* tslint:disable-next-line: max-func-body-length */}
+                {tab === 0 && (
+                    <>
+                        <div className={LocalStyles.TextSection}>
+                            <div className="row">
+                                <div className="col-12 col-md-6">
+                                    <AttrField
+                                        color={yellow}
+                                        icon="globe-americas"
+                                        value={coffee.origin.name}
+                                        name="Herkunft:"
+                                    />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <AttrField color={yellow} icon="mug-hot" value={coffee.kind.name} name="Art:" />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <AttrField
+                                        color={yellow}
+                                        icon="flask"
+                                        value={coffee.roasted.name}
+                                        name="Rösterei:"
+                                    />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <AttrField color={yellow} icon="leaf" value={coffee.roasted.name} name="Prozess:" />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <AttrField
+                                        color={yellow}
+                                        icon="leaf"
+                                        value={coffee.roasted.name}
+                                        name="Bohnenart:"
+                                    />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <AttrFieldLikeList value={coffee.rating} name="Gesammtbewertung:" />
+                                </div>
+                                <div className="col-12">
+                                    <AttrFieldDescription
+                                        name="Beschreibung:"
+                                        value={coffee.description}
+                                        expanded={true}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                )}
+
+                {tab === 1 && (
+                    <>
+                        <div className={LocalStyles.TextSection}>
+                            <div className="row">
+                                <div className="col-12 col-md-6">
+                                    <AttrFieldSlider color={blue} name="Geschmack:" value={coffee.taste} />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <AttrFieldSlider color={green} name="Schokolade/Frucht:" value={coffee.tasteKind} />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <AttrFieldSlider color={yellow} name="Säure:" value={coffee.sour} />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <AttrFieldSlider color={green} name="Erbsig:" value={coffee.woody} />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <AttrFieldSlider color={cyan} name="Bitter:" value={coffee.bitter} />
+                                </div>
+                                <div className="col-12">
+                                    <AttrFieldDescription
+                                        expanded={true}
+                                        name="Eigene Beschreibung"
+                                        value={coffee.ownDescription}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                )}
+
+                {tab === 2 && (
+                    <>
+                        <div className={LocalStyles.ImageSection}>
+                            {coffee.imageStrings &&
+                                coffee.imageStrings.map((url, i) => (
+                                    <>
+                                        <div className={LocalStyles.Image}>
+                                            <img src={`${baseURL}${url}`} key={i} alt="coffee" />
+                                        </div>
+                                    </>
+                                ))}
+                        </div>
+                    </>
+                )}
+                {tab === 3 && <></>}
+
+                <div className={LocalStyles.ButtonSection}>
+                    <AdvancedDeleteButton changes={false} onClick={() => deleteCoffee(coffee.id)} />
+                </div>
+            </div>
+        </>
+    );
+};

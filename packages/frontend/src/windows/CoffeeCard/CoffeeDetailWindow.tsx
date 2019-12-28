@@ -4,6 +4,7 @@ import { CoffeeAttrData, CoffeeEntry, User } from '../../helpers/types';
 import { CoffeeCardEdit } from './CoffeeCardEdit';
 import { CoffeeBrewingWindow } from './CoffeeBewingWindow';
 import { useJwt } from '../UserWindows/UserHelperFunctions';
+import { CoffeeCardDetail } from './CoffeeCardDetail';
 
 type CoffeeDetailWindowProps = {
     basePath: string;
@@ -74,7 +75,7 @@ export const CoffeeDetailWindow = ({
                     basePath={basePath}
                 />
             );
-        } else {
+        } else if (view === 'brewings') {
             return (
                 <CoffeeBrewingWindow
                     coffee={coffee}
@@ -82,6 +83,15 @@ export const CoffeeDetailWindow = ({
                     basePath={basePath}
                     saveCoffee={saveCoffee}
                     delteCoffee={deleteCoffee}
+                />
+            );
+        } else {
+            return (
+                <CoffeeCardDetail
+                    basePath={basePath}
+                    coffee={coffee}
+                    coffeeAttrData={coffeeAttrData}
+                    deleteCoffee={deleteCoffee}
                 />
             );
         }

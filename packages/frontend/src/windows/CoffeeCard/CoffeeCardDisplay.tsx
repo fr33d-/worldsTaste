@@ -22,6 +22,7 @@ type InlineCoffeeCardDisplayProps = {
     deleteCoffee(id: number): void;
 };
 
+
 export const InlineCoffeeCardDisplay = ({ entry, active, deleteCoffee }: InlineCoffeeCardDisplayProps) => {
     const [expanded, setExpanded] = useState(false);
 
@@ -32,9 +33,12 @@ export const InlineCoffeeCardDisplay = ({ entry, active, deleteCoffee }: InlineC
         setExpanded(!expanded);
     };
 
+    const openDetails = () => {
+        history.push(`/coffee/card/${entry.id}?view=display`);
+    }
     const editCard = () => {
         // Todo: routing ist noch echt ungeil
-        history.push(`card/${entry.id}?view=edit`);
+        history.push(`/coffee/card/${entry.id}?view=edit`);
     };
 
     const openBrewings = () => {
@@ -71,6 +75,9 @@ export const InlineCoffeeCardDisplay = ({ entry, active, deleteCoffee }: InlineC
                     </button>
                     <button onClick={toggleCard}>
                         <FontAwesomeIcon icon={expanded ? 'chevron-up' : 'chevron-down'} />
+                    </button>
+                    <button onClick={openDetails}>
+                        <FontAwesomeIcon icon={'chevron-right'} />
                     </button>
                 </div>
                 <div className={LocalStyles.CoffeeCardImageSection}>

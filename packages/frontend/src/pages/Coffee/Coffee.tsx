@@ -187,6 +187,8 @@ export const Coffee = () => {
                 case 'Bewertung':
                     newPosts = newPosts.sort((a, b) => a.rating - b.rating);
                     break;
+                default:
+                    break;
             }
         }
 

@@ -20,10 +20,27 @@ export const IconButton = ({ icon, name, color, onClick, className }: IconButton
     </button>
 );
 
+export const SmallIconButton = ({
+    onClick,
+    color,
+    icon,
+    name,
+}: {
+    onClick(): void;
+    color: string;
+    icon: IconProp;
+    name: string;
+}) => {
+    <button onClick={onClick} className={classNames('color-button', color)}>
+        <FontAwesomeIcon icon={icon} />
+        {name}
+    </button>;
+};
+
 type SaveButtonProps = {
     withText?: boolean;
     error: boolean;
-    save?(): void;
+    save(): void;
 };
 
 export const SaveButton = (props: SaveButtonProps) => (

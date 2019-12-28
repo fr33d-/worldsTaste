@@ -10,6 +10,20 @@ import { CoffeeBrewingCard } from './CoffeeBrewingCard';
 import LocalStyles from './CoffeeBrewingCard.module.scss';
 import { getCoffeeBrewings, saveCoffeeBrewing, newBrewing } from './CoffeeCardHelperFuctions';
 
+export const displayDate = (date?: Date) => {
+    if (date) {
+        return (
+            <>
+                {/* {date.getDate()}.{date.getMonth()}.{date.getFullYear()} - {date.getUTCHours()}:
+                {date.getUTCMinutes()} Uhr */}
+            </>
+        );
+    } else {
+        return <> unknown</>;
+    }
+};
+
+
 type CoffeeBrewingWindowProps = {
     coffee: CoffeeEntry;
     methods: AttrDataType[];
@@ -49,21 +63,19 @@ export const CoffeeBrewingWindow = ({
         setSelectedBrewing(newBrewing(methods[0]));
     };
 
-    const innerDeleteBrewing = (brewing: BrewingEntry) => {
-
-    };
+    const innerDeleteBrewing = (brewing: BrewingEntry) => {};
 
     const innerSaveBrewing = (brewing: BrewingEntry) => {
-            saveCoffeeBrewing(coffee.id, brewing)
-                .then((newId) => {
-                    // Now save the new id, in case of save new if this works and display stuff
-                    const newBrewing: BrewingEntry = {...brewing, id: newId}
-                    setSelectedBrewing(newBrewing);
-                    throwDataSucess(`saved brewing with id ${newId}`);
-                })
-                .catch((error) => {
-                    throwDataError('cant save brewing', error);
-                });
+        saveCoffeeBrewing(coffee.id, brewing)
+            .then((newId) => {
+                // Now save the new id, in case of save new if this works and display stuff
+                const newBrewing: BrewingEntry = { ...brewing, id: newId };
+                setSelectedBrewing(newBrewing);
+                throwDataSucess(`saved brewing with id ${newId}`);
+            })
+            .catch((error) => {
+                throwDataError('cant save brewing', error);
+            });
     };
 
     if (!coffee) return <p>Error, coffee not found with this id</p>;
@@ -76,17 +88,15 @@ export const CoffeeBrewingWindow = ({
                     <div className={classNames(LocalStyles.BrewList, 'col-4')}>
                         <h4>Brewings</h4>
                         <ul>
-                            {coffee.brewings && coffee.brewings.length > 0 ? (
-                                coffee.brewings.map((brewing) => (
+                            {brewings.length > 0 ? (
+                                brewings.map((brewing) => (
                                     <li
                                         className={classNames(
                                             selectedBrewing && brewing.id === selectedBrewing.id && LocalStyles.Active
                                         )}
                                         onClick={() => setSelectedBrewing(brewing)}
                                     >
-                                        {brewing.method.name} am {brewing.brewDate.getDate()}.
-                                        {brewing.brewDate.getMonth()}.{brewing.brewDate.getFullYear()} -
-                                        {brewing.brewDate.getUTCHours()}:{brewing.brewDate.getUTCMinutes()} Uhr
+                                        {brewing.method.name} am {displayDate(brewing.brewDate)}
                                     </li>
                                 ))
                             ) : (

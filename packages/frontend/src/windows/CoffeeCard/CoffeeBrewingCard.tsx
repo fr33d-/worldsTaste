@@ -1,4 +1,3 @@
-import axios from 'axios';
 import classNames from 'classnames';
 import React, { useState } from 'react';
 import { BoolInput, DateInput, DropdownInput, NumberInput, TextareaInput } from '../../components/FormElements';
@@ -8,10 +7,10 @@ import {
     ObjSliderAttrField,
 } from '../../components/FormElements/AttrFields';
 import { AdvancedSaveButton, DeleteButton } from '../../components/IconButton';
-import { baseURL, coffeeURL } from '../../data';
 import { AttrDataType, BrewingEntry } from '../../helpers/types';
 import { black, blue, blueAccent, green, yellow } from '../../styles/colors';
 import LocalStyles from './CoffeeBrewingCard.module.scss';
+import { displayDate } from './CoffeeBewingWindow';
 
 type CoffeeBrewingCardProps = {
     brewing: BrewingEntry;
@@ -37,7 +36,7 @@ export const CoffeeBrewingCard = ({ brewing, methods, saveBrewing, deleteBrewing
     //         });
     // };
 
-    console.log('initial brewing')
+    console.log('initial brewing');
 
     return (
         <>
@@ -46,8 +45,7 @@ export const CoffeeBrewingCard = ({ brewing, methods, saveBrewing, deleteBrewing
                     <h4>
                         {formBrewing.brewDate ? (
                             <>
-                                {formBrewing.method.name} am {formBrewing.brewDate.getDate()}.
-                                {formBrewing.brewDate.getMonth()}.{formBrewing.brewDate.getFullYear()}
+                                {formBrewing.method.name} am {displayDate(formBrewing.brewDate)}
                             </>
                         ) : (
                             <>{formBrewing.method.name} am ERROR</>
