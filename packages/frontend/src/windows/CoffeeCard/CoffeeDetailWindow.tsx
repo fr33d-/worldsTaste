@@ -29,31 +29,33 @@ export const CoffeeDetailWindow = ({
     const view = new URLSearchParams(search).get('view');
 
     if (!coffeeAttrData) return <p>Error, no coffee data defined</p>;
-    if (!user) return <p>Error, you are not logged in </p>;
-
-    const newCoffee: CoffeeEntry = {
-        bitter: 0,
-        brewings: [],
-        buyDate: new Date(),
-        dateAdded: new Date(),
-        description: '',
-        id: 0,
-        kind: coffeeAttrData.kinds[0],
-        name: 'new coffee',
-        origin: coffeeAttrData.origins[0],
-        ownDescription: '',
-        owner: user,
-        process: coffeeAttrData.processes[0],
-        rating: 0,
-        roasted: coffeeAttrData.roasteds[0],
-        sour: 0,
-        species: coffeeAttrData.specieses[0],
-        taste: 0,
-        tasteKind: 0,
-        woody: 0,
-    };
 
     if (view === 'new') {
+
+        if (!user) return <p>Error, you are not logged in </p>;
+        
+        const newCoffee: CoffeeEntry = {
+            bitter: 0,
+            brewings: [],
+            buyDate: new Date(),
+            dateAdded: new Date(),
+            description: '',
+            id: 0,
+            kind: coffeeAttrData.kinds[0],
+            name: 'new coffee',
+            origin: coffeeAttrData.origins[0],
+            ownDescription: '',
+            owner: user,
+            process: coffeeAttrData.processes[0],
+            rating: 0,
+            roasted: coffeeAttrData.roasteds[0],
+            sour: 0,
+            species: coffeeAttrData.specieses[0],
+            taste: 0,
+            tasteKind: 0,
+            woody: 0,
+        };
+
         return (
             <CoffeeCardEdit
                 entry={newCoffee}

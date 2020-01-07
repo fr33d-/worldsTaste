@@ -163,7 +163,6 @@ export class CigarCardDisplay extends Component<CigarCardDisplayProps, CigarCard
                                     </div>
                                     <div className="col-12">
                                         <AttrFieldDescription
-                                            expanded={expanded}
                                             name="Beschreibung:"
                                             value={description}
                                         />

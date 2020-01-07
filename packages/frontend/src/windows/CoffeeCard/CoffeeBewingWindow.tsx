@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AttrDataType, BrewingEntry, CoffeeEntry } from '../../helpers/types';
+import { AttrDataType, BrewingEntry, CoffeeEntry, User } from '../../helpers/types';
 import Beans from '../../images/beans.svg';
 import Cup from '../../images/cup-bw.svg';
 import { throwDataError, throwDataSucess } from '../../pages/User/userHelperFunctions';
@@ -28,6 +28,7 @@ type CoffeeBrewingWindowProps = {
     coffee: CoffeeEntry;
     methods: AttrDataType[];
     basePath: string;
+    user?: User;
     saveCoffee(coffee: CoffeeEntry): void;
     delteCoffee(id: number): void;
 };
@@ -36,6 +37,7 @@ export const CoffeeBrewingWindow = ({
     coffee,
     methods,
     basePath,
+    user,
     saveCoffee,
     delteCoffee,
 }: CoffeeBrewingWindowProps) => {
@@ -105,10 +107,11 @@ export const CoffeeBrewingWindow = ({
                                 </li>
                             )}
                         </ul>
+                        {user &&
                         <button onClick={createBrewing}>
                             <FontAwesomeIcon icon="plus" size="sm" />
                             Add brewing
-                        </button>
+                        </button>}
                     </div>
                     <div className={classNames(LocalStyles.BrewingCard, 'col-8')}>
                         {selectedBrewing ? (

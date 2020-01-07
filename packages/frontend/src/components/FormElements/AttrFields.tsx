@@ -295,16 +295,15 @@ export const AttrFieldLikeList = ({ name, value }: AttrFieldLikeList) => (
 type AttrFieldDescriptionProps = {
     name: string;
     value: string;
-    expanded: boolean;
 };
 
-export const AttrFieldDescription = ({ name, value, expanded }: AttrFieldDescriptionProps) => (
+export const AttrFieldDescription = ({ name, value }: AttrFieldDescriptionProps) => (
     <>
         <label className={LocalStyles.AttrFieldLabel}>{name}</label>
         <div className={LocalStyles.Description}>
             <p>
                 <FontAwesomeIcon icon="bars" size="lg" color={grayDarker} />
-                {expanded || value.length < 200 ? value : `${value.substring(0, 200)} ...`}
+                {value}
             </p>
         </div>
     </>

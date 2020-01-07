@@ -12,7 +12,7 @@ import { baseURL } from '../../data';
 import { CoffeeAttrData, CoffeeEntry } from '../../helpers/types';
 import { blue, cyan, green, yellow } from '../../styles/colors';
 import GeneralStyles from './../../styles/GeneralStyles.module.scss';
-import LocalStyles from './CoffeeCardEdit.module.scss';
+// import LocalStyles from './CoffeeCardEdit.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 type CoffeeCardDetailProps = {
@@ -45,25 +45,25 @@ export const CoffeeCardDetail = ({ coffee, deleteCoffee, basePath, coffeeAttrDat
 
     return (
         <>
-            <div className={LocalStyles.CoffeeCardEdit}>
+            <div className={'CoffeeCardEdit'}>
                 <div className="col-12">
                     <h2>{coffee.name}</h2>
                 </div>
-                <div className={LocalStyles.CoffeeCardActionSection}>
+                <div className={'CoffeeCardActionSection'}>
                     <button
                         onClick={openBrewings}
-                        className={classNames(LocalStyles.IconButton, LocalStyles.HoverGreen)}
+                        className={'IconButton HoverGreen'}
                     >
                         <FontAwesomeIcon icon="flask" />
                         Add brewing
                     </button>
-                    <button onClick={editCard} className={classNames(LocalStyles.IconButton, LocalStyles.HoverBlue)}>
+                    <button onClick={editCard} className={'IconButton HoverBlue'}>
                         <FontAwesomeIcon icon="edit" />
                         Edit
                     </button>
                     <button
                         onClick={() => deleteCoffee(coffee.id)}
-                        className={classNames(LocalStyles.IconButton, LocalStyles.HoverRed)}
+                        className={'IconButton HoverRed'}
                     >
                         <FontAwesomeIcon icon="trash-alt" />
                         Delete
@@ -72,18 +72,18 @@ export const CoffeeCardDetail = ({ coffee, deleteCoffee, basePath, coffeeAttrDat
                         <FontAwesomeIcon icon={'times'} />
                     </button>
                 </div>
-                <div className={GeneralStyles.TabBar}>
+                <div className={'TabBar'}>
                     <ul>
-                        <li className={classNames(tab === 0 && GeneralStyles.Active)} onClick={() => setTab(0)}>
+                        <li className={classNames(tab === 0 && 'Active')} onClick={() => setTab(0)}>
                             Information
                         </li>
-                        <li className={classNames(tab === 1 && GeneralStyles.Active)} onClick={() => setTab(1)}>
+                        <li className={classNames(tab === 1 && 'Active')} onClick={() => setTab(1)}>
                             Details
                         </li>
-                        <li className={classNames(tab === 2 && GeneralStyles.Active)} onClick={() => setTab(2)}>
+                        <li className={classNames(tab === 2 && 'Active')} onClick={() => setTab(2)}>
                             Images
                         </li>
-                        <li className={classNames(tab === 3 && GeneralStyles.Active)} onClick={() => setTab(3)}>
+                        <li className={classNames(tab === 3 && 'Active')} onClick={() => setTab(3)}>
                             Bewings
                         </li>
                     </ul>
@@ -91,7 +91,7 @@ export const CoffeeCardDetail = ({ coffee, deleteCoffee, basePath, coffeeAttrDat
                 {/* tslint:disable-next-line: max-func-body-length */}
                 {tab === 0 && (
                     <>
-                        <div className={LocalStyles.TextSection}>
+                        <div className={'TextSection'}>
                             <div className="row">
                                 <div className="col-12 col-md-6">
                                     <AttrField
@@ -127,11 +127,7 @@ export const CoffeeCardDetail = ({ coffee, deleteCoffee, basePath, coffeeAttrDat
                                     <AttrFieldLikeList value={coffee.rating} name="Gesammtbewertung:" />
                                 </div>
                                 <div className="col-12">
-                                    <AttrFieldDescription
-                                        name="Beschreibung:"
-                                        value={coffee.description}
-                                        expanded={true}
-                                    />
+                                    <AttrFieldDescription name="Beschreibung:" value={coffee.description} />
                                 </div>
                             </div>
                         </div>
@@ -140,7 +136,7 @@ export const CoffeeCardDetail = ({ coffee, deleteCoffee, basePath, coffeeAttrDat
 
                 {tab === 1 && (
                     <>
-                        <div className={LocalStyles.TextSection}>
+                        <div className={'TextSection'}>
                             <div className="row">
                                 <div className="col-12 col-md-6">
                                     <AttrFieldSlider color={blue} name="Geschmack:" value={coffee.taste} />
@@ -158,11 +154,7 @@ export const CoffeeCardDetail = ({ coffee, deleteCoffee, basePath, coffeeAttrDat
                                     <AttrFieldSlider color={cyan} name="Bitter:" value={coffee.bitter} />
                                 </div>
                                 <div className="col-12">
-                                    <AttrFieldDescription
-                                        expanded={true}
-                                        name="Eigene Beschreibung"
-                                        value={coffee.ownDescription}
-                                    />
+                                    <AttrFieldDescription name="Eigene Beschreibung" value={coffee.ownDescription} />
                                 </div>
                             </div>
                         </div>
@@ -171,11 +163,11 @@ export const CoffeeCardDetail = ({ coffee, deleteCoffee, basePath, coffeeAttrDat
 
                 {tab === 2 && (
                     <>
-                        <div className={LocalStyles.ImageSection}>
+                        <div className={'ImageSection'}>
                             {coffee.imageStrings &&
                                 coffee.imageStrings.map((url, i) => (
                                     <>
-                                        <div className={LocalStyles.Image}>
+                                        <div className={'Image'}>
                                             <img src={`${baseURL}${url}`} key={i} alt="coffee" />
                                         </div>
                                     </>
@@ -185,7 +177,7 @@ export const CoffeeCardDetail = ({ coffee, deleteCoffee, basePath, coffeeAttrDat
                 )}
                 {tab === 3 && <></>}
 
-                <div className={LocalStyles.ButtonSection}>
+                <div className={'ButtonSection'}>
                     <AdvancedDeleteButton changes={false} onClick={() => deleteCoffee(coffee.id)} />
                 </div>
             </div>

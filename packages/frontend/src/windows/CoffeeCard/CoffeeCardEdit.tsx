@@ -9,7 +9,7 @@ import { AdvancedCancelButton, AdvancedDeleteButton, AdvancedSaveButton } from '
 import { baseURL, coffeeURL } from '../../data';
 import { blue, brown, cyan, grayDarker, green, yellow } from '../../styles/colors';
 import GeneralStyles from './../../styles/GeneralStyles.module.scss';
-import LocalStyles from './CoffeeCardEdit.module.scss';
+// import LocalStyles from './CoffeeCardEdit.module.scss';
 import { CoffeeEntry, CoffeeAttrData } from '../../helpers/types';
 
 type CoffeeCardEditProps = {
@@ -121,22 +121,22 @@ export const CoffeeCardEdit = ({
 
     return (
         <>
-            <div className={LocalStyles.CoffeeCardEdit}>
+            <div className={'CoffeeCardEdit'}>
                 <div className="col-12">
                     <TextInput name="Name" obj={formCoffee} propPath={['name']} setStateHandler={setFormCoffee} />
                 </div>
-                <div className={GeneralStyles.TabBar}>
+                <div className={'TabBar'}>
                     <ul>
-                        <li className={classNames(tab === 0 && GeneralStyles.Active)} onClick={() => setTab(0)}>
+                        <li className={classNames(tab === 0 && 'Active')} onClick={() => setTab(0)}>
                             Information
                         </li>
-                        <li className={classNames(tab === 1 && GeneralStyles.Active)} onClick={() => setTab(1)}>
+                        <li className={classNames(tab === 1 && 'Active')} onClick={() => setTab(1)}>
                             Details
                         </li>
-                        <li className={classNames(tab === 2 && GeneralStyles.Active)} onClick={() => setTab(2)}>
+                        <li className={classNames(tab === 2 && 'Active')} onClick={() => setTab(2)}>
                             Images
                         </li>
-                        <li className={classNames(tab === 3 && GeneralStyles.Active)} onClick={() => setTab(3)}>
+                        <li className={classNames(tab === 3 && 'Active')} onClick={() => setTab(3)}>
                             Bewings
                         </li>
                     </ul>
@@ -144,7 +144,7 @@ export const CoffeeCardEdit = ({
                 {/* tslint:disable-next-line: max-func-body-length */}
                 {tab === 0 && (
                     <>
-                        <div className={LocalStyles.TextSection}>
+                        <div className={'TextSection'}>
                             <div className="row">
                                 <div className="col-12 col-md-6">
                                     <DropdownInput
@@ -230,7 +230,7 @@ export const CoffeeCardEdit = ({
 
                 {tab === 1 && (
                     <>
-                        <div className={LocalStyles.TextSection}>
+                        <div className={'TextSection'}>
                             <div className="row">
                                 <div className="col-12 col-md-6">
                                     <ObjSliderAttrField
@@ -293,11 +293,11 @@ export const CoffeeCardEdit = ({
 
                 {tab === 2 && (
                     <>
-                        <div className={LocalStyles.ImageSection}>
+                        <div className={'ImageSection'}>
                             {imageStrings !== undefined &&
                                 imageStrings.map((url, i) => (
                                     <>
-                                        <div className={LocalStyles.Image}>
+                                        <div className={'Image'}>
                                             <button onClick={() => deleteImageByURL(url, formCoffee.id)}>
                                                 <FontAwesomeIcon icon="trash" color={grayDarker} />
                                             </button>
@@ -306,7 +306,7 @@ export const CoffeeCardEdit = ({
                                     </>
                                 ))}
 
-                            <div className={LocalStyles.UploadArea}>
+                            <div className={'UploadArea'}>
                                 <label htmlFor="file">
                                     <FontAwesomeIcon icon="upload" />
                                 </label>
@@ -316,7 +316,7 @@ export const CoffeeCardEdit = ({
                                     name="pic"
                                     accept="image/*"
                                     onChange={uploadSelectedFile}
-                                    className={LocalStyles.Fileupload}
+                                    className={'Fileupload'}
                                     id="file"
                                     onDrop={uploadDropeddFile}
                                     multiple
@@ -327,7 +327,7 @@ export const CoffeeCardEdit = ({
                 )}
                 {tab === 3 && <></>}
 
-                <div className={LocalStyles.ButtonSection}>
+                <div className={'ButtonSection'}>
                     <AdvancedDeleteButton changes={edited} onClick={() => deleteCoffee(formCoffee.id)} />
                     <AdvancedCancelButton changes={edited} onClick={() => goBack()} />
                     <AdvancedSaveButton
