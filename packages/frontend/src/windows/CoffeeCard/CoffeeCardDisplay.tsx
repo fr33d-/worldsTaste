@@ -1,45 +1,32 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { default as classnames, default as classNames } from 'classnames';
-import React, { useState } from 'react';
-import {
-    AttrField,
-    AttrFieldDescription,
-    AttrFieldLikeList,
-    AttrFieldSlider,
-    AttrFieldSliderSingle,
-} from '../../components/FormElements/AttrFields';
-import { baseURL } from '../../data';
-import { CoffeeEntry, User } from '../../helpers/types';
-import { blue, cyan, green, yellow } from '../../styles/colors';
-import coffeePlacement from './../../images/coffeePlacement.svg';
-import GeneralStyles from './../../styles/GeneralStyles.module.scss';
-// import LocalStyles from './CoffeeCard.module.scss';
+import { default as classNames } from 'classnames';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
+import { AttrField, AttrFieldDescription, AttrFieldLikeList } from '../../components/FormElements/AttrFields';
+import { CoffeeContext } from '../../Contexts/CoffeeContext';
+import { baseURL } from '../../data';
+import { CoffeeEntry } from '../../helpers/types';
+import { blue, green, yellow } from '../../styles/colors';
+import coffeePlacement from './../../images/coffeePlacement.svg';
 
 type InlineCoffeeCardDisplayProps = {
     entry: CoffeeEntry;
-    active?: boolean;
-    user?: User;
     deleteCoffee(id: number): void;
 };
 
-export const InlineCoffeeCardDisplay = ({ entry, active, user, deleteCoffee }: InlineCoffeeCardDisplayProps) => {
-    // const [expanded, setExpanded] = useState(false);
-
+export const InlineCoffeeCardDisplay = ({ entry, deleteCoffee }: InlineCoffeeCardDisplayProps) => {
     const history = useHistory();
-    // const [tab, setTab] = useState(0);
 
-    const openDetails = () => {
-        history.push(`/coffee/card/${entry.id}?view=display`);
-    };
     const editCard = () => {
-        // Todo: routing ist noch echt ungeil
         history.push(`/coffee/card/${entry.id}?view=edit`);
     };
 
     const openBrewings = () => {
         history.push(`/coffee/card/${entry.id}?view=brewings`);
     };
+
+    const { user } = useContext(CoffeeContext);
 
     return (
         <>
@@ -61,12 +48,6 @@ export const InlineCoffeeCardDisplay = ({ entry, active, user, deleteCoffee }: I
                             Delete
                         </button>
                     )}
-                    {/* <button onClick={toggleCard}>
-                        <FontAwesomeIcon icon={expanded ? 'chevron-up' : 'chevron-down'} />
-                    </button> */}
-                    <button onClick={openDetails}>
-                        <FontAwesomeIcon icon={'chevron-right'} />
-                    </button>
                 </div>
                 <div className={'CoffeeCardImageSection'}>
                     {entry.imageStrings !== undefined && entry.imageStrings.length > 0 ? (
@@ -83,7 +64,9 @@ export const InlineCoffeeCardDisplay = ({ entry, active, user, deleteCoffee }: I
                 <div className={'CoffeeCardTextSection'}>
                     <div className="container">
                         <div className="row">
-                            <h2>{entry.name}</h2>
+                            <h2>
+                                <Link to={`/coffee/card/${entry.id}?view=display`}>{entry.name}</Link>
+                            </h2>
 
                             <div className="col-12 col-md-6">
                                 <AttrField
@@ -113,34 +96,6 @@ export const InlineCoffeeCardDisplay = ({ entry, active, user, deleteCoffee }: I
                                 <AttrFieldDescription name="Beschreibung:" value={entry.description} />
                             </div>
                         </div>
-
-                        {/* {tab === 1 && (
-                            <div className="row">
-                                <div className="col-12 col-md-6">
-                                    <AttrFieldSlider color={blue} name="Geschmack:" value={entry.taste} />
-                                </div>
-                                <div className="col-12 col-md-6">
-                                    <AttrFieldSliderSingle
-                                        color={green}
-                                        textLeft="Schokoloade"
-                                        textRight="Frucht"
-                                        value={entry.tasteKind}
-                                    />
-                                </div>
-                                <div className="col-12 col-md-6">
-                                    <AttrFieldSlider color={green} name="Erbsig:" value={entry.woody} />
-                                </div>
-                                <div className="col-12 col-md-6">
-                                    <AttrFieldSlider color={cyan} name="Bitter:" value={entry.bitter} />
-                                </div>
-                                <div className="col-12 col-md-6">
-                                    <AttrFieldSlider color={yellow} name="Säure:" value={entry.sour} />
-                                </div>
-                                <div className="col-12">
-                                    <AttrFieldDescription name="Eigene Beschreibung" value={entry.ownDescription} />
-                                </div>
-                            </div>
-                        )} */}
                     </div>
                 </div>
             </div>

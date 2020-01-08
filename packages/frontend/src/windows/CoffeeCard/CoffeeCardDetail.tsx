@@ -11,8 +11,6 @@ import { AdvancedDeleteButton } from '../../components/IconButton';
 import { baseURL } from '../../data';
 import { CoffeeAttrData, CoffeeEntry } from '../../helpers/types';
 import { blue, cyan, green, yellow } from '../../styles/colors';
-import GeneralStyles from './../../styles/GeneralStyles.module.scss';
-// import LocalStyles from './CoffeeCardEdit.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 type CoffeeCardDetailProps = {
@@ -31,9 +29,6 @@ export const CoffeeCardDetail = ({ coffee, deleteCoffee, basePath, coffeeAttrDat
         history.push(`${basePath}`);
     };
 
-    const openDetails = () => {
-        history.push(`/coffee/card/${coffee.id}?view=display`);
-    };
     const editCard = () => {
         // Todo: routing ist noch echt ungeil
         history.push(`/coffee/card/${coffee.id}?view=edit`);
