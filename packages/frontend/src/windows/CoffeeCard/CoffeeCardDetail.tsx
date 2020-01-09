@@ -172,9 +172,9 @@ export const CoffeeCardDetail = ({ coffee, deleteCoffee, basePath, coffeeAttrDat
                 )}
                 {tab === 3 && <></>}
 
-                <div className={'ButtonSection'}>
+                {/* <div className={'ButtonSection'}>
                     <AdvancedDeleteButton changes={false} onClick={() => deleteCoffee(coffee.id)} />
-                </div>
+                </div> */}
             </div>
         </>
     );

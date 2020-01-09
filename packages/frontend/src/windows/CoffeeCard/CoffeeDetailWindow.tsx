@@ -33,7 +33,7 @@ export const CoffeeDetailWindow = ({
     if (view === 'new') {
 
         if (!user) return <p>Error, you are not logged in </p>;
-        
+
         const newCoffee: CoffeeEntry = {
             bitter: 0,
             brewings: [],
@@ -82,9 +82,9 @@ export const CoffeeDetailWindow = ({
                 <CoffeeBrewingWindow
                     coffee={coffee}
                     methods={coffeeAttrData.brewMethods}
-                    basePath={basePath}
-                    saveCoffee={saveCoffee}
-                    delteCoffee={deleteCoffee}
+                    // basePath={basePath}
+                    // saveCoffee={saveCoffee}
+                    // delteCoffee={deleteCoffee}
                 />
             );
         } else {

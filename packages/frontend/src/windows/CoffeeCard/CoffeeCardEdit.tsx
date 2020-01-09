@@ -47,7 +47,8 @@ export const CoffeeCardEdit = ({
     const history = useHistory();
 
     const goBack = () => {
-        history.push(`${basePath}`);
+        // history.push(`${basePath}`);
+        history.push(`/coffee/card/${entry.id}?view=view`);
     };
 
     console.log('render coffee card edit with id', formCoffee.id);

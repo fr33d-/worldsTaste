@@ -36,7 +36,7 @@ export const CoffeeBrewingCard = ({ brewing, methods, saveBrewing, deleteBrewing
     //         });
     // };
 
-    console.log('initial brewing');
+    // console.log('initial brewing');
 
     return (
         <>

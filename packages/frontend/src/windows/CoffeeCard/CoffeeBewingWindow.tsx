@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AttrDataType, BrewingEntry, CoffeeEntry, User } from '../../helpers/types';
 import Beans from '../../images/beans.svg';
@@ -9,6 +9,7 @@ import { throwDataError, throwDataSucess } from '../../pages/User/userHelperFunc
 import { CoffeeBrewingCard } from './CoffeeBrewingCard';
 import LocalStyles from './CoffeeBrewingCard.module.scss';
 import { getCoffeeBrewings, saveCoffeeBrewing, newBrewing } from './CoffeeCardHelperFuctions';
+import { CoffeeContext } from '../../Contexts/CoffeeContext';
 
 export const displayDate = (date?: Date) => {
     if (date) {
@@ -27,19 +28,14 @@ export const displayDate = (date?: Date) => {
 type CoffeeBrewingWindowProps = {
     coffee: CoffeeEntry;
     methods: AttrDataType[];
-    basePath: string;
-    user?: User;
-    saveCoffee(coffee: CoffeeEntry): void;
-    delteCoffee(id: number): void;
+    // basePath: string;
+    // saveCoffee(coffee: CoffeeEntry): void;
+    // delteCoffee(id: number): void;
 };
 
 export const CoffeeBrewingWindow = ({
     coffee,
     methods,
-    basePath,
-    user,
-    saveCoffee,
-    delteCoffee,
 }: CoffeeBrewingWindowProps) => {
     const [selectedBrewing, setSelectedBrewing] = useState<BrewingEntry>();
     // When we have the context we have a setCoffee or so, then write the coffee therer
@@ -79,6 +75,8 @@ export const CoffeeBrewingWindow = ({
                 throwDataError('cant save brewing', error);
             });
     };
+
+    const { user } = useContext(CoffeeContext);
 
     if (!coffee) return <p>Error, coffee not found with this id</p>;
 
@@ -132,7 +130,7 @@ export const CoffeeBrewingWindow = ({
                 </div>
             </div>
             <div className={LocalStyles.CloseButton}>
-                <Link to={basePath}>
+                <Link to={`/coffee/card/${coffee.id}?view=edit`}>
                     <button>
                         <FontAwesomeIcon icon="times-circle" size="lg" />
                     </button>
