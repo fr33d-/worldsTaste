@@ -1,7 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { default as classNames } from 'classnames';
 import React, { useContext } from 'react';
-import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import { AttrField, AttrFieldDescription, AttrFieldLikeList } from '../../components/FormElements/AttrFields';
 import { CoffeeContext } from '../../Contexts/CoffeeContext';
@@ -12,38 +11,33 @@ import coffeePlacement from './../../images/coffeePlacement.svg';
 
 type InlineCoffeeCardDisplayProps = {
     entry: CoffeeEntry;
-    deleteCoffee(id: number): void;
 };
 
-export const InlineCoffeeCardDisplay = ({ entry, deleteCoffee }: InlineCoffeeCardDisplayProps) => {
-    const history = useHistory();
-
-    const editCard = () => {
-        history.push(`/coffee/card/${entry.id}?view=edit`);
-    };
-
-    const openBrewings = () => {
-        history.push(`/coffee/card/${entry.id}?view=brewings`);
-    };
-
-    const { user } = useContext(CoffeeContext);
+export const InlineCoffeeCardDisplay = ({ entry }: InlineCoffeeCardDisplayProps) => {
+    const { user, openBrewingWindow, editCoffeeCard, contextDeleteCoffee } = useContext(CoffeeContext);
 
     return (
         <>
             <div className={'CoffeeCard'}>
                 <div className={'CoffeeCardActionSection'}>
-                    <button onClick={openBrewings} className={classNames('IconButton', 'HoverGreen')}>
+                    <button
+                        onClick={() => openBrewingWindow(entry.id)}
+                        className={classNames('IconButton', 'HoverGreen')}
+                    >
                         <FontAwesomeIcon icon="flask" />
                         Brewings
                     </button>
                     {user && (
-                        <button onClick={editCard} className={classNames('IconButton', 'HoverBlue')}>
+                        <button
+                            onClick={() => editCoffeeCard(entry.id)}
+                            className={classNames('IconButton', 'HoverBlue')}
+                        >
                             <FontAwesomeIcon icon="edit" />
                             Edit
                         </button>
                     )}
                     {user && (
-                        <button onClick={() => deleteCoffee(entry.id)} className={classNames('IconButton', 'HoverRed')}>
+                        <button onClick={() => contextDeleteCoffee(entry.id)} className={classNames('IconButton', 'HoverRed')}>
                             <FontAwesomeIcon icon="trash-alt" />
                             Delete
                         </button>

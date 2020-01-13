@@ -1,18 +1,15 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classnames from 'classnames';
-import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useContext, useState } from 'react';
 import { Row } from 'react-bootstrap';
+import { CoffeeContext } from '../../Contexts/CoffeeContext';
+import { AttrDataType } from '../../helpers/types';
 import { throwDataError, throwDataSucess } from '../../pages/User/userHelperFunctions';
 import { addNewItem, deleteItem } from './AttrDataHelperFunctions';
 import LocalStyles from './AttrDataWindow.module.scss';
-import { AttrDataType, CoffeeAttrData } from '../../helpers/types';
 
-type CoffeeAttrDataWindowProps = {
-    coffeeAttrData?: CoffeeAttrData;
-    close(): void;
-}
-
-export const CoffeeAttrDataWindow = ({close, coffeeAttrData}: CoffeeAttrDataWindowProps) => {
+export const CoffeeAttrDataWindow = () => {
+    const { coffeeAttrData, closeAttrWindow } = useContext(CoffeeContext);
 
     if (!coffeeAttrData) return <p>Error, no coffee data loaded</p>;
 
@@ -62,11 +59,8 @@ export const CoffeeAttrDataWindow = ({close, coffeeAttrData}: CoffeeAttrDataWind
         },
     ];
 
-    return (
-        <AttrDataWindow close={close} content={attrData} />
-    )
-
-}
+    return <AttrDataWindow close={closeAttrWindow} content={attrData} />;
+};
 
 export type AttrDataProps = {
     content: AttrDataType[];

@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { BoolInput, DateInput, DropdownInput, NumberInput, TextareaInput } from '../../components/FormElements';
 import {
     ObjLikeSliderAttrField,
@@ -11,34 +11,24 @@ import { AttrDataType, BrewingEntry } from '../../helpers/types';
 import { black, blue, blueAccent, green, yellow } from '../../styles/colors';
 import LocalStyles from './CoffeeBrewingCard.module.scss';
 import { displayDate } from './CoffeeBewingWindow';
+import { CoffeeContext } from '../../Contexts/CoffeeContext';
 
 type CoffeeBrewingCardProps = {
     brewing: BrewingEntry;
-    methods: AttrDataType[];
     deleteBrewing(brewing: BrewingEntry): void;
     saveBrewing(brewing: BrewingEntry): void;
 };
 
 // tslint:disable-next-line: max-func-body-length
-export const CoffeeBrewingCard = ({ brewing, methods, saveBrewing, deleteBrewing }: CoffeeBrewingCardProps) => {
+export const CoffeeBrewingCard = ({ brewing, saveBrewing, deleteBrewing }: CoffeeBrewingCardProps) => {
     const [formBrewing, setFormBrewing] = useState<BrewingEntry>(brewing);
+    const { coffeeAttrData } = useContext(CoffeeContext);
+
+    const methods = coffeeAttrData && coffeeAttrData.brewMethods;
 
     const [saveError, setSaveError] = useState(false);
 
-    // const saveBrewing = () => {
-    //     axios
-    //         .put(`${baseURL}${coffeeURL}/${coffeeId}/brewings/${coffeeId}`, { ...formBrewing })
-    //         .then((response) => {
-    //             console.log(response);
-    //         })
-    //         .catch((error) => {
-    //             console.log(error);
-    //         });
-    // };
-
-    // console.log('initial brewing');
-
-    return (
+    return !methods ? (<h1>Loading</h1>) : (
         <>
             <div className="row">
                 <div className="col-12">

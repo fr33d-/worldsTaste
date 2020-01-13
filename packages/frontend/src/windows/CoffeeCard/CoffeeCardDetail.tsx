@@ -1,42 +1,25 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
-import React, { useState } from 'react';
-import { useHistory } from 'react-router';
+import React, { useContext, useState } from 'react';
 import {
     AttrField,
     AttrFieldDescription,
     AttrFieldLikeList,
     AttrFieldSlider,
 } from '../../components/FormElements/AttrFields';
-import { AdvancedDeleteButton } from '../../components/IconButton';
+import { CoffeeContext } from '../../Contexts/CoffeeContext';
 import { baseURL } from '../../data';
-import { CoffeeAttrData, CoffeeEntry } from '../../helpers/types';
+import { CoffeeEntry } from '../../helpers/types';
 import { blue, cyan, green, yellow } from '../../styles/colors';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 type CoffeeCardDetailProps = {
     coffee: CoffeeEntry;
-    coffeeAttrData: CoffeeAttrData;
-    deleteCoffee(id: number): void;
-    basePath: string;
 };
 
-export const CoffeeCardDetail = ({ coffee, deleteCoffee, basePath, coffeeAttrData }: CoffeeCardDetailProps) => {
+export const CoffeeCardDetail = ({ coffee }: CoffeeCardDetailProps) => {
     const [tab, setTab] = useState(0);
 
-    const history = useHistory();
-
-    const goBack = () => {
-        history.push(`${basePath}`);
-    };
-
-    const editCard = () => {
-        // Todo: routing ist noch echt ungeil
-        history.push(`/coffee/card/${coffee.id}?view=edit`);
-    };
-
-    const openBrewings = () => {
-        history.push(`/coffee/card/${coffee.id}?view=brewings`);
-    };
+    const { goToCoffees, openBrewingWindow, editCoffeeCard, contextDeleteCoffee } = useContext(CoffeeContext);
 
     return (
         <>
@@ -45,25 +28,19 @@ export const CoffeeCardDetail = ({ coffee, deleteCoffee, basePath, coffeeAttrDat
                     <h2>{coffee.name}</h2>
                 </div>
                 <div className={'CoffeeCardActionSection'}>
-                    <button
-                        onClick={openBrewings}
-                        className={'IconButton HoverGreen'}
-                    >
+                    <button onClick={() => openBrewingWindow(coffee.id)} className={'IconButton HoverGreen'}>
                         <FontAwesomeIcon icon="flask" />
                         Add brewing
                     </button>
-                    <button onClick={editCard} className={'IconButton HoverBlue'}>
+                    <button onClick={() => editCoffeeCard(coffee.id)} className={'IconButton HoverBlue'}>
                         <FontAwesomeIcon icon="edit" />
                         Edit
                     </button>
-                    <button
-                        onClick={() => deleteCoffee(coffee.id)}
-                        className={'IconButton HoverRed'}
-                    >
+                    <button onClick={() => contextDeleteCoffee(coffee.id)} className={'IconButton HoverRed'}>
                         <FontAwesomeIcon icon="trash-alt" />
                         Delete
                     </button>
-                    <button onClick={goBack}>
+                    <button onClick={goToCoffees}>
                         <FontAwesomeIcon icon={'times'} />
                     </button>
                 </div>
@@ -83,7 +60,6 @@ export const CoffeeCardDetail = ({ coffee, deleteCoffee, basePath, coffeeAttrDat
                         </li>
                     </ul>
                 </div>
-                {/* tslint:disable-next-line: max-func-body-length */}
                 {tab === 0 && (
                     <>
                         <div className={'TextSection'}>

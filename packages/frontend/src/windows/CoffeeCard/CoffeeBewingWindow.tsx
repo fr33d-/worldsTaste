@@ -1,22 +1,22 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AttrDataType, BrewingEntry, CoffeeEntry, User } from '../../helpers/types';
+import { CoffeeContext } from '../../Contexts/CoffeeContext';
+import { BrewingEntry, CoffeeEntry } from '../../helpers/types';
 import Beans from '../../images/beans.svg';
 import Cup from '../../images/cup-bw.svg';
-import { throwDataError, throwDataSucess } from '../../pages/User/userHelperFunctions';
+import { throwDataError } from '../../pages/User/userHelperFunctions';
 import { CoffeeBrewingCard } from './CoffeeBrewingCard';
 import LocalStyles from './CoffeeBrewingCard.module.scss';
-import { getCoffeeBrewings, saveCoffeeBrewing, newBrewing } from './CoffeeCardHelperFuctions';
-import { CoffeeContext } from '../../Contexts/CoffeeContext';
+import { deleteCoffeeBrewing, getCoffeeBrewings, newBrewing, saveCoffeeBrewing } from './CoffeeCardHelperFuctions';
 
-export const displayDate = (date?: Date) => {
-    if (date) {
+export const displayDate = (dateString?: Date) => {
+    if (dateString) {
+        const date = new Date(dateString);
         return (
             <>
-                {/* {date.getDate()}.{date.getMonth()}.{date.getFullYear()} - {date.getUTCHours()}:
-                {date.getUTCMinutes()} Uhr */}
+                {date.getDate()}.{date.getMonth()}.{date.getFullYear()} - {date.getUTCHours()}:{date.getUTCMinutes()}
             </>
         );
     } else {
@@ -24,59 +24,43 @@ export const displayDate = (date?: Date) => {
     }
 };
 
-
 type CoffeeBrewingWindowProps = {
     coffee: CoffeeEntry;
-    methods: AttrDataType[];
-    // basePath: string;
-    // saveCoffee(coffee: CoffeeEntry): void;
-    // delteCoffee(id: number): void;
 };
 
-export const CoffeeBrewingWindow = ({
-    coffee,
-    methods,
-}: CoffeeBrewingWindowProps) => {
-    const [selectedBrewing, setSelectedBrewing] = useState<BrewingEntry>();
-    // When we have the context we have a setCoffee or so, then write the coffee therer
+export const CoffeeBrewingWindow = ({ coffee }: CoffeeBrewingWindowProps) => {
     const [brewings, setBrewings] = useState<BrewingEntry[]>([]);
-    // const [stateCoffee, setStateCoffee] = useState<CoffeeEntry>(coffee);
+    const [selectedBrewing, setSelectedBrewing] = useState<BrewingEntry>();
+
+    const { user, coffeeAttrData } = useContext(CoffeeContext);
 
     useEffect(() => {
-        openBrewingWindow();
+        getCoffeeBrewings(coffee.id).then((res) => {
+            setBrewings(res);
+        });
     }, [coffee]);
 
-    const openBrewingWindow = () => {
-        getCoffeeBrewings(coffee.id)
-            .then((res) => {
-                throwDataSucess('brewings loaded');
-                setBrewings(res);
-            })
-            .catch((error) => {
-                throwDataError('cant load brewings', error);
-            });
-    };
-
     const createBrewing = () => {
-        setSelectedBrewing(newBrewing(methods[0]));
+        if (coffeeAttrData) {
+            setSelectedBrewing(newBrewing(coffeeAttrData.brewMethods[0]));
+        } else {
+            throwDataError('no attr data to create brewing');
+        }
     };
 
-    const innerDeleteBrewing = (brewing: BrewingEntry) => {};
+    // i hope this works
+    const innerDeleteBrewing = (brewing: BrewingEntry) => {
+        deleteCoffeeBrewing(coffee.id, brewing).then((deletedID) => {
+            setSelectedBrewing(undefined);
+            setBrewings((brewings) => brewings.filter((brewing) => brewing.id !== deletedID));
+        });
+    };
 
     const innerSaveBrewing = (brewing: BrewingEntry) => {
-        saveCoffeeBrewing(coffee.id, brewing)
-            .then((newId) => {
-                // Now save the new id, in case of save new if this works and display stuff
-                const newBrewing: BrewingEntry = { ...brewing, id: newId };
-                setSelectedBrewing(newBrewing);
-                throwDataSucess(`saved brewing with id ${newId}`);
-            })
-            .catch((error) => {
-                throwDataError('cant save brewing', error);
-            });
+        saveCoffeeBrewing(coffee.id, brewing).then((newId) => {
+            setSelectedBrewing({ ...brewing, id: newId });
+        });
     };
-
-    const { user } = useContext(CoffeeContext);
 
     if (!coffee) return <p>Error, coffee not found with this id</p>;
 
@@ -96,7 +80,7 @@ export const CoffeeBrewingWindow = ({
                                         )}
                                         onClick={() => setSelectedBrewing(brewing)}
                                     >
-                                        {brewing.method.name} am {displayDate(brewing.brewDate)}
+                                        {brewing.method.name}: {displayDate(brewing.brewDate)}
                                     </li>
                                 ))
                             ) : (
@@ -105,18 +89,18 @@ export const CoffeeBrewingWindow = ({
                                 </li>
                             )}
                         </ul>
-                        {user &&
-                        <button onClick={createBrewing}>
-                            <FontAwesomeIcon icon="plus" size="sm" />
-                            Add brewing
-                        </button>}
+                        {user && (
+                            <button onClick={createBrewing}>
+                                <FontAwesomeIcon icon="plus" size="sm" />
+                                Add brewing
+                            </button>
+                        )}
                     </div>
                     <div className={classNames(LocalStyles.BrewingCard, 'col-8')}>
                         {selectedBrewing ? (
                             <CoffeeBrewingCard
                                 brewing={selectedBrewing}
                                 key={selectedBrewing.id}
-                                methods={methods}
                                 saveBrewing={innerSaveBrewing}
                                 deleteBrewing={innerDeleteBrewing}
                             />

@@ -1,10 +1,12 @@
-import React, { createContext, PropsWithChildren, useState, SetStateAction, Dispatch } from 'react';
-import { CoffeeEntry, CoffeeAttrData, User } from '../helpers/types';
+import React, { createContext, Dispatch, PropsWithChildren, SetStateAction, useState } from 'react';
+import { useHistory } from 'react-router';
+import { CoffeeAttrData, CoffeeEntry, User } from '../helpers/types';
+import { deleteCoffee, saveNewCoffee, updateCoffee } from '../pages/Coffee/CoffeeHelperFunctions';
 import { useJwt } from '../windows/UserWindows/UserHelperFunctions';
 
 type CoffeeContextType = {
-    posts: CoffeeEntry[];
-    setPosts: Dispatch<SetStateAction<CoffeeEntry[]>>;
+    coffees: CoffeeEntry[];
+    setCoffees: Dispatch<SetStateAction<CoffeeEntry[]>>;
     filteredPosts: CoffeeEntry[];
     setFilteredPosts: Dispatch<SetStateAction<CoffeeEntry[]>>;
     filterName: string | undefined;
@@ -19,12 +21,21 @@ type CoffeeContextType = {
     setCoffeeAttrData: React.Dispatch<React.SetStateAction<CoffeeAttrData | undefined>>;
     user: User | undefined;
     basePath: string;
+    contextSaveCoffee(coffee: CoffeeEntry): void;
+    contextDeleteCoffee(id: number): void;
+    openAttrWindow(): void;
+    openBrewingWindow(id: number): void;
+    closeAttrWindow(): void;
+    goToCreateCoffee(): void;
+    goToCoffees(): void;
+    editCoffeeCard(id: number): void;
+    viewCoffeeCard(id: number): void;
 };
 
 export const CoffeeContext = createContext<CoffeeContextType>(({} as unknown) as CoffeeContextType);
 
 export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
-    const [posts, setPosts] = useState<CoffeeEntry[]>([]);
+    const [coffees, setCoffees] = useState<CoffeeEntry[]>([]);
 
     const [filteredPosts, setFilteredPosts] = useState<CoffeeEntry[]>([]);
     const [filterName, setFilterName] = useState<string>();
@@ -37,11 +48,61 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
 
     const basePath = '/coffee';
 
+    const history = useHistory();
+
+    const contextSaveCoffee = (coffee: CoffeeEntry) => {
+        if (coffee.id === 0) {
+            //Create new coffee
+            saveNewCoffee(coffee).then((id) => {
+                setCoffees((posts) => (!posts ? posts : [{ ...coffee, id: Number(id) }, ...posts]));
+            });
+        } else {
+            // Save existing coffee
+            updateCoffee(coffee).then((res) => {
+                setCoffees((posts) => (!posts ? posts : posts.map((elm) => (elm.id === coffee.id ? coffee : elm))));
+            });
+        }
+    };
+
+    const contextDeleteCoffee = (id: number) => {
+        deleteCoffee(id).then((res) => {
+            setCoffees((posts) => (!posts ? posts : posts.filter((elm) => elm.id !== id)));
+        });
+    };
+
+    const openAttrWindow = () => {
+        history.push('/coffee/attrDataWindow/');
+    };
+
+    const openBrewingWindow = (id: number) => {
+        history.push(`/coffee/card/${id}?view=brewings`);
+    };
+
+    const closeAttrWindow = () => {
+        history.push('/coffee/');
+    };
+
+    const goToCreateCoffee = () => {
+        history.push('/coffee/card/?view=new');
+    };
+
+    const goToCoffees = () => {
+        history.push(`/coffee/`);
+    };
+
+    const editCoffeeCard = (id: number) => {
+        history.push(`/coffee/card/${id}?view=edit`);
+    };
+
+    const viewCoffeeCard = (id: number) => {
+        history.push(`/coffee/card/${id}?view=view`);
+    };
+
     return (
         <CoffeeContext.Provider
             value={{
-                posts,
-                setPosts,
+                coffees,
+                setCoffees,
                 filterName,
                 filteredPosts,
                 setFilterName,
@@ -56,6 +117,15 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
                 setPostOrderBy,
                 setSearchString,
                 user,
+                closeAttrWindow,
+                contextDeleteCoffee,
+                contextSaveCoffee,
+                goToCreateCoffee,
+                openAttrWindow,
+                openBrewingWindow,
+                editCoffeeCard,
+                goToCoffees,
+                viewCoffeeCard
             }}
         >
             {children}

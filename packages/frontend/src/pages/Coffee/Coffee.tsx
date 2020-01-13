@@ -1,8 +1,9 @@
 import React, { useContext, useEffect } from 'react';
-import { Route, Switch, useHistory, useLocation, useParams } from 'react-router';
+import { Route, Switch, useParams } from 'react-router';
 import { AddButton, DataButton, Filter, IntroText, Search } from '../../components/Filter';
 import { Sidemenu } from '../../components/Sidemenu';
-import { CoffeeEntry, FilterMenuType } from '../../helpers/types';
+import { CoffeeContext } from '../../Contexts/CoffeeContext';
+import { FilterMenuType } from '../../helpers/types';
 import { AppWindow } from '../../windows/AppWindow';
 import { CoffeeAttrDataWindow } from '../../windows/AttrDataWindow';
 import { InlineCoffeeCardDisplay } from '../../windows/CoffeeCard/CoffeeCardDisplay';
@@ -13,31 +14,29 @@ import { throwDataError, throwDataSucess } from '../User/userHelperFunctions';
 import { default as chemexSVG, default as CoffeeReplacement } from './../../images/Chemex.svg';
 import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import LocalStyles from './Coffee.module.scss';
-import { deleteCoffee, getCoffeAttrData, getCoffees, saveNewCoffee, updateCoffee } from './CoffeeHelperFunctions';
-import { CoffeeContext } from '../../Contexts/CoffeeContext';
+import { getCoffeAttrData, getCoffees } from './CoffeeHelperFunctions';
 
 export const Coffee = () => {
     const {
+        coffees,
+        setCoffees,
         basePath,
         coffeeAttrData,
         filterAttr,
         filterName,
         filteredPosts,
         postOrderBy,
-        posts,
         searchString,
         setCoffeeAttrData,
         setFilterAttr,
         setFilterName,
         setFilteredPosts,
         setPostOrderBy,
-        setPosts,
         setSearchString,
         user,
+        goToCreateCoffee,
+        openAttrWindow,
     } = useContext(CoffeeContext);
-
-    const history = useHistory();
-    const { pathname } = useLocation();
 
     // Todo: vill sollte man das schlauer machen
     useEffect(() => {
@@ -46,68 +45,7 @@ export const Coffee = () => {
 
     useEffect(() => {
         filterPosts();
-    }, [posts, filterName, filterAttr, searchString, postOrderBy]);
-
-    const innerSaveCoffee = async (coffee: CoffeeEntry): Promise<void> => {
-        if (coffee.id === 0) {
-            //Create new coffee
-            saveNewCoffee(coffee)
-                .then((id) => {
-                    setPosts((posts) => (!posts ? posts : [{ ...coffee, id: Number(id) }, ...posts]));
-                    throwDataSucess('new coffee saved');
-                })
-                .catch((error) => {
-                    console.log(error);
-                    console.log('Cant create coffee');
-                    throwDataError('sorry, cant create new coffe', error);
-                });
-        } else {
-            // Save existing coffee
-            updateCoffee(coffee)
-                .then((res) => {
-                    console.log('updated coffee with id:', res);
-                    throwDataSucess('coffee updated!');
-                    setPosts((posts) => (!posts ? posts : posts.map((elm) => (elm.id === coffee.id ? coffee : elm))));
-                })
-                .catch((error) => {
-                    console.log(error);
-                    console.log('Cant save coffee');
-                    throwDataError('sorry, cant update coffee', error);
-                });
-        }
-    };
-
-    const innerDeleteCoffee = (id: number) => {
-        deleteCoffee(id)
-            .then((res) => {
-                console.log('Post deleted');
-                setPosts((posts) => (!posts ? posts : posts.filter((elm) => elm.id !== id)));
-                setFilteredPosts((posts) => (!posts ? posts : posts.filter((elm) => elm.id !== id)));
-                throwDataSucess('coffee deleted');
-            })
-            .catch((error) => {
-                console.log(error);
-                console.log('Cant delete Post');
-                throwDataError('cant delete coffee', error);
-            });
-    };
-
-    const openAttrWindow = () => {
-        history.push('attrDataWindow/');
-    };
-
-    const openBrewingWindow = (id: number) => {
-        history.push(`/coffee/card/${id}?view=brewings`);
-    };
-
-    const closeAttrWindow = () => {
-        history.push(pathname.replace('attrDataWindow/', ''));
-    };
-
-    const goToCreateCoffee = () => {
-        //todo das sollte besser gehen, mach das mal so wie man das eigentlich macht
-        history.push('/coffee/card/?view=new');
-    };
+    }, [coffees, filterName, filterAttr, searchString, postOrderBy]);
 
     const initiateData = () => {
         getCoffeAttrData()
@@ -129,7 +67,7 @@ export const Coffee = () => {
         getCoffees()
             .then((coffees) => {
                 throwDataSucess('got coffees');
-                setPosts(coffees);
+                setCoffees(coffees);
             })
             .catch((error) => {
                 throwDataError('cant get coffees', error);
@@ -145,27 +83,27 @@ export const Coffee = () => {
 
         switch (filterName) {
             case 'Arten':
-                newPosts = posts.filter((post) => {
+                newPosts = coffees.filter((post) => {
                     return post.kind.name === filterAttr;
                 });
                 break;
             case 'Herkunft':
-                newPosts = posts.filter((post) => {
+                newPosts = coffees.filter((post) => {
                     return post.origin.name === filterAttr;
                 });
                 break;
             case 'Röstereien':
-                newPosts = posts.filter((post) => {
+                newPosts = coffees.filter((post) => {
                     return post.roasted.name === filterAttr;
                 });
                 break;
             case 'Bewertung':
-                newPosts = posts.filter((post) => {
+                newPosts = coffees.filter((post) => {
                     return String(post.rating) === filterAttr;
                 });
                 break;
             default:
-                newPosts = posts;
+                newPosts = coffees;
                 break;
         }
 
@@ -249,7 +187,7 @@ export const Coffee = () => {
                 </IntroText>
 
                 <div className={`${LocalStyles.CoffeeContainer}`}>
-                    {posts.length === 0 ? (
+                    {coffees.length === 0 ? (
                         <div className={GeneralStyles.ReplImg}>
                             <img src={CoffeeReplacement} alt="no content" />
                             <p>No coffees to display</p>
@@ -259,7 +197,6 @@ export const Coffee = () => {
                             <InlineCoffeeCardDisplay
                                 entry={post}
                                 key={`${post.name}_${i}`}
-                                deleteCoffee={innerDeleteCoffee}
                             />
                         ))
                     )}
@@ -267,17 +204,11 @@ export const Coffee = () => {
             </AppWindow>
             <Switch>
                 <Route exact path={`${basePath}/attrDataWindow`}>
-                    <CoffeeAttrDataWindow close={closeAttrWindow} coffeeAttrData={coffeeAttrData} />
+                    <CoffeeAttrDataWindow />
                 </Route>
                 <Route exact path={`${basePath}/card/:id?`}>
                     <OverlayFrame>
-                        <CoffeeDetailWindow
-                            basePath={basePath}
-                            coffees={posts}
-                            coffeeAttrData={coffeeAttrData}
-                            deleteCoffee={innerDeleteCoffee}
-                            saveCoffee={innerSaveCoffee}
-                        />
+                        <CoffeeDetailWindow />
                     </OverlayFrame>
                 </Route>
             </Switch>

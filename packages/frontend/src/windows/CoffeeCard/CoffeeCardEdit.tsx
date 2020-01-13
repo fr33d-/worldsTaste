@@ -1,42 +1,28 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import classNames from 'classnames';
-import React, { ChangeEvent, useState } from 'react';
-import { useHistory } from 'react-router';
+import React, { ChangeEvent, useContext, useState } from 'react';
 import { DropdownInput, TextareaInput, TextInput } from '../../components/FormElements';
-import { ObjLikeSliderAttrField, ObjSingleSliderAttrField, ObjSliderAttrField } from '../../components/FormElements/AttrFields';
+import {
+    ObjLikeSliderAttrField,
+    ObjSingleSliderAttrField,
+    ObjSliderAttrField,
+} from '../../components/FormElements/AttrFields';
 import { AdvancedCancelButton, AdvancedDeleteButton, AdvancedSaveButton } from '../../components/IconButton';
+import { CoffeeContext } from '../../Contexts/CoffeeContext';
 import { baseURL, coffeeURL } from '../../data';
+import { CoffeeEntry } from '../../helpers/types';
 import { blue, brown, cyan, grayDarker, green, yellow } from '../../styles/colors';
-import GeneralStyles from './../../styles/GeneralStyles.module.scss';
-// import LocalStyles from './CoffeeCardEdit.module.scss';
-import { CoffeeEntry, CoffeeAttrData } from '../../helpers/types';
 
 type CoffeeCardEditProps = {
     entry: CoffeeEntry;
-    coffeeAttrData: CoffeeAttrData;
-    deleteCoffee(id: number): void;
-    saveCoffee(coffee: CoffeeEntry): void;
-    basePath: string;
 };
 
 // tslint:disable-next-line: max-func-body-length
-export const CoffeeCardEdit = ({
-    entry,
-    deleteCoffee,
-    saveCoffee,
-    basePath,
-    coffeeAttrData
-}: CoffeeCardEditProps) => {
+export const CoffeeCardEdit = ({ entry }: CoffeeCardEditProps) => {
     const [saveError, setSaveError] = useState(false);
     const [edited, setEdited] = useState(false);
     const [tab, setTab] = useState(0);
-
-    const kinds = coffeeAttrData.kinds;
-    const roasteds = coffeeAttrData.roasteds;
-    const origins = coffeeAttrData.origins;
-    const processes = coffeeAttrData.processes;
-    const specieses = coffeeAttrData.specieses;
 
     const [formCoffee, setFormCoffee] = useState<CoffeeEntry>(entry);
 
@@ -44,14 +30,7 @@ export const CoffeeCardEdit = ({
     const [imageFiles, setImageFiles] = useState(entry.imageFiles);
     const [imageStrings, setImageStrings] = useState(entry.imageStrings);
 
-    const history = useHistory();
-
-    const goBack = () => {
-        // history.push(`${basePath}`);
-        history.push(`/coffee/card/${entry.id}?view=view`);
-    };
-
-    console.log('render coffee card edit with id', formCoffee.id);
+    const { coffeeAttrData, contextDeleteCoffee, contextSaveCoffee, viewCoffeeCard } = useContext(CoffeeContext);
 
     const deleteImageByURL = (url: string, id: number) => {
         axios
@@ -92,8 +71,6 @@ export const CoffeeCardEdit = ({
 
                 if (typeof newImageString === 'string' && imageStrings !== undefined) {
                     setImageStrings([newImageString, ...imageStrings]);
-                    // imageStrings.push(newImageString);
-                    // setImageStrings(imageStrings);
                     console.log(imageStrings);
                 }
             })
@@ -120,7 +97,7 @@ export const CoffeeCardEdit = ({
         handleFileUpload(eventFiles);
     };
 
-    return (
+    return !coffeeAttrData ? (<h1>loading...</h1>) : (
         <>
             <div className={'CoffeeCardEdit'}>
                 <div className="col-12">
@@ -149,7 +126,7 @@ export const CoffeeCardEdit = ({
                             <div className="row">
                                 <div className="col-12 col-md-6">
                                     <DropdownInput
-                                        items={origins}
+                                        items={coffeeAttrData.origins}
                                         icon="globe-americas"
                                         iconColor={green}
                                         label="Herkunft"
@@ -161,7 +138,7 @@ export const CoffeeCardEdit = ({
                                 </div>
                                 <div className="col-12 col-md-6">
                                     <DropdownInput
-                                        items={kinds}
+                                        items={coffeeAttrData.kinds}
                                         icon="mug-hot"
                                         iconColor={brown}
                                         label="Art"
@@ -173,7 +150,7 @@ export const CoffeeCardEdit = ({
                                 </div>
                                 <div className="col-12 col-md-6">
                                     <DropdownInput
-                                        items={roasteds}
+                                        items={coffeeAttrData.roasteds}
                                         icon="flask"
                                         iconColor={blue}
                                         label="Rösterei"
@@ -185,7 +162,7 @@ export const CoffeeCardEdit = ({
                                 </div>
                                 <div className="col-12 col-md-6">
                                     <DropdownInput
-                                        items={processes}
+                                        items={coffeeAttrData.processes}
                                         icon="leaf"
                                         iconColor={green}
                                         label="Prozess"
@@ -197,7 +174,7 @@ export const CoffeeCardEdit = ({
                                 </div>
                                 <div className="col-12 col-md-6">
                                     <DropdownInput
-                                        items={specieses}
+                                        items={coffeeAttrData.specieses}
                                         icon="leaf"
                                         iconColor={green}
                                         label="Bohnenart"
@@ -329,11 +306,11 @@ export const CoffeeCardEdit = ({
                 {tab === 3 && <></>}
 
                 <div className={'ButtonSection'}>
-                    <AdvancedDeleteButton changes={edited} onClick={() => deleteCoffee(formCoffee.id)} />
-                    <AdvancedCancelButton changes={edited} onClick={() => goBack()} />
+                    <AdvancedDeleteButton changes={edited} onClick={() => contextDeleteCoffee(formCoffee.id)} />
+                    <AdvancedCancelButton changes={edited} onClick={() => viewCoffeeCard()} />
                     <AdvancedSaveButton
-                        save={() => saveCoffee(formCoffee)}
-                        close={() => goBack()}
+                        save={() => contextSaveCoffee(formCoffee)}
+                        close={() => viewCoffeeCard()}
                         error={saveError}
                         changes={edited}
                     />

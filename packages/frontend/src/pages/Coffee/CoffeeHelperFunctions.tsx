@@ -3,6 +3,7 @@ import axios from 'axios';
 import { AttrDataItemType, User, CoffeeEntry, CoffeeAttrData, AttrDataType } from '../../helpers/types';
 import { coffeeURL, baseURL, coffeeAttrURL } from '../../data';
 import { CoffeeEntity } from 'backend/src/models/entities/CoffeeEntity';
+import { throwDataSucess, throwDataError } from '../User/userHelperFunctions';
 
 export const createCoffee = (
     coffeeOrigin: AttrDataItemType,
@@ -43,9 +44,11 @@ export const deleteCoffee = async (id: number): Promise<void> => {
     return await axios
         .delete(`${baseURL}${coffeeURL}/${id}`)
         .then((response) => {
+            throwDataSucess('coffee deleted');
             return response;
         })
         .catch((error) => {
+            throwDataError('cant delete coffee', error);
             return error;
         });
 };
@@ -57,9 +60,11 @@ export const saveNewCoffee = async (coffee: CoffeeEntry): Promise<number> => {
         .then((response) => {
             const location: string = response.headers['location'];
             const [id] = location.split('/').slice(-1);
+            throwDataSucess('new coffee saved');
             return id;
         })
         .catch((error) => {
+            throwDataError('sorry, cant create new coffe', error);
             return error;
         });
 };
@@ -69,9 +74,11 @@ export const updateCoffee = async (coffee: CoffeeEntry): Promise<void> => {
     await axios
         .put(`${baseURL}${coffeeURL}/${coffee.id}`, { ...coffee }, { headers: { auth: jwtObj } })
         .then((res) => {
+            throwDataSucess('coffee updated!');
             return res.headers['location'];
         })
         .catch((error) => {
+            throwDataError('sorry, cant update coffee', error);
             return error;
         });
 };
