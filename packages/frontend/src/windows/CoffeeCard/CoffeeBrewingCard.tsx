@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useState, useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { BoolInput, DateInput, DropdownInput, NumberInput, TextareaInput } from '../../components/FormElements';
 import {
     ObjLikeSliderAttrField,
@@ -7,11 +7,10 @@ import {
     ObjSliderAttrField,
 } from '../../components/FormElements/AttrFields';
 import { AdvancedSaveButton, DeleteButton } from '../../components/IconButton';
-import { AttrDataType, BrewingEntry } from '../../helpers/types';
-import { black, blue, blueAccent, green, yellow } from '../../styles/colors';
-import LocalStyles from './CoffeeBrewingCard.module.scss';
-import { displayDate } from './CoffeeBewingWindow';
 import { CoffeeContext } from '../../Contexts/CoffeeContext';
+import { BrewingEntry } from '../../helpers/types';
+import { black, blue, blueAccent, green, yellow } from '../../styles/colors';
+import { displayDate } from './CoffeeBewingWindow';
 
 type CoffeeBrewingCardProps = {
     brewing: BrewingEntry;
@@ -19,16 +18,15 @@ type CoffeeBrewingCardProps = {
     saveBrewing(brewing: BrewingEntry): void;
 };
 
-// tslint:disable-next-line: max-func-body-length
 export const CoffeeBrewingCard = ({ brewing, saveBrewing, deleteBrewing }: CoffeeBrewingCardProps) => {
     const [formBrewing, setFormBrewing] = useState<BrewingEntry>(brewing);
     const { coffeeAttrData } = useContext(CoffeeContext);
 
     const methods = coffeeAttrData && coffeeAttrData.brewMethods;
 
-    const [saveError, setSaveError] = useState(false);
-
-    return !methods ? (<h1>Loading</h1>) : (
+    return !methods ? (
+        <h1>Loading</h1>
+    ) : (
         <>
             <div className="row">
                 <div className="col-12">
@@ -162,9 +160,9 @@ export const CoffeeBrewingCard = ({ brewing, saveBrewing, deleteBrewing }: Coffe
                 </div>
             </div>
             <div className="row">
-                <div className={classNames(LocalStyles.ButtonSection, 'col-12')}>
+                <div className={classNames('ButtonSection col-12')}>
                     <DeleteButton onClick={() => deleteBrewing(formBrewing)} withText />
-                    <AdvancedSaveButton save={() => saveBrewing(formBrewing)} error={saveError} changes={true} />
+                    <AdvancedSaveButton save={() => saveBrewing(formBrewing)} changes={true} />
                 </div>
             </div>
         </>

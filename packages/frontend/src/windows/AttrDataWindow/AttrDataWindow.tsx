@@ -6,7 +6,6 @@ import { CoffeeContext } from '../../Contexts/CoffeeContext';
 import { AttrDataType } from '../../helpers/types';
 import { throwDataError, throwDataSucess } from '../../pages/User/userHelperFunctions';
 import { addNewItem, deleteItem } from './AttrDataHelperFunctions';
-import LocalStyles from './AttrDataWindow.module.scss';
 
 export const CoffeeAttrDataWindow = () => {
     const { coffeeAttrData, closeAttrWindow } = useContext(CoffeeContext);
@@ -127,9 +126,9 @@ export const AttrDataWindow = ({ close, content }: AttrDataProps) => {
 
     return (
         <>
-            <div className={LocalStyles.AttrDataWindow}>
+            <div className={'AttrDataWindow'}>
                 <Row>
-                    <div className={LocalStyles.AttrList}>
+                    <div className={'AttrList'}>
                         {/* <FontAwesomeIcon icon="mug-hot" size="3x" color="#8B572A" /> */}
                         <h2>Kaffee Daten</h2>
                         <ul>
@@ -137,7 +136,7 @@ export const AttrDataWindow = ({ close, content }: AttrDataProps) => {
                                 <li
                                     key={item.id}
                                     onClick={() => selectCategory(item.id)}
-                                    className={classnames(item.id === selectedCategory.id && LocalStyles.Active)}
+                                    className={classnames(item.id === selectedCategory.id && 'Active')}
                                 >
                                     {item.name}
                                     <span> ({item.items.length})</span>
@@ -145,11 +144,11 @@ export const AttrDataWindow = ({ close, content }: AttrDataProps) => {
                             ))}
                         </ul>
                     </div>
-                    <div className={LocalStyles.AttrItemList}>
-                        <button className={LocalStyles.CloseButton} onClick={() => close()}>
+                    <div className={'AttrItemList'}>
+                        <button className={'CloseButton'} onClick={() => close()}>
                             <FontAwesomeIcon icon="times" color="#929292" />
                         </button>
-                        <span className={LocalStyles.ListHeader}>
+                        <span className={'ListHeader'}>
                             <h2>{selectedCategory.name}</h2>
                             {selectedCategory.description}
                         </span>
@@ -159,7 +158,7 @@ export const AttrDataWindow = ({ close, content }: AttrDataProps) => {
                                     {item.name}{' '}
                                     <button
                                         onClick={() => innerDeleteItem(item.id)}
-                                        className={LocalStyles.ListDeleteButton}
+                                        className={'ListDeleteButton'}
                                     >
                                         <FontAwesomeIcon icon="trash-alt" size="xs" color="#929292" />
                                     </button>
@@ -172,16 +171,16 @@ export const AttrDataWindow = ({ close, content }: AttrDataProps) => {
                                         placeholder="New item"
                                         value={newItemName}
                                         onChange={handleItemNameChange}
-                                        className={LocalStyles.Input}
+                                        className={'Input'}
                                         onKeyPress={handleKeyPress}
                                     />
-                                    <button onClick={innerAddNewItem} className={LocalStyles.ListAddButton}>
+                                    <button onClick={innerAddNewItem} className={'ListAddButton'}>
                                         <FontAwesomeIcon icon="plus" color="#929292" size="lg" />
                                     </button>
                                 </Row>
                             </li>
                         </ul>
-                        {error && <p className={LocalStyles.Error}>Theres a error with the server, sorry!</p>}
+                        {error && <p className={'Error'}>Theres a error with the server, sorry!</p>}
                     </div>
                 </Row>
             </div>

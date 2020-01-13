@@ -8,7 +8,6 @@ import Beans from '../../images/beans.svg';
 import Cup from '../../images/cup-bw.svg';
 import { throwDataError } from '../../pages/User/userHelperFunctions';
 import { CoffeeBrewingCard } from './CoffeeBrewingCard';
-import LocalStyles from './CoffeeBrewingCard.module.scss';
 import { deleteCoffeeBrewing, getCoffeeBrewings, newBrewing, saveCoffeeBrewing } from './CoffeeCardHelperFuctions';
 
 export const displayDate = (dateString?: Date) => {
@@ -65,18 +64,18 @@ export const CoffeeBrewingWindow = ({ coffee }: CoffeeBrewingWindowProps) => {
     if (!coffee) return <p>Error, coffee not found with this id</p>;
 
     return (
-        <div className={LocalStyles.BrewingWindow}>
+        <div className={"BrewingWindow"}>
             <h6>{coffee.name}</h6>
             <div className="container">
                 <div className="row">
-                    <div className={classNames(LocalStyles.BrewList, 'col-4')}>
+                    <div className={'BrewList col-4'}>
                         <h4>Brewings</h4>
                         <ul>
                             {brewings.length > 0 ? (
                                 brewings.map((brewing) => (
                                     <li
                                         className={classNames(
-                                            selectedBrewing && brewing.id === selectedBrewing.id && LocalStyles.Active
+                                            selectedBrewing && brewing.id === selectedBrewing.id && 'Active'
                                         )}
                                         onClick={() => setSelectedBrewing(brewing)}
                                     >
@@ -84,7 +83,7 @@ export const CoffeeBrewingWindow = ({ coffee }: CoffeeBrewingWindowProps) => {
                                     </li>
                                 ))
                             ) : (
-                                <li className={LocalStyles.NoContent}>
+                                <li className={'NoContent'}>
                                     <img src={Cup} alt="Cup" /> no brewings
                                 </li>
                             )}
@@ -96,7 +95,7 @@ export const CoffeeBrewingWindow = ({ coffee }: CoffeeBrewingWindowProps) => {
                             </button>
                         )}
                     </div>
-                    <div className={classNames(LocalStyles.BrewingCard, 'col-8')}>
+                    <div className={'BrewingCard col-8'}>
                         {selectedBrewing ? (
                             <CoffeeBrewingCard
                                 brewing={selectedBrewing}
@@ -105,7 +104,7 @@ export const CoffeeBrewingWindow = ({ coffee }: CoffeeBrewingWindowProps) => {
                                 deleteBrewing={innerDeleteBrewing}
                             />
                         ) : (
-                            <div className={LocalStyles.NoContent}>
+                            <div className={'NoContent'}>
                                 <img src={Beans} alt="beans" />
                                 nothing selected
                             </div>
@@ -113,7 +112,7 @@ export const CoffeeBrewingWindow = ({ coffee }: CoffeeBrewingWindowProps) => {
                     </div>
                 </div>
             </div>
-            <div className={LocalStyles.CloseButton}>
+            <div className={'CloseButton'}>
                 <Link to={`/coffee/card/${coffee.id}?view=edit`}>
                     <button>
                         <FontAwesomeIcon icon="times-circle" size="lg" />

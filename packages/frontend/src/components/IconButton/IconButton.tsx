@@ -79,7 +79,7 @@ type AdvancedButtonState = {
 
 type AdvancedButtonProps = {
     onClick(): void;
-    changes: boolean;
+    changes?: boolean;
 };
 
 export class AdvancedCancelButton extends Component<AdvancedButtonProps, AdvancedButtonState> {
@@ -176,8 +176,8 @@ type AdvancedSaveButtonState = {
 };
 
 type AdvancedSaveButtonProps = {
-    error: boolean;
-    changes: boolean;
+    error?: boolean;
+    changes?: boolean;
     save(): void;
     close?(): void;
 };
