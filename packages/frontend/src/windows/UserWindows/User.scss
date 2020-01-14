@@ -1,18 +1,16 @@
-@import './../../styles/barel.scss';
-
 .User {
     @extend .container;
 
     .TestButton {
         @extend .color-button;
         @extend .gray;
-        margin-top: 120px; //$default-space-large;
+        margin-top: 120px; //$default-space-xxl;
     }
 
     .Sidebar {
         background: $blue-gray;
         height: 100vh;
-        padding-top: 120px; //$default-space-large;
+        padding-top: 120px; //$default-space-xxl;
 
         .Image {
             $image-dimension: 120px;
@@ -21,7 +19,7 @@
             height: $image-dimension;
             border-radius: calc(#{$image-dimension}/2);
             background: $new-dark-gray;
-            margin: $default-space-large 0;
+            margin: $default-space-xxl 0;
             // background-image: url('./../../images/avatar-frederic.png');
             background-size: cover;
 
@@ -42,12 +40,12 @@
         ul {
             list-style: none;
             margin: 0;
-            padding: $default-space 0;
+            padding: $default-space-l 0;
 
             .ListHeader {
                 @extend .small;
                 color: $new-darker-gray;
-                padding-top: $default-space;
+                padding-top: $default-space-l;
             }
 
             .active {
@@ -63,31 +61,31 @@
     }
 
     .Content {
-        padding-top: 320px; //$default-space-large;
+        padding-top: 320px; //$default-space-xxl;
 
         .AttrField {
-            margin-bottom: $default-space;
+            margin-bottom: $default-space-l;
         }
     }
 }
 
 
 .Login {
-    padding-top: 120px; //$default-space-large;
+    padding-top: 120px; //$default-space-xxl;
 }
 
 .LoginWindow {
     @extend .card-now-hover;
 
     .Head {
-        margin-bottom: $default-space-small;
-        padding: $default-space-small;
+        margin-bottom: $default-space-s;
+        padding: $default-space-s;
 
         border-bottom: 1px solid $new-dark-gray;
     }
 
     .Form {
-        padding: $default-space;
+        padding: $default-space-l;
     }
 
     .Error {
@@ -102,9 +100,5 @@
             @extend .color-button;
             @extend .blue-full;
         }
-
-        // Button {
-        //     width: fit-content;
-        // }
     }
 }

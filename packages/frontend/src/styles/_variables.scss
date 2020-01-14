@@ -32,22 +32,12 @@ $black: #000;
 $body-bg: $white; //$new-gray; //$brand-white-clay;
 $body-color: $brand-text-dark-gray;
 
-$border-radius-min: 5px;
-$border-radius: 10px;
-$border-radius-lg: 20px;
-
-$line-space: 15px;
-
-$activ-box-shadow-height: 3px;
-
 $box-shadow-sm:  0px 0px 10px 0px rgba(0,0,0,0.1);
 $box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
 $box-shadow-lg: 0px 10px 30px 0px rgba(0,0,0,0.15);
 
-$navbar-padding-y: 15px;
-$navbar-padding-x: 0;
 
-//Custom variables:
+//Custom colors:
 
 $navbar-bg-color: $brand-white-blue;
 $card-bg-color: $brand-white;
@@ -55,17 +45,7 @@ $card-bg-color: $brand-white;
 $brand-blue: #254CFB;
 $brand-blue-light: #0097FF;
 
-$container-margin-big: 50px;
-$default-space-small: 15px;
-$default-space: 30px;
-$default-space-large: 60px;
-
 $icon-button-color: $brand-gray;
-
-$main-menu-with: 360px;
-$sub-menu-with: 340px;
-$teaser-with: 250px;
-$menu-margin: 20px;
 
 $red: #DC3545;
 $red-accent: #BB5959;
@@ -78,3 +58,35 @@ $yellow-accent: #EBAD64;
 
 $blue: #007BFF;
 $blue-accent: #6792BA; //#17A2B8;
+
+
+// Spacing
+
+$default-space: 8px;
+$default-space-s: calc(#{$default-space*2}); //16
+$default-space-m: calc(#{$default-space*3}); //24
+$default-space-l: calc(#{$default-space*4}); //32
+$default-space-xl: calc(#{$default-space*5}); //40
+$default-space-xxl: calc(#{$default-space*7}); //56
+$default-space-3xl: calc(#{$default-space*8}); //64
+
+// $container-margin-big: $default-space-xxl;
+// $default-space-small: 15px;
+// $default-space: 30px;
+// $default-space-large: 60px;
+
+$main-menu-with: 360px;
+$sub-menu-with: 340px;
+$teaser-with: 250px;
+$menu-margin: $default-space-m;
+
+$navbar-padding-y: $default-space-s;
+$navbar-padding-x: 0;
+
+$border-radius-min: 5px;
+$border-radius: 10px;
+$border-radius-lg: 20px;
+
+$line-space: 15px;
+
+$activ-box-shadow-height: 3px;

@@ -1,38 +1,130 @@
-// @import '../../styles/barel.scss';
-
-
-.CoffeeCardEdit {
+.WTCard {
     @extend .card;
-    @extend .cardActive;
 
+    display: flex;
+    flex-direction: row;
     overflow: hidden;
     position: relative;
     border: none;
-    padding: 45px;
+    padding: $default-space-xl;
+
+    animation-duration: 1s;
+    animation-name: slidein;
+
+    @include media-breakpoint-down(sm) {
+        flex-direction: column;
+    }
+
+    // &.Extended,
+    // &.Edit {
+    //     @extend .cardActive;
+    //     max-height: 900px;
+    // }
 
     .Row {
         display: flex;
         flex-direction: row;
-        margin-bottom: $default-space-large;
+        margin-bottom: $default-space-xxl;
     }
 
-    .Fileupload {
-        opacity: 0;
+    .ButtonSection {
+        display: flex;
         width: 100%;
-        height: 100%;
-        background: red;
+        padding: $default-space-l 0 0 0;
+
+        button:last-of-type {
+            margin-left: auto;
+            margin-right: 0;
+        }
+    }
+
+    .ActionSection {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+
+        @include media-breakpoint-down(sm) {
+            top: 265px;
+        }
+
+        // button {
+        //     @extend .icon-button;
+        // }
+
+        // .IconButton {
+        //     @extend .icon-button;
+
+        //     border-radius: 15px;
+        //     height: 30px;
+        //     padding: 4px 12px;
+        //     margin-right: 5px;
+        //     font-size: 14px;
+        //     color: $new-darker-gray;
+        //     outline: 0;
+
+        //     &:hover,
+        //     &:focus {
+        //         outline: 0;
+        //     }
+
+        //     svg {
+        //         margin-right: 8px;
+        //     }
+
+        //     &.HoverGreen:hover {
+        //         background-color: $green;
+        //         color: $white;
+        //     }
+
+        //     &.HoverBlue:hover {
+        //         background-color: $blue;
+        //         color: $white;
+        //     }
+
+        //     &.HoverRed:hover {
+        //         background-color: $red;
+        //         color: $white;
+        //     }
+        // }
     }
 
     .ImageSection {
         width: 100%;
+        // width: 250px;
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-        padding: $default-space-small;
+        padding: $default-space-s;
+
+        @include media-breakpoint-down(sm) {
+            width: 100%;
+            background: $new-darker-gray;
+            min-width: 250px;
+            text-align: center;
+        }
+
+        img,
+        .Img {
+            width: 100px;
+            height: 100px;
+            border-radius: $border-radius-min;
+            margin: $default-space-s $default-space-s 0 0;
+            display: inline-block;
+
+            background-size: cover;
+            background-position: center;
+
+            &:first-of-type {
+                width: 220px;
+                height: 220px;
+                border-radius: $border-radius;
+                margin-top: 0;
+            }
+        }
 
         .Image {
             position: relative;
-            margin: $default-space-small $default-space-small 0 0;
+            margin: $default-space-s $default-space-s 0 0;
 
             button {
                 position: absolute;
@@ -43,6 +135,7 @@
                 background: $new-dark-gray;
                 border-radius: 16px;
             }
+
             img {
                 width: 120px;
             }
@@ -53,7 +146,7 @@
             width: 120px;
             border: 1px dashed $new-dark-gray;
             border-radius: $border-radius;
-            margin: $default-space-small $default-space-small 0 0;
+            margin: $default-space-s $default-space-s 0 0;
             position: relative;
 
             display: flex;
@@ -70,24 +163,39 @@
                 margin: auto;
             }
         }
-    }
 
-    .ButtonSection {
-        display: flex;
-        width: 100%;
-        padding: $default-space 0 0 0;
-
-        button:last-of-type {
-            margin-left: auto;
-            margin-right: 0;
+        .Fileupload {
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            background: red;
         }
     }
 
     .TextSection {
-        h2 {
+        width: 100%;
+        margin-left: $default-space-s;
+        padding-left: $default-space-s;
+        border-left: 1px solid $new-dark-gray;
+
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        align-items: flex-start;
+
+        @include media-breakpoint-down(md) {
+            flex-direction: column;
+        }
+
+        .BrewingTab {
+            height: 500px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+
+        .Description {
             width: 100%;
-            text-align: center;
-            margin-bottom: $line-space;
         }
 
         p {
@@ -106,139 +214,6 @@
                 text-align: center;
             }
         }
-    }
-}
-
-
-.CoffeeCard {
-    @extend .card;
-
-    display: flex;
-    flex-direction: row;
-    overflow: hidden;
-    position: relative;
-    border: none;
-    padding: 40px;
-
-    animation-duration: 1s;
-    animation-name: slidein;
-
-    @include media-breakpoint-down(sm) {
-        flex-direction: column;
-    }
-
-    &.Extended,
-    &.Edit {
-        @extend .cardActive;
-        max-height: 900px;
-    }
-
-    &ActionSection {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-
-        @include media-breakpoint-down(sm) {
-            top: 265px;
-        }
-
-        button {
-            @extend .icon-button;
-        }
-
-        .IconButton {
-            @extend .icon-button;
-
-            border-radius: 15px;
-            height: 30px;
-            padding: 4px 12px;
-            margin-right: 5px;
-            font-size: 14px;
-            color: $new-darker-gray;
-            outline: 0;
-
-            &:hover,
-            &:focus {
-                outline: 0;
-            }
-
-            svg {
-                margin-right: 8px;
-            }
-
-            &.HoverGreen:hover {
-                background-color: $green;
-                color: $white;
-            }
-
-            &.HoverBlue:hover {
-                background-color: $blue;
-                color: $white;
-            }
-
-            &.HoverRed:hover {
-                background-color: $red;
-                color: $white;
-            }
-        }
-    }
-
-    &ImageSection {
-        width: 250px;
-
-        @include media-breakpoint-down(sm) {
-            width: 100%;
-            background: $new-darker-gray;
-            min-width: 250px;
-            text-align: center;
-        }
-
-        img,
-        .Img {
-            width: 100px;
-            height: 100px;
-            border-radius: $border-radius-min;
-            margin: $default-space-small $default-space-small 0 0;
-            display: inline-block;
-
-            background-size: cover;
-            background-position: center;
-
-            &:first-of-type {
-                width: 220px;
-                height: 220px;
-                border-radius: $border-radius;
-                margin-top: 0;
-            }
-        }
-    }
-
-    &TextSection {
-        margin-left: $default-space-small;
-        padding-left: $default-space-small;
-        border-left: 1px solid $new-dark-gray;
-
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-content: flex-start;
-        align-items: flex-start;
-
-        @include media-breakpoint-down(md) {
-            flex-direction: column;
-        }
-
-        width: 100%;
-
-        .BrewingTab {
-            height: 500px;
-            overflow-y: scroll;
-            overflow-x: hidden;
-        }
-
-        .Description {
-            width: 100%;
-        }
 
         h2 {
             width: 100%;
@@ -246,10 +221,10 @@
             font-weight: 700;
             margin: 0 0 15px 5px;
             line-height: 24xp;
+            text-align: center;
         }
     }
 }
-
 
 .BrewingWindow {
     @extend .card;
@@ -258,7 +233,7 @@
     width: 100%;
     padding: $default-padding $default-padding $default-padding 0;
 
-    >h6 {
+    > h6 {
         padding-left: $default-padding;
         margin-bottom: $default-space-s;
     }
@@ -337,7 +312,6 @@
         flex-direction: row;
     }
 
-
     .NoContent {
         width: 100%;
         display: flex;
@@ -357,7 +331,7 @@
     left: 0;
     height: 100vh;
     width: 100vw;
-    background: rgba(0,0,0,0.2);
+    background: rgba(0, 0, 0, 0.2);
     padding-top: 120px;
     overflow: scroll;
 }

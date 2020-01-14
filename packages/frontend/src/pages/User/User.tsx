@@ -1,8 +1,8 @@
 import classNames from 'classnames';
-import jwt from 'jsonwebtoken';
 import React, { useEffect, useState } from 'react';
 import { Button, Container, Row } from 'react-bootstrap';
 import { Navigationbar } from '../../components/Navigationbar';
+import { AttrDataItemType, FullUser } from '../../helpers/types';
 import userAvatar from '../../images/avatar-frederic.png';
 import {
     LoginWindow,
@@ -12,42 +12,13 @@ import {
     UserDataWindow,
     UserDetailWindow,
 } from '../../windows/UserWindows/';
-import LocalStyles from './User.module.scss';
-import { AttrDataItemType, FullUser } from '../../helpers/types';
-import { throwDataError, throwDataSucess } from './userHelperFunctions';
+import { setUserFromSessionStorage, throwDataError, throwDataSucess } from './userHelperFunctions';
 
 export const UserRoles: AttrDataItemType[] = [
     { id: 0, name: 'ADMIN' },
     { id: 1, name: 'USER' },
     { id: 2, name: 'GUEST' },
 ];
-
-export const setUserFromSessionStorage = async () => {
-    const jwtObj = sessionStorage.getItem('auth');
-
-    try {
-        if (jwtObj == null) {
-            throwDataError('cant set user from session strorage, your not logged in ');
-            throw new Error('not logged in');
-        }
-        const data = jwt.decode(jwtObj);
-
-        if (data != null && typeof data !== 'string') {
-            const user: FullUser = {
-                id: data['userId'],
-                username: data['username'],
-                name: data['name'],
-                email: data['email'],
-                image: 'avatar_frederic.png',
-                created: 'sice 07.08.1989',
-                role: data['role'],
-            };
-            return user;
-        }
-    } catch {}
-    
-    throw new Error('not logged in');
-};
 
 export const UserPage = () => {
     const [user, setUser] = useState<FullUser | undefined>();
@@ -78,54 +49,51 @@ export const UserPage = () => {
     return (
         <>
             <Navigationbar />
-            <div className={LocalStyles.User}>
+            <div className={'User'}>
                 <Container>
                     <Row>
                         {user && (
                             <>
                                 <div className={'backgroundHelper'} />
                                 <div className="col-3">
-                                    <div className={LocalStyles.Sidebar}>
-                                        <div
-                                            className={LocalStyles.Image}
-                                            style={{ backgroundImage: `url(${userAvatar})` }}
-                                        />
-                                        <div className={LocalStyles.Name}>{user.name}</div>
-                                        <div className={LocalStyles.Subline}>{user.created}</div>
+                                    <div className={'Sidebar'}>
+                                        <div className={'Image'} style={{ backgroundImage: `url(${userAvatar})` }} />
+                                        <div className={'Name'}>{user.name}</div>
+                                        <div className={'Subline'}>{user.created}</div>
                                         <ul>
-                                            <li className={LocalStyles.ListHeader}>General</li>
+                                            <li className={'ListHeader'}>General</li>
                                             <li
-                                                className={classNames(activeMenu === 0 && LocalStyles.active)}
+                                                className={classNames(activeMenu === 0 && 'active')}
                                                 onClick={() => setActiveMenu(0)}
                                             >
                                                 General
                                             </li>
                                             <li
-                                                className={classNames(activeMenu === 1 && LocalStyles.active)}
+                                                className={classNames(activeMenu === 1 && 'active')}
                                                 onClick={() => setActiveMenu(1)}
                                             >
                                                 Your Data
                                             </li>
                                             <li
-                                                className={classNames(activeMenu === 2 && LocalStyles.active)}
+                                                className={classNames(activeMenu === 2 && 'active')}
                                                 onClick={() => setActiveMenu(2)}
                                             >
                                                 Change Password
                                             </li>
-                                            <li className={LocalStyles.ListHeader}>Admin</li>
-                                            <li className={classNames(activeMenu === 3 && LocalStyles.active)}>
+                                            <li className={'ListHeader'}>Admin</li>
+                                            <li className={classNames(activeMenu === 3 && 'active')}>
                                                 <span onClick={() => setActiveMenu(3)}>All users</span>
                                             </li>
-                                            <li className={classNames(activeMenu === 4 && LocalStyles.active)}>
+                                            <li className={classNames(activeMenu === 4 && 'active')}>
                                                 <span onClick={() => setActiveMenu(4)}>Create new user</span>
                                             </li>
                                         </ul>
-                                        <Button className={LocalStyles.TestButton} onClick={logout}>
+                                        <Button className={'TestButton'} onClick={logout}>
                                             Log out
                                         </Button>
                                     </div>
                                 </div>
-                                <div className={classNames('col-9', LocalStyles.Content)}>
+                                <div className={classNames('col-9', 'Content')}>
                                     {activeMenu === 0 && <UserDetailWindow user={user} />}
                                     {activeMenu === 1 && <UserDataWindow user={user} />}
                                     {activeMenu === 2 && <UserChangePasswordWindow user={user} />}

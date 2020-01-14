@@ -9,8 +9,7 @@ import { CoffeeAttrDataWindow } from '../../windows/AttrDataWindow';
 import { InlineCoffeeCardDisplay } from '../../windows/CoffeeCard/CoffeeCardDisplay';
 import { CoffeeDetailWindow } from '../../windows/CoffeeCard/CoffeeDetailWindow';
 import OverlayFrame from '../../windows/OverlayFrame/OverlayFrame';
-import { setUserFromSessionStorage } from '../User';
-import { throwDataError, throwDataSucess } from '../User/userHelperFunctions';
+import { throwDataError, throwDataSucess, setUserFromSessionStorage } from '../User/userHelperFunctions';
 import { default as chemexSVG, default as CoffeeReplacement } from './../../images/Chemex.svg';
 import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import LocalStyles from './Coffee.module.scss';
@@ -73,9 +72,9 @@ export const Coffee = () => {
                 throwDataError('cant get coffees', error);
             });
 
-        setUserFromSessionStorage().catch((error) => {
-            throwDataError('you are not logged in', error);
-        });
+        setUserFromSessionStorage(); //.catch((error) => {
+        //     throwDataError('you are not logged in', error);
+        // });
     };
 
     const filterPosts = () => {

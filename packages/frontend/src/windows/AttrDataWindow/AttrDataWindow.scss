@@ -1,5 +1,3 @@
-@import '../../styles/barel.scss';
-
 .AttrDataBackground {
     position: absolute;
     top: 0;
@@ -38,16 +36,16 @@
     .AttrList {
         height: 500px;
         width: 320px;
-        padding: 20px $default-space;
+        padding: 20px $default-space-l;
         background: $new-gray;
-        padding: $default-space-large $default-space $default-space-large $default-space-large;
+        padding: $default-space-xxl $default-space-l $default-space-xxl $default-space-xxl;
         border-radius: $border-radius 0 0 $border-radius;
 
         h2 {
             font-size: 32px;
             color: $black;
             font-weight: 400;
-            margin-bottom: $default-space;
+            margin-bottom: $default-space-l;
         }
 
         ul {
@@ -75,7 +73,7 @@
         position: relative;
         height: 500px;
         width: 370px;
-        padding: $default-space-large; // $default-space;
+        padding: $default-space-xxl; // $default-space;
 
         .ListHeader {
             font-size: 16px;
@@ -85,12 +83,12 @@
                 font-size: 24px;
                 color: $black;
                 font-weight: 400;
-                margin-bottom: $default-space-small;
+                margin-bottom: $default-space-s;
             }
         }
 
         ul {
-            padding: $default-space 0 0 10px;
+            padding: $default-space-l 0 0 10px;
 
             li {
                 padding-bottom: 10px;

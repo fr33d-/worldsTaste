@@ -16,8 +16,8 @@
 .card-now-hover {
     width: 100%;
 
-    padding: $default-space;
-    margin-bottom: $default-space;
+    padding: $default-space-l;
+    margin-bottom: $default-space-l;
 
     background: none;
     // background-color: white;
@@ -79,5 +79,5 @@
 }
 
 .pageContainer {
-    margin-bottom: $default-space-large;
+    margin-bottom: $default-space-xxl;
 }

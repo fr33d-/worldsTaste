@@ -1,5 +1,6 @@
 import { Position, Toaster } from '@blueprintjs/core';
 import axios from 'axios';
+import jwt from 'jsonwebtoken';
 import { baseURL, userURL } from '../../data';
 import { ExtendedUser, FullUser, User } from '../../helpers/types';
 
@@ -52,7 +53,7 @@ export const newExtendedUser: ExtendedUser = {
 };
 
 export const AppToaster = Toaster.create({
-    className: "coffee-toaster",
+    className: 'coffee-toaster',
     position: Position.TOP_RIGHT,
 });
 
@@ -64,4 +65,31 @@ export const throwDataSucess = (message: string) => {
 export const throwDataError = (message: string, error?: any) => {
     console.log('error', message, error);
     AppToaster.show({ message: message, intent: 'danger' });
+};
+
+export const setUserFromSessionStorage = async () => {
+    const jwtObj = sessionStorage.getItem('auth');
+
+    try {
+        if (jwtObj == null) {
+            throwDataError('cant set user from session strorage, your not logged in ');
+            throw new Error('not logged in');
+        }
+        const data = jwt.decode(jwtObj);
+
+        if (data != null && typeof data !== 'string') {
+            const user: FullUser = {
+                id: data['userId'],
+                username: data['username'],
+                name: data['name'],
+                email: data['email'],
+                image: 'avatar_frederic.png',
+                created: 'sice 07.08.1989',
+                role: data['role'],
+            };
+            return user;
+        }
+    } catch {}
+
+    throw new Error('not logged in');
 };

@@ -15,7 +15,6 @@ import {
     throwDataSucess,
 } from '../../pages/User/userHelperFunctions';
 import { green, white } from '../../styles/colors';
-import LocalStyles from './User.module.scss';
 import { login } from './UserHelperFunctions';
 
 type LoginWindowProps = {
@@ -47,22 +46,22 @@ export const LoginWindow = ({ setUser }: LoginWindowProps) => {
 
     return (
         <>
-            <div className={`col-12 col-md-6 offset-md-3 ${LocalStyles.Login} `}>
+            <div className={`col-12 col-md-6 offset-md-3 ${'Login'} `}>
                 <h1>Login</h1>
-                <div className={LocalStyles.LoginWindow}>
-                    <div className={LocalStyles.Head}>
+                <div className={'LoginWindow'}>
+                    <div className={'Head'}>
                         You are currently not logged in. If you wish to sign up please send me a mail.
                     </div>
-                    <div className={LocalStyles.Form}>
+                    <div className={'Form'}>
                         <SimpleTextInput onChange={setUserName} name="Username" value={username} />
                         <SimplePasswordInput onChange={setPassword} name="Password" value={password} />
                     </div>
-                    <div className={LocalStyles.ButtonSection}>
-                        <Button className={LocalStyles.Login} onClick={innerLogin}>
+                    <div className={'ButtonSection'}>
+                        <Button className={'Login'} onClick={innerLogin}>
                             Login
                         </Button>
                     </div>
-                    <p className={LocalStyles.Error}>{msg}</p>
+                    <p className={'Error'}>{msg}</p>
                 </div>
             </div>
         </>
@@ -73,10 +72,10 @@ export const UserDetailWindow: FC<{ user: FullUser }> = ({ user }) => {
     return (
         <>
             <h2>General</h2>
-            <AttrField value={user.name} name="Name:" className={LocalStyles.AttrField} />
-            <AttrField value={user.email} name="E-Mail:" className={LocalStyles.AttrField} />
-            <AttrField value={user.created} name="Erstellt am:" className={LocalStyles.AttrField} />
-            <AttrField value={user.role} name="Rolle:" className={LocalStyles.AttrField} />
+            <AttrField value={user.name} name="Name:" className={'AttrField'} />
+            <AttrField value={user.email} name="E-Mail:" className={'AttrField'} />
+            <AttrField value={user.created} name="Erstellt am:" className={'AttrField'} />
+            <AttrField value={user.role} name="Rolle:" className={'AttrField'} />
         </>
     );
 };
@@ -174,14 +173,14 @@ export const UserAdminWindow: FC<{ user: FullUser }> = ({ user }) => {
                         name={saveingError ? 'Error while saving' : 'Update User'}
                         color={white}
                         onClick={innerChangeUser}
-                        className={saveingError ? LocalStyles.RedFull : LocalStyles.GreenFull}
+                        className={saveingError ? 'RedFull' : 'GreenFull'}
                     />
                     <IconButton
                         icon="envelope-open"
                         name="Send user password reset link"
                         color={white}
                         onClick={sendResetPasswordLink}
-                        className={LocalStyles.GreenFull}
+                        className={'GreenFull'}
                     />
                 </>
             )}
@@ -225,7 +224,7 @@ export const UserCreateNewWindow: FC<{ user: FullUser }> = () => {
                 name={'Save new User'}
                 color={white}
                 onClick={innerCreateUser}
-                className={LocalStyles.GreenFull}
+                className={'GreenFull'}
             />
         </>
     );
@@ -254,7 +253,7 @@ export const UserChangePasswordWindow: FC<{ user: FullUser }> = ({ user }) => {
                 name={savePWError ? 'Error while saving' : 'Save new Password'}
                 color={white}
                 onClick={saveNewPW}
-                className={savePWError ? LocalStyles.RedFull : LocalStyles.GreenFull}
+                className={savePWError ? 'RedFull' : 'GreenFull'}
             />
         </>
     );
