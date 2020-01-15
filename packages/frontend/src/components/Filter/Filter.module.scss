@@ -2,7 +2,7 @@
 
 .Select {
     border: 1px solid $new-dark-gray;
-    margin-right: $default-space;
+    margin-right: $default-space-l;
     border-radius: 5px;
     padding: 9px;
     height: 46px;
@@ -21,7 +21,7 @@
     border-radius: 5px;
     padding: 9px 15px;
     width: 200px;
-    margin-right: $default-space;
+    margin-right: $default-space-l;
     height: 46px;
 
     input {
@@ -38,6 +38,6 @@
     border: 1px solid $new-darker-gray;
     background: none;
     color: $new-darker-gray;
-    margin-right: $default-space-small;
+    margin-right: $default-space-s;
     height: 46px;
 }

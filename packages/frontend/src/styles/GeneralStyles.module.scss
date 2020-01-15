@@ -1,9 +1,9 @@
 @import './barel.scss';
 
 .Introtext {
-    margin-top: $default-space;
-    margin-left: $default-space;
-    padding: $default-space;
+    margin-top: $default-space-l;
+    margin-left: $default-space-l;
+    padding: $default-space-l;
     width: 80%;
 
     p {
@@ -16,7 +16,7 @@
     }
 
     h2 {
-        padding-bottom: $default-space-small;
+        padding-bottom: $default-space-s;
         color: $black;
         font-size: 32px;
         font-weight: 400;
@@ -29,7 +29,7 @@
 
     img {
         width: 200px;
-        margin-bottom: $default-space;
+        margin-bottom: $default-space-l;
     }
 
     p {
@@ -44,7 +44,7 @@
 }
 
 .MobileHeader {
-    margin-bottom: $default-space;
+    margin-bottom: $default-space-l;
 
     @include media-breakpoint-up(lg) {
         display: none;
@@ -80,14 +80,14 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-top: $default-space;
+    margin-top: $default-space-l;
 }
 
 
 .TabBar {
     width: 100%;
     text-align: center;
-    padding: $default-space 0;
+    padding: $default-space-l 0;
 
     ul {
         padding: 0;

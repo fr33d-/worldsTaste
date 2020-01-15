@@ -2,7 +2,7 @@
     @extend .card;
 
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     overflow: hidden;
     position: relative;
     border: none;
@@ -176,7 +176,7 @@
         width: 100%;
         margin-left: $default-space-s;
         padding-left: $default-space-s;
-        border-left: 1px solid $new-dark-gray;
+        // border-left: 1px solid $new-dark-gray;
 
         display: flex;
         flex-direction: row;

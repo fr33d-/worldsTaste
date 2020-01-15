@@ -23,11 +23,11 @@ export const CoffeeCardDetail = ({ coffee }: CoffeeCardDetailProps) => {
 
     return (
         <>
-            <div className={'CoffeeCardEdit'}>
+            <div className={'WTCard'}>
                 <div className="col-12">
                     <h2>{coffee.name}</h2>
                 </div>
-                <div className={'CoffeeCardActionSection'}>
+                <div className={'ActionSection'}>
                     <button onClick={() => openBrewingWindow(coffee.id)} className={'IconButton HoverGreen'}>
                         <FontAwesomeIcon icon="flask" />
                         Add brewing
@@ -40,7 +40,7 @@ export const CoffeeCardDetail = ({ coffee }: CoffeeCardDetailProps) => {
                         <FontAwesomeIcon icon="trash-alt" />
                         Delete
                     </button>
-                    <button onClick={goToCoffees}>
+                    <button onClick={goToCoffees} className="icon-button">
                         <FontAwesomeIcon icon={'times'} />
                     </button>
                 </div>

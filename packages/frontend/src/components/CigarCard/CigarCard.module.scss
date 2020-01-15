@@ -41,7 +41,7 @@
 
     .Details {
         opacity: 1;
-        margin-bottom: $default-space;
+        margin-bottom: $default-space-l;
 
         &.Opend {
             animation: fadeIn 500ms;
@@ -70,7 +70,7 @@
 
     .ImageSection {
         width: 260px;
-        padding: $default-space 0 0 $default-space;
+        padding: $default-space-l 0 0 $default-space-l;
 
         @include media-breakpoint-down(sm) {
             width: 100%;
@@ -85,7 +85,7 @@
             // max-width: 210px;
             // max-height: 210px;
             border-radius: $border-radius-min;
-            margin: 0 $default-space-small $default-space-small 0;
+            margin: 0 $default-space-s $default-space-s 0;
             display: inline-block;
 
             background-size: cover;
@@ -100,11 +100,11 @@
     }
 
     .TextSection {
-        margin: $default-space;
+        margin: $default-space-l;
         width: 100%;
 
         border-left: 1px solid $new-dark-gray;
-        padding-left: $default-space;
+        padding-left: $default-space-l;
 
         .Description {
             width: 90%;

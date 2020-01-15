@@ -18,8 +18,8 @@ export const InlineCoffeeCardDisplay = ({ entry }: InlineCoffeeCardDisplayProps)
 
     return (
         <>
-            <div className={'CoffeeCard'}>
-                <div className={'CoffeeCardActionSection'}>
+            <div className={'WTCard'}>
+                <div className={'ActionSection'}>
                     <button
                         onClick={() => openBrewingWindow(entry.id)}
                         className={classNames('IconButton', 'HoverGreen')}
@@ -43,7 +43,7 @@ export const InlineCoffeeCardDisplay = ({ entry }: InlineCoffeeCardDisplayProps)
                         </button>
                     )}
                 </div>
-                <div className={'CoffeeCardImageSection'}>
+                <div className={'ImageSection'}>
                     {entry.imageStrings !== undefined && entry.imageStrings.length > 0 ? (
                         <>
                             <div
@@ -55,7 +55,7 @@ export const InlineCoffeeCardDisplay = ({ entry }: InlineCoffeeCardDisplayProps)
                         <img src={coffeePlacement} alt="no coffees" />
                     )}
                 </div>
-                <div className={'CoffeeCardTextSection'}>
+                <div className={'TextSection'}>
                     <div className="container">
                         <div className="row">
                             <h2>

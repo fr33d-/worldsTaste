@@ -123,7 +123,7 @@
 }
 
 .Description {
-    margin-bottom: $default-space-small;
+    margin-bottom: $default-space-s;
 
     p {
         width: 100%;
@@ -133,12 +133,12 @@
     }
 
     svg {
-        margin: 0 $default-space-small 0 0;
+        margin: 0 $default-space-s 0 0;
     }
 }
 
 .AttrField {
-    margin-bottom: $default-space-small;
+    margin-bottom: $default-space-s;
 
     svg {
         margin-right: 10px;

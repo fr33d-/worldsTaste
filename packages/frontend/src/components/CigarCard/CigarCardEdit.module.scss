@@ -27,11 +27,11 @@
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-        padding: $default-space-small;
+        padding: $default-space-s;
 
         .Image {
             position: relative;
-            margin: $default-space-small $default-space-small 0 0;
+            margin: $default-space-s $default-space-s 0 0;
 
             button {
                 position: absolute;
@@ -52,7 +52,7 @@
             width: 120px;
             border: 1px dashed $new-dark-gray;
             border-radius: $border-radius;
-            margin: $default-space-small $default-space-small 0 0;
+            margin: $default-space-s $default-space-s 0 0;
 
             display: flex;
             align-items: center;
@@ -65,7 +65,7 @@
     }
 
     .ButtonSection {
-        margin-top: $default-space;
+        margin-top: $default-space-l;
         display: flex;
         width: 100%;
 
@@ -80,12 +80,12 @@
 
         h3 {
             font-size: 20px;
-            margin-top: $default-space;
+            margin-top: $default-space-l;
         }
 
         .Row {
             @extend .row;
-            margin-bottom: $default-space-small;
+            margin-bottom: $default-space-s;
         }
     }
 
@@ -94,7 +94,7 @@
         h2 {
             width: 100%;
             text-align: center;
-            margin-bottom: $default-space;
+            margin-bottom: $default-space-l;
         }
     }
 }
