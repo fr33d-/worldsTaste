@@ -43,7 +43,7 @@ export const Navigationbar = ({ light }: NavbarProps) => {
                         </div>
                         <div className={classnames('Navbar', 'Burger')}>
                             <Link to="/user">
-                                <button className={'User'}>
+                                <button className={'UserIcon'}>
                                     <FontAwesomeIcon icon="user" color={user ? black : grayDark} />
                                 </button>
                             </Link>

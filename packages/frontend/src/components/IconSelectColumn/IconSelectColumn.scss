@@ -1,6 +1,3 @@
-@import '../../bootstrap.scss';
-@import '../../style/card.scss';
-
 .IconSelect {
     width: 100%;
     padding: 10px;
@@ -21,7 +18,7 @@
             display: inline-block;
             height: fit-content;
             width: fit-content;
-    
+
             .Hover {
                 // display: inline;
                 position: absolute;
@@ -31,7 +28,7 @@
                 top: 0;
                 left: 0;
             }
-    
+
             svg {
                 margin: 0 2px;
             }

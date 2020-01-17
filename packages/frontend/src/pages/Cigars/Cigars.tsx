@@ -13,8 +13,8 @@ import { Sidemenu } from '../../components/Sidemenu';
 import { baseURL, cigarsAttrURL, cigarsURL } from '../../data';
 import CigarReplacement from './../../images/Cigar-replacement.svg';
 import Tabak from './../../images/Tabak.svg';
-import GeneralStyles from './../../styles/GeneralStyles.module.scss';
-import LocalStyles from './Cigars.module.scss';
+// import GeneralStyles from './../../styles/'module'.scss';
+// import LocalStyles from './Cigars.module.scss';
 import { AttrDataItemType, FilterMenuType } from '../../helpers/types';
 import { useJwt } from '../../windows/UserWindows/UserHelperFunctions';
 
@@ -339,11 +339,11 @@ export const Cigars = () => {
 
     return (
         <>
-            <div className={GeneralStyles.BackgroundHelper} />
+            <div className={'BackgroundHelper'} />
             <Navigationbar />
-            <div className={classNames(editCard && LocalStyles.EditBackground)}>
-                <div className={classNames(`container`, GeneralStyles.Container, 'pageContainer')}>
-                    <div className={classNames('row', GeneralStyles.MobileHeader)}>
+            <div className={classNames(editCard && 'EditBackground')}>
+                <div className={classNames(`container`, 'Container', 'pageContainer')}>
+                    <div className={classNames('row', 'MobileHeader')}>
                         <FontAwesomeIcon icon="smoking" size="4x" color="#8B572A" />
                         <h1>Smoke of fame</h1>
                     </div>
@@ -364,9 +364,9 @@ export const Cigars = () => {
                                 Irgend was schlaues über Zigarren.
                             </IntroText>
 
-                            <div className={`${GeneralStyles.CardsContainer}`}>
+                            <div className={`${'CardsContainer'}`}>
                                 {posts.length === 0 ? (
-                                    <div className={GeneralStyles.ReplImg}>
+                                    <div className={'ReplImg'}>
                                         <img src={CigarReplacement} alt="no cards"/>
                                         <p>No cigars to display</p>
                                     </div>
@@ -393,10 +393,10 @@ export const Cigars = () => {
                 <Footer year="2019" version="0.1" />
             </div>
             {editCard && (
-                <div className={LocalStyles.EditFrame}>
+                <div className={'EditFrame'}>
                     <div className="container">
                         <div className="col-12 col-md-10 offset-md-1">
-                            <div className={LocalStyles.EditCard}>
+                            <div className={'EditCard'}>
                                 <CigarCardEdit
                                     entry={editCard}
                                     deleteCigar={deletePost}

@@ -3,7 +3,6 @@ import { UserDto } from "backend";
 import * as httpStatusCodes from "http-status-codes";
 import React, { Component } from "react";
 import { RouteComponentProps, withRouter } from "react-router";
-import Styles from "./UserList.module.scss";
 
 export type UsersRouteParams = {
     id?: string;
@@ -105,8 +104,8 @@ class UserListBase extends Component<UserListProps, UserListState> {
         ));
 
         return (
-            <div className={Styles.userList}>
-                <header className={Styles.userListHeader}>
+            <div className={'UserList'}>
+                <header className={'Header'}>
                     <p>{headlineText}</p>
                     <ul>{usersComponent}</ul>
                 </header>

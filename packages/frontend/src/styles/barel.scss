@@ -13,7 +13,6 @@
 @import './fontfaces';
 @import './layoutCard';
 @import './general';
-@import './colorButtons';
 
 @import './../components/Navigationbar/Navigationbar.scss';
 @import './../components/DropdownColumn/DropdownColumn.scss';
@@ -23,6 +22,9 @@
 @import './../components/FormElements/AttrFields.scss';
 @import './../components/FormElements/FormElements.scss';
 @import './../components/IconButton/IconButton.scss';
+@import './../components/IconSelectColumn/IconSelectColumn.scss';
+@import './../components/MobileHeader/MobileHeader.scss';
+@import './../components/Sidemenu/Sidemenu.scss';
 
 @import './../windows/CoffeeCard/CoffeeCard.scss';
 @import './../windows/AttrDataWindow/AttrDataWindow.scss';

@@ -1,9 +1,5 @@
-@import '../../styles/barel.scss';
-
 .Sidemenu {
-    // position: relative;
     @extend .background;
-    // padding-top: $default-space;
     position: fixed;
     height: 120%;
     width: 270px;
@@ -91,4 +87,3 @@
         display: none;
     }
 }
-

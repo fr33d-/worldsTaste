@@ -11,8 +11,8 @@ import { CoffeeDetailWindow } from '../../windows/CoffeeCard/CoffeeDetailWindow'
 import OverlayFrame from '../../windows/OverlayFrame/OverlayFrame';
 import { throwDataError, throwDataSucess, setUserFromSessionStorage } from '../User/userHelperFunctions';
 import { default as chemexSVG, default as CoffeeReplacement } from './../../images/Chemex.svg';
-import GeneralStyles from './../../styles/GeneralStyles.module.scss';
-import LocalStyles from './Coffee.module.scss';
+// import GeneralStyles from './../../styles/'module'.scss';
+// import LocalStyles from './Coffee.module.scss';
 import { getCoffeAttrData, getCoffees } from './CoffeeHelperFunctions';
 
 export const Coffee = () => {
@@ -170,7 +170,7 @@ export const Coffee = () => {
                     />
                 }
             >
-                <div className={GeneralStyles.FilterRow}>
+                <div className={'FilterRow'}>
                     <Search searchString={searchString} setSearchString={setSearchString} />
                     <Filter orderItems={filterMenu} orderString={postOrderBy} setOrderString={setPostOrderBy} />
                     {user && <AddButton onClick={goToCreateCoffee} />}
@@ -185,9 +185,9 @@ export const Coffee = () => {
                     meine persönlichen Erfahrungen soll nun hier entstehen.
                 </IntroText>
 
-                <div className={`${LocalStyles.CoffeeContainer}`}>
+                <div className={`${'CoffeeContainer'}`}>
                     {coffees.length === 0 ? (
-                        <div className={GeneralStyles.ReplImg}>
+                        <div className={'ReplImg'}>
                             <img src={CoffeeReplacement} alt="no content" />
                             <p>No coffees to display</p>
                         </div>

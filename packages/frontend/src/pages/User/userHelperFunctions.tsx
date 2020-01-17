@@ -67,15 +67,14 @@ export const throwDataError = (message: string, error?: any) => {
     AppToaster.show({ message: message, intent: 'danger' });
 };
 
-export const setUserFromSessionStorage = async () => {
+export const setUserFromSessionStorage = async (): Promise<FullUser | undefined> => {
     const jwtObj = sessionStorage.getItem('auth');
 
-    try {
-        if (jwtObj == null) {
-            throwDataError('cant set user from session strorage, your not logged in ');
-            throw new Error('not logged in');
-        }
-        const data = jwt.decode(jwtObj);
+    if (jwtObj == null) {
+        throwDataError('cant set user from session strorage, your not logged in ');
+        return undefined;
+    } else {
+        let data = jwt.decode(jwtObj);
 
         if (data != null && typeof data !== 'string') {
             const user: FullUser = {
@@ -89,7 +88,5 @@ export const setUserFromSessionStorage = async () => {
             };
             return user;
         }
-    } catch {}
-
-    throw new Error('not logged in');
+    }
 };

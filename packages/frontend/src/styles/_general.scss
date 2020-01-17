@@ -21,6 +21,12 @@
     }
 }
 
+.EditBackground {
+    * {
+        filter: blur(5px);
+    }
+}
+
 .ReplImg {
     width: 100%;
     text-align: center;
@@ -37,7 +43,22 @@
     }
 }
 
+// .Container {
+//     margin-top: 100px;
+// }
+
+.CoffeeContainer {
+    margin-top: 50px;
+    margin-left: -60px;
+    margin-bottom: 50px;
+
+    @include media-breakpoint-down(md) {
+        margin-left: 0;
+    }
+}
+
 .Container {
+    @extend .container;
     margin-top: 100px;
 }
 
