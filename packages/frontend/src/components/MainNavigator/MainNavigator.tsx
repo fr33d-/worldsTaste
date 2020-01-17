@@ -8,7 +8,7 @@ import { ArrowLeft } from './ArrowLeft';
 import { Shape } from './Shape';
 import Background from './Background.svg';
 import Line from './Line.svg';
-import LocalStyles from './MainNavigator.module.scss';
+// import 'from' './MainNavigator.module.scss';
 import menuSmall from './menuSmall.svg';
 import shape from './shape1.svg';
 import shapeBlue from './shapeBlue.svg';
@@ -39,19 +39,19 @@ class MainNavigatorBase extends Component<MainNavigatorProps, MainNavigatorState
         }
 
         this.setState({
-            animationClass: LocalStyles.FadeOut,
+            animationClass: 'FadeOut',
         });
         setTimeout(() => {
             if (clickedItem.color !== undefined) {
                 this.setState({
-                    animationClass: LocalStyles.FadeIn,
+                    animationClass: 'FadeIn',
                     backgroundColor: clickedItem.color,
                     activeMenuItem: clickedItem,
                 });
             } else {
                 this.setState({
                     activeMenuItem: clickedItem,
-                    animationClass: LocalStyles.FadeIn,
+                    animationClass: 'FadeIn',
                     backgroundColor: '#495F99',
                 });
             }
@@ -106,10 +106,10 @@ class MainNavigatorBase extends Component<MainNavigatorProps, MainNavigatorState
         const { menu } = this.props;
 
         return (
-            <div className={classNames(LocalStyles.MainNavigator, 'container')} style={this.animationColor()}>
+            <div className={classNames('MainNavigator', 'container')} style={this.animationColor()}>
                 <div className="row">
-                    <div className={`col-5 ${LocalStyles.Menu}`}>
-                        <div className={LocalStyles.Header}>
+                    <div className={`col-5 ${'Menu'}`}>
+                        <div className={'Header'}>
                             <span>Pleasure DB</span>
                             <img src={Line} />
                             <FontAwesomeIcon color="#fff" icon="search" />
@@ -120,37 +120,37 @@ class MainNavigatorBase extends Component<MainNavigatorProps, MainNavigatorState
                                     onClick={this.clickMenuItem(item)}
                                     className={`${activeMenuItem &&
                                         item.link === activeMenuItem.link &&
-                                        LocalStyles.Active}`}
+                                        'Active'}`}
                                     key={i}
                                 >
                                     {item.name}
-                                    <span className={LocalStyles.icon}>
+                                    <span className={'icon'}>
                                         <FontAwesomeIcon icon="chevron-right" size="xs" />
                                     </span>
                                 </li>
                             ))}
                         </ul>
-                        <img src={shape} className={LocalStyles.Shape} />
-                        <div className={LocalStyles.Footer}>A small collection of pleasures</div>
+                        <img src={shape} className={'Shape'} />
+                        <div className={'Footer'}>A small collection of pleasures</div>
                     </div>
-                    <div className={`col-7 ${LocalStyles.SubMenu}`}>
-                        <img src={Background} className={LocalStyles.SubMenBackground} style={this.topHeight()} />
+                    <div className={`col-7 ${'SubMenu'}`}>
+                        <img src={Background} className={'SubMenBackground'} style={this.topHeight()} />
                         {activeMenuItem ? (
                             <>
-                                <Shape color={backgroundColor} className={LocalStyles.Shape} />
+                                <Shape color={backgroundColor} className={'Shape'} />
                                 <ArrowLeft
                                     color={backgroundColor}
-                                    className={LocalStyles.BackArrow}
+                                    className={'BackArrow'}
                                     onClick={this.deselectMenuItem()}
                                 />
-                                <img src={menuSmall} className={LocalStyles.SubMenuIcon} />
+                                <img src={menuSmall} className={'SubMenuIcon'} />
 
-                                <div className={classNames(LocalStyles.AnimationDiv, animationClass)}>
+                                <div className={classNames('AnimationDiv', animationClass)}>
                                     {activeMenuItem && !activeMenuItem.image && activeMenuItem.icon}
                                     {activeMenuItem && activeMenuItem.image && (
-                                        <img src={activeMenuItem.image} className={classNames(LocalStyles.Icon)} />
+                                        <img src={activeMenuItem.image} className={classNames('Icon')} />
                                     )}
-                                    <div className={classNames(LocalStyles.Right)}>
+                                    <div className={classNames('Right')}>
                                         <h1>{activeMenuItem && activeMenuItem.label}</h1>
                                         <ul>
                                             {activeMenuItem &&
@@ -165,16 +165,16 @@ class MainNavigatorBase extends Component<MainNavigatorProps, MainNavigatorState
                             </>
                         ) : (
                             <>
-                                <img src={menuSmall} className={LocalStyles.SubMenuIcon} />
-                                <img src={shapeBlue} className={LocalStyles.Shape} />
-                                <div className={classNames(LocalStyles.Left, animationClass)}>
+                                <img src={menuSmall} className={'SubMenuIcon'} />
+                                <img src={shapeBlue} className={'Shape'} />
+                                <div className={classNames('Left', animationClass)}>
                                     <h1>A collection of good tasts</h1>
                                     <p>
                                         This is a small collection of something that we define as good tast. And bad.
                                         This data base helps us to keep track of what we tried, liked and not.
                                     </p>
                                 </div>
-                                <img src={tastes} className={classNames(LocalStyles.Icon, animationClass)} />
+                                <img src={tastes} className={classNames('Icon', animationClass)} />
                             </>
                         )}
                     </div>

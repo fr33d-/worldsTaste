@@ -4,8 +4,8 @@ import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { Route, useHistory, useLocation } from 'react-router';
 import { AttrDataWindow } from '../../windows/AttrDataWindow';
-import { CigarCardDisplay } from '../../components/CigarCard';
-import { CigarCardEdit } from '../../components/CigarCard/CigarCardEdit';
+import { CigarCardDisplay } from '../../windows/CigarCard';
+import { CigarCardEdit } from '../../windows/CigarCard/CigarCardEdit';
 import { AddButton, DataButton, Filter, IntroText } from '../../components/Filter';
 import { Footer } from '../../components/Footer';
 import { Navigationbar } from '../../components/Navigationbar';
@@ -45,13 +45,7 @@ export type CigarEntry = {
     zugwiederstand: number;
 };
 
-export type CigarsState = {
-    posts: CigarEntry[];
-    filteredPosts: CigarEntry[];
-    menu: AttrDataItemType[];
-    filter: string;
-    loading: boolean;
-    displayAttrMenu: boolean;
+export type CigarAttrData = {
     cigarsProducer: AttrDataItemType[];
     cigarsOrigin: AttrDataItemType[];
     cigarEinlage: AttrDataItemType[];
@@ -59,9 +53,7 @@ export type CigarsState = {
     cigarDeckblatt: AttrDataItemType[];
     cigarAnschnitt: AttrDataItemType[];
     cigarAromarad: AttrDataItemType[];
-    editCard?: CigarEntry;
-    activeFilter?: string;
-};
+}
 
 export const Cigars = () => {
     const [posts, setPosts] = useState<CigarEntry[]>([]);

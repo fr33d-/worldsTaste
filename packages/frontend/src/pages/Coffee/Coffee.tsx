@@ -6,7 +6,7 @@ import { CoffeeContext } from '../../Contexts/CoffeeContext';
 import { FilterMenuType } from '../../helpers/types';
 import { AppWindow } from '../../windows/AppWindow';
 import { CoffeeAttrDataWindow } from '../../windows/AttrDataWindow';
-import { InlineCoffeeCardDisplay } from '../../windows/CoffeeCard/CoffeeCardDisplay';
+import { InlineCoffeeCardDisplay } from '../../windows/CoffeeCard/InlineCoffeeCard';
 import { CoffeeDetailWindow } from '../../windows/CoffeeCard/CoffeeDetailWindow';
 import OverlayFrame from '../../windows/OverlayFrame/OverlayFrame';
 import { throwDataError, throwDataSucess, setUserFromSessionStorage } from '../User/userHelperFunctions';

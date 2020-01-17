@@ -1,1 +1,1 @@
-export * from "./CoffeeCardDisplay";
+export * from "./InlineCoffeeCard";

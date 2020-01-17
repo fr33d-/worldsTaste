@@ -5,11 +5,11 @@ import React, { ChangeEvent, useState } from 'react';
 import { baseURL, cigarsURL } from '../../data';
 import { CigarEntry } from '../../pages/Cigars';
 import { brown, grayDarker, greenAccent, yellowAccent } from '../../styles/colors';
-import { BoolInput, DropdownInput, NumberInput, TextareaInput, TextInput } from '../FormElements';
-import { ObjLikeSliderAttrField, ObjSliderAttrField } from '../FormElements/AttrFields';
-import { AdvancedCancelButton, AdvancedDeleteButton, AdvancedSaveButton } from '../IconButton';
+import { BoolInput, DropdownInput, NumberInput, TextareaInput, TextInput } from '../../components/FormElements';
+import { ObjLikeSliderAttrField, ObjSliderAttrField } from '../../components/FormElements/AttrFields';
+import { AdvancedCancelButton, AdvancedDeleteButton, AdvancedSaveButton } from '../../components/IconButton';
 import GeneralStyles from './../../styles/GeneralStyles.module.scss';
-import LocalStyles from './CigarCardEdit.module.scss';
+// import 'from' './CigarCardEdit.module.scss';
 import { AttrDataItemType } from '../../helpers/types';
 
 type CigarCardEditProps = {
@@ -44,68 +44,7 @@ export const CigarCardEdit = ({
     const [edited, setEdited] = useState(false);
     const [tab, setTab] = useState(0);
 
-    // const [id, setId] = useState(props.entry.id);
-    // const [imageStrings, setImageStrings] = useState(props.entry.imageStrings);
-    // const [imageFiles, setImageFiles] = useState(props.entry.imageFiles);
-    // const [name, setName] = useState(props.entry.name);
-    // const [description, setDescription] = useState(props.entry.description);
-    // const [origin, setOrigin] = useState(props.entry.origin);
-    // const [rating, setRating] = useState(props.entry.rating);
-    // const [abbrand, setAbbrand] = useState(props.entry.abbrand);
-    // const [anschnitt, setAnschnitt] = useState(props.entry.anschnitt);
-    // const [aromarad, setAromarad] = useState(props.entry.aromarad);
-    // const [aromaentwicklung, setAromaentwicklung] = useState(props.entry.aromaentwicklung);
-    // const [aromavielfalt, setAromavielfalt] = useState(props.entry.aromavielfalt);
-    // const [buydate, setBuydate] = useState(props.entry.buydate);
-    // const [deckblatt, setDeckblatt] = useState(props.entry.deckblatt);
-    // const [einlage, setEinlage] = useState(props.entry.einlage);
-    // const [lenght, setLenght] = useState(props.entry.lenght);
-    // const [producer, setProducer] = useState(props.entry.producer);
-    // const [ringmas, setRingmas] = useState(props.entry.ringmas);
-    // const [smokedate, setSmokedate] = useState(props.entry.smokedate);
-    // const [smokeduration, setSmokeduration] = useState(props.entry.smokeduration);
-    // const [strength, setStrength] = useState(props.entry.strength);
-    // const [umblatt, setUmblatt] = useState(props.entry.umblatt);
-    // const [zugwiederstand, setZugwiederstand] = useState(props.entry.zugwiederstand);
-    // const [smokeagain, setSmokeagain] = useState(props.entry.smokeagain);
-
-    // const {
-    //     close,
-    //     cigarAnschnitt,
-    //     cigarAromarad,
-    //     cigarDeckblatt,
-    //     cigarEinlage,
-    //     cigarUmblatt,
-    //     cigarsOrigin,
-    //     cigarsProducer,
-    // } = props;
-
     const saveCard = () => {
-        // const requestObject: CigarEntry = {
-        //     id: id,
-        //     name: name,
-        //     description: description,
-        //     origin: origin,
-        //     rating: rating,
-        //     abbrand: abbrand,
-        //     anschnitt: anschnitt,
-        //     aromaentwicklung: aromaentwicklung,
-        //     aromarad: aromarad,
-        //     aromavielfalt: aromavielfalt,
-        //     buydate: buydate,
-        //     deckblatt: deckblatt,
-        //     einlage: einlage,
-        //     lenght: lenght,
-        //     producer: producer,
-        //     ringmas: ringmas,
-        //     smokeagain: smokeagain,
-        //     smokedate: smokedate,
-        //     smokeduration: smokeduration,
-        //     strength: strength,
-        //     umblatt: umblatt,
-        //     zugwiederstand: zugwiederstand,
-        // };
-
         axios
             .put(`${baseURL}${cigarsURL}/${entry.id}`, { ...formCigar })
             .then((response) => {
@@ -116,10 +55,6 @@ export const CigarCardEdit = ({
                 console.log(error);
             });
     };
-
-    // const deleteCard = () => {
-    //     props.deleteFunction(id);
-    // };
 
     const deleteImageByURL = (url: string, id: number) => {
         axios
@@ -184,7 +119,7 @@ export const CigarCardEdit = ({
 
     return (
         <>
-            <div className={LocalStyles.CigarCardEdit}>
+            <div className={'LayoutCard'}>
                 <div className="col-12">
                     <TextInput name="Name" obj={formCigar} propPath={['name']} setStateHandler={setFormCigar} />
                 </div>
@@ -203,7 +138,7 @@ export const CigarCardEdit = ({
                 </div>
                 {tab === 0 && (
                     <>
-                        <div className={LocalStyles.TextSection}>
+                        <div className={'TextSection'}>
                             <div className="row">
                                 <div className="col-12 col-md-6">
                                     <DropdownInput
@@ -264,13 +199,13 @@ export const CigarCardEdit = ({
                 )}
                 {tab === 1 && (
                     <>
-                        <div className={LocalStyles.TextSection}>
-                            <div className={LocalStyles.Row}>
+                        <div className={'TextSection'}>
+                            <div className={'Row'}>
                                 <div className="col-12">
                                     <h3>Details</h3>
                                 </div>
                             </div>
-                            <div className={LocalStyles.Row}>
+                            <div className={'Row'}>
                                 <div className="col-12 col-md-6">
                                     <DropdownInput
                                         items={cigarEinlage}
@@ -338,7 +273,7 @@ export const CigarCardEdit = ({
                                     />
                                 </div>
                             </div>
-                            <div className={LocalStyles.Row}>
+                            <div className={'Row'}>
                                 <div className="col-12 col-md-6">
                                     <TextInput
                                         name="Gekauft am:"
@@ -356,7 +291,7 @@ export const CigarCardEdit = ({
                                     />
                                 </div>
                             </div>
-                            <div className={LocalStyles.Row}>
+                            <div className={'Row'}>
                                 <div className="col-12 col-md-6">
                                     <NumberInput
                                         name="Rauchdauer:"
@@ -367,7 +302,7 @@ export const CigarCardEdit = ({
                                     />
                                 </div>
                             </div>
-                            <div className={LocalStyles.Row}>
+                            <div className={'Row'}>
                                 <div className="col-12 col-md-6">
                                     <ObjSliderAttrField
                                         color={brown}
@@ -431,11 +366,11 @@ export const CigarCardEdit = ({
                 )}
                 {tab === 2 && (
                     <>
-                        <div className={LocalStyles.ImageSection}>
+                        <div className={'ImageSection'}>
                             {formCigar.imageStrings !== undefined &&
                                 formCigar.imageStrings.map((url, i) => (
                                     <>
-                                        <div className={LocalStyles.Image}>
+                                        <div className={'Image'}>
                                             <button onClick={() => deleteImageByURL(url, formCigar.id)}>
                                                 <FontAwesomeIcon icon="trash" color={grayDarker} />
                                             </button>
@@ -444,18 +379,17 @@ export const CigarCardEdit = ({
                                     </>
                                 ))}
 
-                            <div className={LocalStyles.UploadArea}>
+                            <div className={'UploadArea'}>
                                 <label htmlFor="file">
                                     <FontAwesomeIcon icon="upload" />
                                 </label>
                                 <br />
-                                {/* tslint:disable-next-line: react-a11y-input-elements */}
                                 <input
                                     type="file"
                                     name="pic"
                                     accept="image/*"
                                     onChange={handleFileUpload}
-                                    className={LocalStyles.Fileupload}
+                                    className={'Fileupload'}
                                     id="file"
                                     multiple
                                 />
@@ -464,8 +398,8 @@ export const CigarCardEdit = ({
                     </>
                 )}
 
-                <div className={LocalStyles.Row}>
-                    <div className={LocalStyles.ButtonSection}>
+                <div className={'Row'}>
+                    <div className={'ButtonSection'}>
                         <AdvancedDeleteButton changes={edited} onClick={() => deleteCigar(formCigar.id)} />
                         <AdvancedCancelButton changes={edited} onClick={close} />
                         <AdvancedSaveButton save={saveCard} close={close} error={saveError} changes={edited} />

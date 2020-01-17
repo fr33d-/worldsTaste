@@ -1,6 +1,4 @@
-@import '../../styles/barel.scss';
-
-.Container {
+.NavigationContainer {
     position: fixed;
     top: 0;
     left: 0;
@@ -8,9 +6,10 @@
     z-index: 10;
     background: $gray-darkest;
     padding-top: 10px;
+    margin-top: 0;
 }
 
-.ContainerLight {
+.NavigationContainerLight {
     background: none;
 }
 

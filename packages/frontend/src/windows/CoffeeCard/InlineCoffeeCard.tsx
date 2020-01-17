@@ -18,7 +18,7 @@ export const InlineCoffeeCardDisplay = ({ entry }: InlineCoffeeCardDisplayProps)
 
     return (
         <>
-            <div className={'WTCard'}>
+            <div className={'InlineLayoutCard'}>
                 <div className={'ActionSection'}>
                     <button
                         onClick={() => openBrewingWindow(entry.id)}
@@ -49,7 +49,9 @@ export const InlineCoffeeCardDisplay = ({ entry }: InlineCoffeeCardDisplayProps)
                             <div
                                 className={'Img'}
                                 style={{ backgroundImage: `url(${baseURL}${entry.imageStrings[0]})` }}
-                            />
+                                >
+                                    {/* <img src={`url(${baseURL}${entry.imageStrings[0]})`} /> */}
+                                </div>
                         </>
                     ) : (
                         <img src={coffeePlacement} alt="no coffees" />

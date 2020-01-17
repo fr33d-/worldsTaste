@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import React, { Component } from 'react';
 import { grayDarker, red, white } from '../../styles/colors';
-import LocalStyles from './IconButton.module.scss';
+// import 'from' './IconButton.module.scss';
 
 type IconButtonProps = Partial<{
     icon: IconProp;
@@ -14,7 +14,7 @@ type IconButtonProps = Partial<{
 }>;
 
 export const IconButton = ({ icon, name, color, onClick, className }: IconButtonProps = { color: '#000' }) => (
-    <button onClick={onClick} className={classNames(className, LocalStyles.IconButton)}>
+    <button onClick={onClick} className={classNames(className, 'IconButton')}>
         {icon !== undefined && <FontAwesomeIcon icon={icon} color={color} />}
         {name}
     </button>
@@ -49,7 +49,7 @@ export const SaveButton = (props: SaveButtonProps) => (
         name={props.withText ? (props.error ? 'Error' : 'Save') : ''}
         color={white}
         onClick={props.save}
-        className={props.error ? LocalStyles.RedFull : LocalStyles.GreenFull}
+        className={props.error ? 'RedFull' : 'GreenFull'}
     />
 );
 
@@ -59,7 +59,7 @@ export const DeleteButton = ({ withText, onClick }: { withText?: boolean; onClic
         name={withText ? 'Delete' : ''}
         color={red}
         onClick={onClick}
-        className={LocalStyles.Red}
+        className={'Red'}
     />
 );
 
@@ -69,7 +69,7 @@ export const CancelButton = ({ withText, onClick }: { withText?: boolean; onClic
         name={withText ? 'Cancel' : ''}
         color={grayDarker}
         onClick={onClick}
-        className={LocalStyles.Gray}
+        className={'Gray'}
     />
 );
 
@@ -96,26 +96,26 @@ export class AdvancedCancelButton extends Component<AdvancedButtonProps, Advance
         const { onClick, changes } = this.props;
         return (
             <>
-                <div className={classNames(LocalStyles.BtnFrame, LocalStyles.Gray, extended && LocalStyles.Extended)}>
+                <div className={classNames('BtnFrame', 'Gray', extended && 'Extended')}>
                     {!extended ? (
                         changes ? (
-                            <button className={LocalStyles.FrameButton} onClick={this.toggleExtendButton}>
+                            <button className={'FrameButton'} onClick={this.toggleExtendButton}>
                                 <FontAwesomeIcon icon="times-circle" color={grayDarker} />
                                 Cancel
                             </button>
                         ) : (
-                            <button className={LocalStyles.FrameButton} onClick={onClick}>
+                            <button className={'FrameButton'} onClick={onClick}>
                                 <FontAwesomeIcon icon="times-circle" color={grayDarker} />
                                 Cancel
                             </button>
                         )
                     ) : (
                         <>
-                            <button className={LocalStyles.FrameButton} onClick={this.toggleExtendButton}>
+                            <button className={'FrameButton'} onClick={this.toggleExtendButton}>
                                 <FontAwesomeIcon icon="times-circle" color={grayDarker} />
                                 <span>continue editing</span>
                             </button>
-                            <button className={LocalStyles.FrameButton} onClick={onClick}>
+                            <button className={'FrameButton'} onClick={onClick}>
                                 <FontAwesomeIcon icon="trash-alt" color={grayDarker} />
                                 <span>Cancel edit and delete changes</span>
                             </button>
@@ -141,10 +141,10 @@ export class AdvancedDeleteButton extends Component<AdvancedButtonProps, Advance
         const { onClick, changes } = this.props;
         return (
             <>
-                <div className={classNames(LocalStyles.BtnFrame, LocalStyles.Red, extended && LocalStyles.Extended)}>
+                <div className={classNames('BtnFrame', 'Red', extended && 'Extended')}>
                     {!extended ? (
                         <button
-                            className={classNames(LocalStyles.FrameButton, LocalStyles.Red)}
+                            className={classNames('FrameButton', 'Red')}
                             onClick={this.toggleExtendButton}
                         >
                             <FontAwesomeIcon icon="trash-alt" color={red} />
@@ -153,13 +153,13 @@ export class AdvancedDeleteButton extends Component<AdvancedButtonProps, Advance
                     ) : (
                         <>
                             <button
-                                className={classNames(LocalStyles.FrameButton, LocalStyles.Gray)}
+                                className={classNames('FrameButton', 'Gray')}
                                 onClick={this.toggleExtendButton}
                             >
                                 <FontAwesomeIcon icon="times-circle" color={grayDarker} />
                                 <span>continue editing</span>
                             </button>
-                            <button className={classNames(LocalStyles.FrameButton, LocalStyles.Red)} onClick={onClick}>
+                            <button className={classNames('FrameButton', 'Red')} onClick={onClick}>
                                 <FontAwesomeIcon icon="trash-alt" color={red} />
                                 <span>delete Coffee Card</span>
                             </button>
@@ -203,14 +203,14 @@ export class AdvancedSaveButton extends Component<AdvancedSaveButtonProps, Advan
             <>
                 <div
                     className={classNames(
-                        LocalStyles.BtnFrame,
-                        LocalStyles.GreenFull,
-                        extended && LocalStyles.Extended
+                        'BtnFrame',
+                        'GreenFull',
+                        extended && 'Extended'
                     )}
                 >
                     {!extended || (changes && !error) ? (
                         <button
-                            className={classNames(LocalStyles.FrameButton, LocalStyles.White)}
+                            className={classNames('FrameButton', 'White')}
                             onClick={this.saveCardButton}
                         >
                             <FontAwesomeIcon icon="save" color={white} />
@@ -219,7 +219,7 @@ export class AdvancedSaveButton extends Component<AdvancedSaveButtonProps, Advan
                     ) : error ? (
                         <>
                             <span>Error!</span>
-                            <button className={classNames(LocalStyles.FrameButton, LocalStyles.White)} onClick={save}>
+                            <button className={classNames('FrameButton', 'White')} onClick={save}>
                                 <FontAwesomeIcon icon="save" color={white} />
                                 <span>try again</span>
                             </button>
@@ -229,7 +229,7 @@ export class AdvancedSaveButton extends Component<AdvancedSaveButtonProps, Advan
                             <span>card saved!</span>
                             {close && (
                                 <button
-                                    className={classNames(LocalStyles.FrameButton, LocalStyles.White)}
+                                    className={classNames('FrameButton', 'White')}
                                     onClick={close}
                                 >
                                     <FontAwesomeIcon icon="times-circle" color={white} />

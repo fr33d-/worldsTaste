@@ -4,7 +4,6 @@ import React from 'react';
 import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
 import { black, grayDark } from '../../styles/colors';
-import LocalStyles from './Navigationbar.module.scss';
 import { useJwt } from '../../windows/UserWindows/UserHelperFunctions';
 
 type NavbarProps = {
@@ -18,15 +17,15 @@ export const Navigationbar = ({ light }: NavbarProps) => {
     const user = useJwt();
 
     return (
-        <div className={LocalStyles.Container}>
-            <div className={classNames('container', light && LocalStyles.ContainerLight)}>
+        <div className={'NavigationContainer'}>
+            <div className={classNames('container', light && 'NavigationContainerLight')}>
                 <div className="row">
-                    <div className={classNames('col-12', LocalStyles.Navbar)}>
-                        <div className={classnames(LocalStyles.Navbar, LocalStyles.Breadcrupm)}>
+                    <div className={classNames('col-12', 'Navbar')}>
+                        <div className={classnames('Navbar', 'Breadcrupm')}>
                             <ul>
                                 <li key={'chevron-right'}>
                                     Home
-                                    <FontAwesomeIcon icon="chevron-right" className={LocalStyles.svg}  />
+                                    <FontAwesomeIcon icon="chevron-right" className={'svg'} />
                                 </li>
                                 {path.map((item, i) => {
                                     if (path.length === i + 1) {
@@ -35,23 +34,23 @@ export const Navigationbar = ({ light }: NavbarProps) => {
                                         return (
                                             <li key={`${item}_${i}`}>
                                                 {item}
-                                                <FontAwesomeIcon icon="chevron-right" className={LocalStyles.svg} />
+                                                <FontAwesomeIcon icon="chevron-right" className={'svg'} />
                                             </li>
                                         );
                                     }
                                 })}
                             </ul>
                         </div>
-                        <div className={classnames(LocalStyles.Navbar, LocalStyles.Burger)}>
+                        <div className={classnames('Navbar', 'Burger')}>
                             <Link to="/user">
-                                <button className={LocalStyles.User}>
+                                <button className={'User'}>
                                     <FontAwesomeIcon icon="user" color={user ? black : grayDark} />
                                 </button>
                             </Link>
                             <FontAwesomeIcon icon="bars" size="lg" />
                         </div>
                         <Link to="/">
-                            <div className={classnames(LocalStyles.Navbar, LocalStyles.Logo)}>Logo</div>
+                            <div className={classnames('Navbar', 'Logo')}>Logo</div>
                         </Link>
                     </div>
                 </div>

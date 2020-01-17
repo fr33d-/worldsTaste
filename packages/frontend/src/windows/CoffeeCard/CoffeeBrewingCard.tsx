@@ -10,7 +10,7 @@ import { AdvancedSaveButton, DeleteButton } from '../../components/IconButton';
 import { CoffeeContext } from '../../Contexts/CoffeeContext';
 import { BrewingEntry } from '../../helpers/types';
 import { black, blue, blueAccent, green, yellow } from '../../styles/colors';
-import { displayDate } from './CoffeeBewingWindow';
+import { displayDate } from '../../helpers/helperFunctions';
 
 type CoffeeBrewingCardProps = {
     brewing: BrewingEntry;

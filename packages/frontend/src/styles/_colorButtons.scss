@@ -1,12 +1,10 @@
-@import './../../styles/barel.scss';
-
 .color-button {
     height: 45px;
     padding: 10px 15px;
     border: none;
     border-radius: $border-radius;
-    margin-bottom: $default-space-small;
-    margin-right: $default-space-small;
+    margin-bottom: $default-space-s;
+    margin-right: $default-space-s;
     background: $new-gray;
 
     svg {

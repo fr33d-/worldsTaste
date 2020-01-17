@@ -12,6 +12,17 @@
 @import './forms';
 @import './fontfaces';
 @import './layoutCard';
+@import './general';
+@import './colorButtons';
+
+@import './../components/Navigationbar/Navigationbar.scss';
+@import './../components/DropdownColumn/DropdownColumn.scss';
+@import './../components/MainNavigator/MainNavigator.scss';
+@import './../components/Filter/Filter.scss';
+@import './../components/Footer/Footer.scss';
+@import './../components/FormElements/AttrFields.scss';
+@import './../components/FormElements/FormElements.scss';
+@import './../components/IconButton/IconButton.scss';
 
 @import './../windows/CoffeeCard/CoffeeCard.scss';
 @import './../windows/AttrDataWindow/AttrDataWindow.scss';

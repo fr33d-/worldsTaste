@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { cloneDeep, get, set } from 'lodash';
 import React, { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { blue, grayDarker } from '../../styles/colors';
-import LocalStyles from './FormElements.module.scss';
+// import LocalStyles from './FormElements.module.scss';
 import { AttrDataItemType } from '../../helpers/types';
 
 type textInputProps = {
@@ -15,8 +15,8 @@ type textInputProps = {
 
 export const TextInput = ({ name, obj, propPath, setStateHandler }: textInputProps) => {
     return (
-        <div className={LocalStyles.TextInput}>
-            <span className={LocalStyles.Name}>{name}</span>
+        <div className={'TextInput'}>
+            <span className={'Name'}>{name}</span>
             <input
                 type="text"
                 placeholder={name}
@@ -37,8 +37,8 @@ type SimpleInputProps = {
 
 export const SimpleTextInput = ({ name, onChange, value }: SimpleInputProps) => {
     return (
-        <div className={LocalStyles.TextInput}>
-            <span className={LocalStyles.Name}>{name}</span>
+        <div className={'TextInput'}>
+            <span className={'Name'}>{name}</span>
             <input
                 type="text"
                 placeholder={name}
@@ -62,16 +62,16 @@ export const SimpleTextInput = ({ name, onChange, value }: SimpleInputProps) => 
 //     };
 
 //     return (
-//         <div className={LocalStyles.TextInput}>
-//             <span className={LocalStyles.Name}>{name}</span>
+//         <div className={'TextInput'}>
+//             <span className={'Name'}>{name}</span>
 //             <input type="text" placeholder={name} value={get(obj, propPath)} onChange={handleChange} />
 //         </div>
 //     );
 // };
 
 export const PasswordInput = ({ name, obj, propPath, setStateHandler }: textInputProps) => (
-    <div className={LocalStyles.TextInput}>
-        <span className={LocalStyles.Name}>{name}</span>
+    <div className={'TextInput'}>
+        <span className={'Name'}>{name}</span>
         <input
             type="password"
             placeholder={name}
@@ -84,8 +84,8 @@ export const PasswordInput = ({ name, obj, propPath, setStateHandler }: textInpu
 );
 
 export const SimplePasswordInput = ({ name, onChange, value }: SimpleInputProps) => (
-    <div className={LocalStyles.TextInput}>
-        <span className={LocalStyles.Name}>{name}</span>
+    <div className={'TextInput'}>
+        <span className={'Name'}>{name}</span>
         <input
             type="password"
             placeholder={name}
@@ -110,16 +110,16 @@ export const NumberInput = ({ name, unit, obj, propPath, setStateHandler }: numb
     };
 
     return (
-        <div className={LocalStyles.TextInput}>
-            <span className={LocalStyles.Name}>{name}</span>
+        <div className={'TextInput'}>
+            <span className={'Name'}>{name}</span>
             <input
                 type="text"
                 placeholder={name}
                 value={get(obj, propPath)}
                 onChange={onChange}
-                className={LocalStyles.NumberInput}
+                className={'NumberInput'}
             />
-            <span className={LocalStyles.Unit}>{unit}</span>
+            <span className={'Unit'}>{unit}</span>
         </div>
     );
 };
@@ -154,10 +154,10 @@ export const DropdownInput = ({
     };
 
     return (
-        <div className={LocalStyles.DropdownInput}>
+        <div className={'DropdownInput'}>
             <label>{label}</label>
-            <div className={LocalStyles.select}>
-                {icon && <FontAwesomeIcon icon={icon} color={iconColor} className={LocalStyles.Icon} size="sm" />}
+            <div className={'select'}>
+                {icon && <FontAwesomeIcon icon={icon} color={iconColor} className={'Icon'} size="sm" />}
                 <select onChange={handleChange}>
                     {items.map((item, i) => {
                         if (selectedItem && item.name === selectedItem.name) {
@@ -197,10 +197,10 @@ export const DropdownInput = ({
 //     };
 
 //     return (
-//         <div className={LocalStyles.DropdownInput}>
+//         <div className={'DropdownInput'}>
 //             <label>{label}</label>
-//             <div className={LocalStyles.select}>
-//                 {icon && <FontAwesomeIcon icon={icon} color={iconColor} className={LocalStyles.Icon} size="sm" />}
+//             <div className={'select'}>
+//                 {icon && <FontAwesomeIcon icon={icon} color={iconColor} className={'Icon'} size="sm" />}
 //                 <select onChange={handleChange}>
 //                     {items.map((item, i) => {
 //                         if (item.name === selectedItem.name) {
@@ -233,7 +233,7 @@ type TextareaProps = {
 export const TextareaInput = ({ label, obj, propPath, setStateHandler }: TextareaProps) => {
     return (
         <>
-            <div className={LocalStyles.TextareaInput}>
+            <div className={'TextareaInput'}>
                 <FontAwesomeIcon icon="bars" size="lg" color={grayDarker} />
                 <textarea
                     placeholder={label}
@@ -259,9 +259,9 @@ type DateInputProps = {
 
 export const DateInput = ({ label, obj, propPath, setStateHandler }: DateInputProps) => {
     return (
-        <div className={LocalStyles.DateInput}>
+        <div className={'DateInput'}>
             <label>{label}</label>
-            <div className={LocalStyles.DateInputArea}>
+            <div className={'DateInputArea'}>
                 <FontAwesomeIcon icon="calendar" size="lg" color={blue} />
                 <input
                     type="text"
@@ -290,7 +290,7 @@ type BoolInputProps = {
 export const BoolInput = ({ label, obj, propPath, setStateHandler }: BoolInputProps) => (
     <>
         <label>Boolean</label>
-        <div className={LocalStyles.BoolInput}>
+        <div className={'BoolInput'}>
             <label>{label}</label>
             <input
                 type="checkbox"

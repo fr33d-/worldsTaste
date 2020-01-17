@@ -2,7 +2,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { ChangeEvent } from 'react';
 import { Col } from 'react-bootstrap';
-import LocalStyles from './DropdownColumn.module.scss';
+// import LocalStyles from './DropdownColumn.module.scss';
 import { AttrDataItemType } from '../../helpers/types';
 
 type DropdownComponentProps = {
@@ -22,12 +22,10 @@ export const DropdownColumn = ({
     iconLabel,
     iconLabelColor,
 }: DropdownComponentProps) => (
-    <Col>
+    <Col className="CustomDropdown">
         {label && <label>{label}</label>}
-        <div className={LocalStyles.select}>
-            {iconLabel && (
-                <FontAwesomeIcon icon={iconLabel} color={iconLabelColor} className={LocalStyles.Icon} size="lg" />
-            )}
+        <div className={'select'}>
+            {iconLabel && <FontAwesomeIcon icon={iconLabel} color={iconLabelColor} size="lg" />}
             <select onChange={onChange}>
                 <option value="unknown">unknown</option>
                 {items.map((item, i) => {

@@ -9,19 +9,20 @@ import Cup from '../../images/cup-bw.svg';
 import { throwDataError } from '../../pages/User/userHelperFunctions';
 import { CoffeeBrewingCard } from './CoffeeBrewingCard';
 import { deleteCoffeeBrewing, getCoffeeBrewings, newBrewing, saveCoffeeBrewing } from './CoffeeCardHelperFuctions';
+import { displayDate } from '../../helpers/helperFunctions';
 
-export const displayDate = (dateString?: Date) => {
-    if (dateString) {
-        const date = new Date(dateString);
-        return (
-            <>
-                {date.getDate()}.{date.getMonth()}.{date.getFullYear()} - {date.getUTCHours()}:{date.getUTCMinutes()}
-            </>
-        );
-    } else {
-        return <> unknown</>;
-    }
-};
+// export const displayDate = (dateString?: Date) => {
+//     if (dateString) {
+//         const date = new Date(dateString);
+//         return (
+//             <>
+//                 {date.getDate()}.{date.getMonth()}.{date.getFullYear()} - {date.getUTCHours()}:{date.getUTCMinutes()}
+//             </>
+//         );
+//     } else {
+//         return <> unknown</>;
+//     }
+// };
 
 type CoffeeBrewingWindowProps = {
     coffee: CoffeeEntry;
@@ -64,7 +65,7 @@ export const CoffeeBrewingWindow = ({ coffee }: CoffeeBrewingWindowProps) => {
     if (!coffee) return <p>Error, coffee not found with this id</p>;
 
     return (
-        <div className={"BrewingWindow"}>
+        <div className={"LayoutCard"}>
             <h6>{coffee.name}</h6>
             <div className="container">
                 <div className="row">

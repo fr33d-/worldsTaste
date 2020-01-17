@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { grayDark } from '../../styles/colors';
-import LocalStyles from './Footer.module.scss';
+// import LocalStyles from './Footer.module.scss';
 
 type FooterProps = {
     year: string;
@@ -11,7 +11,7 @@ type FooterProps = {
 };
 
 export const Footer = ({ year, version }: FooterProps) => (
-    <div className={LocalStyles.Footer}>
+    <div className={'Footer'}>
         <Container>
             <Row>
                 <div className="col-3">Frederic Wollinger, {year}</div>

@@ -1,6 +1,4 @@
-@import '../../styles/barel.scss';
-
-.Select {
+.WTSelect {
     border: 1px solid $new-dark-gray;
     margin-right: $default-space-l;
     border-radius: 5px;
@@ -16,7 +14,7 @@
     }
 }
 
-.Search {
+.WTSearch {
     border: 1px solid $new-dark-gray;
     border-radius: 5px;
     padding: 9px 15px;
@@ -34,7 +32,7 @@
     }
 }
 
-.Button {
+.WTButton {
     border: 1px solid $new-darker-gray;
     background: none;
     color: $new-darker-gray;

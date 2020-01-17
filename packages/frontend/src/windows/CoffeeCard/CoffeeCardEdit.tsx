@@ -58,7 +58,7 @@ export const CoffeeCardEdit = ({ entry }: CoffeeCardEditProps) => {
         <h1>loading...</h1>
     ) : (
         <>
-            <div className={'CoffeeCardEdit'}>
+            <div className={'LayoutCard'}>
                 <div className="col-12">
                     <TextInput name="Name" obj={formCoffee} propPath={['name']} setStateHandler={setFormCoffee} />
                 </div>
