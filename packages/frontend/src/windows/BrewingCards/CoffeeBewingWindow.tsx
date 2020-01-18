@@ -7,9 +7,9 @@ import { BrewingEntry, CoffeeEntry } from '../../helpers/types';
 import Beans from '../../images/beans.svg';
 import Cup from '../../images/cup-bw.svg';
 import { throwDataError } from '../../pages/User/userHelperFunctions';
-import { CoffeeBrewingCard } from './CoffeeBrewingCard';
-import { deleteCoffeeBrewing, getCoffeeBrewings, newBrewing, saveCoffeeBrewing } from './CoffeeCardHelperFuctions';
+import { deleteCoffeeBrewing, getCoffeeBrewings, newBrewing, saveCoffeeBrewing } from '../CoffeeCard/CoffeeCardHelperFuctions';
 import { displayDate } from '../../helpers/helperFunctions';
+import { CoffeeBrewingCard } from './CoffeeBrewingCard';
 
 // export const displayDate = (dateString?: Date) => {
 //     if (dateString) {

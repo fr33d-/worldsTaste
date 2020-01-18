@@ -16,7 +16,8 @@ import Tabak from './../../images/Tabak.svg';
 // import GeneralStyles from './../../styles/'module'.scss';
 // import LocalStyles from './Cigars.module.scss';
 import { AttrDataItemType, FilterMenuType } from '../../helpers/types';
-import { useJwt } from '../../windows/UserWindows/UserHelperFunctions';
+import { setUserFromSessionStorage } from '../User/userHelperFunctions';
+// import { useJwt } from '../../windows/UserWindows/UserHelperFunctions';
 
 export type CigarEntry = {
     abbrand: number;
@@ -331,7 +332,7 @@ export const Cigars = () => {
         },
     ];
 
-    const user = useJwt();
+    const user = setUserFromSessionStorage();
     const [filterName, setFilterName] = useState<string>();
     const [filterAttr, setFilterAttr] = useState<string>();
     const [searchString, setSearchString] = useState<string>();

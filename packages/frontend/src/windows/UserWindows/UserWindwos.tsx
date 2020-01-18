@@ -17,11 +17,8 @@ import {
 import { green, white } from '../../styles/colors';
 import { login } from './UserHelperFunctions';
 
-type LoginWindowProps = {
-    setUser(): void;
-};
 
-export const LoginWindow = ({ setUser }: LoginWindowProps) => {
+export const LoginWindow = () => {
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [msg, setMsg] = useState('');
@@ -30,7 +27,6 @@ export const LoginWindow = ({ setUser }: LoginWindowProps) => {
         login(username, password)
             .then((res) => {
                 setMsg('Logged in!');
-                setUser();
             })
             .catch((error) => {
                 console.log(error);

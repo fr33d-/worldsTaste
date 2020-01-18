@@ -67,7 +67,7 @@ export const throwDataError = (message: string, error?: any) => {
     AppToaster.show({ message: message, intent: 'danger' });
 };
 
-export const setUserFromSessionStorage = async (): Promise<FullUser | undefined> => {
+export const setUserFromSessionStorage = (): FullUser | undefined=> {
     const jwtObj = sessionStorage.getItem('auth');
 
     if (jwtObj == null) {

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useLocation, useParams } from 'react-router';
 import { CoffeeContext } from '../../Contexts/CoffeeContext';
-import { CoffeeBrewingWindow } from './CoffeeBewingWindow';
+import { CoffeeBrewingWindow } from '../BrewingCards/CoffeeBewingWindow';
 import { CoffeeCardDetail } from './CoffeeCardDetail';
 import { CoffeeCardEdit } from './CoffeeCardEdit';
 import { emptyCoffee } from './CoffeeCardHelperFuctions';

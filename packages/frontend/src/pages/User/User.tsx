@@ -1,8 +1,9 @@
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Button, Container, Row } from 'react-bootstrap';
 import { Navigationbar } from '../../components/Navigationbar';
-import { AttrDataItemType, FullUser } from '../../helpers/types';
+import { CoffeeContext } from '../../Contexts/CoffeeContext';
+import { AttrDataItemType } from '../../helpers/types';
 import userAvatar from '../../images/avatar-frederic.png';
 import {
     LoginWindow,
@@ -12,7 +13,6 @@ import {
     UserDataWindow,
     UserDetailWindow,
 } from '../../windows/UserWindows/';
-import { setUserFromSessionStorage, throwDataError, throwDataSucess } from './userHelperFunctions';
 
 export const UserRoles: AttrDataItemType[] = [
     { id: 0, name: 'ADMIN' },
@@ -21,30 +21,25 @@ export const UserRoles: AttrDataItemType[] = [
 ];
 
 export const UserPage = () => {
-    const [user, setUser] = useState<FullUser | undefined>();
+    // const [user, setUser] = useState<FullUser | undefined>(setUserFromSessionStorage());
     const [activeMenu, setActiveMenu] = useState(0);
 
-    const innerSetUserFromSessionStorage = () => {
-        setUserFromSessionStorage()
-            .then((user) => {
-                throwDataSucess('user set from sessio storeage');
-                setUser(user);
-            })
-            .catch((error) => {
-                throwDataError('cant set user from session strorage, your not logged in ', error);
-            });
-    };
+    const { user, logout } = useContext(CoffeeContext);
 
-    useEffect(() => {
-        innerSetUserFromSessionStorage();
-    }, []);
+    // const innerSetUserFromSessionStorage = () => {
+    //     setUser(setUserFromSessionStorage());
+    //     // .then((user) => {
+    //     //     throwDataSucess('user set from sessio storeage');
+    //     //     setUser(user);
+    //     // })
+    //     // .catch((error) => {
+    //     //     throwDataError('cant set user from session strorage, your not logged in ', error);
+    //     // });
+    // };
 
-    const logout = () => {
-        console.log('logout');
-        sessionStorage.removeItem('auth');
-        // location.reload();
-        setUser(undefined);
-    };
+    // useEffect(() => {
+    //     innerSetUserFromSessionStorage();
+    // }, []);
 
     return (
         <>
@@ -102,7 +97,7 @@ export const UserPage = () => {
                                 </div>
                             </>
                         )}
-                        {!user && <LoginWindow setUser={innerSetUserFromSessionStorage} />}
+                        {!user && <LoginWindow />}
                     </Row>
                 </Container>
             </div>

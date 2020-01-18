@@ -14,7 +14,7 @@ import Beans from '../../images/beans.svg';
 import Cup from '../../images/cup-bw.svg';
 import { throwDataError } from '../../pages/User/userHelperFunctions';
 import { blue, cyan, green, yellow } from '../../styles/colors';
-import { CoffeeBrewingCard } from './CoffeeBrewingCard';
+import { CoffeeBrewingCard } from '../BrewingCards/CoffeeBrewingCard';
 import { deleteCoffeeBrewing, getCoffeeBrewings, newBrewing, saveCoffeeBrewing } from './CoffeeCardHelperFuctions';
 import { displayDate } from '../../helpers/helperFunctions';
 

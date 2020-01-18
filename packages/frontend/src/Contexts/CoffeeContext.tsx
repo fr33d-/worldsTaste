@@ -1,8 +1,8 @@
 import React, { createContext, Dispatch, PropsWithChildren, SetStateAction, useState } from 'react';
 import { useHistory } from 'react-router';
-import { CoffeeAttrData, CoffeeEntry, User } from '../helpers/types';
-import { deleteCoffee, saveNewCoffee, updateCoffee } from '../pages/Coffee/CoffeeHelperFunctions';
-import { useJwt } from '../windows/UserWindows/UserHelperFunctions';
+import { CoffeeAttrData, CoffeeEntry, User, FullUser } from '../helpers/types';
+import { deleteCoffee, saveNewCoffee, updateCoffee, getCoffeAttrData } from '../pages/Coffee/CoffeeHelperFunctions';
+import { setUserFromSessionStorage, throwDataSucess, throwDataError } from '../pages/User/userHelperFunctions';
 
 type CoffeeContextType = {
     coffees: CoffeeEntry[];
@@ -19,8 +19,9 @@ type CoffeeContextType = {
     setPostOrderBy: React.Dispatch<React.SetStateAction<string | undefined>>;
     coffeeAttrData: CoffeeAttrData | undefined;
     setCoffeeAttrData: React.Dispatch<React.SetStateAction<CoffeeAttrData | undefined>>;
-    user: User | undefined;
+    user: FullUser | undefined;
     basePath: string;
+    logout(): void;
     contextSaveCoffee(coffee: CoffeeEntry): void;
     contextDeleteCoffee(id: number): void;
     openAttrWindow(): void;
@@ -30,6 +31,7 @@ type CoffeeContextType = {
     goToCoffees(): void;
     editCoffeeCard(id: number): void;
     viewCoffeeCard(id: number): void;
+    getFilterCoffeeList(): void;
 };
 
 export const CoffeeContext = createContext<CoffeeContextType>(({} as unknown) as CoffeeContextType);
@@ -44,7 +46,7 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
     const [postOrderBy, setPostOrderBy] = useState<string>();
 
     const [coffeeAttrData, setCoffeeAttrData] = useState<CoffeeAttrData>();
-    const [user] = useState<User | undefined>(useJwt());
+    const [user, setUser] = useState<FullUser | undefined>(setUserFromSessionStorage());
 
     const basePath = '/coffee';
 
@@ -68,6 +70,12 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
         deleteCoffee(id).then((res) => {
             setCoffees((posts) => (!posts ? posts : posts.filter((elm) => elm.id !== id)));
         });
+    };
+
+    const logout = () => {
+        throwDataSucess('Logged out!')
+        sessionStorage.removeItem('auth');
+        setUser(undefined);
     };
 
     const openAttrWindow = () => {
@@ -98,6 +106,62 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
         history.push(`/coffee/card/${id}?view=view`);
     };
 
+    const getFilterCoffeeList = () => {
+
+        let newPosts: CoffeeEntry[] = [];
+
+        switch (filterName) {
+            case 'Arten':
+                newPosts = coffees.filter((post) => {
+                    return post.kind.name === filterAttr;
+                });
+                break;
+            case 'Herkunft':
+                newPosts = coffees.filter((post) => {
+                    return post.origin.name === filterAttr;
+                });
+                break;
+            case 'Röstereien':
+                newPosts = coffees.filter((post) => {
+                    return post.roasted.name === filterAttr;
+                });
+                break;
+            case 'Bewertung':
+                newPosts = coffees.filter((post) => {
+                    return String(post.rating) === filterAttr;
+                });
+                break;
+            default:
+                newPosts = coffees;
+                break;
+        }
+
+        if (searchString) {
+            newPosts = newPosts.filter((post) => post.name.includes(searchString));
+        }
+
+        if (postOrderBy) {
+            switch (filterName) {
+                case 'Arten':
+                    newPosts = newPosts.sort((a, b) => a.kind.name.localeCompare(b.kind.name));
+                    break;
+                case 'Herkunft':
+                    newPosts = newPosts.sort((a, b) => a.origin.name.localeCompare(b.origin.name));
+                    break;
+                case 'Röstereien':
+                    newPosts = newPosts.sort((a, b) => a.roasted.name.localeCompare(b.roasted.name));
+                    break;
+                case 'Bewertung':
+                    newPosts = newPosts.sort((a, b) => a.rating - b.rating);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        setFilteredPosts(newPosts);
+    };
+
     return (
         <CoffeeContext.Provider
             value={{
@@ -125,7 +189,9 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
                 openBrewingWindow,
                 editCoffeeCard,
                 goToCoffees,
-                viewCoffeeCard
+                viewCoffeeCard,
+                logout,
+                getFilterCoffeeList
             }}
         >
             {children}

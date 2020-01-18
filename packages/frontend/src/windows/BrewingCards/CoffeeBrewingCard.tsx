@@ -20,6 +20,7 @@ type CoffeeBrewingCardProps = {
 
 export const CoffeeBrewingCard = ({ brewing, saveBrewing, deleteBrewing }: CoffeeBrewingCardProps) => {
     const [formBrewing, setFormBrewing] = useState<BrewingEntry>(brewing);
+    const [editModeActive, setEditModeActive] = useState(false);
     const { coffeeAttrData } = useContext(CoffeeContext);
 
     const methods = coffeeAttrData && coffeeAttrData.brewMethods;

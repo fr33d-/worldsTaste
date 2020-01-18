@@ -1,9 +1,35 @@
 import axios from 'axios';
 
-import { AttrDataItemType, User, CoffeeEntry, CoffeeAttrData, AttrDataType } from '../../helpers/types';
+import { AttrDataItemType, User, CoffeeEntry, CoffeeAttrData, AttrDataType, FilterMenuType } from '../../helpers/types';
 import { coffeeURL, baseURL, coffeeAttrURL } from '../../data';
 import { CoffeeEntity } from 'backend/src/models/entities/CoffeeEntity';
 import { throwDataSucess, throwDataError } from '../User/userHelperFunctions';
+import { CoffeeContext } from '../../Contexts/CoffeeContext';
+import { useContext } from 'react';
+
+export const getFilterMenu = (coffeeAttrData?: CoffeeAttrData): FilterMenuType[] => {
+
+    return coffeeAttrData
+    ? [
+          {
+              name: 'Arten',
+              items: coffeeAttrData.kinds.map((item) => item.name),
+          },
+          {
+              name: 'Herkunft',
+              items: coffeeAttrData.origins.map((item) => item.name),
+          },
+          {
+              name: 'Röstereien',
+              items: coffeeAttrData.roasteds.map((item) => item.name),
+          },
+          {
+              name: 'Bewertung',
+              items: ['1', '2', '3', '4', '5'],
+          },
+      ]
+    : [];
+}
 
 export const createCoffee = (
     coffeeOrigin: AttrDataItemType,
@@ -119,3 +145,5 @@ export const getCoffeAttrData = async (): Promise<CoffeeAttrData> => {
             return error;
         });
 };
+
+

@@ -15,29 +15,28 @@ export const login = async (username: string, password: string): Promise<void> =
         });
 };
 
-export const useJwt = (): User | undefined => {
-    const jwtObj = sessionStorage.getItem('auth');
+// export const useJwt = (): User | undefined => {
+//     const jwtObj = sessionStorage.getItem('auth');
 
-    if (jwtObj == null && typeof jwtObj !== 'string') {
-        return;
-    } else {
-        const jwtJson = jwt.decode(jwtObj);
-        // console.log(jwtJson);
+//     if (jwtObj == null && typeof jwtObj !== 'string') {
+//         return;
+//     } else {
+//         const jwtJson = jwt.decode(jwtObj);
 
-        if (
-            jwtJson !== null &&
-            typeof jwtJson !== 'string' &&
-            jwtJson['userId'] !== null &&
-            jwtJson['username'] !== null &&
-            jwtJson['name'] !== null &&
-            jwtJson['role'] !== null
-        ) {
-            return {
-                id: jwtJson['userId'],
-                username: jwtJson['username'],
-                name: jwtJson['name'],
-                role: jwtJson['role'],
-            };
-        }
-    }
-};
+//         if (
+//             jwtJson !== null &&
+//             typeof jwtJson !== 'string' &&
+//             jwtJson['userId'] !== null &&
+//             jwtJson['username'] !== null &&
+//             jwtJson['name'] !== null &&
+//             jwtJson['role'] !== null
+//         ) {
+//             return {
+//                 id: jwtJson['userId'],
+//                 username: jwtJson['username'],
+//                 name: jwtJson['name'],
+//                 role: jwtJson['role'],
+//             };
+//         }
+//     }
+// };

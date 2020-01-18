@@ -4,7 +4,8 @@ import React from 'react';
 import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
 import { black, grayDark } from '../../styles/colors';
-import { useJwt } from '../../windows/UserWindows/UserHelperFunctions';
+import { setUserFromSessionStorage } from '../../pages/User/userHelperFunctions';
+// import { useJwt } from '../../windows/UserWindows/UserHelperFunctions';
 
 type NavbarProps = {
     light?: boolean;
@@ -14,7 +15,7 @@ export const Navigationbar = ({ light }: NavbarProps) => {
     const { pathname } = useLocation();
     const path = pathname.split('/').filter(Boolean);
 
-    const user = useJwt();
+    const user = setUserFromSessionStorage();
 
     return (
         <div className={'NavigationContainer'}>

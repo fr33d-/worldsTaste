@@ -6,21 +6,18 @@ import { CoffeeContext } from '../../Contexts/CoffeeContext';
 import { FilterMenuType } from '../../helpers/types';
 import { AppWindow } from '../../windows/AppWindow';
 import { CoffeeAttrDataWindow } from '../../windows/AttrDataWindow';
-import { InlineCoffeeCardDisplay } from '../../windows/CoffeeCard/InlineCoffeeCard';
 import { CoffeeDetailWindow } from '../../windows/CoffeeCard/CoffeeDetailWindow';
+import { InlineCoffeeCardDisplay } from '../../windows/CoffeeCard/InlineCoffeeCard';
 import OverlayFrame from '../../windows/OverlayFrame/OverlayFrame';
-import { throwDataError, throwDataSucess, setUserFromSessionStorage } from '../User/userHelperFunctions';
+import { throwDataError, throwDataSucess } from '../User/userHelperFunctions';
 import { default as chemexSVG, default as CoffeeReplacement } from './../../images/Chemex.svg';
-// import GeneralStyles from './../../styles/'module'.scss';
-// import LocalStyles from './Coffee.module.scss';
-import { getCoffeAttrData, getCoffees } from './CoffeeHelperFunctions';
+import { getCoffeAttrData, getCoffees, getFilterMenu } from './CoffeeHelperFunctions';
 
 export const Coffee = () => {
     const {
         coffees,
         setCoffees,
         basePath,
-        coffeeAttrData,
         filterAttr,
         filterName,
         filteredPosts,
@@ -29,13 +26,17 @@ export const Coffee = () => {
         setCoffeeAttrData,
         setFilterAttr,
         setFilterName,
-        setFilteredPosts,
         setPostOrderBy,
         setSearchString,
         user,
         goToCreateCoffee,
         openAttrWindow,
+        coffeeAttrData,
+        getFilterCoffeeList
     } = useContext(CoffeeContext);
+    const { URPExtention } = useParams();
+
+    const filterMenu: FilterMenuType[] = getFilterMenu(coffeeAttrData);
 
     // Todo: vill sollte man das schlauer machen
     useEffect(() => {
@@ -43,7 +44,7 @@ export const Coffee = () => {
     }, []);
 
     useEffect(() => {
-        filterPosts();
+        getFilterCoffeeList();
     }, [coffees, filterName, filterAttr, searchString, postOrderBy]);
 
     const initiateData = () => {
@@ -71,94 +72,12 @@ export const Coffee = () => {
             .catch((error) => {
                 throwDataError('cant get coffees', error);
             });
-
-        setUserFromSessionStorage(); //.catch((error) => {
-        //     throwDataError('you are not logged in', error);
-        // });
     };
-
-    const filterPosts = () => {
-        let newPosts = [];
-
-        switch (filterName) {
-            case 'Arten':
-                newPosts = coffees.filter((post) => {
-                    return post.kind.name === filterAttr;
-                });
-                break;
-            case 'Herkunft':
-                newPosts = coffees.filter((post) => {
-                    return post.origin.name === filterAttr;
-                });
-                break;
-            case 'Röstereien':
-                newPosts = coffees.filter((post) => {
-                    return post.roasted.name === filterAttr;
-                });
-                break;
-            case 'Bewertung':
-                newPosts = coffees.filter((post) => {
-                    return String(post.rating) === filterAttr;
-                });
-                break;
-            default:
-                newPosts = coffees;
-                break;
-        }
-
-        if (searchString) {
-            newPosts = newPosts.filter((post) => post.name.includes(searchString));
-        }
-
-        if (postOrderBy) {
-            switch (filterName) {
-                case 'Arten':
-                    newPosts = newPosts.sort((a, b) => a.kind.name.localeCompare(b.kind.name));
-                    break;
-                case 'Herkunft':
-                    newPosts = newPosts.sort((a, b) => a.origin.name.localeCompare(b.origin.name));
-                    break;
-                case 'Röstereien':
-                    newPosts = newPosts.sort((a, b) => a.roasted.name.localeCompare(b.roasted.name));
-                    break;
-                case 'Bewertung':
-                    newPosts = newPosts.sort((a, b) => a.rating - b.rating);
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        setFilteredPosts(newPosts);
-    };
-
-    const filterMenu: FilterMenuType[] = coffeeAttrData
-        ? [
-              {
-                  name: 'Arten',
-                  items: coffeeAttrData.kinds.map((item) => item.name),
-              },
-              {
-                  name: 'Herkunft',
-                  items: coffeeAttrData.origins.map((item) => item.name),
-              },
-              {
-                  name: 'Röstereien',
-                  items: coffeeAttrData.roasteds.map((item) => item.name),
-              },
-              {
-                  name: 'Bewertung',
-                  items: ['1', '2', '3', '4', '5'],
-              },
-          ]
-        : [];
-
-    const { extention } = useParams();
 
     return (
         <>
             <AppWindow
-                editState={extention ? true : false}
+                editState={URPExtention ? true : false}
                 sidebar={
                     <Sidemenu
                         filter={filterMenu}
@@ -193,10 +112,7 @@ export const Coffee = () => {
                         </div>
                     ) : (
                         filteredPosts.map((post, i) => (
-                            <InlineCoffeeCardDisplay
-                                entry={post}
-                                key={`${post.name}_${i}`}
-                            />
+                            <InlineCoffeeCardDisplay entry={post} key={`${post.name}_${i}`} />
                         ))
                     )}
                 </div>
