@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { useLocation, useParams } from 'react-router';
 import { CoffeeContext } from '../../Contexts/CoffeeContext';
-import { CoffeeBrewingWindow } from '../BrewingCards/CoffeeBewingWindow';
 import { CoffeeCardDetail } from './CoffeeCardDetail';
 import { CoffeeCardEdit } from './CoffeeCardEdit';
 import { emptyCoffee } from './CoffeeCardHelperFuctions';
@@ -25,8 +24,8 @@ export const CoffeeDetailWindow = () => {
         if (!coffee) return <p>Error, coffee not found</p>;
         if (view === 'edit') {
             return <CoffeeCardEdit entry={coffee} />;
-        } else if (view === 'brewings') {
-            return <CoffeeBrewingWindow coffee={coffee} />;
+        // } else if (view === 'brewings') {
+        //     return <CoffeeBrewingWindow coffee={coffee} />;
         } else {
             return <CoffeeCardDetail coffee={coffee} />;
         }

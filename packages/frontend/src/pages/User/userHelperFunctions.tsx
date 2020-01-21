@@ -71,7 +71,7 @@ export const setUserFromSessionStorage = (): FullUser | undefined=> {
     const jwtObj = sessionStorage.getItem('auth');
 
     if (jwtObj == null) {
-        throwDataError('cant set user from session strorage, your not logged in ');
+        // throwDataError('cant set user from session strorage, your not logged in ');
         return undefined;
     } else {
         let data = jwt.decode(jwtObj);

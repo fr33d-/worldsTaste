@@ -32,7 +32,7 @@ export const Coffee = () => {
         goToCreateCoffee,
         openAttrWindow,
         coffeeAttrData,
-        getFilterCoffeeList
+        getFilterCoffeeList,
     } = useContext(CoffeeContext);
     const { URPExtention } = useParams();
 
@@ -123,7 +123,9 @@ export const Coffee = () => {
                 </Route>
                 <Route exact path={`${basePath}/card/:id?`}>
                     <OverlayFrame>
-                        <CoffeeDetailWindow />
+                        <div className={'LayoutCard'}>
+                            <CoffeeDetailWindow />
+                        </div>
                     </OverlayFrame>
                 </Route>
             </Switch>

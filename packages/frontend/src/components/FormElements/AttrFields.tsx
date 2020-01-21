@@ -58,7 +58,15 @@ type ObjSliderAttrFieldProps = {
     setStateHandler: Dispatch<SetStateAction<any>>; //number
 };
 
-export const ObjSliderAttrField = ({ name, icon, iconColor, color, obj, propPath, setStateHandler }: ObjSliderAttrFieldProps) => {
+export const ObjSliderAttrField = ({
+    name,
+    icon,
+    iconColor,
+    color,
+    obj,
+    propPath,
+    setStateHandler,
+}: ObjSliderAttrFieldProps) => {
     const style = { backgroundColor: color };
     return (
         <>
@@ -68,7 +76,11 @@ export const ObjSliderAttrField = ({ name, icon, iconColor, color, obj, propPath
                 <ul>
                     {[...Array(5)].map((_, i) => {
                         return i <= get(obj, propPath) ? (
-                            <li onClick={() => setStateHandler(cloneDeep(set(obj, propPath, i)))} style={style} key={i} />
+                            <li
+                                onClick={() => setStateHandler(cloneDeep(set(obj, propPath, i)))}
+                                style={style}
+                                key={i}
+                            />
                         ) : (
                             <li onClick={() => setStateHandler(cloneDeep(set(obj, propPath, i)))} key={i} />
                         );
@@ -100,12 +112,20 @@ export const SingleSliderAttrField = ({ name, value, icon, onChange, iconColor, 
     );
 };
 
-export const ObjSingleSliderAttrField = ({ name, color, icon, iconColor, obj, propPath, setStateHandler }: ObjSliderAttrFieldProps) => {
+export const ObjSingleSliderAttrField = ({
+    name,
+    color,
+    icon,
+    iconColor,
+    obj,
+    propPath,
+    setStateHandler,
+}: ObjSliderAttrFieldProps) => {
     const value = get(obj, propPath);
     const style = { backgroundColor: `hsl(${value * 30}, 50%, 50%)` };
     const onChange = (i: number) => {
-        setStateHandler(cloneDeep(set(obj, propPath, i)))
-    }
+        setStateHandler(cloneDeep(set(obj, propPath, i)));
+    };
     return (
         <>
             {name && <label>{name}</label>}
@@ -210,6 +230,32 @@ export const AttrField = ({ name, value, icon, color, className }: AttrFieldProp
     </div>
 );
 
+type NewAttrFieldProps = {
+    name: string;
+    obj: any;
+    propPath: string[];
+    icon?: IconProp;
+    color?: string;
+    className?: string;
+    unit?: string;
+};
+
+export const NewAttrField = ({ name, icon, color, className, obj, propPath, unit }: NewAttrFieldProps) => {
+    const value = String(get(obj, propPath));
+    return (
+    <div className={classNames(className && className)}>
+        <label className={'AttrFieldLabel'}>{name}</label>
+        <div className={'AttrField'}>
+            {icon && <FontAwesomeIcon icon={icon} color={color} size="sm" />}
+            <span className={'Value'}>
+                {value}
+                {unit}
+            </span>
+        </div>
+    </div>
+);
+    };
+
 type AttrFieldSliderProps = {
     name: string;
     value: number;
@@ -219,6 +265,37 @@ type AttrFieldSliderProps = {
 
 export const AttrFieldSlider = ({ name, value, icon, color }: AttrFieldSliderProps) => {
     const style = { backgroundColor: color };
+    return (
+        <>
+            <label className={'AttrFieldLabel'}>{name}</label>
+            <div className={'AttrField'}>
+                {icon && <FontAwesomeIcon icon={icon} color={color} size="sm" />}
+                {
+                    <div className={'Iconlist'}>
+                        <ul>
+                            {[...Array(5)].map((_, i) => {
+                                return i <= value ? <li key={i} style={style} /> : <li key={i} />;
+                            })}
+                        </ul>
+                    </div>
+                }
+            </div>
+        </>
+    );
+};
+
+type NewAttrFieldSliderProps = {
+    name: string;
+    obj: any;
+    propPath: string[],
+    icon?: IconProp;
+    color: string;
+};
+
+export const NewAttrFieldSlider = ({ name, icon, color, obj, propPath }: NewAttrFieldSliderProps) => {
+    const style = { backgroundColor: color };
+    const value = 3;
+    // const value = Number(get(obj, propPath));
     return (
         <>
             <label className={'AttrFieldLabel'}>{name}</label>
@@ -291,6 +368,31 @@ export const AttrFieldLikeList = ({ name, value }: AttrFieldLikeList) => (
     </>
 );
 
+type MewAttrFieldLikeList = {
+    name: string;
+    obj: any;
+    propPath: string[]
+};
+
+export const NewAttrFieldLikeList = ({ name, obj, propPath }: MewAttrFieldLikeList) => {
+    const value = Number(get(obj, propPath));
+    return (<>
+        <label className={'AttrFieldLabel'}>{name}</label>
+        <div className={'AttrField'}>
+            <FontAwesomeIcon icon="heart" color={red} size="sm" />
+            {
+                <div className={'Iconlist'}>
+                    <ul>
+                        {[...Array(5)].map((_, i) => (
+                            <FontAwesomeIcon icon="star" color={i < value ? yellow : grayDark} size="sm" key={i} />
+                        ))}
+                    </ul>
+                </div>
+            }
+        </div>
+    </>)
+};
+
 type AttrFieldDescriptionProps = {
     name: string;
     value: string;
@@ -303,6 +405,24 @@ export const AttrFieldDescription = ({ name, value }: AttrFieldDescriptionProps)
             <p>
                 <FontAwesomeIcon icon="bars" size="lg" color={grayDarker} />
                 {value}
+            </p>
+        </div>
+    </>
+);
+
+type NewAttrFieldDescriptionProps = {
+    name: string;
+    obj: any;
+    propPath: string[]
+};
+
+export const NewAttrFieldDescription = ({ name, obj, propPath }: NewAttrFieldDescriptionProps) => (
+    <>
+        <label className={'AttrFieldLabel'}>{name}</label>
+        <div className={'Description'}>
+            <p>
+                <FontAwesomeIcon icon="bars" size="lg" color={grayDarker} />
+                {get(obj, propPath)}
             </p>
         </div>
     </>

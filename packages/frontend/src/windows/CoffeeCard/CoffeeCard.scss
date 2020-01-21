@@ -1,6 +1,6 @@
 .BrewList {
     background: $blue-gray;
-    border-radius: 0 $border-radius-m $border-radius-m 0;
+    border-radius: $border-radius-m;
     min-height: 400px;
     display: flex;
     flex-direction: column;

@@ -19,7 +19,6 @@ type CoffeeCardEditProps = {
 };
 
 export const CoffeeCardEdit = ({ entry }: CoffeeCardEditProps) => {
-    
     const [tab, setTab] = useState(0);
     const [formCoffee, setFormCoffee] = useState<CoffeeEntry>(entry);
     const [imageStrings, setImageStrings] = useState(entry.imageStrings);
@@ -55,223 +54,221 @@ export const CoffeeCardEdit = ({ entry }: CoffeeCardEditProps) => {
     };
 
     return !coffeeAttrData ? (
-        <h1>loading...</h1>
+        <h1>no coffee data</h1>
     ) : (
         <>
-            <div className={'LayoutCard'}>
-                <div className="col-12">
-                    <TextInput name="Name" obj={formCoffee} propPath={['name']} setStateHandler={setFormCoffee} />
-                </div>
-                <div className={'TabBar'}>
-                    <ul>
-                        <li className={classNames(tab === 0 && 'Active')} onClick={() => setTab(0)}>
-                            Information
-                        </li>
-                        <li className={classNames(tab === 1 && 'Active')} onClick={() => setTab(1)}>
-                            Details
-                        </li>
-                        <li className={classNames(tab === 2 && 'Active')} onClick={() => setTab(2)}>
-                            Images
-                        </li>
-                        <li className={classNames(tab === 3 && 'Active')} onClick={() => setTab(3)}>
-                            Bewings
-                        </li>
-                    </ul>
-                </div>
-                {tab === 0 && (
-                    <>
-                        <div className={'TextSection'}>
-                            <div className="row">
-                                <div className="col-12 col-md-6">
-                                    <DropdownInput
-                                        items={coffeeAttrData.origins}
-                                        icon="globe-americas"
-                                        iconColor={green}
-                                        label="Herkunft"
-                                        selectedItem={formCoffee.origin}
-                                        onChange={setFormCoffee}
-                                        propPath={['origin']}
-                                        obj={formCoffee}
-                                    />
-                                </div>
-                                <div className="col-12 col-md-6">
-                                    <DropdownInput
-                                        items={coffeeAttrData.kinds}
-                                        icon="mug-hot"
-                                        iconColor={brown}
-                                        label="Art"
-                                        selectedItem={formCoffee.kind}
-                                        onChange={setFormCoffee}
-                                        propPath={['kind']}
-                                        obj={formCoffee}
-                                    />
-                                </div>
-                                <div className="col-12 col-md-6">
-                                    <DropdownInput
-                                        items={coffeeAttrData.roasteds}
-                                        icon="flask"
-                                        iconColor={blue}
-                                        label="Rösterei"
-                                        selectedItem={formCoffee.roasted}
-                                        onChange={setFormCoffee}
-                                        propPath={['roasted']}
-                                        obj={formCoffee}
-                                    />
-                                </div>
-                                <div className="col-12 col-md-6">
-                                    <DropdownInput
-                                        items={coffeeAttrData.processes}
-                                        icon="leaf"
-                                        iconColor={green}
-                                        label="Prozess"
-                                        selectedItem={formCoffee.process}
-                                        onChange={setFormCoffee}
-                                        propPath={['process']}
-                                        obj={formCoffee}
-                                    />
-                                </div>
-                                <div className="col-12 col-md-6">
-                                    <DropdownInput
-                                        items={coffeeAttrData.specieses}
-                                        icon="leaf"
-                                        iconColor={green}
-                                        label="Bohnenart"
-                                        selectedItem={formCoffee.species}
-                                        onChange={setFormCoffee}
-                                        propPath={['species']}
-                                        obj={formCoffee}
-                                    />
-                                </div>
-                                <div className="col-12 col-md-6">
-                                    <ObjLikeSliderAttrField
-                                        maxValue={5}
-                                        name="Gesamtbewertung:"
-                                        obj={formCoffee}
-                                        propPath={['rating']}
-                                        setStateHandler={setFormCoffee}
-                                    />
-                                </div>
-                                <div className="col-12">
-                                    <TextareaInput
-                                        label="Beschreibung"
-                                        obj={formCoffee}
-                                        propPath={['description']}
-                                        setStateHandler={setFormCoffee}
-                                    />
-                                </div>
+            <div className="col-12">
+                <TextInput name="Name" obj={formCoffee} propPath={['name']} setStateHandler={setFormCoffee} />
+            </div>
+            <div className={'TabBar'}>
+                <ul>
+                    <li className={classNames(tab === 0 && 'Active')} onClick={() => setTab(0)}>
+                        Information
+                    </li>
+                    <li className={classNames(tab === 1 && 'Active')} onClick={() => setTab(1)}>
+                        Details
+                    </li>
+                    <li className={classNames(tab === 2 && 'Active')} onClick={() => setTab(2)}>
+                        Images
+                    </li>
+                    <li className={classNames(tab === 3 && 'Active')} onClick={() => setTab(3)}>
+                        Bewings
+                    </li>
+                </ul>
+            </div>
+            {tab === 0 && (
+                <>
+                    <div className={'TextSection'}>
+                        <div className="row">
+                            <div className="col-12 col-md-6">
+                                <DropdownInput
+                                    items={coffeeAttrData.origins}
+                                    icon="globe-americas"
+                                    iconColor={green}
+                                    label="Herkunft"
+                                    selectedItem={formCoffee.origin}
+                                    onChange={setFormCoffee}
+                                    propPath={['origin']}
+                                    obj={formCoffee}
+                                />
                             </div>
-                        </div>
-                    </>
-                )}
-
-                {tab === 1 && (
-                    <>
-                        <div className={'TextSection'}>
-                            <div className="row">
-                                <div className="col-12 col-md-6">
-                                    <ObjSliderAttrField
-                                        color={blue}
-                                        name="Geschmack:"
-                                        obj={formCoffee}
-                                        setStateHandler={setFormCoffee}
-                                        propPath={['taste']}
-                                    />
-                                </div>
-                                <div className="col-12 col-md-6">
-                                    <ObjSingleSliderAttrField
-                                        color={green}
-                                        name="Schokolade/Frucht:"
-                                        obj={formCoffee}
-                                        setStateHandler={setFormCoffee}
-                                        propPath={['tasteKind']}
-                                    />
-                                </div>
-                                <div className="col-12 col-md-6">
-                                    <ObjSliderAttrField
-                                        color={yellow}
-                                        name="Säure:"
-                                        obj={formCoffee}
-                                        setStateHandler={setFormCoffee}
-                                        propPath={['sour']}
-                                    />
-                                </div>
-                                <div className="col-12 col-md-6">
-                                    <ObjSliderAttrField
-                                        color={green}
-                                        name="Erbisg:"
-                                        obj={formCoffee}
-                                        setStateHandler={setFormCoffee}
-                                        propPath={['woody']}
-                                    />
-                                </div>
-                                <div className="col-12 col-md-6">
-                                    <ObjSliderAttrField
-                                        color={cyan}
-                                        name="Bitter:"
-                                        obj={formCoffee}
-                                        setStateHandler={setFormCoffee}
-                                        propPath={['bitter']}
-                                    />
-                                </div>
-                                <div className="col-12">
-                                    <TextareaInput
-                                        label="Eigene Beschreibung"
-                                        obj={formCoffee}
-                                        propPath={['ownDescription']}
-                                        setStateHandler={setFormCoffee}
-                                    />
-                                    />
-                                </div>
+                            <div className="col-12 col-md-6">
+                                <DropdownInput
+                                    items={coffeeAttrData.kinds}
+                                    icon="mug-hot"
+                                    iconColor={brown}
+                                    label="Art"
+                                    selectedItem={formCoffee.kind}
+                                    onChange={setFormCoffee}
+                                    propPath={['kind']}
+                                    obj={formCoffee}
+                                />
                             </div>
-                        </div>
-                    </>
-                )}
-
-                {tab === 2 && (
-                    <>
-                        <div className={'ImageSection'}>
-                            {imageStrings !== undefined &&
-                                imageStrings.map((url, i) => (
-                                    <>
-                                        <div className={'Image'}>
-                                            <button onClick={() => innerDeleteImage(url, formCoffee.id)}>
-                                                <FontAwesomeIcon icon="trash" color={grayDarker} />
-                                            </button>
-                                            <img src={`${baseURL}${url}`} key={i} />
-                                        </div>
-                                    </>
-                                ))}
-
-                            <div className={'UploadArea'}>
-                                <label htmlFor="file">
-                                    <FontAwesomeIcon icon="upload" />
-                                </label>
-                                <br />
-                                <input
-                                    type="file"
-                                    name="pic"
-                                    accept="image/*"
-                                    onChange={uploadSelectedFile}
-                                    className={'Fileupload'}
-                                    id="file"
-                                    onDrop={uploadDropeddFile}
-                                    multiple
+                            <div className="col-12 col-md-6">
+                                <DropdownInput
+                                    items={coffeeAttrData.roasteds}
+                                    icon="flask"
+                                    iconColor={blue}
+                                    label="Rösterei"
+                                    selectedItem={formCoffee.roasted}
+                                    onChange={setFormCoffee}
+                                    propPath={['roasted']}
+                                    obj={formCoffee}
+                                />
+                            </div>
+                            <div className="col-12 col-md-6">
+                                <DropdownInput
+                                    items={coffeeAttrData.processes}
+                                    icon="leaf"
+                                    iconColor={green}
+                                    label="Prozess"
+                                    selectedItem={formCoffee.process}
+                                    onChange={setFormCoffee}
+                                    propPath={['process']}
+                                    obj={formCoffee}
+                                />
+                            </div>
+                            <div className="col-12 col-md-6">
+                                <DropdownInput
+                                    items={coffeeAttrData.specieses}
+                                    icon="leaf"
+                                    iconColor={green}
+                                    label="Bohnenart"
+                                    selectedItem={formCoffee.species}
+                                    onChange={setFormCoffee}
+                                    propPath={['species']}
+                                    obj={formCoffee}
+                                />
+                            </div>
+                            <div className="col-12 col-md-6">
+                                <ObjLikeSliderAttrField
+                                    maxValue={5}
+                                    name="Gesamtbewertung:"
+                                    obj={formCoffee}
+                                    propPath={['rating']}
+                                    setStateHandler={setFormCoffee}
+                                />
+                            </div>
+                            <div className="col-12">
+                                <TextareaInput
+                                    label="Beschreibung"
+                                    obj={formCoffee}
+                                    propPath={['description']}
+                                    setStateHandler={setFormCoffee}
                                 />
                             </div>
                         </div>
-                    </>
-                )}
-                {tab === 3 && <></>}
+                    </div>
+                </>
+            )}
 
-                <div className={'ButtonSection'}>
-                    <AdvancedDeleteButton changes={true} onClick={() => contextDeleteCoffee(formCoffee.id)} />
-                    <AdvancedCancelButton changes={true} onClick={() => viewCoffeeCard(formCoffee.id)} />
-                    <AdvancedSaveButton
-                        save={() => contextSaveCoffee(formCoffee)}
-                        close={() => viewCoffeeCard(formCoffee.id)}
-                        changes={true}
-                    />
-                </div>
+            {tab === 1 && (
+                <>
+                    <div className={'TextSection'}>
+                        <div className="row">
+                            <div className="col-12 col-md-6">
+                                <ObjSliderAttrField
+                                    color={blue}
+                                    name="Geschmack:"
+                                    obj={formCoffee}
+                                    setStateHandler={setFormCoffee}
+                                    propPath={['taste']}
+                                />
+                            </div>
+                            <div className="col-12 col-md-6">
+                                <ObjSingleSliderAttrField
+                                    color={green}
+                                    name="Schokolade/Frucht:"
+                                    obj={formCoffee}
+                                    setStateHandler={setFormCoffee}
+                                    propPath={['tasteKind']}
+                                />
+                            </div>
+                            <div className="col-12 col-md-6">
+                                <ObjSliderAttrField
+                                    color={yellow}
+                                    name="Säure:"
+                                    obj={formCoffee}
+                                    setStateHandler={setFormCoffee}
+                                    propPath={['sour']}
+                                />
+                            </div>
+                            <div className="col-12 col-md-6">
+                                <ObjSliderAttrField
+                                    color={green}
+                                    name="Erbisg:"
+                                    obj={formCoffee}
+                                    setStateHandler={setFormCoffee}
+                                    propPath={['woody']}
+                                />
+                            </div>
+                            <div className="col-12 col-md-6">
+                                <ObjSliderAttrField
+                                    color={cyan}
+                                    name="Bitter:"
+                                    obj={formCoffee}
+                                    setStateHandler={setFormCoffee}
+                                    propPath={['bitter']}
+                                />
+                            </div>
+                            <div className="col-12">
+                                <TextareaInput
+                                    label="Eigene Beschreibung"
+                                    obj={formCoffee}
+                                    propPath={['ownDescription']}
+                                    setStateHandler={setFormCoffee}
+                                />
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </>
+            )}
+
+            {tab === 2 && (
+                <>
+                    <div className={'ImageSection'}>
+                        {imageStrings !== undefined &&
+                            imageStrings.map((url, i) => (
+                                <>
+                                    <div className={'Image'}>
+                                        <button onClick={() => innerDeleteImage(url, formCoffee.id)}>
+                                            <FontAwesomeIcon icon="trash" color={grayDarker} />
+                                        </button>
+                                        <img src={`${baseURL}${url}`} key={i} />
+                                    </div>
+                                </>
+                            ))}
+
+                        <div className={'UploadArea'}>
+                            <label htmlFor="file">
+                                <FontAwesomeIcon icon="upload" />
+                            </label>
+                            <br />
+                            <input
+                                type="file"
+                                name="pic"
+                                accept="image/*"
+                                onChange={uploadSelectedFile}
+                                className={'Fileupload'}
+                                id="file"
+                                onDrop={uploadDropeddFile}
+                                multiple
+                            />
+                        </div>
+                    </div>
+                </>
+            )}
+            {tab === 3 && <></>}
+
+            <div className={'ButtonSection'}>
+                <AdvancedDeleteButton changes={true} onClick={() => contextDeleteCoffee(formCoffee.id)} />
+                <AdvancedCancelButton changes={true} onClick={() => viewCoffeeCard(formCoffee.id)} />
+                <AdvancedSaveButton
+                    save={() => contextSaveCoffee(formCoffee)}
+                    close={() => viewCoffeeCard(formCoffee.id)}
+                    changes={true}
+                />
             </div>
         </>
     );
