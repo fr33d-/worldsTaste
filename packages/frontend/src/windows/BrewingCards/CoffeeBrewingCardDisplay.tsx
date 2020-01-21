@@ -5,7 +5,7 @@ import {
     NewAttrFieldLikeList,
     NewAttrFieldSlider,
 } from '../../components/FormElements/AttrFields';
-import { IconButton } from '../../components/IconButton';
+import { IconButton } from '../../components/Buttons';
 import { displayDate } from '../../helpers/helperFunctions';
 import { BrewingEntry } from '../../helpers/types';
 import { black, blue } from '../../styles/colors';

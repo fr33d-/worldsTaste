@@ -7,7 +7,7 @@ import {
     ObjSingleSliderAttrField,
     ObjSliderAttrField,
 } from '../../components/FormElements/AttrFields';
-import { AdvancedCancelButton, AdvancedDeleteButton, AdvancedSaveButton } from '../../components/IconButton';
+import { AdvancedCancelButton, AdvancedDeleteButton, AdvancedSaveButton } from '../../components/Buttons';
 import { CoffeeContext } from '../../Contexts/CoffeeContext';
 import { baseURL } from '../../data';
 import { CoffeeEntry } from '../../helpers/types';

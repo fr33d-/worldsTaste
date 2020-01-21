@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { DropdownInput, SimplePasswordInput, SimpleTextInput, TextInput } from '../../components/FormElements';
 import { AttrField } from '../../components/FormElements/AttrFields';
-import { IconButton } from '../../components/IconButton';
+import { IconButton } from '../../components/Buttons';
 import { AttrDataItemType, ExtendedUser, FullUser, User } from '../../helpers/types';
 import { UserRoles } from '../../pages/User';
 import {
