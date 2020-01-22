@@ -7,10 +7,9 @@ import { CigarEntry } from '../../pages/Cigars';
 import { brown, grayDarker, greenAccent, yellowAccent } from '../../styles/colors';
 import { BoolInput, DropdownInput, NumberInput, TextareaInput, TextInput } from '../../components/FormElements';
 import { ObjLikeSliderAttrField, ObjSliderAttrField } from '../../components/FormElements/AttrFields';
-import { AdvancedCancelButton, AdvancedDeleteButton, AdvancedSaveButton } from '../../components/Buttons';
 import GeneralStyles from './../../styles/GeneralStyles.module.scss';
-// import 'from' './CigarCardEdit.module.scss';
 import { AttrDataItemType } from '../../helpers/types';
+import { AdvancedDeleteButton, AdvancedCancelButton, AdvancedSaveButton } from '../../components/Buttons/AdvancedButtons';
 
 type CigarCardEditProps = {
     entry: CigarEntry;

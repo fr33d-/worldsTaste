@@ -1,8 +1,9 @@
 import classNames from 'classnames';
 import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
+import { DeleteButton } from '../../components/Buttons';
+import { AdvancedSaveButton } from '../../components/Buttons/AdvancedButtons';
 import { BoolInput, DateInput, DropdownInput, NumberInput, TextareaInput } from '../../components/FormElements';
 import { ObjLikeSliderAttrField, ObjSingleSliderAttrField, ObjSliderAttrField } from '../../components/FormElements/AttrFields';
-import { AdvancedSaveButton, DeleteButton } from '../../components/Buttons';
 import { CoffeeContext } from '../../Contexts/CoffeeContext';
 import { displayDate } from '../../helpers/helperFunctions';
 import { BrewingEntry } from '../../helpers/types';
