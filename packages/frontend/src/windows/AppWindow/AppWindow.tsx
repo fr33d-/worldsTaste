@@ -1,11 +1,7 @@
-import React, { FC, PropsWithChildren, ReactNode } from 'react';
-import Styles from './AppWindow.module.scss';
+import React, { FC, ReactNode } from 'react';
 import { Navigationbar } from '../../components/Navigationbar';
 import { Footer } from '../../components/Footer';
-import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import classNames from 'classnames';
-import { Sidemenu } from '../../components/Sidemenu';
-
 
 export type AppWindowProps = {
     loading?: boolean;
@@ -16,14 +12,14 @@ export type AppWindowProps = {
 export const AppWindow: FC<AppWindowProps> = ({ loading = false, children, sidebar, editState }) => {
     return (
         <>
-            <div className={Styles.BackgroundHelper} />
-            <div className={classNames((editState) && Styles.EditBackground)}>
+            <div className={'BackgroundHelper'} />
+            <div className={classNames((editState) && 'EditBackground')}>
                 <Navigationbar />
-                <div className={Styles.Container}>
+                <div className={'Container'}>
                     {/* <MobileHeader icon="mug-hot" name="Blog of Coffee" /> */}
                     <div className="row">
                         {sidebar}
-                        <div className={classNames(`col-12 col-lg-9`, Styles.PageContent)}>
+                        <div className={classNames(`col-12 col-lg-9`, 'PageContent')}>
                             {children}
                         </div>
                     </div>
