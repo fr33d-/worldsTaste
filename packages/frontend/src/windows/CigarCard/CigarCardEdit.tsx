@@ -9,7 +9,7 @@ import { BoolInput, DropdownInput, NumberInput, TextareaInput, TextInput } from 
 import { ObjLikeSliderAttrField, ObjSliderAttrField } from '../../components/FormElements/AttrFields';
 import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import { AttrDataItemType } from '../../helpers/types';
-import { AdvancedDeleteButton, AdvancedCancelButton, AdvancedSaveButton } from '../../components/Buttons/AdvancedButtons';
+import { AdvancedDeleteButton, AdvancedCancelButton, AdvancedSaveButton, SaveSection } from '../../components/Buttons/AdvancedButtons';
 
 type CigarCardEditProps = {
     entry: CigarEntry;
@@ -20,7 +20,7 @@ type CigarCardEditProps = {
     cigarDeckblatt: AttrDataItemType[];
     cigarAnschnitt: AttrDataItemType[];
     cigarAromarad: AttrDataItemType[];
-    deleteCigar(id: number): void;
+    deleteCigar(id: number): Promise<void>;
     close(): void;
 };
 
@@ -43,8 +43,8 @@ export const CigarCardEdit = ({
     const [edited, setEdited] = useState(false);
     const [tab, setTab] = useState(0);
 
-    const saveCard = () => {
-        axios
+    const saveCard = async () => {
+        return await axios
             .put(`${baseURL}${cigarsURL}/${entry.id}`, { ...formCigar })
             .then((response) => {
                 setEdited(false);
@@ -399,9 +399,14 @@ export const CigarCardEdit = ({
 
                 <div className={'Row'}>
                     <div className={'ButtonSection'}>
-                        <AdvancedDeleteButton changes={edited} onClick={() => deleteCigar(formCigar.id)} />
+                        <SaveSection changes={edited}
+                            deleteFunction={() => deleteCigar(formCigar.id)}
+                            closeFunction={close}
+                            saveFunction={saveCard}
+                        />
+                        {/* <AdvancedDeleteButton changes={edited} onClick={() => deleteCigar(formCigar.id)} />
                         <AdvancedCancelButton changes={edited} onClick={close} />
-                        <AdvancedSaveButton save={saveCard} close={close} error={saveError} changes={edited} />
+                        <AdvancedSaveButton save={saveCard} close={close} error={saveError} changes={edited} /> */}
                     </div>
                 </div>
             </div>

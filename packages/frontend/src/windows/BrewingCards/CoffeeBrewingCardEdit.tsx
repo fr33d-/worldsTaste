@@ -1,22 +1,31 @@
 import classNames from 'classnames';
 import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
-import { DeleteButton } from '../../components/Buttons';
-import { AdvancedSaveButton } from '../../components/Buttons/AdvancedButtons';
+import { SaveSection } from '../../components/Buttons/AdvancedButtons';
 import { BoolInput, DateInput, DropdownInput, NumberInput, TextareaInput } from '../../components/FormElements';
-import { ObjLikeSliderAttrField, ObjSingleSliderAttrField, ObjSliderAttrField } from '../../components/FormElements/AttrFields';
+import {
+    ObjLikeSliderAttrField,
+    ObjSingleSliderAttrField,
+    ObjSliderAttrField,
+} from '../../components/FormElements/AttrFields';
 import { CoffeeContext } from '../../Contexts/CoffeeContext';
 import { displayDate } from '../../helpers/helperFunctions';
 import { BrewingEntry } from '../../helpers/types';
 import { black, blue, blueAccent, green, yellow } from '../../styles/colors';
+import { isEqual } from 'lodash';
 
 type CoffeeBrewingCardEditProps = {
     brewing: BrewingEntry;
-    deleteBrewing(brewing: BrewingEntry): void;
-    saveBrewing(brewing: BrewingEntry): void;
+    deleteBrewing(brewing: BrewingEntry): Promise<void>;
+    saveBrewing(brewing: BrewingEntry): Promise<void>;
     setEditMode: Dispatch<SetStateAction<boolean>>;
 };
 
-export const CoffeeBrewingCardEdit = ({ brewing, deleteBrewing, saveBrewing, setEditMode }: CoffeeBrewingCardEditProps) => {
+export const CoffeeBrewingCardEdit = ({
+    brewing,
+    deleteBrewing,
+    saveBrewing,
+    setEditMode,
+}: CoffeeBrewingCardEditProps) => {
     const [formBrewing, setFormBrewing] = useState<BrewingEntry>(brewing);
     const { coffeeAttrData } = useContext(CoffeeContext);
 
@@ -158,12 +167,18 @@ export const CoffeeBrewingCardEdit = ({ brewing, deleteBrewing, saveBrewing, set
             </div>
             <div className="row">
                 <div className={classNames('ButtonSection col-12')}>
-                    <DeleteButton onClick={() => deleteBrewing(formBrewing)} withText />
+                    <SaveSection
+                        changes={isEqual(formBrewing, brewing)}
+                        closeFunction={() => setEditMode(false)}
+                        saveFunction={() => saveBrewing(formBrewing)}
+                        deleteFunction={() => deleteBrewing(formBrewing)}
+                    />
+                    {/* <DeleteButton onClick={() => deleteBrewing(formBrewing)} withText />
                     <AdvancedSaveButton
                         save={() => saveBrewing(formBrewing)}
                         changes={true}
                         close={() => setEditMode(false)}
-                    />
+                    /> */}
                 </div>
             </div>
         </>

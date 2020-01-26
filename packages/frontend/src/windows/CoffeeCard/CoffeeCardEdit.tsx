@@ -7,12 +7,13 @@ import {
     ObjSingleSliderAttrField,
     ObjSliderAttrField,
 } from '../../components/FormElements/AttrFields';
-import { AdvancedDeleteButton, AdvancedCancelButton, AdvancedSaveButton } from '../../components/Buttons/AdvancedButtons';
+import { AdvancedDeleteButton, AdvancedCancelButton, AdvancedSaveButton, SaveSection } from '../../components/Buttons/AdvancedButtons';
 import { CoffeeContext } from '../../Contexts/CoffeeContext';
 import { baseURL } from '../../data';
 import { CoffeeEntry } from '../../helpers/types';
 import { blue, brown, cyan, grayDarker, green, yellow } from '../../styles/colors';
 import { deleteImageByURL, handleFileUpload } from './CoffeeCardHelperFuctions';
+import { isEqual } from 'lodash';
 
 type CoffeeCardEditProps = {
     entry: CoffeeEntry;
@@ -262,13 +263,18 @@ export const CoffeeCardEdit = ({ entry }: CoffeeCardEditProps) => {
             {tab === 3 && <></>}
 
             <div className={'ButtonSection'}>
-                <AdvancedDeleteButton changes={true} onClick={() => contextDeleteCoffee(formCoffee.id)} />
+                <SaveSection changes={isEqual(formCoffee, entry)}
+                    deleteFunction={() => contextDeleteCoffee(formCoffee.id)}
+                    closeFunction={() => viewCoffeeCard(formCoffee.id)}
+                    saveFunction={() => contextSaveCoffee(formCoffee)}
+                />
+                {/* <AdvancedDeleteButton changes={true} onClick={() => contextDeleteCoffee(formCoffee.id)} />
                 <AdvancedCancelButton changes={true} onClick={() => viewCoffeeCard(formCoffee.id)} />
                 <AdvancedSaveButton
                     save={() => contextSaveCoffee(formCoffee)}
                     close={() => viewCoffeeCard(formCoffee.id)}
                     changes={true}
-                />
+                /> */}
             </div>
         </>
     );

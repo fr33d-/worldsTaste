@@ -44,20 +44,20 @@ export const CoffeeCardDetail = ({ coffee }: CoffeeCardDetailProps) => {
     };
 
     // i hope this works
-    const innerDeleteBrewing = (brewing: BrewingEntry) => {
-        deleteCoffeeBrewing(coffee.id, brewing).then((deletedID) => {
+    const innerDeleteBrewing = async (brewing: BrewingEntry) => {
+        return await deleteCoffeeBrewing(coffee.id, brewing).then((deletedID) => {
             setSelectedBrewing(undefined);
             setBrewings((brewings) => brewings.filter((brewing) => brewing.id !== deletedID));
         });
     };
 
-    const innerSaveBrewing = (brewing: BrewingEntry) => {
-        saveCoffeeBrewing(coffee.id, brewing).then((newId) => {
+    const innerSaveBrewing = async (brewing: BrewingEntry) => {
+        return await saveCoffeeBrewing(coffee.id, brewing).then((newId) => {
             setSelectedBrewing({ ...brewing, id: newId });
         });
     };
 
-    const { goToCoffees, openBrewingWindow, editCoffeeCard, contextDeleteCoffee } = useContext(CoffeeContext);
+    const { goToCoffees, editCoffeeCard, contextDeleteCoffee } = useContext(CoffeeContext);
 
     return (
         <>

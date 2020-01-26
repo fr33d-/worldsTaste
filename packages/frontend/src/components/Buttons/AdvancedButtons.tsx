@@ -1,188 +1,236 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
-import React, { Component } from 'react';
+import React, { Component, useState, Dispatch, SetStateAction } from 'react';
 import { grayDarker, red, white, green } from '../../styles/colors';
+import { Button } from 'react-bootstrap';
 
 type FrameButtonProps = {
     name: string;
     icon: IconProp;
     color?: string;
-    onClick(): void;
+    onClick?(): void;
+    small?: boolean;
+    className?: string;
 };
 
-export const FrameButton = ({ icon, name, onClick, color }: FrameButtonProps) => {
+export const FrameButton = ({ icon, name, onClick, color, small, className }: FrameButtonProps) => {
     return (
-        <button className={'FrameButton'} onClick={onClick}>
+        <button className={classNames('FrameButton', className)} onClick={onClick} disabled={small}>
             <FontAwesomeIcon icon={icon} color={color} />
-            {name}
+            {!small && name}
         </button>
     );
 };
 
 type SaveSectionProps = {
-    saveFunction(): void;
+    // todo: all functions optional and async
+    saveFunction(): Promise<void>;
     closeFunction(): void;
-    deleteFunction(): void;
-    elementName: string;
+    deleteFunction(): Promise<void>;
+    changes: boolean;
 };
 
+export enum ButtonState {
+    min,
+    norm,
+    max,
+    error,
+    success,
+}
+
 //Todo: Error aus den funktionen und changes variable ...
-export const SaveSection = ({ elementName, closeFunction, deleteFunction, saveFunction }: SaveSectionProps) => {
+export const SaveSection = ({
+    closeFunction,
+    deleteFunction,
+    saveFunction,
+    changes,
+}: SaveSectionProps) => {
+    const [saveState, setSaveState] = useState(ButtonState.norm);
+    const [deleteState, setDeleteState] = useState(ButtonState.norm);
+    const [cancleState, setCancleState] = useState(ButtonState.norm);
+
+    const innerSaveFunction = async () => {
+        if (saveState === ButtonState.success) {
+            closeFunction();
+        } else {
+            try {
+                await saveFunction();
+                setSaveState(ButtonState.success);
+            } catch (e) {
+                setSaveState(ButtonState.error);
+            }
+        }
+    };
+
+    const innerCancleFunction = () => {
+        if (changes) setCancleState(ButtonState.max);
+        else closeFunction();
+    };
+
+    const innerDeleteFunction = async () => {
+        if (changes) setDeleteState(ButtonState.max);
+        else
+            try {
+                await deleteFunction();
+                closeFunction();
+            } catch (e) {
+                setDeleteState(ButtonState.error);
+            }
+    };
+
     return (
         <>
-            <FrameButton name="cancle" icon="times-circle" color={grayDarker} onClick={closeFunction} />
-            <FrameButton name="delete" icon="trash-alt" color={red} onClick={deleteFunction} />
-            <FrameButton name="save" icon="save" color={green} onClick={saveFunction} />
+            <AdvancedCancelButton setState={setCancleState} onClick={innerCancleFunction} state={cancleState} />
+            <AdvancedDeleteButton onClick={innerDeleteFunction} setState={setDeleteState} state={deleteState} />
+            <AdvancedSaveButton onClick={innerSaveFunction} setState={setSaveState} state={saveState} />
         </>
     );
 };
 
-type AdvancedButtonState = {
-    extended: boolean;
-};
-
 type AdvancedButtonProps = {
-    onClick(): void;
-    changes?: boolean;
+    onClick?: () => void;
+    state: ButtonState;
+    setState: Dispatch<SetStateAction<ButtonState>>;
 };
 
-export class AdvancedCancelButton extends Component<AdvancedButtonProps, AdvancedButtonState> {
-    public readonly state: AdvancedButtonState = {
-        extended: false,
-    };
-
-    public toggleExtendButton = () => {
-        this.setState((oldstate) => ({ extended: !oldstate.extended }));
-    };
-
-    render() {
-        const { extended } = this.state;
-        const { onClick, changes } = this.props;
-        return (
-            <>
-                <div className={classNames('BtnFrame', 'Gray', extended && 'Extended')}>
-                    {!extended ? (
-                        changes ? (
-                            <button className={'FrameButton'} onClick={this.toggleExtendButton}>
-                                <FontAwesomeIcon icon="times-circle" color={grayDarker} />
-                                Cancel
-                            </button>
-                        ) : (
-                            <button className={'FrameButton'} onClick={onClick}>
-                                <FontAwesomeIcon icon="times-circle" color={grayDarker} />
-                                Cancel
-                            </button>
-                        )
-                    ) : (
-                        <>
-                            <button className={'FrameButton'} onClick={this.toggleExtendButton}>
-                                <FontAwesomeIcon icon="times-circle" color={grayDarker} />
-                                <span>continue editing</span>
-                            </button>
-                            <button className={'FrameButton'} onClick={onClick}>
-                                <FontAwesomeIcon icon="trash-alt" color={grayDarker} />
-                                <span>Cancel edit and delete changes</span>
-                            </button>
-                        </>
-                    )}
-                </div>
-            </>
-        );
-    }
-}
-
-export class AdvancedDeleteButton extends Component<AdvancedButtonProps, AdvancedButtonState> {
-    public readonly state: AdvancedButtonState = {
-        extended: false,
-    };
-
-    public toggleExtendButton = () => {
-        this.setState((oldstate) => ({ extended: !oldstate.extended }));
-    };
-
-    render() {
-        const { extended } = this.state;
-        const { onClick, changes } = this.props;
-        return (
-            <>
-                <div className={classNames('BtnFrame', 'Red', extended && 'Extended')}>
-                    {!extended ? (
-                        <button className={classNames('FrameButton', 'Red')} onClick={this.toggleExtendButton}>
-                            <FontAwesomeIcon icon="trash-alt" color={red} />
-                            Delete
-                        </button>
-                    ) : (
-                        <>
-                            <button className={classNames('FrameButton', 'Gray')} onClick={this.toggleExtendButton}>
-                                <FontAwesomeIcon icon="times-circle" color={grayDarker} />
-                                <span>continue editing</span>
-                            </button>
-                            <button className={classNames('FrameButton', 'Red')} onClick={onClick}>
-                                <FontAwesomeIcon icon="trash-alt" color={red} />
-                                <span>delete Coffee Card</span>
-                            </button>
-                        </>
-                    )}
-                </div>
-            </>
-        );
-    }
-}
-
-type AdvancedSaveButtonState = {
-    extended: boolean;
+export const AdvancedCancelButton = ({ onClick, state, setState }: AdvancedButtonProps) => {
+    return (
+        <>
+            <div
+                className={classNames(
+                    'BtnFrame',
+                    'Gray',
+                    state === ButtonState.max && 'Extended',
+                    state === ButtonState.min && 'Minimized'
+                )}
+            >
+                {state === ButtonState.min && (
+                    <FrameButton name="Cancle" icon="times-circle" color={grayDarker} small={true} />
+                )}
+                {state === ButtonState.norm && (
+                    <FrameButton name="Cancle" icon="times-circle" color={grayDarker} onClick={onClick} />
+                )}
+                {state === ButtonState.max && (
+                    <>
+                        <FrameButton
+                            name="Continue editing"
+                            icon="times-circle"
+                            color={grayDarker}
+                            onClick={() => setState(ButtonState.norm)}
+                        />
+                        <FrameButton
+                            name="Cancel edit and delete changes"
+                            icon="trash-alt"
+                            color={red}
+                            className="Red"
+                            onClick={onClick}
+                        />
+                    </>
+                )}
+            </div>
+        </>
+    );
 };
 
-type AdvancedSaveButtonProps = {
-    error?: boolean;
-    changes?: boolean;
-    save(): void;
-    close?(): void;
+export const AdvancedDeleteButton = ({ onClick, state, setState }: AdvancedButtonProps) => {
+    return (
+        <>
+            <div
+                className={classNames(
+                    'BtnFrame',
+                    'Red',
+                    state === ButtonState.max && 'Extended',
+                    state === ButtonState.min && 'Minimized'
+                )}
+            >
+                {state === ButtonState.min && (
+                    <FrameButton
+                        name="Delete"
+                        icon="trash-alt"
+                        className="Red"
+                        color={red}
+                        onClick={onClick}
+                        small={true}
+                    />
+                )}
+                {state === ButtonState.norm && (
+                    <FrameButton name="Delete" icon="trash-alt" className="Red" color={red} onClick={onClick} />
+                )}
+                {state === ButtonState.error && (
+                    <>
+                        <span>Error!</span>
+                        <FrameButton name="Try again" icon="trash-alt" className="Red" color={red} onClick={onClick} />
+                    </>
+                )}
+                {state === ButtonState.max && (
+                    <>
+                        <FrameButton
+                            name="Continue editing"
+                            icon="times-circle"
+                            className="Gray"
+                            color={grayDarker}
+                            onClick={() => setState(ButtonState.norm)}
+                        />
+                        <FrameButton
+                            name="Finaly delete entry"
+                            icon="trash-alt"
+                            className="Red"
+                            color={red}
+                            onClick={onClick}
+                        />
+                    </>
+                )}
+            </div>
+        </>
+    );
 };
 
-export class AdvancedSaveButton extends Component<AdvancedSaveButtonProps, AdvancedSaveButtonState> {
-    public readonly state: AdvancedSaveButtonState = {
-        extended: false,
-    };
-
-    public saveCardButton = () => {
-        this.props.save();
-        this.setState((oldstate) => ({ extended: !oldstate.extended }));
-    };
-
-    public render() {
-        const { extended } = this.state;
-        const { close, save, error, changes } = this.props;
-        return (
-            <>
-                <div className={classNames('BtnFrame', 'GreenFull', extended && 'Extended')}>
-                    {!extended || (changes && !error) ? (
-                        <button className={classNames('FrameButton', 'White')} onClick={this.saveCardButton}>
-                            <FontAwesomeIcon icon="save" color={white} />
-                            Save
-                        </button>
-                    ) : error ? (
-                        <>
-                            <span>Error!</span>
-                            <button className={classNames('FrameButton', 'White')} onClick={save}>
-                                <FontAwesomeIcon icon="save" color={white} />
-                                <span>try again</span>
-                            </button>
-                        </>
-                    ) : (
-                        <>
-                            <span>card saved!</span>
-                            {close && (
-                                <button className={classNames('FrameButton', 'White')} onClick={close}>
-                                    <FontAwesomeIcon icon="times-circle" color={white} />
-                                    <span>close</span>
-                                </button>
-                            )}
-                        </>
-                    )}
-                </div>
-            </>
-        );
-    }
-}
+export const AdvancedSaveButton = ({ onClick, state }: AdvancedButtonProps) => {
+    return (
+        <>
+            <div
+                className={classNames(
+                    'BtnFrame',
+                    'GreenFull',
+                    state === ButtonState.max && 'Extended',
+                    state === ButtonState.success && 'Extended',
+                    state === ButtonState.error && 'Extended',
+                    state === ButtonState.min && 'Minimized'
+                )}
+            >
+                {state === ButtonState.min && (
+                    <FrameButton
+                        name="Save"
+                        icon="save"
+                        className="White"
+                        color={white}
+                        onClick={onClick}
+                        small={true}
+                    />
+                )}
+                {state === ButtonState.norm && (
+                    <FrameButton name="Save" icon="save" className="White" color={white} onClick={onClick} />
+                )}
+                {state === ButtonState.error && (
+                    <>
+                        <span>Error!</span>
+                        <FrameButton name="Try again" icon="save" className="White" color={white} onClick={onClick} />
+                    </>
+                )}
+                {state === ButtonState.success && (
+                    <>
+                        <span>Entry saved!</span>
+                        <FrameButton
+                            name="Close"
+                            icon="times-circle"
+                            className="White"
+                            color={white}
+                            onClick={onClick}
+                        />
+                    </>
+                )}
+            </div>
+        </>
+    );
+};

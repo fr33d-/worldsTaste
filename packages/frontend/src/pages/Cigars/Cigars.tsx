@@ -85,8 +85,8 @@ export const Cigars = () => {
         history.push(pathname.replace('attrDataWindow/', ''));
     };
 
-    const deletePost = (id: number) => {
-        axios
+    const deletePost = async (id: number) => {
+        return await axios
             .delete(`http://localhost:4000/cigars/${id}`)
             .then((response) => {
                 console.log(response);

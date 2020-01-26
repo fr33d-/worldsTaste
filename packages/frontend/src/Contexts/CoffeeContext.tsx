@@ -22,10 +22,10 @@ type CoffeeContextType = {
     user: FullUser | undefined;
     basePath: string;
     logout(): void;
-    contextSaveCoffee(coffee: CoffeeEntry): void;
-    contextDeleteCoffee(id: number): void;
+    contextSaveCoffee(coffee: CoffeeEntry): Promise<void>;
+    contextDeleteCoffee(id: number): Promise<void>;
     openAttrWindow(): void;
-    openBrewingWindow(id: number): void;
+    // openBrewingWindow(id: number): void;
     closeAttrWindow(): void;
     goToCreateCoffee(): void;
     goToCoffees(): void;
@@ -52,22 +52,22 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
 
     const history = useHistory();
 
-    const contextSaveCoffee = (coffee: CoffeeEntry) => {
+    const contextSaveCoffee = async (coffee: CoffeeEntry) => {
         if (coffee.id === 0) {
             //Create new coffee
-            saveNewCoffee(coffee).then((id) => {
+            return await saveNewCoffee(coffee).then((id) => {
                 setCoffees((posts) => (!posts ? posts : [{ ...coffee, id: Number(id) }, ...posts]));
             });
         } else {
             // Save existing coffee
-            updateCoffee(coffee).then((res) => {
+            return await updateCoffee(coffee).then((res) => {
                 setCoffees((posts) => (!posts ? posts : posts.map((elm) => (elm.id === coffee.id ? coffee : elm))));
             });
         }
     };
 
-    const contextDeleteCoffee = (id: number) => {
-        deleteCoffee(id).then((res) => {
+    const contextDeleteCoffee = async (id: number) => {
+        return await deleteCoffee(id).then((res) => {
             setCoffees((posts) => (!posts ? posts : posts.filter((elm) => elm.id !== id)));
         });
     };
@@ -82,9 +82,9 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
         history.push('/coffee/attrDataWindow/');
     };
 
-    const openBrewingWindow = (id: number) => {
-        history.push(`/coffee/card/${id}?view=brewings`);
-    };
+    // const openBrewingWindow = (id: number) => {
+    //     history.push(`/coffee/card/${id}?view=brewings`);
+    // };
 
     const closeAttrWindow = () => {
         history.push('/coffee/');
@@ -186,7 +186,7 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
                 contextSaveCoffee,
                 goToCreateCoffee,
                 openAttrWindow,
-                openBrewingWindow,
+                // openBrewingWindow,
                 editCoffeeCard,
                 goToCoffees,
                 viewCoffeeCard,
