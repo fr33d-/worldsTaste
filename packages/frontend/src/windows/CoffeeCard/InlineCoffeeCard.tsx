@@ -14,19 +14,19 @@ type InlineCoffeeCardDisplayProps = {
 };
 
 export const InlineCoffeeCardDisplay = ({ entry }: InlineCoffeeCardDisplayProps) => {
-    const { user, openBrewingWindow, editCoffeeCard, contextDeleteCoffee } = useContext(CoffeeContext);
+    const { user, editCoffeeCard, contextDeleteCoffee } = useContext(CoffeeContext);
 
     return (
         <>
             <div className={'InlineLayoutCard'}>
                 <div className={'ActionSection'}>
-                    <button
+                    {/* <button
                         onClick={() => openBrewingWindow(entry.id)}
                         className={classNames('IconButton', 'HoverGreen')}
                     >
                         <FontAwesomeIcon icon="flask" />
                         Brewings
-                    </button>
+                    </button> */}
                     {user && (
                         <button
                             onClick={() => editCoffeeCard(entry.id)}
