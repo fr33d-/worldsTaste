@@ -34,7 +34,7 @@ export const Coffee = () => {
         coffeeAttrData,
         getFilterCoffeeList,
     } = useContext(CoffeeContext);
-    const { URPExtention } = useParams();
+    const { extention } = useParams();
 
     const filterMenu: FilterMenuType[] = getFilterMenu(coffeeAttrData);
 
@@ -77,7 +77,7 @@ export const Coffee = () => {
     return (
         <>
             <AppWindow
-                editState={URPExtention ? true : false}
+                editState={extention ? true : false}
                 sidebar={
                     <Sidemenu
                         filter={filterMenu}
