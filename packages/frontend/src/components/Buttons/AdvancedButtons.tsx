@@ -51,7 +51,7 @@ export const SaveSection = ({
     const [cancleState, setCancleState] = useState(ButtonState.norm);
 
     const innerSaveFunction = async () => {
-        if (saveState === ButtonState.success) {
+        if (saveState === ButtonState.success || !changes) {
             closeFunction();
         } else {
             try {
