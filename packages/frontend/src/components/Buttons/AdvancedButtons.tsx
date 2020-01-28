@@ -64,7 +64,7 @@ export const SaveSection = ({
     };
 
     const innerCancleFunction = () => {
-        if (changes) setCancleState(ButtonState.max);
+        if (changes && cancleState === ButtonState.norm) setCancleState(ButtonState.max);
         else closeFunction();
     };
 
