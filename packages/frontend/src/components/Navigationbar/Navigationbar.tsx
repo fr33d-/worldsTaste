@@ -6,23 +6,32 @@ import { Link } from 'react-router-dom';
 import { black, grayDark } from '../../styles/colors';
 import { setUserFromSessionStorage } from '../../pages/User/userHelperFunctions';
 // import { useJwt } from '../../windows/UserWindows/UserHelperFunctions';
+import logoSmall from './../../images/wt-logo-small.svg';
+import logoBig from './../../images/wt-logo-big.svg';
 
 type NavbarProps = {
     light?: boolean;
+    big?: boolean;
 };
 
-export const Navigationbar = ({ light }: NavbarProps) => {
+export const Navigationbar = ({ light, big }: NavbarProps) => {
     const { pathname } = useLocation();
     const path = pathname.split('/').filter(Boolean);
 
     const user = setUserFromSessionStorage();
 
     return (
-        <div className={'NavigationContainer'}>
+        <div className={classNames('NavigationContainer', light && 'light')}>
             <div className={classNames('container', light && 'NavigationContainerLight')}>
                 <div className="row">
-                    <div className={classNames('col-12', 'Navbar')}>
-                        <div className={classnames('Navbar', 'Breadcrupm')}>
+                    <div className={classNames('col-12', 'Navbar', big && 'big')}>
+                        <div className={'Logo'}>
+                            <Link to="/">
+                                <img src={big ? logoBig : logoSmall} alt="Worls taste" />
+                            </Link>
+                        </div>
+
+                        <div className={'Breadcrupm'}>
                             <ul>
                                 <li key={'chevron-right'}>
                                     Home
@@ -42,7 +51,8 @@ export const Navigationbar = ({ light }: NavbarProps) => {
                                 })}
                             </ul>
                         </div>
-                        <div className={classnames('Navbar', 'Burger')}>
+
+                        <div className={'Burger'}>
                             <Link to="/user">
                                 <button className={'UserIcon'}>
                                     <FontAwesomeIcon icon="user" color={user ? black : grayDark} />
@@ -50,9 +60,6 @@ export const Navigationbar = ({ light }: NavbarProps) => {
                             </Link>
                             <FontAwesomeIcon icon="bars" size="lg" />
                         </div>
-                        <Link to="/">
-                            <div className={classnames('Navbar', 'Logo')}>Logo</div>
-                        </Link>
                     </div>
                 </div>
             </div>

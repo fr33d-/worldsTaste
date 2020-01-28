@@ -3,7 +3,7 @@
 
 $font-family-sans-serif: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
-//Colors: 
+//Colors:
 $brand-white: #fff;
 $brand-black: #000;
 $brand-white-blue: #F4F4F6;
@@ -14,15 +14,15 @@ $brand-dark-gray: #4A4A4A;
 
 $brand-text-dark-gray: #2c3340;
 
-$gray-darkest: rgba(48, 48, 48, 0.9);
+$gray-darkest: rgba(48, 48, 48, 1);
+$gray-dark-transparend: rgba(48, 48, 48, 0.3);
 $new-light-gray: #F9F9FF;
 $new-light-gray2: #F2F2F2;
 $new-gray: #ECEDF6;
 $new-dark-gray: #C6C7D1;
 $new-darker-gray: #929292;
-$gray-darkest: rgba(48, 48, 48, 0.9); 
 
-$blue-gray: #F5F7FD; 
+$blue-gray: #F5F7FD;
 
 $white: #fff;
 $black: #000;
@@ -69,6 +69,9 @@ $default-space-l: calc(#{$default-space*4}); //32
 $default-space-xl: calc(#{$default-space*5}); //40
 $default-space-xxl: calc(#{$default-space*7}); //56
 $default-space-3xl: calc(#{$default-space*8}); //64
+$default-space-4xl: calc(#{$default-space*9}); //72
+$default-space-5xl: calc(#{$default-space*10}); //80
+$default-space-6xl: calc(#{$default-space*11}); //96
 
 // $container-margin-big: $default-space-xxl;
 // $default-space-small: 15px;

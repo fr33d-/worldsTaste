@@ -4,9 +4,16 @@
     left: 0;
     width: 100vw;
     z-index: 10;
-    background: $gray-darkest;
-    padding-top: 10px;
     margin-top: 0;
+
+    // background: $gray-dark-transparend;
+    box-shadow: inset 0px 50px 60px -40px rgba(0,0,0,0.75);
+    backdrop-filter: blur(4px);
+
+    &.light {
+        background: none;
+        backdrop-filter: blur(0);
+    }
 }
 
 .NavigationContainerLight {
@@ -16,29 +23,39 @@
 .Navbar {
     background: none;
     box-shadow: none;
-    height: 50px;
+    height: $default-space-6xl;
     width: 100%;
-    color: $white;
+    color: $gray-darkest;
+
+    display: flex;
+    align-items: center;
+    padding-top: 0;
+
+    &.big {
+        align-items: flex-start;
+        padding-top: $default-space-m;
+        height: 260px;
+    }
 
     .UserIcon {
         border: none;
         background: none;
-        margin-right: 10px;
+        margin-right: $default-space;
         color: $white;
 
-        width: 30px;
-        height: 30px;
-        border-radius: 15px;
+        width: $default-space-l;
+        height: $default-space-l;
+        border-radius: $default-space-s;
         background: $new-gray;
     }
 
     .Burger {
-        width: 140px;
-        position: absolute;
-        right: 0;
-        top: 3px;
+        // width: 140px;
+        // position: absolute;
+        // right: 0;
+        // top: 3px;
         z-index: 2;
-        height: fit-content;
+        // height: fit-content;
 
         transition: top 300ms ease-in-out;
 
@@ -49,11 +66,12 @@
 
     .Logo {
         font-size: 24px;
-        text-align: center;
+        text-align: left;
         z-index: 10;
         width: fit-content;
-        margin: 0 auto;
+        margin: 0 $default-space-s;
         transition: margin 300ms ease-in-out;
+        flex-grow: 20;
 
         &:hover {
             margin-top: -3px;
@@ -61,13 +79,13 @@
     }
 
     .Breadcrupm {
-        position: absolute;
-        right: 140px;
-        top: 0;
+        // position: absolute;
+        // right: 140px;
+        // top: 0;
         text-align: right;
         background: none;
         z-index: 5;
-        width: 30%;
+        // width: 30%;
 
         @include media-breakpoint-down(sm) {
             display: none;
@@ -75,13 +93,16 @@
 
         ul {
             list-style: none;
+            margin: 0;
+            margin-right: $default-space-m;
 
             li {
                 display: inline-block;
                 margin-right: 15px;
                 transition: margin 300ms ease-in-out;
                 text-transform: capitalize;
-                margin-top: 3px;
+                line-height: 0;
+                // margin-top: 3px;
 
                 &:hover {
                     margin-top: 0;
