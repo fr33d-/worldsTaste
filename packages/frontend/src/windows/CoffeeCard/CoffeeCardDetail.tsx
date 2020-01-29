@@ -12,7 +12,7 @@ import { baseURL } from '../../data';
 import { BrewingEntry, CoffeeEntry } from '../../helpers/types';
 import Beans from '../../images/beans.svg';
 import Cup from '../../images/cup-bw.svg';
-import { throwDataError } from '../../pages/User/userHelperFunctions';
+import { throwDataError, throwDataSucess } from '../../pages/User/userHelperFunctions';
 import { blue, cyan, green, yellow } from '../../styles/colors';
 import { CoffeeBrewingCard } from '../BrewingCards/CoffeeBrewingCard';
 import { deleteCoffeeBrewing, getCoffeeBrewings, newBrewing, saveCoffeeBrewing } from './CoffeeCardHelperFuctions';
@@ -37,7 +37,10 @@ export const CoffeeCardDetail = ({ coffee }: CoffeeCardDetailProps) => {
 
     const createBrewing = () => {
         if (coffeeAttrData) {
-            setSelectedBrewing(newBrewing(coffeeAttrData.brewMethods[0]));
+            const newBrewingEntry = newBrewing(coffeeAttrData.brewMethods[0])
+            setSelectedBrewing(newBrewingEntry);
+            setBrewings((brewings) => [...brewings, newBrewingEntry]);
+            //Todo: opem in edit state
         } else {
             throwDataError('no attr data to create brewing');
         }
@@ -48,12 +51,18 @@ export const CoffeeCardDetail = ({ coffee }: CoffeeCardDetailProps) => {
         return await deleteCoffeeBrewing(coffee.id, brewing).then((deletedID) => {
             setSelectedBrewing(undefined);
             setBrewings((brewings) => brewings.filter((brewing) => brewing.id !== deletedID));
+            throwDataSucess('Brewing deleted')
+        }).catch((e) => {
+            throwDataError('Cant delete brewing', e)
         });
     };
 
     const innerSaveBrewing = async (brewing: BrewingEntry) => {
         return await saveCoffeeBrewing(coffee.id, brewing).then((newId) => {
             setSelectedBrewing({ ...brewing, id: newId });
+            throwDataSucess('Brewing saved')
+        }).catch((e) => {
+            throwDataError('Cant save brewing', e)
         });
     };
 
