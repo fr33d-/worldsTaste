@@ -8,7 +8,7 @@ import {
 import { IconButton } from '../../components/Buttons';
 import { displayDate } from '../../helpers/helperFunctions';
 import { BrewingEntry } from '../../helpers/types';
-import { black, blue } from '../../styles/colors';
+import { black, blue, yellow, cyan, green, red } from '../../styles/colors';
 
 type CoffeeBrewingCardDisplayProps = {
     brewing: BrewingEntry;
@@ -16,6 +16,7 @@ type CoffeeBrewingCardDisplayProps = {
 };
 
 export const CoffeeBrewingCardDisplay = ({ brewing, setEditMode }: CoffeeBrewingCardDisplayProps) => {
+    console.log('displayed brewing', brewing);
     return (
         <>
             <div className="row">
@@ -84,16 +85,16 @@ export const CoffeeBrewingCardDisplay = ({ brewing, setEditMode }: CoffeeBrewing
                     <NewAttrFieldSlider color={blue} name="Geschmack" propPath={['taste']} obj={brewing} />
                 </div>
                 <div className="col-12 col-md-6">
-                    <NewAttrFieldSlider color={blue} name="Frucht/Schokolade" propPath={['tasteKind']} obj={brewing} />
+                    <NewAttrFieldSlider color={red} name="Frucht/Schokolade" propPath={['tasteKind']} obj={brewing} />
                 </div>
                 <div className="col-12 col-md-6">
-                    <NewAttrFieldSlider color={blue} name="Säure" propPath={['sour']} obj={brewing} />
+                    <NewAttrFieldSlider color={yellow} name="Säure" propPath={['sour']} obj={brewing} />
                 </div>
                 <div className="col-12 col-md-6">
-                    <NewAttrFieldSlider color={blue} name="Bitter" propPath={['bitter']} obj={brewing} />
+                    <NewAttrFieldSlider color={cyan} name="Bitter" propPath={['bitter']} obj={brewing} />
                 </div>
                 <div className="col-12 col-md-6">
-                    <NewAttrFieldSlider color={blue} name="Erbsig" propPath={['woody']} obj={brewing} />
+                    <NewAttrFieldSlider color={green} name="Erbsig" propPath={['woody']} obj={brewing} />
                 </div>
                 <div className="col-12">
                     <NewAttrFieldDescription name="Beschreibung" propPath={['ownDescription']} obj={brewing} />

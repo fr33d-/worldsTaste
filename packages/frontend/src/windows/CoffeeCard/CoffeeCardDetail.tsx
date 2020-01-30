@@ -171,14 +171,16 @@ export const CoffeeCardDetail = ({ coffee }: CoffeeCardDetailProps) => {
             {tab === 2 && (
                 <>
                     <div className={'ImageSection'}>
-                        {coffee.imageStrings &&
+                        {coffee.imageStrings && coffee.imageStrings.length > 0 ?
                             coffee.imageStrings.map((url, i) => (
                                 <>
                                     <div className={'Image'}>
                                         <img src={`${baseURL}${url}`} key={i} alt="coffee" />
                                     </div>
                                 </>
-                            ))}
+                            )) :
+                            <div className="images-replacement">No images defined</div>
+                        }
                     </div>
                 </>
             )}
@@ -224,7 +226,6 @@ export const CoffeeCardDetail = ({ coffee }: CoffeeCardDetailProps) => {
                                 ) : (
                                     <div className={'NoContent'}>
                                         <img src={Beans} alt="beans" />
-                                        nothing selected
                                     </div>
                                 )}
                             </div>

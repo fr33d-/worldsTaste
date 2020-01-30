@@ -19,11 +19,11 @@ export const CoffeeDetailWindow = () => {
     if (view === 'new') {
         if (!user) return <p>Error, you are not logged in </p>;
 
-        return <CoffeeCardEdit entry={emptyCoffee(coffeeAttrData, user)} />;
+        return <CoffeeCardEdit coffee={emptyCoffee(coffeeAttrData, user)} />;
     } else {
         if (!coffee) return <p>Error, coffee not found</p>;
         if (view === 'edit') {
-            return <CoffeeCardEdit entry={coffee} />;
+            return <CoffeeCardEdit coffee={coffee} />;
         // } else if (view === 'brewings') {
         //     return <CoffeeBrewingWindow coffee={coffee} />;
         } else {

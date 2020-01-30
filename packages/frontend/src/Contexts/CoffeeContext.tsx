@@ -22,7 +22,7 @@ type CoffeeContextType = {
     user: FullUser | undefined;
     basePath: string;
     logout(): void;
-    contextSaveCoffee(coffee: CoffeeEntry): Promise<void>;
+    contextSaveCoffee(coffee: CoffeeEntry): Promise<number>;
     contextDeleteCoffee(id: number): Promise<void>;
     openAttrWindow(): void;
     // openBrewingWindow(id: number): void;
@@ -52,16 +52,18 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
 
     const history = useHistory();
 
-    const contextSaveCoffee = async (coffee: CoffeeEntry) => {
+    const contextSaveCoffee = async (coffee: CoffeeEntry): Promise<number> => {
         if (coffee.id === 0) {
             //Create new coffee
             return await saveNewCoffee(coffee).then((id) => {
                 setCoffees((posts) => (!posts ? posts : [{ ...coffee, id: Number(id) }, ...posts]));
+                return Number(id);
             });
         } else {
             // Save existing coffee
             return await updateCoffee(coffee).then((res) => {
                 setCoffees((posts) => (!posts ? posts : posts.map((elm) => (elm.id === coffee.id ? coffee : elm))));
+                return coffee.id;
             });
         }
     };

@@ -16,13 +16,13 @@ import { blue, brown, cyan, grayDarker, green, yellow } from '../../styles/color
 import { deleteImageByURL, handleFileUpload } from './CoffeeCardHelperFuctions';
 
 type CoffeeCardEditProps = {
-    entry: CoffeeEntry;
+    coffee: CoffeeEntry;
 };
 
-export const CoffeeCardEdit = ({ entry }: CoffeeCardEditProps) => {
+export const CoffeeCardEdit = ({ coffee }: CoffeeCardEditProps) => {
     const [tab, setTab] = useState(0);
-    const [formCoffee, setFormCoffee] = useState<CoffeeEntry>(entry);
-    const [imageStrings, setImageStrings] = useState(entry.imageStrings);
+    const [formCoffee, setFormCoffee] = useState<CoffeeEntry>(coffee);
+    const [imageStrings, setImageStrings] = useState(coffee.imageStrings);
 
     const { coffeeAttrData, contextDeleteCoffee, contextSaveCoffee, viewCoffeeCard } = useContext(CoffeeContext);
 
@@ -34,12 +34,18 @@ export const CoffeeCardEdit = ({ entry }: CoffeeCardEditProps) => {
         });
     };
 
+    const innerSaveCoffee = async () => {
+        return await contextSaveCoffee(formCoffee).then((newId) => {
+            setFormCoffee({ ...formCoffee, id: newId });
+        });
+    };
+
     const uploadSelectedFile = (event: ChangeEvent<HTMLInputElement>) => {
         const eventFiles = event.target.files;
         if (eventFiles === null) {
             return;
         }
-        handleFileUpload(eventFiles, entry.id).then((newImageString) => {
+        handleFileUpload(eventFiles, coffee.id).then((newImageString) => {
             if (imageStrings !== undefined) setImageStrings([newImageString, ...imageStrings]);
         });
     };
@@ -49,7 +55,7 @@ export const CoffeeCardEdit = ({ entry }: CoffeeCardEditProps) => {
         if (eventFiles === null) {
             return;
         }
-        handleFileUpload(eventFiles, entry.id).then((newImageString) => {
+        handleFileUpload(eventFiles, coffee.id).then((newImageString) => {
             if (imageStrings !== undefined) setImageStrings([newImageString, ...imageStrings]);
         });
     };
@@ -71,9 +77,6 @@ export const CoffeeCardEdit = ({ entry }: CoffeeCardEditProps) => {
                     </li>
                     <li className={classNames(tab === 2 && 'Active')} onClick={() => setTab(2)}>
                         Images
-                    </li>
-                    <li className={classNames(tab === 3 && 'Active')} onClick={() => setTab(3)}>
-                        Bewings
                     </li>
                 </ul>
             </div>
@@ -260,14 +263,13 @@ export const CoffeeCardEdit = ({ entry }: CoffeeCardEditProps) => {
                     </div>
                 </>
             )}
-            {tab === 3 && <></>}
 
             <div className={'ButtonSection'}>
                 <SaveSection
-                    changes={isEqual(formCoffee, entry)}
+                    changes={isEqual(formCoffee, coffee)}
                     deleteFunction={() => contextDeleteCoffee(formCoffee.id)}
                     closeFunction={() => viewCoffeeCard(formCoffee.id)}
-                    saveFunction={() => contextSaveCoffee(formCoffee)}
+                    saveFunction={() => innerSaveCoffee()}
                 />
                 {/* <AdvancedDeleteButton changes={true} onClick={() => contextDeleteCoffee(formCoffee.id)} />
                 <AdvancedCancelButton changes={true} onClick={() => viewCoffeeCard(formCoffee.id)} />

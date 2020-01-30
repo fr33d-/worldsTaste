@@ -10,7 +10,7 @@ type CoffeeBrewingCardProps = {
 };
 
 export const CoffeeBrewingCard = ({ brewing, saveBrewing, deleteBrewing }: CoffeeBrewingCardProps) => {
-    const [editModeActive, setEditModeActive] = useState(false);
+    const [editModeActive, setEditModeActive] = useState(brewing.id === 0);
 
     return editModeActive ? (
         <CoffeeBrewingCardEdit

@@ -298,8 +298,7 @@ type NewAttrFieldSliderProps = {
 
 export const NewAttrFieldSlider = ({ name, icon, color, obj, propPath }: NewAttrFieldSliderProps) => {
     const style = { backgroundColor: color };
-    const value = 3;
-    // const value = Number(get(obj, propPath));
+    const value = Number(get(obj, propPath));
     return (
         <>
             <label className={'AttrFieldLabel'}>{name}</label>
@@ -309,7 +308,7 @@ export const NewAttrFieldSlider = ({ name, icon, color, obj, propPath }: NewAttr
                     <div className={'Iconlist'}>
                         <ul>
                             {[...Array(5)].map((_, i) => {
-                                return i <= value ? <li key={i} style={style} /> : <li key={i} />;
+                                return i < value ? <li key={i} style={style} /> : <li key={i} />;
                             })}
                         </ul>
                     </div>

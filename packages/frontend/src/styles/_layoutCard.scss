@@ -59,10 +59,17 @@
             text-align: center;
         }
 
+        .images-replacement {
+            width: 100%;
+            text-align: center;
+            color: $new-dark-gray;
+            @extend h4;
+        }
+
         img,
         .Img {
-            width: 100px;
-            height: 100px;
+            width: 150px;
+            // height: 100px;
             border-radius: $border-radius-min;
             margin: $default-space-s $default-space-s 0 0;
             display: inline-block;
@@ -92,9 +99,9 @@
                 border-radius: 16px;
             }
 
-            img {
-                width: 120px;
-            }
+            // img {
+            //     width: 120px;
+            // }
         }
 
         .UploadArea {

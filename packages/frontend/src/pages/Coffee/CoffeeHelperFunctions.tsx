@@ -79,7 +79,7 @@ export const deleteCoffee = async (id: number): Promise<void> => {
         });
 };
 
-export const saveNewCoffee = async (coffee: CoffeeEntry): Promise<number> => {
+export const saveNewCoffee = async (coffee: CoffeeEntry): Promise<{id: number}> => {
     const jwtObj = sessionStorage.getItem('auth');
     return await axios
         .post(`${baseURL}${coffeeURL}`, { ...coffee }, { headers: { auth: jwtObj } })
