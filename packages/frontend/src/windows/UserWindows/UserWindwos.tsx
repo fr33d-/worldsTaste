@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { DropdownInput, SimplePasswordInput, SimpleTextInput, TextInput } from '../../components/FormElements';
+import { SimplePasswordInput, SimpleTextInput, TextInput, AttrDataDropdownInput } from '../../components/FormElements';
 import { AttrField } from '../../components/FormElements/AttrFields';
 import { IconButton } from '../../components/Buttons';
 import { AttrDataItemType, ExtendedUser, FullUser, User } from '../../helpers/types';
@@ -95,7 +95,7 @@ export const UserAdminWindow: FC<{ user: FullUser }> = ({ user }) => {
     const [listOfAllUsers, setListOfAllUsers] = useState<FullUser[]>([]);
     const [selectedUser, setSelectedUser] = useState<User>();
     // Todo: why we dont use this?
-    const [newUserRole, setNewUserRole] = useState<AttrDataItemType>();
+    // const [newUserRole, setNewUserRole] = useState<AttrDataItemType>();
 
     const innerChangeUser = () => {
         if (selectedUser) {
@@ -155,7 +155,7 @@ export const UserAdminWindow: FC<{ user: FullUser }> = ({ user }) => {
                         setStateHandler={setSelectedUser}
                     />
                     <TextInput name="E-Mail" obj={selectedUser} propPath="email" setStateHandler={setSelectedUser} />
-                    <DropdownInput
+                    <AttrDataDropdownInput
                         items={UserRoles}
                         iconColor={green}
                         label="Rolle"
@@ -205,7 +205,7 @@ export const UserCreateNewWindow: FC<{ user: FullUser }> = () => {
             <TextInput name="User name" obj={newUser} propPath={['username']} setStateHandler={setNewUser} />
             <TextInput name="E-Mail" obj={newUser} propPath={['email']} setStateHandler={setNewUser} />
             <TextInput name="Passwort" obj={newUser} propPath={['password']} setStateHandler={setNewUser} />
-            <DropdownInput
+            <AttrDataDropdownInput
                 items={UserRoles}
                 icon="leaf"
                 iconColor={green}

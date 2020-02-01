@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { isEqual } from 'lodash';
 import React, { ChangeEvent, useContext, useState } from 'react';
 import { SaveSection } from '../../components/Buttons/AdvancedButtons';
-import { DropdownInput, TextareaInput, TextInput } from '../../components/FormElements';
+import { TextareaInput, TextInput, AttrDataDropdownInput, StringDropdownInput } from '../../components/FormElements';
 import {
     ObjLikeSliderAttrField,
     ObjSingleSliderAttrField,
@@ -14,6 +14,7 @@ import { baseURL } from '../../data';
 import { CoffeeEntry } from '../../helpers/types';
 import { blue, brown, cyan, grayDarker, green, yellow } from '../../styles/colors';
 import { deleteImageByURL, handleFileUpload } from './CoffeeCardHelperFuctions';
+import { localCoffeeAttrData } from '../../helpers/attrData';
 
 type CoffeeCardEditProps = {
     coffee: CoffeeEntry;
@@ -24,7 +25,7 @@ export const CoffeeCardEdit = ({ coffee }: CoffeeCardEditProps) => {
     const [formCoffee, setFormCoffee] = useState<CoffeeEntry>(coffee);
     const [imageStrings, setImageStrings] = useState(coffee.imageStrings);
 
-    const { coffeeAttrData, contextDeleteCoffee, contextSaveCoffee, viewCoffeeCard } = useContext(CoffeeContext);
+    const { coffeeStores, contextDeleteCoffee, contextSaveCoffee, viewCoffeeCard } = useContext(CoffeeContext);
 
     const innerDeleteImage = (url: string, id: number) => {
         deleteImageByURL(url, id).then(() => {
@@ -60,7 +61,7 @@ export const CoffeeCardEdit = ({ coffee }: CoffeeCardEditProps) => {
         });
     };
 
-    return !coffeeAttrData ? (
+    return !coffeeStores ? (
         <h1>no coffee data</h1>
     ) : (
         <>
@@ -85,8 +86,8 @@ export const CoffeeCardEdit = ({ coffee }: CoffeeCardEditProps) => {
                     <div className={'TextSection'}>
                         <div className="row">
                             <div className="col-12 col-md-6">
-                                <DropdownInput
-                                    items={coffeeAttrData.origins}
+                                <StringDropdownInput
+                                    items={localCoffeeAttrData.origins}
                                     icon="globe-americas"
                                     iconColor={green}
                                     label="Herkunft"
@@ -97,8 +98,8 @@ export const CoffeeCardEdit = ({ coffee }: CoffeeCardEditProps) => {
                                 />
                             </div>
                             <div className="col-12 col-md-6">
-                                <DropdownInput
-                                    items={coffeeAttrData.kinds}
+                                <StringDropdownInput
+                                    items={localCoffeeAttrData.kinds}
                                     icon="mug-hot"
                                     iconColor={brown}
                                     label="Art"
@@ -109,20 +110,20 @@ export const CoffeeCardEdit = ({ coffee }: CoffeeCardEditProps) => {
                                 />
                             </div>
                             <div className="col-12 col-md-6">
-                                <DropdownInput
-                                    items={coffeeAttrData.roasteds}
+                                <AttrDataDropdownInput
+                                    items={coffeeStores.items}
                                     icon="flask"
                                     iconColor={blue}
                                     label="Rösterei"
-                                    selectedItem={formCoffee.roasted}
+                                    selectedItem={coffeeStores}
                                     onChange={setFormCoffee}
                                     propPath={['roasted']}
                                     obj={formCoffee}
                                 />
                             </div>
                             <div className="col-12 col-md-6">
-                                <DropdownInput
-                                    items={coffeeAttrData.processes}
+                                <StringDropdownInput
+                                    items={localCoffeeAttrData.processes}
                                     icon="leaf"
                                     iconColor={green}
                                     label="Prozess"
@@ -133,8 +134,8 @@ export const CoffeeCardEdit = ({ coffee }: CoffeeCardEditProps) => {
                                 />
                             </div>
                             <div className="col-12 col-md-6">
-                                <DropdownInput
-                                    items={coffeeAttrData.specieses}
+                                <StringDropdownInput
+                                    items={localCoffeeAttrData.specieses}
                                     icon="leaf"
                                     iconColor={green}
                                     label="Bohnenart"

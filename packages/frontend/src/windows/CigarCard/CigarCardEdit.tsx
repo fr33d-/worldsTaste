@@ -5,11 +5,11 @@ import React, { ChangeEvent, useState } from 'react';
 import { baseURL, cigarsURL } from '../../data';
 import { CigarEntry } from '../../pages/Cigars';
 import { brown, grayDarker, greenAccent, yellowAccent } from '../../styles/colors';
-import { BoolInput, DropdownInput, NumberInput, TextareaInput, TextInput } from '../../components/FormElements';
+import { BoolInput, NumberInput, TextareaInput, TextInput, AttrDataDropdownInput } from '../../components/FormElements';
 import { ObjLikeSliderAttrField, ObjSliderAttrField } from '../../components/FormElements/AttrFields';
 import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import { AttrDataItemType } from '../../helpers/types';
-import { AdvancedDeleteButton, AdvancedCancelButton, AdvancedSaveButton, SaveSection } from '../../components/Buttons/AdvancedButtons';
+import { SaveSection } from '../../components/Buttons/AdvancedButtons';
 
 type CigarCardEditProps = {
     entry: CigarEntry;
@@ -206,7 +206,7 @@ export const CigarCardEdit = ({
                             </div>
                             <div className={'Row'}>
                                 <div className="col-12 col-md-6">
-                                    <DropdownInput
+                                    <AttrDataDropdownInput
                                         items={cigarEinlage}
                                         icon="leaf"
                                         iconColor={greenAccent}
@@ -218,7 +218,7 @@ export const CigarCardEdit = ({
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
-                                    <DropdownInput
+                                    <AttrDataDropdownInput
                                         items={cigarUmblatt}
                                         icon="leaf"
                                         iconColor={greenAccent}
@@ -230,7 +230,7 @@ export const CigarCardEdit = ({
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
-                                    <DropdownInput
+                                    <AttrDataDropdownInput
                                         items={cigarDeckblatt}
                                         icon="leaf"
                                         iconColor={greenAccent}
@@ -242,7 +242,7 @@ export const CigarCardEdit = ({
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
-                                    <DropdownInput
+                                    <AttrDataDropdownInput
                                         items={cigarAnschnitt}
                                         icon="leaf"
                                         iconColor={greenAccent}
@@ -348,7 +348,7 @@ export const CigarCardEdit = ({
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
-                                    <DropdownInput
+                                    <AttrDataDropdownInput
                                         items={cigarAromarad}
                                         icon="cog"
                                         iconColor={greenAccent}
