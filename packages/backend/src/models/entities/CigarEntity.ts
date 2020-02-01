@@ -1,5 +1,4 @@
 import { BaseEntity, Column, Entity, Index, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
-import { CoffeeOriginEntity, CoffeeKindEntity, CoffeeRoastedEntity } from "./CoffeeAttrsEntity";
 import { CigarAnschnittEntity, CigarAromaradEntity, CigarDeckblattEntity, CigarEinlageEntity, CigarOriginEntity, CigarProducerEntity, CigarUmblattEntity } from "./CigarAttrsEntity";
 
 @Entity()
@@ -17,10 +16,10 @@ export class CigarEntity extends BaseEntity {
 
     @Column()
     public abbrand!: number;
-    
+
     @Column()
     public aromavielfalt!: number;
-    
+
     @Column()
     public aromaentwicklung!: number;
 

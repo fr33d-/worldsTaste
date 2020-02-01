@@ -1,3 +1,9 @@
+body {
+    &::-webkit-scrollbar {
+        display: none;
+      }
+  }
+
 .Introtext {
     margin-top: $default-space-l;
     margin-left: $default-space-l;

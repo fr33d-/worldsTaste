@@ -8,53 +8,18 @@ import { throwDataError, throwDataSucess } from '../../pages/User/userHelperFunc
 import { addNewItem, deleteItem } from './AttrDataHelperFunctions';
 
 export const CoffeeAttrDataWindow = () => {
-    const { coffeeAttrData, closeAttrWindow } = useContext(CoffeeContext);
+    const { coffeeStores, closeAttrWindow } = useContext(CoffeeContext);
 
-    if (!coffeeAttrData) return <p>Error, no coffee data loaded</p>;
+    if (!coffeeStores) return <p>Error, no coffee data loaded</p>;
 
     // Todo: warum fällt das nicht aus der API raus
-    const attrData = [
+    const attrData: AttrDataType[] = [
         {
             id: 1,
-            name: 'Röstarten',
-            urlSubstring: 'coffeeAttrs/kinds',
-            description: 'Kaffee Arten, zB Filter Kaffee oder Espresso',
-            items: coffeeAttrData.kinds,
-        },
-        {
-            id: 2,
-            name: 'Herkünfte',
-            urlSubstring: 'coffeeAttrs/origins',
-            description: 'Kaffee herkunfts Länder',
-            items: coffeeAttrData.origins,
-        },
-        {
-            id: 3,
             name: 'Röstereien',
-            urlSubstring: 'coffeeAttrs/roasteds',
-            description: 'Kaffee Röstereien',
-            items: coffeeAttrData.roasteds,
-        },
-        {
-            id: 4,
-            name: 'Bohnenart',
-            urlSubstring: 'coffeeAttrs/species',
-            description: 'Art der Bohne, zB Arabica oder Robusta',
-            items: coffeeAttrData.specieses,
-        },
-        {
-            id: 5,
-            name: 'Prozess',
-            urlSubstring: 'coffeeAttrs/processes',
-            description: 'Verarbeitungsprozess, zB Washed oder Natural',
-            items: coffeeAttrData.processes,
-        },
-        {
-            id: 6,
-            name: 'Brühmethoden',
-            urlSubstring: 'coffeeAttrs/method',
-            description: 'Brühmethoden, zB. V60, French Press oder AeroPress',
-            items: coffeeAttrData.brewMethods,
+            urlSubstring: '/coffees/stores',
+            description: 'Läden oder Röstereien weltweit',
+            items: coffeeStores.items,
         },
     ];
 

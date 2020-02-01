@@ -124,7 +124,63 @@ export const NumberInput = ({ name, unit, obj, propPath, setStateHandler }: numb
     );
 };
 
-type DropdownInputProps = {
+type StringDropdownInputProps = {
+    label: string;
+    icon?: IconProp;
+    iconColor?: string;
+    items: string[];
+    selectedItem?: string;
+    onChange: Dispatch<SetStateAction<any>>;
+    propPath: string | string[];
+    obj: any;
+};
+
+export const StringDropdownInput = ({
+    label,
+    selectedItem,
+    icon,
+    iconColor,
+    onChange,
+    propPath,
+    items,
+    obj,
+}: StringDropdownInputProps) => {
+    const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
+        if (obj) {
+            console.log('old item and changed path', obj, propPath)
+            onChange(cloneDeep(set(obj, propPath, items.filter(item => item === e.target.value)[0])));
+            console.log('new item', obj)
+        }
+    };
+
+    return (
+        <div className={'DropdownInput'}>
+            <label>{label}</label>
+            <div className={'select'}>
+                {icon && <FontAwesomeIcon icon={icon} color={iconColor} className={'Icon'} size="sm" />}
+                <select onChange={handleChange}>
+                    {items.map((item, i) => {
+                        if (selectedItem && item === selectedItem) {
+                            return (
+                                <option key={i} value={item} selected>
+                                    {item}
+                                </option>
+                            );
+                        } else {
+                            return (
+                                <option key={i} value={item}>
+                                    {item}
+                                </option>
+                            );
+                        }
+                    })}
+                </select>
+            </div>
+        </div>
+    );
+};
+
+type AttrDataDropdownInputProps = {
     label: string;
     icon?: IconProp;
     iconColor?: string;
@@ -135,7 +191,7 @@ type DropdownInputProps = {
     obj: any;
 };
 
-export const DropdownInput = ({
+export const AttrDataDropdownInput = ({
     label,
     selectedItem,
     icon,
@@ -144,7 +200,7 @@ export const DropdownInput = ({
     propPath,
     items,
     obj,
-}: DropdownInputProps) => {
+}: AttrDataDropdownInputProps) => {
     const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
         if (obj) {
             console.log('old item and changed path', obj, propPath)

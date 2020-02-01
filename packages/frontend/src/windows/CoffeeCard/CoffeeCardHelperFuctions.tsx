@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { baseURL, coffeeURL } from '../../data';
-import { BrewingEntry, AttrDataItemType, CoffeeEntry, CoffeeAttrData, User } from '../../helpers/types';
+import { BrewingEntry,CoffeeEntry, User, CoffeSortDataType } from '../../helpers/types';
 import { throwDataError, throwDataSucess } from '../../pages/User/userHelperFunctions';
+import { localCoffeeAttrData } from '../../helpers/attrData';
 
 export const saveCoffeeBrewing = async (id: number, brewing: BrewingEntry): Promise<number> => {
     return await axios
@@ -31,7 +32,7 @@ export const deleteCoffeeBrewing = async (id: number, brewing: BrewingEntry): Pr
         });
 };
 
-export const emptyCoffee = (coffeeAttrData: CoffeeAttrData, user: User): CoffeeEntry => {
+export const emptyCoffee = (user: User, stores: CoffeSortDataType ): CoffeeEntry => {
     return {
         bitter: 0,
         brewings: [],
@@ -39,28 +40,28 @@ export const emptyCoffee = (coffeeAttrData: CoffeeAttrData, user: User): CoffeeE
         dateAdded: new Date(),
         description: '',
         id: 0,
-        kind: coffeeAttrData.kinds[0],
+        kind: localCoffeeAttrData.kinds[0],
         name: 'new coffee',
-        origin: coffeeAttrData.origins[0],
+        origin: localCoffeeAttrData.origins[0],
         ownDescription: '',
         owner: user,
-        process: coffeeAttrData.processes[0],
+        process: localCoffeeAttrData.processes[0],
         rating: 0,
-        roasted: coffeeAttrData.roasteds[0],
+        store: stores.items[0],
         sour: 0,
-        species: coffeeAttrData.specieses[0],
+        species: localCoffeeAttrData.specieses[0],
         taste: 0,
         tasteKind: 0,
         woody: 0,
     };
 };
 
-export const newBrewing = (brewingMethod: AttrDataItemType): BrewingEntry => {
+export const newBrewing = (): BrewingEntry => {
     return {
         id: 0,
         bitter: 0,
         brewDate: new Date(),
-        method: brewingMethod,
+        method: localCoffeeAttrData.brewMethods[0],
         ownDescription: '',
         rating: 0,
         sour: 0,
@@ -122,16 +123,3 @@ export const handleFileUpload = async (files: FileList, coffeeID: number): Promi
             return error;
         });
 };
-
-// export const displayDate = (dateString?: Date) => {
-//     if (dateString) {
-//         const date = new Date(dateString);
-//         return (
-//             <>
-//                 {date.getDate()}.{date.getMonth()}.{date.getFullYear()} - {date.getUTCHours()}:{date.getUTCMinutes()}
-//             </>
-//         );
-//     } else {
-//         return <> unknown</>;
-//     }
-// };

@@ -1,13 +1,7 @@
-import {
-    CoffeeKindEntity,
-    CoffeeOriginEntity,
-    CoffeeProcessEntity,
-    CoffeeRoastedEntity,
-    CoffeeSpeciesEntity,
-} from '../entities/CoffeeAttrsEntity';
 import { CoffeeEntity } from '../entities/CoffeeEntity';
 import { UserEntity } from '../entities/UserEntity';
 import { CoffeeBrewingEntity } from '../entities/CoffeeBrewingEntity';
+import { CoffeeStoreEntity } from '../entities/CoffeeStoresEntity';
 
 // This Dto class is used to omit certain data from the actual UserEntity class, in our case the password field. When
 // we send any user as a result to a client we'd like to keep some data only on the server and hidden. Hence we use the
@@ -18,9 +12,9 @@ export class CoffeeDto {
     public imageStrings: string[];
     public description: string;
     public rating: number;
-    public origin: CoffeeOriginEntity;
-    public kind: CoffeeKindEntity;
-    public roasted: CoffeeRoastedEntity;
+    public origin: string;
+    public kind: string;
+    public store: CoffeeStoreEntity;
     public bitter: number;
     public ownDescription: string;
     public sour: number;
@@ -28,9 +22,9 @@ export class CoffeeDto {
     public tasteKind: number;
     public woody: number;
     public dateAdded: Date;
-    public process: CoffeeProcessEntity;
+    public process: string;
     public buyDate: Date;
-    public species: CoffeeSpeciesEntity;
+    public species: string;
     public owner: UserEntity;
     public brewings: CoffeeBrewingEntity[];
 
@@ -43,7 +37,6 @@ export class CoffeeDto {
         origin,
         rating,
         kind,
-        roasted,
         bitter,
         ownDescription,
         sour,
@@ -56,6 +49,7 @@ export class CoffeeDto {
         species,
         owner,
         brewings,
+        store
     }: CoffeeEntity) {
         this.id = id;
         this.name = name;
@@ -64,7 +58,7 @@ export class CoffeeDto {
         this.rating = rating;
         this.origin = origin;
         this.kind = kind;
-        this.roasted = roasted;
+        this.store = store;
         this.bitter = bitter;
         this.ownDescription = ownDescription;
         this.sour = sour;

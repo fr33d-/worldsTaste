@@ -11,7 +11,7 @@ import { InlineCoffeeCardDisplay } from '../../windows/CoffeeCard/InlineCoffeeCa
 import OverlayFrame from '../../windows/OverlayFrame/OverlayFrame';
 import { throwDataError, throwDataSucess } from '../User/userHelperFunctions';
 import { default as chemexSVG, default as CoffeeReplacement } from './../../images/Chemex.svg';
-import { getCoffeAttrData, getCoffees, getFilterMenu } from './CoffeeHelperFunctions';
+import { getCoffees, getFilterMenu, getCoffeStores } from './CoffeeHelperFunctions';
 
 export const Coffee = () => {
     const {
@@ -23,7 +23,6 @@ export const Coffee = () => {
         filteredPosts,
         postOrderBy,
         searchString,
-        setCoffeeAttrData,
         setFilterAttr,
         setFilterName,
         setPostOrderBy,
@@ -31,12 +30,12 @@ export const Coffee = () => {
         user,
         goToCreateCoffee,
         openAttrWindow,
-        coffeeAttrData,
         getFilterCoffeeList,
+        setCoffeeStores
     } = useContext(CoffeeContext);
     const { extention } = useParams();
 
-    const filterMenu: FilterMenuType[] = getFilterMenu(coffeeAttrData);
+    const filterMenu: FilterMenuType[] = getFilterMenu();
 
     // Todo: vill sollte man das schlauer machen
     useEffect(() => {
@@ -48,16 +47,9 @@ export const Coffee = () => {
     }, [coffees, filterName, filterAttr, searchString, postOrderBy]);
 
     const initiateData = () => {
-        getCoffeAttrData()
-            .then((coffeeAttrData) => {
-                setCoffeeAttrData({
-                    brewMethods: coffeeAttrData.brewMethods,
-                    kinds: coffeeAttrData.kinds,
-                    origins: coffeeAttrData.origins,
-                    processes: coffeeAttrData.processes,
-                    roasteds: coffeeAttrData.processes,
-                    specieses: coffeeAttrData.specieses,
-                });
+        getCoffeStores()
+            .then((coffeeStores) => {
+                setCoffeeStores(coffeeStores);
                 throwDataSucess('got coffee data');
             })
             .catch((error) => {
@@ -105,7 +97,7 @@ export const Coffee = () => {
                 </IntroText>
 
                 <div className={`${'CoffeeContainer'}`}>
-                    {coffees.length === 0 ? (
+                    {filteredPosts.length === 0 ? (
                         <div className={'ReplImg'}>
                             <img src={CoffeeReplacement} alt="no content" />
                             <p>No coffees to display</p>

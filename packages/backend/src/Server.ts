@@ -48,7 +48,6 @@ createConnection()
         server.use('/api/auth', authRouter);
         server.use('/api/user', usersRoute);
         server.use('/api/coffee', coffeeRoute);
-        server.use('/api/coffeeAttrs', coffeeAttrsRoute);
         server.use('/api/coffeebrewings', coffeeBrewingRoute);
         server.use('/api/cigars', cigarRoute);
         server.use('/api/cigarAttrs', cigarAttrsRoute);

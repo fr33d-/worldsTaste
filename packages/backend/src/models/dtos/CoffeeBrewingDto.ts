@@ -1,4 +1,3 @@
-import { CoffeeMethodEntity } from '../entities/CoffeeAttrsEntity';
 import { CoffeeBrewingEntity } from '../entities/CoffeeBrewingEntity';
 
 // This Dto class is used to omit certain data from the actual UserEntity class, in our case the password field. When
@@ -16,7 +15,7 @@ export class CoffeeBrewingDto {
     public strength: number;
     public sour: number;
     public woody: number; //Holzig, Mehlig, Erbsig
-    public method: CoffeeMethodEntity;
+    public method: string;
     public waterAmount: number;
     public coffeeAmount: number;
 

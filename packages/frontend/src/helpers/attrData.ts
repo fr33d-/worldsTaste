@@ -1,12 +1,6 @@
-export type LocalAttrData = {
-    brewMethods: string[],
-    kinds: string[],
-    origins: string[],
-    processes: string[],
-    specieses: string[],
-};
+import { LocalCoffeeAttrData } from "./types";
 
-export const localCoffeeAttrData: LocalAttrData = {
+export const localCoffeeAttrData: LocalCoffeeAttrData = {
     brewMethods: ['AeroPess', 'Chemex', 'Kalita'],
     kinds: ['Filterkaffee', 'Espresso'],
     origins: ['Indonesien', 'Brasilien', 'Äthiopien'],

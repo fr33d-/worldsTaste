@@ -1,5 +1,4 @@
-import { BaseEntity, Column, Entity, Index, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
-import { CoffeeOriginEntity, CoffeeKindEntity, CoffeeRoastedEntity, CoffeeMethodEntity } from "./CoffeeAttrsEntity";
+import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CoffeeEntity } from "./CoffeeEntity";
 
 @Entity()
@@ -44,9 +43,8 @@ export class CoffeeBrewingEntity extends BaseEntity {
     @Column()
     public coffeeAmount!: number;
 
-    @ManyToOne(type => CoffeeMethodEntity, coffeeMethod => coffeeMethod.id)
-    @JoinColumn({ name: "method" })
-    public method!: CoffeeMethodEntity;
+    @Column()
+    public method!: string;
 
     @ManyToOne(type => CoffeeEntity, coffee => coffee.brewings, { onDelete: 'CASCADE' })
     public coffee!: CoffeeEntity;

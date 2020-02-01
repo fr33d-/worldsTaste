@@ -21,7 +21,7 @@ export const getAllCoffees: RequestHandler = async (_, result) => {
     log(`GET /coffee`);
 
     const coffeeEntities = await CoffeeEntity.find({
-        relations: ['origin', 'kind', 'roasted', 'process', 'species', 'owner'],
+        relations: ['store'],
     });
 
     //Append images
@@ -50,7 +50,7 @@ export const getCoffeeById: RequestHandler = async (request, result) => {
 
     const coffeeEntity = await CoffeeEntity.findOne({
         where: { id: requestParams.id },
-        relations: ['origin', 'kind', 'roasted', 'process', 'species', 'owner'],
+        relations: ['store'],
     });
 
     if (coffeeEntity !== undefined) {

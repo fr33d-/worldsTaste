@@ -1,8 +1,9 @@
 import React, { createContext, Dispatch, PropsWithChildren, SetStateAction, useState } from 'react';
 import { useHistory } from 'react-router';
-import { CoffeeAttrData, CoffeeEntry, User, FullUser } from '../helpers/types';
-import { deleteCoffee, saveNewCoffee, updateCoffee, getCoffeAttrData } from '../pages/Coffee/CoffeeHelperFunctions';
-import { setUserFromSessionStorage, throwDataSucess, throwDataError } from '../pages/User/userHelperFunctions';
+import { localCoffeeAttrData } from '../helpers/attrData';
+import { CoffeeEntry, FullUser, LocalCoffeeAttrData, AttrDataType, } from '../helpers/types';
+import { deleteCoffee, saveNewCoffee, updateCoffee } from '../pages/Coffee/CoffeeHelperFunctions';
+import { setUserFromSessionStorage, throwDataSucess } from '../pages/User/userHelperFunctions';
 
 type CoffeeContextType = {
     coffees: CoffeeEntry[];
@@ -12,20 +13,20 @@ type CoffeeContextType = {
     filterName: string | undefined;
     setFilterName: Dispatch<SetStateAction<string | undefined>>;
     filterAttr: string | undefined;
-    setFilterAttr: React.Dispatch<React.SetStateAction<string | undefined>>;
+    setFilterAttr: Dispatch<SetStateAction<string | undefined>>;
     searchString: string | undefined;
-    setSearchString: React.Dispatch<React.SetStateAction<string | undefined>>;
+    setSearchString: Dispatch<SetStateAction<string | undefined>>;
     postOrderBy: string | undefined;
-    setPostOrderBy: React.Dispatch<React.SetStateAction<string | undefined>>;
-    coffeeAttrData: CoffeeAttrData | undefined;
-    setCoffeeAttrData: React.Dispatch<React.SetStateAction<CoffeeAttrData | undefined>>;
+    setPostOrderBy: Dispatch<SetStateAction<string | undefined>>;
+    coffeeAttrData: LocalCoffeeAttrData;
+    coffeeStores: AttrDataType | undefined;
+    setCoffeeStores: Dispatch<SetStateAction<AttrDataType | undefined>>;
     user: FullUser | undefined;
     basePath: string;
     logout(): void;
     contextSaveCoffee(coffee: CoffeeEntry): Promise<number>;
     contextDeleteCoffee(id: number): Promise<void>;
     openAttrWindow(): void;
-    // openBrewingWindow(id: number): void;
     closeAttrWindow(): void;
     goToCreateCoffee(): void;
     goToCoffees(): void;
@@ -38,6 +39,7 @@ export const CoffeeContext = createContext<CoffeeContextType>(({} as unknown) as
 
 export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
     const [coffees, setCoffees] = useState<CoffeeEntry[]>([]);
+    const [coffeeStores, setCoffeeStores] = useState<AttrDataType>();
 
     const [filteredPosts, setFilteredPosts] = useState<CoffeeEntry[]>([]);
     const [filterName, setFilterName] = useState<string>();
@@ -45,7 +47,7 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
     const [searchString, setSearchString] = useState<string>();
     const [postOrderBy, setPostOrderBy] = useState<string>();
 
-    const [coffeeAttrData, setCoffeeAttrData] = useState<CoffeeAttrData>();
+    const [coffeeAttrData, _] = useState<LocalCoffeeAttrData>(localCoffeeAttrData);
     const [user, setUser] = useState<FullUser | undefined>(setUserFromSessionStorage());
 
     const basePath = '/coffee';
@@ -75,7 +77,7 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
     };
 
     const logout = () => {
-        throwDataSucess('Logged out!')
+        throwDataSucess('Logged out!');
         sessionStorage.removeItem('auth');
         setUser(undefined);
     };
@@ -109,23 +111,22 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
     };
 
     const getFilterCoffeeList = () => {
-
         let newPosts: CoffeeEntry[] = [];
 
         switch (filterName) {
             case 'Arten':
                 newPosts = coffees.filter((post) => {
-                    return post.kind.name === filterAttr;
+                    return post.kind === filterAttr;
                 });
                 break;
             case 'Herkunft':
                 newPosts = coffees.filter((post) => {
-                    return post.origin.name === filterAttr;
+                    return post.origin === filterAttr;
                 });
                 break;
             case 'Röstereien':
                 newPosts = coffees.filter((post) => {
-                    return post.roasted.name === filterAttr;
+                    return post.store.name === filterAttr;
                 });
                 break;
             case 'Bewertung':
@@ -145,13 +146,13 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
         if (postOrderBy) {
             switch (filterName) {
                 case 'Arten':
-                    newPosts = newPosts.sort((a, b) => a.kind.name.localeCompare(b.kind.name));
+                    newPosts = newPosts.sort((a, b) => a.kind.localeCompare(b.kind));
                     break;
                 case 'Herkunft':
-                    newPosts = newPosts.sort((a, b) => a.origin.name.localeCompare(b.origin.name));
+                    newPosts = newPosts.sort((a, b) => a.origin.localeCompare(b.origin));
                     break;
                 case 'Röstereien':
-                    newPosts = newPosts.sort((a, b) => a.roasted.name.localeCompare(b.roasted.name));
+                    newPosts = newPosts.sort((a, b) => a.store.name.localeCompare(b.store.name));
                     break;
                 case 'Bewertung':
                     newPosts = newPosts.sort((a, b) => a.rating - b.rating);
@@ -178,7 +179,6 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
                 filterAttr,
                 postOrderBy,
                 searchString,
-                setCoffeeAttrData,
                 setFilterAttr,
                 setPostOrderBy,
                 setSearchString,
@@ -188,12 +188,13 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
                 contextSaveCoffee,
                 goToCreateCoffee,
                 openAttrWindow,
-                // openBrewingWindow,
                 editCoffeeCard,
                 goToCoffees,
                 viewCoffeeCard,
                 logout,
-                getFilterCoffeeList
+                getFilterCoffeeList,
+                coffeeStores,
+                setCoffeeStores,
             }}
         >
             {children}

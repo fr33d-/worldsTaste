@@ -22,8 +22,7 @@ export const getCoffeeBrewings: RequestHandler = async (request, result) => {
     log(`GET /coffee/:id/brewings/ (id = ${requestParams.id})`);
 
     const coffeeBrewingEntity = await CoffeeBrewingEntity.find({
-        where: { coffee: { id: requestParams.id } },
-        relations: ['method'],
+        where: { coffee: { id: requestParams.id } }
     });
 
     if (coffeeBrewingEntity !== undefined) {
@@ -32,17 +31,6 @@ export const getCoffeeBrewings: RequestHandler = async (request, result) => {
     } else {
         result.sendStatus(httpStatusCodes.NOT_FOUND);
     }
-
-    // const coffeeBrewingEntity = await CoffeeBrewingEntity.findOne({
-    //     where: { id: requestParams.id },
-    //     relations: ['method'],
-    // });
-
-    // if (coffeeBrewingEntity !== undefined) {
-    //     result.status(httpStatusCodes.OK).json(new CoffeeBrewingDto(coffeeBrewingEntity));
-    // } else {
-    //     result.sendStatus(httpStatusCodes.NOT_FOUND);
-    // }
 };
 
 // POST /
@@ -61,12 +49,10 @@ export const createCoffeeBrewing: RequestHandler = async (request, result) => {
         return;
     }
 
-    
-
     try {
         const coffeeBrewingEntity = CoffeeBrewingEntity.create({ ...requestBody });
         await CoffeeBrewingEntity.save(coffeeBrewingEntity);
-        
+
         coffeeEntity.brewings = [coffeeBrewingEntity, ...coffeeEntity.brewings];
         log('Got new brewing for coffee:');
         log(coffeeEntity);

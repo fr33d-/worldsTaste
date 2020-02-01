@@ -1,11 +1,5 @@
 import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import {
-    CoffeeKindEntity,
-    CoffeeOriginEntity,
-    CoffeeProcessEntity,
-    CoffeeRoastedEntity,
-    CoffeeSpeciesEntity,
-} from './CoffeeAttrsEntity';
+import { CoffeeStoreEntity } from './CoffeeStoresEntity';
 import { CoffeeBrewingEntity } from './CoffeeBrewingEntity';
 import { UserEntity } from './UserEntity';
 
@@ -54,31 +48,27 @@ export class CoffeeEntity extends BaseEntity {
     @Column()
     public buyDate!: Date;
 
+    @Column()
+    public kind!: string;
+
+    @Column()
+    public process!: string;
+
+    @Column()
+    public species!: string;
+
+    @Column()
+    public origin!: string;
+
     @ManyToOne((type) => UserEntity, (user) => user.id)
     @JoinColumn({ name: 'owner' })
     public owner!: UserEntity;
 
-    @ManyToOne((type) => CoffeeOriginEntity, (coffeeOrigin) => coffeeOrigin.id)
-    @JoinColumn({ name: 'origin' })
-    public origin!: CoffeeOriginEntity;
-
-    @ManyToOne((type) => CoffeeKindEntity, (coffeeKind) => coffeeKind.id)
-    @JoinColumn({ name: 'kind' })
-    public kind!: CoffeeOriginEntity; // Todo: Coffe Kind Entry? 
-
-    @ManyToOne((type) => CoffeeRoastedEntity, (coffeeRoasted) => coffeeRoasted.id)
-    @JoinColumn({ name: 'roasted' })
-    public roasted!: CoffeeOriginEntity; // Todo: Coffe Roasted Entry? Also die Rösterei oder? 
-
-    @ManyToOne((type) => CoffeeProcessEntity, (coffeeProcess) => coffeeProcess.id)
-    @JoinColumn({ name: 'process' })
-    public process!: CoffeeProcessEntity;
-
-    @ManyToOne((type) => CoffeeSpeciesEntity, (coffeeSpecies) => coffeeSpecies.id)
-    @JoinColumn({ name: 'species' })
-    public species!: CoffeeSpeciesEntity;
+    @ManyToOne((type) => CoffeeStoreEntity, (coffeeStore) => coffeeStore.id)
+    @JoinColumn({ name: 'store' })
+    public store!: CoffeeStoreEntity;
 
     @OneToMany((type) => CoffeeBrewingEntity, (coffeeBrewings) => coffeeBrewings.coffee )
-    // @JoinColumn({ name: 'brewings' })
+    // @JoinColumn({ name: 'brewings' })∏
     public brewings!: CoffeeBrewingEntity[];
 }

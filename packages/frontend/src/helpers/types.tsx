@@ -38,14 +38,20 @@ export type AttrDataType = {
     items: AttrDataItemType[];
 };
 
-export type CoffeeAttrData = {
-    kinds: AttrDataType[];
-    origins: AttrDataType[];
-    roasteds: AttrDataType[];
-    processes: AttrDataType[];
-    specieses: AttrDataType[];
-    brewMethods: AttrDataType[];
-}
+// export type CoffeStoresDataType = {
+//     id: number;
+//     name: string;
+//     description: string;
+//     items: AttrDataItemType[];
+// };
+
+export type LocalCoffeeAttrData = {
+    brewMethods: string[],
+    kinds: string[],
+    origins: string[],
+    processes: string[],
+    specieses: string[],
+};
 
 export type Image = {
     name: string;
@@ -66,7 +72,7 @@ export type BrewingEntry = {
     strength: number;
     sour: number;
     woody: number; //Holzig, Mehlig, Erbsig
-    method: AttrDataItemType;
+    method: string;
     waterAmount: number;
     coffeeAmount: number;
 };
@@ -77,10 +83,9 @@ export type CoffeeEntry = {
     imageStrings?: string[];
     name: string;
     description: string;
-    origin: AttrDataItemType;
+    origin: string;
     rating: number;
-    kind: AttrDataItemType; //Filterkaffee, Espresso
-    roasted: AttrDataItemType;
+    kind: string; //Filterkaffee, Espresso
     taste: number; //Geschmacksintensivität
     tasteKind: number; // Schokolade/Frucht
     woody: number; //Holzig, Mehlig, Erbsig
@@ -88,11 +93,12 @@ export type CoffeeEntry = {
     sour: number;
     ownDescription: string;
     dateAdded: Date;
-    process: AttrDataItemType;
+    process: string;
     buyDate: Date;
-    species: AttrDataItemType; //Arabica, Robusta
+    species: string; //Arabica, Robusta
     brewings: BrewingEntry[];
     owner: User;
+    store: AttrDataItemType;
 };
 
 export type FilterMenuType = {

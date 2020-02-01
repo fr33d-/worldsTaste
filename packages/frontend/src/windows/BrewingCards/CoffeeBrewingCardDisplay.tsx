@@ -24,10 +24,10 @@ export const CoffeeBrewingCardDisplay = ({ brewing, setEditMode }: CoffeeBrewing
                     <h4>
                         {brewing.brewDate ? (
                             <>
-                                {brewing.method.name} am {displayDate(brewing.brewDate)}
+                                {brewing.method} am {displayDate(brewing.brewDate)}
                             </>
                         ) : (
-                            <>{brewing.method.name} am ERROR</>
+                            <>{brewing.method} am ERROR</>
                         )}
                     </h4>
                 </div>
