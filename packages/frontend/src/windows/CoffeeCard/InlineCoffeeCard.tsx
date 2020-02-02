@@ -68,22 +68,22 @@ export const InlineCoffeeCardDisplay = ({ entry }: InlineCoffeeCardDisplayProps)
                                 <AttrField
                                     color={yellow}
                                     icon="globe-americas"
-                                    value={entry.origin.name}
+                                    value={entry.origin}
                                     name="Herkunft:"
                                 />
                             </div>
                             <div className="col-12 col-md-6">
-                                <AttrField color={blue} icon="flask" value={entry.kind.name} name="Art:" />
+                                <AttrField color={blue} icon="flask" value={entry.kind} name="Art:" />
                             </div>
                             <div className="col-12 col-md-6">
-                                <AttrField color={yellow} icon="store" value={entry.roasted.name} name="Rösterei:" />
+                                <AttrField color={yellow} icon="store" value={entry.store.name} name="Rösterei:" />
                             </div>
 
                             <div className="col-12 col-md-6">
-                                <AttrField color={green} icon="leaf" value={entry.process.name} name="Prozess:" />
+                                <AttrField color={green} icon="leaf" value={entry.process} name="Prozess:" />
                             </div>
                             <div className="col-12 col-md-6">
-                                <AttrField color={green} icon="leaf" value={entry.species.name} name="Bohnenart:" />
+                                <AttrField color={green} icon="leaf" value={entry.species} name="Bohnenart:" />
                             </div>
                             <div className="col-12 col-md-6">
                                 <AttrFieldLikeList value={entry.rating} name="Gesammtbewertung:" />

@@ -8,7 +8,6 @@ import 'reflect-metadata';
 import { createConnection } from 'typeorm';
 import { cigarAttrsRoute } from './routes/CigarAttrsRouts';
 import { cigarRoute } from './routes/CigarsRoute';
-import { coffeeAttrsRoute } from './routes/CoffeeAttrsRouts';
 import { coffeeBrewingRoute } from './routes/CoffeeBrewingRoute';
 import { coffeeRoute } from './routes/CoffeeRoute';
 import { usersRoute } from './routes/UsersRoute';

@@ -66,6 +66,9 @@ export const Coffee = () => {
             });
     };
 
+    console.log('Filtered posts', filteredPosts);
+    console.log('Filtered posts lenth', filteredPosts.length);
+
     return (
         <>
             <AppWindow
@@ -96,16 +99,17 @@ export const Coffee = () => {
                     meine persönlichen Erfahrungen soll nun hier entstehen.
                 </IntroText>
 
-                <div className={`${'CoffeeContainer'}`}>
+                <div className={'CoffeeContainer'}>
                     {filteredPosts.length === 0 ? (
                         <div className={'ReplImg'}>
                             <img src={CoffeeReplacement} alt="no content" />
                             <p>No coffees to display</p>
                         </div>
                     ) : (
-                        filteredPosts.map((post, i) => (
-                            <InlineCoffeeCardDisplay entry={post} key={`${post.name}_${i}`} />
-                        ))
+                        // filteredPosts.map((post, i) => (
+                        //     <InlineCoffeeCardDisplay entry={post} key={`${post.name}_${i}`} />
+                        // ))
+                        <>test</>
                     )}
                 </div>
             </AppWindow>

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { baseURL, coffeeURL } from '../../data';
-import { BrewingEntry,CoffeeEntry, User, CoffeSortDataType } from '../../helpers/types';
+import { BrewingEntry,CoffeeEntry, User, AttrDataType } from '../../helpers/types';
 import { throwDataError, throwDataSucess } from '../../pages/User/userHelperFunctions';
 import { localCoffeeAttrData } from '../../helpers/attrData';
 
@@ -32,7 +32,7 @@ export const deleteCoffeeBrewing = async (id: number, brewing: BrewingEntry): Pr
         });
 };
 
-export const emptyCoffee = (user: User, stores: CoffeSortDataType ): CoffeeEntry => {
+export const emptyCoffee = (user: User, stores: AttrDataType ): CoffeeEntry => {
     return {
         bitter: 0,
         brewings: [],

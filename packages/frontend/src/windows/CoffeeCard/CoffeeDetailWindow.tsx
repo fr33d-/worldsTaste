@@ -9,17 +9,17 @@ export const CoffeeDetailWindow = () => {
     const { id } = useParams();
     const { search } = useLocation();
 
-    const { user, coffees, coffeeAttrData } = useContext(CoffeeContext);
+    const { user, coffees, coffeeStores } = useContext(CoffeeContext);
 
     const coffee = coffees.find((elm) => elm.id === Number(id));
     const view = new URLSearchParams(search).get('view');
 
-    if (!coffeeAttrData) return <p>Error, no coffee data defined</p>;
+    if (!coffeeStores) return <p>Error, no coffee stores defined</p>;
 
     if (view === 'new') {
         if (!user) return <p>Error, you are not logged in </p>;
 
-        return <CoffeeCardEdit coffee={emptyCoffee(coffeeAttrData, user)} />;
+        return <CoffeeCardEdit coffee={emptyCoffee(user, coffeeStores)} />;
     } else {
         if (!coffee) return <p>Error, coffee not found</p>;
         if (view === 'edit') {

@@ -1,17 +1,13 @@
 import classNames from 'classnames';
+import { isEqual } from 'lodash';
 import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
 import { SaveSection } from '../../components/Buttons/AdvancedButtons';
-import { BoolInput, DateInput, DropdownInput, NumberInput, TextareaInput } from '../../components/FormElements';
-import {
-    ObjLikeSliderAttrField,
-    ObjSingleSliderAttrField,
-    ObjSliderAttrField,
-} from '../../components/FormElements/AttrFields';
+import { BoolInput, DateInput, NumberInput, StringDropdownInput, TextareaInput } from '../../components/FormElements';
+import { ObjLikeSliderAttrField, ObjSingleSliderAttrField, ObjSliderAttrField } from '../../components/FormElements/AttrFields';
 import { CoffeeContext } from '../../Contexts/CoffeeContext';
 import { displayDate } from '../../helpers/helperFunctions';
 import { BrewingEntry } from '../../helpers/types';
 import { black, blue, blueAccent, green, yellow } from '../../styles/colors';
-import { isEqual } from 'lodash';
 
 type CoffeeBrewingCardEditProps = {
     brewing: BrewingEntry;
@@ -39,15 +35,15 @@ export const CoffeeBrewingCardEdit = ({
                     <h4>
                         {formBrewing.brewDate ? (
                             <>
-                                {formBrewing.method.name} am {displayDate(formBrewing.brewDate)}
+                                {formBrewing.method} am {displayDate(formBrewing.brewDate)}
                             </>
                         ) : (
-                            <>{formBrewing.method.name} am ERROR</>
+                            <>{formBrewing.method} am ERROR</>
                         )}
                     </h4>
                 </div>
                 <div className="col-12 col-md-6">
-                    <DropdownInput
+                    <StringDropdownInput
                         items={methods}
                         label="Brühmethode"
                         onChange={setFormBrewing}

@@ -27,7 +27,7 @@ export const CoffeeCardDetail = ({ coffee }: CoffeeCardDetailProps) => {
     const [brewings, setBrewings] = useState<BrewingEntry[]>([]);
     const [selectedBrewing, setSelectedBrewing] = useState<BrewingEntry>();
 
-    const { user, coffeeAttrData } = useContext(CoffeeContext);
+    const { user } = useContext(CoffeeContext);
 
     useEffect(() => {
         getCoffeeBrewings(coffee.id).then((res) => {
@@ -36,14 +36,10 @@ export const CoffeeCardDetail = ({ coffee }: CoffeeCardDetailProps) => {
     }, [coffee]);
 
     const createBrewing = () => {
-        if (coffeeAttrData) {
-            const newBrewingEntry = newBrewing(coffeeAttrData.brewMethods[0])
+            const newBrewingEntry = newBrewing()
             setSelectedBrewing(newBrewingEntry);
             setBrewings((brewings) => [...brewings, newBrewingEntry]);
             //Todo: opem in edit state
-        } else {
-            throwDataError('no attr data to create brewing');
-        }
     };
 
     // i hope this works
@@ -114,21 +110,21 @@ export const CoffeeCardDetail = ({ coffee }: CoffeeCardDetailProps) => {
                                 <AttrField
                                     color={yellow}
                                     icon="globe-americas"
-                                    value={coffee.origin.name}
+                                    value={coffee.origin}
                                     name="Herkunft:"
                                 />
                             </div>
                             <div className="col-12 col-md-6">
-                                <AttrField color={yellow} icon="mug-hot" value={coffee.kind.name} name="Art:" />
+                                <AttrField color={yellow} icon="mug-hot" value={coffee.kind} name="Art:" />
                             </div>
                             <div className="col-12 col-md-6">
-                                <AttrField color={yellow} icon="flask" value={coffee.roasted.name} name="Rösterei:" />
+                                <AttrField color={yellow} icon="flask" value={coffee.store.name} name="Rösterei:" />
                             </div>
                             <div className="col-12 col-md-6">
-                                <AttrField color={yellow} icon="leaf" value={coffee.roasted.name} name="Prozess:" />
+                                <AttrField color={yellow} icon="leaf" value={coffee.process} name="Prozess:" />
                             </div>
                             <div className="col-12 col-md-6">
-                                <AttrField color={yellow} icon="leaf" value={coffee.roasted.name} name="Bohnenart:" />
+                                <AttrField color={yellow} icon="leaf" value={coffee.species} name="Bohnenart:" />
                             </div>
                             <div className="col-12 col-md-6">
                                 <AttrFieldLikeList value={coffee.rating} name="Gesammtbewertung:" />
@@ -199,7 +195,7 @@ export const CoffeeCardDetail = ({ coffee }: CoffeeCardDetailProps) => {
                                                 )}
                                                 onClick={() => setSelectedBrewing(brewing)}
                                             >
-                                                {brewing.method.name}: {displayDate(brewing.brewDate)}
+                                                {brewing.method}: {displayDate(brewing.brewDate)}
                                             </li>
                                         ))
                                     ) : (
@@ -233,10 +229,6 @@ export const CoffeeCardDetail = ({ coffee }: CoffeeCardDetailProps) => {
                     </div>
                 </>
             )}
-
-            {/* <div className={'ButtonSection'}>
-                    <AdvancedDeleteButton changes={false} onClick={() => deleteCoffee(coffee.id)} />
-                </div> */}
         </>
     );
 };

@@ -140,7 +140,7 @@ export const CigarCardEdit = ({
                         <div className={'TextSection'}>
                             <div className="row">
                                 <div className="col-12 col-md-6">
-                                    <DropdownInput
+                                    <AttrDataDropdownInput
                                         items={cigarsProducer}
                                         icon="store"
                                         iconColor={yellowAccent}
@@ -153,7 +153,7 @@ export const CigarCardEdit = ({
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
-                                    <DropdownInput
+                                    <AttrDataDropdownInput
                                         items={cigarsOrigin}
                                         icon="globe-americas"
                                         iconColor={greenAccent}
@@ -399,7 +399,8 @@ export const CigarCardEdit = ({
 
                 <div className={'Row'}>
                     <div className={'ButtonSection'}>
-                        <SaveSection changes={edited}
+                        <SaveSection
+                            changes={edited}
                             deleteFunction={() => deleteCigar(formCigar.id)}
                             closeFunction={close}
                             saveFunction={saveCard}
