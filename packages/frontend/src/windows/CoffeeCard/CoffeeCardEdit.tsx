@@ -35,10 +35,16 @@ export const CoffeeCardEdit = ({ coffee }: CoffeeCardEditProps) => {
         });
     };
 
-    const innerSaveCoffee = async () => {
-        return await contextSaveCoffee(formCoffee).then((newId) => {
-            setFormCoffee({ ...formCoffee, id: newId });
-        });
+    const innerSaveCoffee = async (): Promise<number> => {
+        return await contextSaveCoffee(formCoffee)
+            .then((newId) => {
+                setFormCoffee({ ...formCoffee, id: newId });
+                return newId;
+            })
+            .catch((e) => {
+                console.log(e);
+                return e;
+            });
     };
 
     const uploadSelectedFile = (event: ChangeEvent<HTMLInputElement>) => {
@@ -111,11 +117,11 @@ export const CoffeeCardEdit = ({ coffee }: CoffeeCardEditProps) => {
                             </div>
                             <div className="col-12 col-md-6">
                                 <AttrDataDropdownInput
-                                    items={coffeeStores.items}
+                                    items={coffeeStores}
                                     icon="flask"
                                     iconColor={blue}
                                     label="Rösterei"
-                                    selectedItem={coffeeStores}
+                                    selectedItem={formCoffee.store}
                                     onChange={setFormCoffee}
                                     propPath={['roasted']}
                                     obj={formCoffee}
@@ -223,7 +229,6 @@ export const CoffeeCardEdit = ({ coffee }: CoffeeCardEditProps) => {
                                     propPath={['ownDescription']}
                                     setStateHandler={setFormCoffee}
                                 />
-                                />
                             </div>
                         </div>
                     </div>
@@ -268,9 +273,9 @@ export const CoffeeCardEdit = ({ coffee }: CoffeeCardEditProps) => {
             <div className={'ButtonSection'}>
                 <SaveSection
                     changes={isEqual(formCoffee, coffee)}
-                    deleteFunction={() => contextDeleteCoffee(formCoffee.id)}
-                    closeFunction={() => viewCoffeeCard(formCoffee.id)}
-                    saveFunction={() => innerSaveCoffee()}
+                    deleteFunction={async() => contextDeleteCoffee(formCoffee.id)}
+                    closeFunction={async () => viewCoffeeCard(formCoffee.id)}
+                    saveFunction={async () => innerSaveCoffee()}
                 />
                 {/* <AdvancedDeleteButton changes={true} onClick={() => contextDeleteCoffee(formCoffee.id)} />
                 <AdvancedCancelButton changes={true} onClick={() => viewCoffeeCard(formCoffee.id)} />

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { baseURL, coffeeURL } from '../../data';
-import { BrewingEntry,CoffeeEntry, User, AttrDataType } from '../../helpers/types';
+import { BrewingEntry,CoffeeEntry, User, AttrDataType, AttrDataItemType } from '../../helpers/types';
 import { throwDataError, throwDataSucess } from '../../pages/User/userHelperFunctions';
 import { localCoffeeAttrData } from '../../helpers/attrData';
 
@@ -32,7 +32,7 @@ export const deleteCoffeeBrewing = async (id: number, brewing: BrewingEntry): Pr
         });
 };
 
-export const emptyCoffee = (user: User, stores: AttrDataType ): CoffeeEntry => {
+export const emptyCoffee = (user: User, stores: AttrDataItemType[] ): CoffeeEntry => {
     return {
         bitter: 0,
         brewings: [],
@@ -47,7 +47,7 @@ export const emptyCoffee = (user: User, stores: AttrDataType ): CoffeeEntry => {
         owner: user,
         process: localCoffeeAttrData.processes[0],
         rating: 0,
-        store: stores.items[0],
+        store: stores[0],
         sour: 0,
         species: localCoffeeAttrData.specieses[0],
         taste: 0,

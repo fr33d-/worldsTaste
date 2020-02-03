@@ -1,7 +1,7 @@
 import React, { createContext, Dispatch, PropsWithChildren, SetStateAction, useState } from 'react';
 import { useHistory } from 'react-router';
 import { localCoffeeAttrData } from '../helpers/attrData';
-import { CoffeeEntry, FullUser, LocalCoffeeAttrData, AttrDataType, } from '../helpers/types';
+import { CoffeeEntry, FullUser, LocalCoffeeAttrData, AttrDataType, AttrDataItemType } from '../helpers/types';
 import { deleteCoffee, saveNewCoffee, updateCoffee } from '../pages/Coffee/CoffeeHelperFunctions';
 import { setUserFromSessionStorage, throwDataSucess } from '../pages/User/userHelperFunctions';
 
@@ -19,8 +19,8 @@ type CoffeeContextType = {
     postOrderBy: string | undefined;
     setPostOrderBy: Dispatch<SetStateAction<string | undefined>>;
     coffeeAttrData: LocalCoffeeAttrData;
-    coffeeStores: AttrDataType | undefined;
-    setCoffeeStores: Dispatch<SetStateAction<AttrDataType | undefined>>;
+    coffeeStores: AttrDataItemType[] | undefined;
+    setCoffeeStores: Dispatch<SetStateAction<AttrDataItemType[] | undefined>>;
     user: FullUser | undefined;
     basePath: string;
     logout(): void;
@@ -39,7 +39,7 @@ export const CoffeeContext = createContext<CoffeeContextType>(({} as unknown) as
 
 export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
     const [coffees, setCoffees] = useState<CoffeeEntry[]>([]);
-    const [coffeeStores, setCoffeeStores] = useState<AttrDataType>();
+    const [coffeeStores, setCoffeeStores] = useState<AttrDataItemType[]>();
 
     const [filteredPosts, setFilteredPosts] = useState<CoffeeEntry[]>([]);
     const [filterName, setFilterName] = useState<string>();
@@ -57,16 +57,26 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
     const contextSaveCoffee = async (coffee: CoffeeEntry): Promise<number> => {
         if (coffee.id === 0) {
             //Create new coffee
-            return await saveNewCoffee(coffee).then((id) => {
-                setCoffees((posts) => (!posts ? posts : [{ ...coffee, id: Number(id) }, ...posts]));
-                return Number(id);
-            });
+            return await saveNewCoffee(coffee)
+                .then((id) => {
+                    setCoffees((posts) => (!posts ? posts : [{ ...coffee, id: Number(id) }, ...posts]));
+                    return Number(id);
+                })
+                .catch((e) => {
+                    console.log('error saving', e);
+                    return e;
+                });
         } else {
             // Save existing coffee
-            return await updateCoffee(coffee).then((res) => {
-                setCoffees((posts) => (!posts ? posts : posts.map((elm) => (elm.id === coffee.id ? coffee : elm))));
-                return coffee.id;
-            });
+            return await updateCoffee(coffee)
+                .then((res) => {
+                    setCoffees((posts) => (!posts ? posts : posts.map((elm) => (elm.id === coffee.id ? coffee : elm))));
+                    return coffee.id;
+                })
+                .catch((e) => {
+                    console.log('error saving', e);
+                    return e;
+                });
         }
     };
 

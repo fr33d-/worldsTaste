@@ -36,30 +36,36 @@ export const CoffeeCardDetail = ({ coffee }: CoffeeCardDetailProps) => {
     }, [coffee]);
 
     const createBrewing = () => {
-            const newBrewingEntry = newBrewing()
-            setSelectedBrewing(newBrewingEntry);
-            setBrewings((brewings) => [...brewings, newBrewingEntry]);
-            //Todo: opem in edit state
+        const newBrewingEntry = newBrewing();
+        setSelectedBrewing(newBrewingEntry);
+        setBrewings((brewings) => [...brewings, newBrewingEntry]);
+        //Todo: opem in edit state
     };
 
     // i hope this works
     const innerDeleteBrewing = async (brewing: BrewingEntry) => {
-        return await deleteCoffeeBrewing(coffee.id, brewing).then((deletedID) => {
-            setSelectedBrewing(undefined);
-            setBrewings((brewings) => brewings.filter((brewing) => brewing.id !== deletedID));
-            throwDataSucess('Brewing deleted')
-        }).catch((e) => {
-            throwDataError('Cant delete brewing', e)
-        });
+        return await deleteCoffeeBrewing(coffee.id, brewing)
+            .then((deletedID) => {
+                setSelectedBrewing(undefined);
+                setBrewings((brewings) => brewings.filter((brewing) => brewing.id !== deletedID));
+                throwDataSucess('Brewing deleted');
+            })
+            .catch((e) => {
+                throwDataError('Cant delete brewing', e);
+            });
     };
 
-    const innerSaveBrewing = async (brewing: BrewingEntry) => {
-        return await saveCoffeeBrewing(coffee.id, brewing).then((newId) => {
-            setSelectedBrewing({ ...brewing, id: newId });
-            throwDataSucess('Brewing saved')
-        }).catch((e) => {
-            throwDataError('Cant save brewing', e)
-        });
+    const innerSaveBrewing = async (brewing: BrewingEntry): Promise<number> => {
+        return await saveCoffeeBrewing(coffee.id, brewing)
+            .then((newId) => {
+                setSelectedBrewing({ ...brewing, id: newId });
+                throwDataSucess('Brewing saved');
+                return newId;
+            })
+            .catch((e) => {
+                throwDataError('Cant save brewing', e);
+                return e;
+            });
     };
 
     const { goToCoffees, editCoffeeCard, contextDeleteCoffee } = useContext(CoffeeContext);
@@ -167,16 +173,17 @@ export const CoffeeCardDetail = ({ coffee }: CoffeeCardDetailProps) => {
             {tab === 2 && (
                 <>
                     <div className={'ImageSection'}>
-                        {coffee.imageStrings && coffee.imageStrings.length > 0 ?
+                        {coffee.imageStrings && coffee.imageStrings.length > 0 ? (
                             coffee.imageStrings.map((url, i) => (
                                 <>
                                     <div className={'Image'}>
                                         <img src={`${baseURL}${url}`} key={i} alt="coffee" />
                                     </div>
                                 </>
-                            )) :
+                            ))
+                        ) : (
                             <div className="images-replacement">No images defined</div>
-                        }
+                        )}
                     </div>
                 </>
             )}

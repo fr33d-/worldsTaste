@@ -25,7 +25,7 @@ export const FrameButton = ({ icon, name, onClick, color, small, className }: Fr
 
 type SaveSectionProps = {
     // todo: all functions optional and async
-    saveFunction(): Promise<void>;
+    saveFunction(): Promise<number>;
     closeFunction(): void;
     deleteFunction(): Promise<void>;
     changes: boolean;
@@ -40,12 +40,7 @@ export enum ButtonState {
 }
 
 //Todo: Error aus den funktionen und changes variable ...
-export const SaveSection = ({
-    closeFunction,
-    deleteFunction,
-    saveFunction,
-    changes,
-}: SaveSectionProps) => {
+export const SaveSection = ({ closeFunction, deleteFunction, saveFunction, changes }: SaveSectionProps) => {
     const [saveState, setSaveState] = useState(ButtonState.norm);
     const [deleteState, setDeleteState] = useState(ButtonState.norm);
     const [cancleState, setCancleState] = useState(ButtonState.norm);
@@ -54,12 +49,16 @@ export const SaveSection = ({
         if (saveState === ButtonState.success) {
             closeFunction();
         } else {
-            try {
-                await saveFunction();
-                setSaveState(ButtonState.success);
-            } catch (e) {
-                setSaveState(ButtonState.error);
-            }
+            console.log('try to save');
+            await saveFunction()
+                .then(() => {
+                    console.log('was successful');
+                    setSaveState(ButtonState.success);
+                })
+                .catch(() => {
+                    console.log('falied');
+                    setSaveState(ButtonState.error);
+                });
         }
     };
 

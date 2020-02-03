@@ -14,6 +14,7 @@ import { usersRoute } from './routes/UsersRoute';
 import { authRouter } from './routes/AuthRoute';
 import { errorLoggerMiddleware, errorMiddleware } from './utils/ErrorHandlerUtil';
 import { createLogger } from './utils/LoggerUtil';
+import { coffeeStoresRoute } from './routes/CoffeeStoreRouts';
 
 // Export all necessary Dtos to make them accessible from the frontend
 export * from './models/dtos/UserDto';
@@ -47,6 +48,7 @@ createConnection()
         server.use('/api/auth', authRouter);
         server.use('/api/user', usersRoute);
         server.use('/api/coffee', coffeeRoute);
+        server.use('/api/coffeesStores', coffeeStoresRoute);
         server.use('/api/coffeebrewings', coffeeBrewingRoute);
         server.use('/api/cigars', cigarRoute);
         server.use('/api/cigarAttrs', cigarAttrsRoute);

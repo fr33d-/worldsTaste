@@ -14,7 +14,7 @@ type WithId = {
 // GETS for menu, filtering and selection
 
 export const getCoffeeStores: RequestHandler = async (_, result) => {
-    log(`GET /coffee/stores`);
+    log(`GET /coffeeStores`);
 
     const coffeeStoresEntities = await CoffeeStoreEntity.find();
     result.status(httpStatusCodes.OK).json(coffeeStoresEntities.map(CoffeeStoreDto.fromEntity));
@@ -65,7 +65,7 @@ type UpdateCoffeeStoreByIdRequestBody = CoffeeStoreDto;
 export const updateCoffeeStoreById: RequestHandler = async (request, result) => {
     const { id } = request.params as unknown as UpdateCoffeeStoreByIdRequestParams;
     const requestBody = request.body as UpdateCoffeeStoreByIdRequestBody;
-    log(`PUT /coffee/stores/${id}/`);
+    log(`PUT /coffeeStores/${id}/`);
 
     const coffeeStoreEntity = await CoffeeStoreEntity.findOne({ where: { id } });
 

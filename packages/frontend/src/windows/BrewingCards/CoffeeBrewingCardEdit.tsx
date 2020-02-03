@@ -12,7 +12,7 @@ import { black, blue, blueAccent, green, yellow } from '../../styles/colors';
 type CoffeeBrewingCardEditProps = {
     brewing: BrewingEntry;
     deleteBrewing(brewing: BrewingEntry): Promise<void>;
-    saveBrewing(brewing: BrewingEntry): Promise<void>;
+    saveBrewing(brewing: BrewingEntry): Promise<number>;
     setEditMode: Dispatch<SetStateAction<boolean>>;
 };
 
@@ -165,9 +165,9 @@ export const CoffeeBrewingCardEdit = ({
                 <div className={classNames('ButtonSection col-12')}>
                     <SaveSection
                         changes={isEqual(formBrewing, brewing)}
-                        closeFunction={() => setEditMode(false)}
-                        saveFunction={() => saveBrewing(formBrewing)}
-                        deleteFunction={() => deleteBrewing(formBrewing)}
+                        closeFunction={async () => setEditMode(false)}
+                        saveFunction={async () => saveBrewing(formBrewing)}
+                        deleteFunction={async () => deleteBrewing(formBrewing)}
                     />
                     {/* <DeleteButton onClick={() => deleteBrewing(formBrewing)} withText />
                     <AdvancedSaveButton

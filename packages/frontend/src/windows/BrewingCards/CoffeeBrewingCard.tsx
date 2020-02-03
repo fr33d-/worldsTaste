@@ -6,7 +6,7 @@ import { CoffeeBrewingCardEdit } from './CoffeeBrewingCardEdit';
 type CoffeeBrewingCardProps = {
     brewing: BrewingEntry;
     deleteBrewing(brewing: BrewingEntry): Promise<void>;
-    saveBrewing(brewing: BrewingEntry): Promise<void>;
+    saveBrewing(brewing: BrewingEntry): Promise<number>;
 };
 
 export const CoffeeBrewingCard = ({ brewing, saveBrewing, deleteBrewing }: CoffeeBrewingCardProps) => {

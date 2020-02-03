@@ -50,7 +50,8 @@ export const Coffee = () => {
         getCoffeStores()
             .then((coffeeStores) => {
                 setCoffeeStores(coffeeStores);
-                throwDataSucess('got coffee data');
+                console.log('Coffee Stores', coffeeStores);
+                throwDataSucess('got coffee stores');
             })
             .catch((error) => {
                 throwDataError('cant get data from data', error);
@@ -65,9 +66,6 @@ export const Coffee = () => {
                 throwDataError('cant get coffees', error);
             });
     };
-
-    console.log('Filtered posts', filteredPosts);
-    console.log('Filtered posts lenth', filteredPosts.length);
 
     return (
         <>
@@ -106,10 +104,9 @@ export const Coffee = () => {
                             <p>No coffees to display</p>
                         </div>
                     ) : (
-                        // filteredPosts.map((post, i) => (
-                        //     <InlineCoffeeCardDisplay entry={post} key={`${post.name}_${i}`} />
-                        // ))
-                        <>test</>
+                        filteredPosts.map((post, i) => (
+                            <InlineCoffeeCardDisplay entry={post} key={`${post.name}_${i}`} />
+                        ))
                     )}
                 </div>
             </AppWindow>

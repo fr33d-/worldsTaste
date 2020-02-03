@@ -17,11 +17,13 @@ export const CoffeeAttrDataWindow = () => {
         {
             id: 1,
             name: 'Röstereien',
-            urlSubstring: '/coffees/stores',
+            urlSubstring: 'coffeesStores',
             description: 'Läden oder Röstereien weltweit',
-            items: coffeeStores.items,
+            items: coffeeStores,
         },
     ];
+
+    console.log('Attr Data', attrData);
 
     return <AttrDataWindow close={closeAttrWindow} content={attrData} />;
 };
@@ -47,6 +49,9 @@ export const AttrDataWindow = ({ close, content }: AttrDataProps) => {
     };
 
     const innerAddNewItem = () => {
+
+        console.log('Selected category', selectedCategory);
+
         if (newItemName) {
             addNewItem(selectedCategory.urlSubstring, newItemName)
                 .then((id) => {
@@ -94,8 +99,7 @@ export const AttrDataWindow = ({ close, content }: AttrDataProps) => {
             <div className={'AttrDataWindow'}>
                 <Row>
                     <div className={'AttrList'}>
-                        {/* <FontAwesomeIcon icon="mug-hot" size="3x" color="#8B572A" /> */}
-                        <h2>Kaffee Daten</h2>
+                        <h2>Zusätzliche Daten</h2>
                         <ul>
                             {content.map((item) => (
                                 <li
@@ -104,7 +108,7 @@ export const AttrDataWindow = ({ close, content }: AttrDataProps) => {
                                     className={classnames(item.id === selectedCategory.id && 'Active')}
                                 >
                                     {item.name}
-                                    <span> ({item.items.length})</span>
+                                    <span> ({item.items && item.items.length})</span>
                                 </li>
                             ))}
                         </ul>
@@ -118,7 +122,7 @@ export const AttrDataWindow = ({ close, content }: AttrDataProps) => {
                             {selectedCategory.description}
                         </span>
                         <ul>
-                            {selectedCategory.items.map((item) => (
+                            {selectedCategory.items && selectedCategory.items.map((item) => (
                                 <li key={item.id}>
                                     {item.name}{' '}
                                     <button

@@ -9,7 +9,7 @@ export const userURL = '/user';
 export const authURL = '/auth';
 export const coffeeURL = '/coffee';
 export const brewingURL = '/coffeebrewings';
-export const coffeeStoresURL = '/coffee/stores';
+export const coffeeStoresURL = '/coffeesStores';
 export const cigarsURL = '/cigars';
 export const cigarsAttrURL = '/cigarAttrs';
 

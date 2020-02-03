@@ -72,7 +72,7 @@ export const deleteCoffee = async (id: number): Promise<void> => {
         });
 };
 
-export const saveNewCoffee = async (coffee: CoffeeEntry): Promise<{id: number}> => {
+export const saveNewCoffee = async (coffee: CoffeeEntry): Promise<number> => {
     const jwtObj = sessionStorage.getItem('auth');
     return await axios
         .post(`${baseURL}${coffeeURL}`, { ...coffee }, { headers: { auth: jwtObj } })
@@ -114,7 +114,7 @@ export const getCoffees = async (): Promise<CoffeeEntity[]> => {
         });
 };
 
-export const getCoffeStores = async (): Promise<AttrDataType> => {
+export const getCoffeStores = async (): Promise<AttrDataItemType[]> => {
     return await axios
         .get<AttrDataType>(`${baseURL}${coffeeStoresURL}`)
         .then((res) => {
