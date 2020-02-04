@@ -11,6 +11,7 @@ export const login = async (req: Request, res: Response) => {
     let { username, password } = req.body;
     if (!(username && password)) {
         res.status(400).send();
+        console.log('Auth: 400')
         return;
     }
 
@@ -23,6 +24,7 @@ export const login = async (req: Request, res: Response) => {
         //Check if encrypted password match
         if (!user.checkIfUnencryptedPasswordIsValid(password)) {
             res.status(401).send();
+            console.log('Auth: 401')
             return;
         }
 
@@ -34,8 +36,10 @@ export const login = async (req: Request, res: Response) => {
         );
 
         //Send the jwt in the response
+        console.log('Auth: ok')
         res.send(token);
     } catch (error) {
+        console.log('Auth: 401')
         res.status(401).send();
     }
 };
