@@ -1,9 +1,9 @@
 import classNames from 'classnames';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Button, Container, Row } from 'react-bootstrap';
 import { Navigationbar } from '../../components/Navigationbar';
 import { CoffeeContext } from '../../Contexts/CoffeeContext';
-import { AttrDataItemType } from '../../helpers/types';
+import { AttrDataItemType, FullUser } from '../../helpers/types';
 import userAvatar from '../../images/avatar-frederic.png';
 import {
     LoginWindow,
@@ -13,6 +13,7 @@ import {
     UserDataWindow,
     UserDetailWindow,
 } from '../../windows/UserWindows/';
+import { setUserFromSessionStorage } from './userHelperFunctions';
 
 export const UserRoles: AttrDataItemType[] = [
     { id: 0, name: 'ADMIN' },
@@ -21,25 +22,15 @@ export const UserRoles: AttrDataItemType[] = [
 ];
 
 export const UserPage = () => {
-    // const [user, setUser] = useState<FullUser | undefined>(setUserFromSessionStorage());
+    const [user, setUser] = useState<FullUser | undefined>(setUserFromSessionStorage());
     const [activeMenu, setActiveMenu] = useState(0);
 
-    const { user, logout } = useContext(CoffeeContext);
+    const { logout } = useContext(CoffeeContext);
+    // const { user, logout } = useContext(CoffeeContext);
 
-    // const innerSetUserFromSessionStorage = () => {
-    //     setUser(setUserFromSessionStorage());
-    //     // .then((user) => {
-    //     //     throwDataSucess('user set from sessio storeage');
-    //     //     setUser(user);
-    //     // })
-    //     // .catch((error) => {
-    //     //     throwDataError('cant set user from session strorage, your not logged in ', error);
-    //     // });
-    // };
-
-    // useEffect(() => {
-    //     innerSetUserFromSessionStorage();
-    // }, []);
+    useEffect(() => {
+        setUser(setUserFromSessionStorage());
+    });
 
     return (
         <>
@@ -83,7 +74,7 @@ export const UserPage = () => {
                                                 <span onClick={() => setActiveMenu(4)}>Create new user</span>
                                             </li>
                                         </ul>
-                                        <Button className={'TestButton'} onClick={logout}>
+                                        <Button className={'LogoutButton'} onClick={logout}>
                                             Log out
                                         </Button>
                                     </div>

@@ -1,10 +1,9 @@
 .User {
     @extend .container;
 
-    .TestButton {
+    .LogoutButton {
         @extend .color-button;
         @extend .gray;
-        margin-top: 120px; //$default-space-xxl;
     }
 
     .Sidebar {

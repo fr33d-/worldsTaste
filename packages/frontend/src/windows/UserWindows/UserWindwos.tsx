@@ -1,10 +1,10 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useContext } from 'react';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { SimplePasswordInput, SimpleTextInput, TextInput, AttrDataDropdownInput } from '../../components/FormElements';
 import { AttrField } from '../../components/FormElements/AttrFields';
 import { IconButton } from '../../components/Buttons';
-import { AttrDataItemType, ExtendedUser, FullUser, User } from '../../helpers/types';
+import { ExtendedUser, FullUser, User } from '../../helpers/types';
 import { UserRoles } from '../../pages/User';
 import {
     changeUser,
@@ -15,7 +15,7 @@ import {
     throwDataSucess,
 } from '../../pages/User/userHelperFunctions';
 import { green, white } from '../../styles/colors';
-import { login } from './UserHelperFunctions';
+import { CoffeeContext } from '../../Contexts/CoffeeContext';
 
 
 export const LoginWindow = () => {
@@ -23,10 +23,12 @@ export const LoginWindow = () => {
     const [password, setPassword] = useState('');
     const [msg, setMsg] = useState('');
 
+    const {contextLogin} = useContext(CoffeeContext);
+
     const innerLogin = () => {
-        login(username, password)
+        contextLogin(username, password)
             .then((res) => {
-                setMsg('Logged in!');
+                setMsg(`Maybe Logged in! ${res} `);
             })
             .catch((error) => {
                 console.log(error);

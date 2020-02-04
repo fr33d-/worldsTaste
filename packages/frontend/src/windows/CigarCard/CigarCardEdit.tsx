@@ -39,18 +39,20 @@ export const CigarCardEdit = ({
 }: CigarCardEditProps) => {
     const [formCigar, setFormCigar] = useState<CigarEntry>(entry);
 
-    const [saveError, setSaveError] = useState(false);
+    // const [saveError, setSaveError] = useState(false);
     const [edited, setEdited] = useState(false);
     const [tab, setTab] = useState(0);
 
-    const saveCard = async () => {
+    const saveCard = async (): Promise<number> => {
         return await axios
             .put(`${baseURL}${cigarsURL}/${entry.id}`, { ...formCigar })
             .then((response) => {
                 setEdited(false);
-                setSaveError(false);
+                return entry.id;
+                // setSaveError(false);
             })
             .catch((error) => {
+                return error;
                 console.log(error);
             });
     };
@@ -60,7 +62,7 @@ export const CigarCardEdit = ({
             .delete(`${baseURL}${cigarsURL}/assets/${id}`, { data: { url: url } })
             .then((response) => {
                 console.log('... sucessfully');
-                setSaveError(false);
+                // setSaveError(false);
 
                 if (formCigar.imageStrings !== undefined && formCigar.imageStrings.length > 0) {
                     // setImageStrings(imageStrings.filter((image) => image !== url));
@@ -73,7 +75,7 @@ export const CigarCardEdit = ({
             .catch((error) => {
                 console.log(error);
                 console.log('... failed');
-                setSaveError(true);
+                // setSaveError(true);
             });
     };
 
@@ -95,7 +97,7 @@ export const CigarCardEdit = ({
             .then((response) => {
                 console.log('... sucessfully');
                 setEdited(false);
-                setSaveError(false);
+                // setSaveError(false);
 
                 let newImageString: string = response.headers.location;
                 newImageString = newImageString.split('/').slice(-1)[0];
@@ -112,7 +114,7 @@ export const CigarCardEdit = ({
             .catch((error) => {
                 console.log(error);
                 console.log('... failed');
-                setSaveError(true);
+                // setSaveError(true);
             });
     };
 

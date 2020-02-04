@@ -3,7 +3,8 @@ import { useHistory } from 'react-router';
 import { localCoffeeAttrData } from '../helpers/attrData';
 import { CoffeeEntry, FullUser, LocalCoffeeAttrData, AttrDataType, AttrDataItemType } from '../helpers/types';
 import { deleteCoffee, saveNewCoffee, updateCoffee } from '../pages/Coffee/CoffeeHelperFunctions';
-import { setUserFromSessionStorage, throwDataSucess } from '../pages/User/userHelperFunctions';
+import { setUserFromSessionStorage, throwDataSucess, throwDataError } from '../pages/User/userHelperFunctions';
+import { login } from '../windows/UserWindows/UserHelperFunctions';
 
 type CoffeeContextType = {
     coffees: CoffeeEntry[];
@@ -33,6 +34,7 @@ type CoffeeContextType = {
     editCoffeeCard(id: number): void;
     viewCoffeeCard(id: number): void;
     getFilterCoffeeList(): void;
+    contextLogin(username: string, password: string): Promise<FullUser>;
 };
 
 export const CoffeeContext = createContext<CoffeeContextType>(({} as unknown) as CoffeeContextType);
@@ -53,6 +55,19 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
     const basePath = '/coffee';
 
     const history = useHistory();
+
+    const contextLogin = async (username: string, password: string): Promise<FullUser> => {
+        return await login(username, password)
+            .then((res) => {
+                setUserFromSessionStorage()
+                throwDataSucess('Logged in');
+                return user;
+            })
+            .catch((error) => {
+                throwDataError('not logged in', error);
+                return error;
+            });
+    };
 
     const contextSaveCoffee = async (coffee: CoffeeEntry): Promise<number> => {
         if (coffee.id === 0) {
@@ -90,6 +105,7 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
         throwDataSucess('Logged out!');
         sessionStorage.removeItem('auth');
         setUser(undefined);
+        history.push('/')
     };
 
     const openAttrWindow = () => {
@@ -205,6 +221,7 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
                 getFilterCoffeeList,
                 coffeeStores,
                 setCoffeeStores,
+                contextLogin
             }}
         >
             {children}

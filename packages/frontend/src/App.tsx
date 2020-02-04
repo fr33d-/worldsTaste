@@ -103,7 +103,9 @@ export const App = () => (
         <BrowserRouter>
             <Switch>
                 <Route path="/user/:extention?">
-                    <UserPage />
+                    <CoffeeContextProvider>
+                        <UserPage />
+                    </CoffeeContextProvider>
                 </Route>
                 <Route path="/coffee/:extention?">
                     <CoffeeContextProvider>
