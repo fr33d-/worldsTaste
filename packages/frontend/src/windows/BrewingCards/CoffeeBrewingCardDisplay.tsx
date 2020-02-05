@@ -4,6 +4,7 @@ import {
     NewAttrFieldDescription,
     NewAttrFieldLikeList,
     NewAttrFieldSlider,
+    NewDateAttrField,
 } from '../../components/FormElements/AttrFields';
 import { IconButton } from '../../components/Buttons';
 import { displayDate } from '../../helpers/helperFunctions';
@@ -44,7 +45,7 @@ export const CoffeeBrewingCardDisplay = ({ brewing, setEditMode }: CoffeeBrewing
                     />
                 </div>
                 <div className="col-12 col-md-6">
-                    <NewAttrField name="Datum" icon={'clock'} propPath={['brewDate']} obj={brewing} color={blue} />
+                    <NewDateAttrField name="Datum" icon={'clock'} propPath={['brewDate']} obj={brewing} color={blue} />
                 </div>
                 <div className="col-12 col-md-6">
                     <NewAttrField

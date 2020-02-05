@@ -5,6 +5,7 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 // import LocalStyles from './AttrFields.module.scss';
 import { red, gray, yellow, grayDark, grayDarker } from '../../styles/colors';
 import { get, set, cloneDeep } from 'lodash';
+import { displayDate } from '../../helpers/helperFunctions';
 
 type dateFormatProps = {
     date: Date;
@@ -253,6 +254,33 @@ export const NewAttrField = ({ name, icon, color, className, obj, propPath, unit
                 {icon && <FontAwesomeIcon icon={icon} color={color} size="sm" />}
                 <span className={'Value'}>
                     {value}
+                    {unit}
+                </span>
+            </div>
+        </div>
+    );
+};
+
+type NewDateAttrFieldProps = {
+    name: string;
+    obj: any;
+    propPath: string[];
+    icon?: IconProp;
+    color?: string;
+    className?: string;
+    unit?: string;
+};
+
+export const NewDateAttrField = ({ name, icon, color, className, obj, propPath, unit }: NewDateAttrFieldProps) => {
+    const value: Date = get(obj, propPath);
+
+    return (
+        <div className={classNames(className && className)}>
+            <label className={'AttrFieldLabel'}>{name}</label>
+            <div className={'AttrField'}>
+                {icon && <FontAwesomeIcon icon={icon} color={color} size="sm" />}
+                <span className={'Value'}>
+                    {displayDate(value)}
                     {unit}
                 </span>
             </div>

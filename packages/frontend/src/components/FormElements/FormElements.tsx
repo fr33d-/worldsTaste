@@ -5,6 +5,7 @@ import React, { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { blue, grayDarker } from '../../styles/colors';
 // import LocalStyles from './FormElements.module.scss';
 import { AttrDataItemType } from '../../helpers/types';
+import { DateInput } from "@blueprintjs/datetime";
 
 type textInputProps = {
     name: string;
@@ -313,21 +314,24 @@ type DateInputProps = {
     setStateHandler: Dispatch<SetStateAction<any>>;
 };
 
-export const DateInput = ({ label, obj, propPath, setStateHandler }: DateInputProps) => {
+export const WTDateInput = ({ label, obj, propPath, setStateHandler }: DateInputProps) => {
+    const date: Date = get(obj, propPath);
+    const setDate = (date: Date) => {
+        setStateHandler(cloneDeep(set(obj, propPath, date)))
+    }
+
     return (
         <div className={'DateInput'}>
             <label>{label}</label>
             <div className={'DateInputArea'}>
                 <FontAwesomeIcon icon="calendar" size="lg" color={blue} />
-                <input
-                    type="text"
-                    placeholder={label}
-                    // value={`${value.getDate()}.${value.getMonth()}.${value.getFullYear()} - ${value.getUTCHours()}:${value.getUTCMinutes()} Uhr`}
-
-                    value={get(obj, propPath)}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                        setStateHandler(cloneDeep(set(obj, propPath, e.target.value)))
-                    }
+                <DateInput
+                    formatDate={date => date.toLocaleString()}
+                    onChange={setDate}
+                    parseDate={str => new Date(str)}
+                    placeholder={"DD/MM/YYYY"}
+                    value={date}
+                    timePrecision={"minute"}
                 />
             </div>
         </div>
@@ -336,8 +340,6 @@ export const DateInput = ({ label, obj, propPath, setStateHandler }: DateInputPr
 
 type BoolInputProps = {
     label: string;
-    // value: boolean;
-    // onChange: Dispatch<SetStateAction<boolean>>;
     obj: any;
     propPath: string | Array<string>;
     setStateHandler: Dispatch<SetStateAction<any>>;

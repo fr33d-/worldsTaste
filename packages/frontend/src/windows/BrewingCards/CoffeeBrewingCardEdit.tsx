@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { isEqual } from 'lodash';
 import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
 import { SaveSection } from '../../components/Buttons/AdvancedButtons';
-import { BoolInput, DateInput, NumberInput, StringDropdownInput, TextareaInput } from '../../components/FormElements';
+import { BoolInput, WTDateInput, NumberInput, StringDropdownInput, TextareaInput } from '../../components/FormElements';
 import { ObjLikeSliderAttrField, ObjSingleSliderAttrField, ObjSliderAttrField } from '../../components/FormElements/AttrFields';
 import { CoffeeContext } from '../../Contexts/CoffeeContext';
 import { displayDate } from '../../helpers/helperFunctions';
@@ -55,7 +55,7 @@ export const CoffeeBrewingCardEdit = ({
                     />
                 </div>
                 <div className="col-12 col-md-6">
-                    <DateInput
+                    <WTDateInput
                         label="Datum"
                         obj={formBrewing}
                         setStateHandler={setFormBrewing}

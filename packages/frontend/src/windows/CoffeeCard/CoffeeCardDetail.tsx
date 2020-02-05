@@ -31,11 +31,18 @@ export const CoffeeCardDetail = ({ coffee }: CoffeeCardDetailProps) => {
     const { user } = useContext(UserContext);
 
     useEffect(() => {
-        {async () => {
+        innerGetBrewings();
+    }, [coffee]);
+
+    const innerGetBrewings = async () => {
+        try {
             const res = await getCoffeeBrewings(coffee.id);
             setBrewings(res);
-        }}
-    }, [coffee]);
+        } catch(e) {
+            throwDataError('Cant get brewings', e);
+            throw e;
+        }
+    }
 
     const createBrewing = () => {
         const newBrewingEntry = newBrewing();
@@ -46,26 +53,24 @@ export const CoffeeCardDetail = ({ coffee }: CoffeeCardDetailProps) => {
 
     // i hope this works
     const innerDeleteBrewing = async (brewing: BrewingEntry) => {
-
         try {
             const deletedID = await deleteCoffeeBrewing(coffee.id, brewing);
             setSelectedBrewing(undefined);
             setBrewings((brewings) => brewings.filter((brewing) => brewing.id !== deletedID));
             throwDataSucess('Brewing deleted');
-        } catch(e) {
+        } catch (e) {
             throwDataError('Cant delete brewing', e);
             throw e;
         }
     };
 
     const innerSaveBrewing = async (brewing: BrewingEntry): Promise<number> => {
-
         try {
             const newId = await saveCoffeeBrewing(coffee.id, brewing);
             setSelectedBrewing({ ...brewing, id: newId });
             throwDataSucess('Brewing saved');
             return newId;
-        } catch(e) {
+        } catch (e) {
             throwDataError('Cant save brewing', e);
             throw e;
         }

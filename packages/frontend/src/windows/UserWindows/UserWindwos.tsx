@@ -27,8 +27,8 @@ export const LoginWindow = () => {
 
     const innerLogin = async () => {
         try {
-            const res = await contextLogin(username, password);
-            setMsg(`Logged in! ${res} `);
+            await contextLogin(username, password);
+            setMsg(`Logged in! `);
         } catch (error) {
             if (error && error.response && error.response.status === 400) {
                 setMsg('You need to enter a valid Mail and a Password!');
