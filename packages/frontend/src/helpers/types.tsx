@@ -46,11 +46,11 @@ export type AttrDataType = {
 // };
 
 export type LocalCoffeeAttrData = {
-    brewMethods: string[],
-    kinds: string[],
-    origins: string[],
-    processes: string[],
-    specieses: string[],
+    brewMethods: string[];
+    kinds: string[];
+    origins: string[];
+    processes: string[];
+    specieses: string[];
 };
 
 export type Image = {
@@ -105,4 +105,3 @@ export type FilterMenuType = {
     name: string;
     items: string[];
 };
-

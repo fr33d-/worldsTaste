@@ -93,9 +93,9 @@ export const updateCoffee = async (coffee: CoffeeEntry): Promise<number> => {
     }
 };
 
-export const getCoffees = async (): Promise<CoffeeEntity[]> => {
+export const getCoffees = async (): Promise<CoffeeEntry[]> => {
     try {
-        const res = await axios.get<CoffeeEntity[]>(`${baseURL}${coffeeURL}`);
+        const res = await axios.get<CoffeeEntry[]>(`${baseURL}${coffeeURL}`);
         return res.data;
     } catch (e) {
         console.log(e);
