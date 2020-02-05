@@ -26,6 +26,7 @@ export const UserContextProvider = ({ children }: PropsWithChildren<{}>) => {
             const user = setUserFromSessionStorage();
             if (user) {
                 throwDataSucess('Logged in');
+                setUser(user)
                 return user;
             } else {
                 throw 'error, login not possible';
@@ -40,7 +41,7 @@ export const UserContextProvider = ({ children }: PropsWithChildren<{}>) => {
         throwDataSucess('Logged out!');
         sessionStorage.removeItem('auth');
         setUser(undefined);
-        history.push('/');
+        // history.push('/');
     };
 
     return (
