@@ -5,31 +5,29 @@ import { throwDataError, throwDataSucess } from '../../pages/User/userHelperFunc
 import { localCoffeeAttrData } from '../../helpers/attrData';
 
 export const saveCoffeeBrewing = async (id: number, brewing: BrewingEntry): Promise<number> => {
-    return await axios
-        .post(`${baseURL}${coffeeURL}/${id}/brewings/`, brewing)
-        .then((response) => {
-            const location: string = response.headers['location'];
-            const [newId] = location.split('/').slice(-1);
-            throwDataSucess(`saved brewing with id ${newId}`);
-            return Number(newId);
-        })
-        .catch((error) => {
-            throwDataError('cant save brewing', error);
-            return error;
-        });
+
+    try {
+        const res = await axios.post(`${baseURL}${coffeeURL}/${id}/brewings/`, brewing);
+        const location: string = res.headers['location'];
+        const [newId] = location.split('/').slice(-1);
+        throwDataSucess(`Saved brewing with id ${newId}`);
+        return Number(newId);
+    } catch(e) {
+        throwDataError('Cant save brewing', e);
+        throw e;
+    };
 };
 
 export const deleteCoffeeBrewing = async (id: number, brewing: BrewingEntry): Promise<number> => {
-    return await axios
-        .delete(`${baseURL}${coffeeURL}/${id}/brewings/${brewing.id}`)
-        .then((response) => {
-            throwDataSucess(`deleted brewing with id ${response}`);
-            return Number(response);
-        })
-        .catch((error) => {
-            throwDataError('cant delete brewing', error);
-            return error;
-        });
+
+    try {
+        const res = await axios.delete(`${baseURL}${coffeeURL}/${id}/brewings/${brewing.id}`)
+        throwDataSucess(`deleted brewing with id ${res}`);
+        return Number(res);
+    } catch(e) {
+        throwDataError('cant delete brewing', e);
+        throw e;
+    };
 };
 
 export const emptyCoffee = (user: User, stores: AttrDataItemType[] ): CoffeeEntry => {
@@ -76,29 +74,27 @@ export const newBrewing = (): BrewingEntry => {
 };
 
 export const getCoffeeBrewings = async (coffeeId: number): Promise<BrewingEntry[]> => {
-    return await axios
-        .get<BrewingEntry[]>(`${baseURL}${coffeeURL}/${coffeeId}/brewings`)
-        .then((response) => {
-            throwDataSucess('brewings loaded');
-            return response.data;
-        })
-        .catch((error) => {
-            throwDataError('cant load brewings', error);
-            return error;
-        });
+
+    try {
+        const res = await axios.get<BrewingEntry[]>(`${baseURL}${coffeeURL}/${coffeeId}/brewings`);
+        throwDataSucess('brewings loaded');
+        return res.data;
+    } catch(e) {
+        throwDataError('cant load brewings', e);
+        throw e;
+    };
 };
 
 export const deleteImageByURL = async (url: string, id: number): Promise<any> => {
-    return await axios
-        .delete(`${baseURL}${coffeeURL}/assets/${id}`, { data: { url: url } })
-        .then((response) => {
-            throwDataSucess('image deleted');
-            return response;
-        })
-        .catch((error) => {
-            throwDataError('cant delete image', error);
-            return error;
-        });
+
+    try {
+        const res = await axios.delete(`${baseURL}${coffeeURL}/assets/${id}`, { data: { url: url } });
+        throwDataSucess('image deleted');
+        return res;
+    } catch(e) {
+        throwDataError('cant delete image', e);
+        throw e;
+    };
 };
 
 export const handleFileUpload = async (files: FileList, coffeeID: number): Promise<string> => {
@@ -108,18 +104,16 @@ export const handleFileUpload = async (files: FileList, coffeeID: number): Promi
         formData.append('images', file);
     });
 
-    return await axios
-        .post(`${baseURL}${coffeeURL}/assets/${coffeeID}`, formData)
-        .then((response) => {
-            let newImageString: string = response.headers.location;
-            newImageString = newImageString.split('/').slice(-1)[0];
-            newImageString = `/coffee/assets/${coffeeID}/${newImageString}`;
+    try {
+        const res = await axios.post(`${baseURL}${coffeeURL}/assets/${coffeeID}`, formData);
+        let newImageString: string = res.headers.location;
+        newImageString = newImageString.split('/').slice(-1)[0];
+        newImageString = `/coffee/assets/${coffeeID}/${newImageString}`;
 
-            throwDataSucess('image uploaded');
-            return newImageString;
-        })
-        .catch((error) => {
-            throwDataError('cant upload image', error);
-            return error;
-        });
+        throwDataSucess('Image uploaded');
+        return newImageString;
+    } catch(e) {
+        throwDataError('Cant upload image', e);
+        throw e;
+    };
 };

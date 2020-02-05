@@ -8,7 +8,9 @@ import {
     AttrFieldSlider,
 } from '../../components/FormElements/AttrFields';
 import { CoffeeContext } from '../../Contexts/CoffeeContext';
+import { UserContext } from '../../Contexts/UserContext';
 import { baseURL } from '../../data';
+import { displayDate } from '../../helpers/helperFunctions';
 import { BrewingEntry, CoffeeEntry } from '../../helpers/types';
 import Beans from '../../images/beans.svg';
 import Cup from '../../images/cup-bw.svg';
@@ -16,7 +18,6 @@ import { throwDataError, throwDataSucess } from '../../pages/User/userHelperFunc
 import { blue, cyan, green, yellow } from '../../styles/colors';
 import { CoffeeBrewingCard } from '../BrewingCards/CoffeeBrewingCard';
 import { deleteCoffeeBrewing, getCoffeeBrewings, newBrewing, saveCoffeeBrewing } from './CoffeeCardHelperFuctions';
-import { displayDate } from '../../helpers/helperFunctions';
 
 type CoffeeCardDetailProps = {
     coffee: CoffeeEntry;
@@ -27,12 +28,13 @@ export const CoffeeCardDetail = ({ coffee }: CoffeeCardDetailProps) => {
     const [brewings, setBrewings] = useState<BrewingEntry[]>([]);
     const [selectedBrewing, setSelectedBrewing] = useState<BrewingEntry>();
 
-    const { user } = useContext(CoffeeContext);
+    const { user } = useContext(UserContext);
 
     useEffect(() => {
-        getCoffeeBrewings(coffee.id).then((res) => {
+        {async () => {
+            const res = await getCoffeeBrewings(coffee.id);
             setBrewings(res);
-        });
+        }}
     }, [coffee]);
 
     const createBrewing = () => {
@@ -44,28 +46,29 @@ export const CoffeeCardDetail = ({ coffee }: CoffeeCardDetailProps) => {
 
     // i hope this works
     const innerDeleteBrewing = async (brewing: BrewingEntry) => {
-        return await deleteCoffeeBrewing(coffee.id, brewing)
-            .then((deletedID) => {
-                setSelectedBrewing(undefined);
-                setBrewings((brewings) => brewings.filter((brewing) => brewing.id !== deletedID));
-                throwDataSucess('Brewing deleted');
-            })
-            .catch((e) => {
-                throwDataError('Cant delete brewing', e);
-            });
+
+        try {
+            const deletedID = await deleteCoffeeBrewing(coffee.id, brewing);
+            setSelectedBrewing(undefined);
+            setBrewings((brewings) => brewings.filter((brewing) => brewing.id !== deletedID));
+            throwDataSucess('Brewing deleted');
+        } catch(e) {
+            throwDataError('Cant delete brewing', e);
+            throw e;
+        }
     };
 
     const innerSaveBrewing = async (brewing: BrewingEntry): Promise<number> => {
-        return await saveCoffeeBrewing(coffee.id, brewing)
-            .then((newId) => {
-                setSelectedBrewing({ ...brewing, id: newId });
-                throwDataSucess('Brewing saved');
-                return newId;
-            })
-            .catch((e) => {
-                throwDataError('Cant save brewing', e);
-                return e;
-            });
+
+        try {
+            const newId = await saveCoffeeBrewing(coffee.id, brewing);
+            setSelectedBrewing({ ...brewing, id: newId });
+            throwDataSucess('Brewing saved');
+            return newId;
+        } catch(e) {
+            throwDataError('Cant save brewing', e);
+            throw e;
+        }
     };
 
     const { goToCoffees, editCoffeeCard, contextDeleteCoffee } = useContext(CoffeeContext);

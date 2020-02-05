@@ -49,16 +49,12 @@ export const SaveSection = ({ closeFunction, deleteFunction, saveFunction, chang
         if (saveState === ButtonState.success) {
             closeFunction();
         } else {
-            console.log('try to save');
-            await saveFunction()
-                .then(() => {
-                    console.log('was successful');
-                    setSaveState(ButtonState.success);
-                })
-                .catch(() => {
-                    console.log('falied');
-                    setSaveState(ButtonState.error);
-                });
+            try {
+                await saveFunction();
+                setSaveState(ButtonState.success);
+            } catch(e) {
+                setSaveState(ButtonState.error);
+            }
         }
     };
 

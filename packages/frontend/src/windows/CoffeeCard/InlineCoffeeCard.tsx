@@ -8,25 +8,20 @@ import { baseURL } from '../../data';
 import { CoffeeEntry } from '../../helpers/types';
 import { blue, green, yellow } from '../../styles/colors';
 import coffeePlacement from './../../images/coffeePlacement.svg';
+import { UserContext } from '../../Contexts/UserContext';
 
 type InlineCoffeeCardDisplayProps = {
     entry: CoffeeEntry;
 };
 
 export const InlineCoffeeCardDisplay = ({ entry }: InlineCoffeeCardDisplayProps) => {
-    const { user, editCoffeeCard, contextDeleteCoffee } = useContext(CoffeeContext);
+    const { editCoffeeCard, contextDeleteCoffee } = useContext(CoffeeContext);
+    const { user } = useContext(UserContext);
 
     return (
         <>
             <div className={'InlineLayoutCard'}>
                 <div className={'ActionSection'}>
-                    {/* <button
-                        onClick={() => openBrewingWindow(entry.id)}
-                        className={classNames('IconButton', 'HoverGreen')}
-                    >
-                        <FontAwesomeIcon icon="flask" />
-                        Brewings
-                    </button> */}
                     {user && (
                         <button
                             onClick={() => editCoffeeCard(entry.id)}

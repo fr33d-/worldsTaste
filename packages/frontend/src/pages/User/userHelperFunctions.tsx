@@ -7,39 +7,38 @@ import { ExtendedUser, FullUser, User } from '../../helpers/types';
 export const createUser = async (newUser: ExtendedUser): Promise<void> => {
     const jwtObj = sessionStorage.getItem('auth');
 
-    return await axios
-        .post(`${baseURL}${userURL}/`, { ...newUser }, { headers: { auth: jwtObj } })
-        .then((response) => {
-            return response;
-        })
-        .catch((error) => {
-            return error;
-        });
+    try {
+        const res = await axios.post(`${baseURL}${userURL}/`, { ...newUser }, { headers: { auth: jwtObj } });
+        throwDataSucess(`User created under: ${res.headers} `)
+    } catch(e) {
+        throwDataError('Cant create user', e);
+        throw e;
+    }
 };
 
 export const getUserList = async (): Promise<FullUser[]> => {
     const jwtObj = sessionStorage.getItem('auth');
 
-    return await axios
-        .get<FullUser[]>(`${baseURL}${userURL}/`, { headers: { auth: jwtObj } })
-        .then((response) => {
-            return response.data;
-        })
-        .catch((error) => {
-            return error;
-        });
+    try {
+        const res = await axios.get<FullUser[]>(`${baseURL}${userURL}/`, { headers: { auth: jwtObj } })
+        throwDataSucess('Got user list');
+        return res.data;
+    } catch(e) {
+        throwDataError('Cant get user list', e)
+        throw e;
+    }
 };
 
 export const changeUser = async (user: User): Promise<void> => {
     const jwtObj = sessionStorage.getItem('auth');
-    return await axios
-        .patch(`${baseURL}${userURL}/${user.id}`, user, { headers: { auth: jwtObj } })
-        .then((response) => {
-            return response;
-        })
-        .catch((error) => {
-            return error;
-        });
+
+    try {
+        const res = await axios.patch(`${baseURL}${userURL}/${user.id}`, user, { headers: { auth: jwtObj } });
+        throwDataSucess('User edited');
+    } catch(e) {
+        throwDataError('Cant edit user', e);
+        throw e;
+    }
 };
 
 export const newExtendedUser: ExtendedUser = {

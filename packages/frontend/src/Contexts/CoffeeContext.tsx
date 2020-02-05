@@ -1,10 +1,15 @@
 import React, { createContext, Dispatch, PropsWithChildren, SetStateAction, useState } from 'react';
 import { useHistory } from 'react-router';
 import { localCoffeeAttrData } from '../helpers/attrData';
-import { CoffeeEntry, FullUser, LocalCoffeeAttrData, AttrDataType, AttrDataItemType } from '../helpers/types';
-import { deleteCoffee, saveNewCoffee, updateCoffee } from '../pages/Coffee/CoffeeHelperFunctions';
-import { setUserFromSessionStorage, throwDataSucess, throwDataError } from '../pages/User/userHelperFunctions';
-import { login } from '../windows/UserWindows/UserHelperFunctions';
+import { AttrDataItemType, CoffeeEntry, LocalCoffeeAttrData } from '../helpers/types';
+import {
+    deleteCoffee,
+    getCoffees,
+    getCoffeStores,
+    saveNewCoffee,
+    updateCoffee,
+} from '../pages/Coffee/CoffeeHelperFunctions';
+import { throwDataError, throwDataSucess } from '../pages/User/userHelperFunctions';
 
 type CoffeeContextType = {
     coffees: CoffeeEntry[];
@@ -21,10 +26,8 @@ type CoffeeContextType = {
     setPostOrderBy: Dispatch<SetStateAction<string | undefined>>;
     coffeeAttrData: LocalCoffeeAttrData;
     coffeeStores: AttrDataItemType[] | undefined;
-    setCoffeeStores: Dispatch<SetStateAction<AttrDataItemType[] | undefined>>;
-    user: FullUser | undefined;
+    setCoffeeStores: Dispatch<SetStateAction<AttrDataItemType[]>>;
     basePath: string;
-    logout(): void;
     contextSaveCoffee(coffee: CoffeeEntry): Promise<number>;
     contextDeleteCoffee(id: number): Promise<void>;
     openAttrWindow(): void;
@@ -34,14 +37,15 @@ type CoffeeContextType = {
     editCoffeeCard(id: number): void;
     viewCoffeeCard(id: number): void;
     getFilterCoffeeList(): void;
-    contextLogin(username: string, password: string): Promise<FullUser>;
+    contextInitiateCoffeeStores(): Promise<void>;
+    contextInitiateCoffees(): Promise<void>;
 };
 
 export const CoffeeContext = createContext<CoffeeContextType>(({} as unknown) as CoffeeContextType);
 
 export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
     const [coffees, setCoffees] = useState<CoffeeEntry[]>([]);
-    const [coffeeStores, setCoffeeStores] = useState<AttrDataItemType[]>();
+    const [coffeeStores, setCoffeeStores] = useState<AttrDataItemType[]>([]);
 
     const [filteredPosts, setFilteredPosts] = useState<CoffeeEntry[]>([]);
     const [filterName, setFilterName] = useState<string>();
@@ -50,71 +54,69 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
     const [postOrderBy, setPostOrderBy] = useState<string>();
 
     const [coffeeAttrData, _] = useState<LocalCoffeeAttrData>(localCoffeeAttrData);
-    const [user, setUser] = useState<FullUser | undefined>(setUserFromSessionStorage());
 
     const basePath = '/coffee';
-
     const history = useHistory();
 
-    const contextLogin = async (username: string, password: string): Promise<FullUser> => {
-        return await login(username, password)
-            .then((res) => {
-                setUserFromSessionStorage()
-                throwDataSucess('Logged in');
-                return user;
-            })
-            .catch((error) => {
-                throwDataError('not logged in', error);
-                return error;
-            });
+    const contextInitiateCoffeeStores = async () => {
+        try {
+            const coffeeStores = await getCoffeStores();
+            setCoffeeStores(coffeeStores);
+            console.log('Coffee Stores', coffeeStores);
+            throwDataSucess('got coffee stores');
+        } catch (e) {
+            throwDataError('cant get data from data', e);
+        }
+    };
+
+    const contextInitiateCoffees = async () => {
+        try {
+            const coffees = await getCoffees();
+            throwDataSucess('got coffees');
+            setCoffees(coffees);
+        } catch (e) {
+            throwDataError('cant get coffees', e);
+            throw e;
+        }
     };
 
     const contextSaveCoffee = async (coffee: CoffeeEntry): Promise<number> => {
         if (coffee.id === 0) {
             //Create new coffee
-            return await saveNewCoffee(coffee)
-                .then((id) => {
-                    setCoffees((posts) => (!posts ? posts : [{ ...coffee, id: Number(id) }, ...posts]));
-                    return Number(id);
-                })
-                .catch((e) => {
-                    console.log('error saving', e);
-                    return e;
-                });
+            try {
+                const id = await saveNewCoffee(coffee);
+                setCoffees((posts) => (!posts ? posts : [{ ...coffee, id: Number(id) }, ...posts]));
+                return Number(id);
+            } catch (e) {
+                throwDataError('Cant create coffee', e);
+                throw e;
+            }
         } else {
             // Save existing coffee
-            return await updateCoffee(coffee)
-                .then((res) => {
-                    setCoffees((posts) => (!posts ? posts : posts.map((elm) => (elm.id === coffee.id ? coffee : elm))));
-                    return coffee.id;
-                })
-                .catch((e) => {
-                    console.log('error saving', e);
-                    return e;
-                });
+            try {
+                await updateCoffee(coffee);
+                setCoffees((posts) => (!posts ? posts : posts.map((elm) => (elm.id === coffee.id ? coffee : elm))));
+                return coffee.id;
+            } catch (e) {
+                throwDataError('Cant save coffee', e);
+                throw e;
+            }
         }
     };
 
     const contextDeleteCoffee = async (id: number) => {
-        return await deleteCoffee(id).then((res) => {
-            setCoffees((posts) => (!posts ? posts : posts.filter((elm) => elm.id !== id)));
-        });
-    };
-
-    const logout = () => {
-        throwDataSucess('Logged out!');
-        sessionStorage.removeItem('auth');
-        setUser(undefined);
-        history.push('/')
+        try {
+            await deleteCoffee(id);
+            throwDataSucess(`Coffee wiht id: ${id} deleted`);
+        } catch (e) {
+            throwDataError('Cant delete coffee', e);
+            throw e;
+        }
     };
 
     const openAttrWindow = () => {
         history.push('/coffee/attrDataWindow/');
     };
-
-    // const openBrewingWindow = (id: number) => {
-    //     history.push(`/coffee/card/${id}?view=brewings`);
-    // };
 
     const closeAttrWindow = () => {
         history.push('/coffee/');
@@ -137,28 +139,36 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
     };
 
     const getFilterCoffeeList = () => {
-        let newPosts: CoffeeEntry[] = [];
+        let newPosts: CoffeeEntry[] | undefined = [];
 
         switch (filterName) {
             case 'Arten':
-                newPosts = coffees.filter((post) => {
-                    return post.kind === filterAttr;
-                });
+                newPosts =
+                    coffees &&
+                    coffees.filter((post) => {
+                        return post.kind === filterAttr;
+                    });
                 break;
             case 'Herkunft':
-                newPosts = coffees.filter((post) => {
-                    return post.origin === filterAttr;
-                });
+                newPosts =
+                    coffees &&
+                    coffees.filter((post) => {
+                        return post.origin === filterAttr;
+                    });
                 break;
             case 'Röstereien':
-                newPosts = coffees.filter((post) => {
-                    return post.store.name === filterAttr;
-                });
+                newPosts =
+                    coffees &&
+                    coffees.filter((post) => {
+                        return post.store.name === filterAttr;
+                    });
                 break;
             case 'Bewertung':
-                newPosts = coffees.filter((post) => {
-                    return String(post.rating) === filterAttr;
-                });
+                newPosts =
+                    coffees &&
+                    coffees.filter((post) => {
+                        return String(post.rating) === filterAttr;
+                    });
                 break;
             default:
                 newPosts = coffees;
@@ -166,10 +176,10 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
         }
 
         if (searchString) {
-            newPosts = newPosts.filter((post) => post.name.includes(searchString));
+            newPosts = newPosts ? newPosts.filter((post) => post.name.includes(searchString)) : [];
         }
 
-        if (postOrderBy) {
+        if (postOrderBy && newPosts) {
             switch (filterName) {
                 case 'Arten':
                     newPosts = newPosts.sort((a, b) => a.kind.localeCompare(b.kind));
@@ -208,7 +218,6 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
                 setFilterAttr,
                 setPostOrderBy,
                 setSearchString,
-                user,
                 closeAttrWindow,
                 contextDeleteCoffee,
                 contextSaveCoffee,
@@ -217,11 +226,11 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
                 editCoffeeCard,
                 goToCoffees,
                 viewCoffeeCard,
-                logout,
                 getFilterCoffeeList,
                 coffeeStores,
                 setCoffeeStores,
-                contextLogin
+                contextInitiateCoffeeStores,
+                contextInitiateCoffees,
             }}
         >
             {children}

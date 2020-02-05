@@ -15,6 +15,7 @@ import { CoffeeEntry } from '../../helpers/types';
 import { blue, brown, cyan, grayDarker, green, yellow } from '../../styles/colors';
 import { deleteImageByURL, handleFileUpload } from './CoffeeCardHelperFuctions';
 import { localCoffeeAttrData } from '../../helpers/attrData';
+import { throwDataError, throwDataSucess } from '../../pages/User/userHelperFunctions';
 
 type CoffeeCardEditProps = {
     coffee: CoffeeEntry;
@@ -27,44 +28,58 @@ export const CoffeeCardEdit = ({ coffee }: CoffeeCardEditProps) => {
 
     const { coffeeStores, contextDeleteCoffee, contextSaveCoffee, viewCoffeeCard } = useContext(CoffeeContext);
 
-    const innerDeleteImage = (url: string, id: number) => {
-        deleteImageByURL(url, id).then(() => {
+    const innerDeleteImage = async (url: string, id: number) => {
+
+        try {
+            await deleteImageByURL(url, id);
             if (imageStrings !== undefined && imageStrings.length > 0) {
                 setImageStrings(imageStrings.filter((image) => image !== url));
             }
-        });
+        } catch(e) {
+            throwDataError('Cant delete image', e);
+            throw e;
+        };
     };
 
     const innerSaveCoffee = async (): Promise<number> => {
-        return await contextSaveCoffee(formCoffee)
-            .then((newId) => {
-                setFormCoffee({ ...formCoffee, id: newId });
-                return newId;
-            })
-            .catch((e) => {
-                console.log(e);
-                return e;
-            });
+
+        try {
+            const newId = await contextSaveCoffee(formCoffee);
+            setFormCoffee({ ...formCoffee, id: newId });
+            return newId;
+        } catch(e) {
+            throwDataError('Cant save coffee', e)
+            throw e;
+        };
     };
 
-    const uploadSelectedFile = (event: ChangeEvent<HTMLInputElement>) => {
+    const uploadSelectedFile = async (event: ChangeEvent<HTMLInputElement>) => {
         const eventFiles = event.target.files;
-        if (eventFiles === null) {
-            return;
-        }
-        handleFileUpload(eventFiles, coffee.id).then((newImageString) => {
+        if (eventFiles === null)
+            throw 'no file there';
+
+        try {
+            const newImageString = await handleFileUpload(eventFiles, coffee.id);
             if (imageStrings !== undefined) setImageStrings([newImageString, ...imageStrings]);
-        });
+            throwDataSucess('File uploaded');
+        } catch(e) {
+            throwDataError('Cant upload file', e);
+            throw e;
+        };
     };
 
-    const uploadDropeddFile = (event: React.DragEvent<HTMLInputElement>) => {
+    const uploadDropeddFile = async (event: React.DragEvent<HTMLInputElement>) => {
         const eventFiles = event.currentTarget.files;
-        if (eventFiles === null) {
-            return;
-        }
-        handleFileUpload(eventFiles, coffee.id).then((newImageString) => {
+        if (eventFiles === null) throw 'no file there';
+
+        try {
+            const newImageString = await handleFileUpload(eventFiles, coffee.id)
             if (imageStrings !== undefined) setImageStrings([newImageString, ...imageStrings]);
-        });
+            throwDataSucess('File uploaded');
+        } catch(e) {
+            throwDataError('Cant upload file', e);
+            throw e;
+        };
     };
 
     return !coffeeStores ? (

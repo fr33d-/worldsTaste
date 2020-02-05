@@ -14,6 +14,7 @@ import {
     UserDetailWindow,
 } from '../../windows/UserWindows/';
 import { setUserFromSessionStorage } from './userHelperFunctions';
+import { UserContext } from '../../Contexts/UserContext';
 
 export const UserRoles: AttrDataItemType[] = [
     { id: 0, name: 'ADMIN' },
@@ -25,8 +26,7 @@ export const UserPage = () => {
     const [user, setUser] = useState<FullUser | undefined>(setUserFromSessionStorage());
     const [activeMenu, setActiveMenu] = useState(0);
 
-    const { logout } = useContext(CoffeeContext);
-    // const { user, logout } = useContext(CoffeeContext);
+    const { contextLogout } = useContext(UserContext);
 
     useEffect(() => {
         setUser(setUserFromSessionStorage());
@@ -74,7 +74,7 @@ export const UserPage = () => {
                                                 <span onClick={() => setActiveMenu(4)}>Create new user</span>
                                             </li>
                                         </ul>
-                                        <Button className={'LogoutButton'} onClick={logout}>
+                                        <Button className={'LogoutButton'} onClick={contextLogout}>
                                             Log out
                                         </Button>
                                     </div>

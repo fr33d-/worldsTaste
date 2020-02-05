@@ -5,33 +5,28 @@ import { AttrDataItemType, CoffeeEntry, FilterMenuType, User, AttrDataType } fro
 import { throwDataError, throwDataSucess } from '../User/userHelperFunctions';
 import { localCoffeeAttrData } from '../../helpers/attrData';
 
-
 export const getFilterMenu = (): FilterMenuType[] => {
-
     return [
-          {
-              name: 'Arten',
-              items: localCoffeeAttrData.kinds.map((item) => item),
-          },
-          {
-              name: 'Herkunft',
-              items: localCoffeeAttrData.origins.map((item) => item),
-          },
+        {
+            name: 'Arten',
+            items: localCoffeeAttrData.kinds.map((item) => item),
+        },
+        {
+            name: 'Herkunft',
+            items: localCoffeeAttrData.origins.map((item) => item),
+        },
         //   {
         //       name: 'Röstereien',
         //       items: localCoffeeAttrData.roasteds.map((item) => item.name),
         //   },
-          {
-              name: 'Bewertung',
-              items: ['1', '2', '3', '4', '5'],
-          },
-      ];
-}
+        {
+            name: 'Bewertung',
+            items: ['1', '2', '3', '4', '5'],
+        },
+    ];
+};
 
-export const createCoffee = (
-    store: AttrDataItemType,
-    user: User
-) => {
+export const createCoffee = (store: AttrDataItemType, user: User) => {
     const newPost: CoffeeEntry = {
         id: 0,
         imageFiles: [],
@@ -60,69 +55,60 @@ export const createCoffee = (
 };
 
 export const deleteCoffee = async (id: number): Promise<void> => {
-    return await axios
-        .delete(`${baseURL}${coffeeURL}/${id}`)
-        .then((response) => {
-            throwDataSucess('coffee deleted');
-            return response;
-        })
-        .catch((error) => {
-            throwDataError('cant delete coffee', error);
-            return error;
-        });
+
+    try {
+        await axios.delete(`${baseURL}${coffeeURL}/${id}`)
+        throwDataSucess('coffee deleted');
+    } catch(e) {
+        throwDataError('cant delete coffee', e);
+        throw e;
+    }
 };
 
 export const saveNewCoffee = async (coffee: CoffeeEntry): Promise<number> => {
     const jwtObj = sessionStorage.getItem('auth');
-    return await axios
-        .post(`${baseURL}${coffeeURL}`, { ...coffee }, { headers: { auth: jwtObj } })
-        .then((response) => {
-            const location: string = response.headers['location'];
-            const [id] = location.split('/').slice(-1);
-            throwDataSucess('new coffee saved');
-            return id;
-        })
-        .catch((error) => {
-            throwDataError('sorry, cant create new coffe', error);
-            return error;
-        });
+
+    try {
+        const response = await axios.post(`${baseURL}${coffeeURL}`, { ...coffee }, { headers: { auth: jwtObj } })
+        const location: string = response.headers['location'];
+        const [id] = location.split('/').slice(-1);
+        throwDataSucess('new coffee saved');
+        return Number(id);
+    } catch(e) {
+        throwDataError('sorry, cant create new coffe', e);
+        throw e;
+    }
 };
 
-export const updateCoffee = async (coffee: CoffeeEntry): Promise<void> => {
+export const updateCoffee = async (coffee: CoffeeEntry): Promise<number> => {
     const jwtObj = sessionStorage.getItem('auth');
-    await axios
-        .put(`${baseURL}${coffeeURL}/${coffee.id}`, { ...coffee }, { headers: { auth: jwtObj } })
-        .then((res) => {
-            throwDataSucess('coffee updated!');
-            return res.headers['location'];
-        })
-        .catch((error) => {
-            throwDataError('sorry, cant update coffee', error);
-            return error;
-        });
-};
 
+    try {
+        const res = await axios.put(`${baseURL}${coffeeURL}/${coffee.id}`, { ...coffee }, { headers: { auth: jwtObj } })
+        throwDataSucess('coffee updated!');
+        return res.headers['location'];
+    } catch(e) {
+        throwDataError('sorry, cant update coffee', e);
+        throw e;
+    }
+};
 
 export const getCoffees = async (): Promise<CoffeeEntity[]> => {
-    return await axios
-        .get<CoffeeEntity[]>(`${baseURL}${coffeeURL}`)
-        .then((res) => {
-            return res.data;
-        })
-        .catch((error) => {
-            return error;
-        });
+    try {
+        const res = await axios.get<CoffeeEntity[]>(`${baseURL}${coffeeURL}`);
+        return res.data;
+    } catch (e) {
+        console.log(e);
+        throw e;
+    }
 };
 
 export const getCoffeStores = async (): Promise<AttrDataItemType[]> => {
-    return await axios
-        .get<AttrDataType>(`${baseURL}${coffeeStoresURL}`)
-        .then((res) => {
-            return res.data;
-        })
-        .catch((error) => {
-            return error;
-        });
+    try {
+        const res = await axios.get<AttrDataItemType[]>(`${baseURL}${coffeeStoresURL}`);
+        return res.data;
+    } catch(e) {
+        console.log(e);
+        throw e;
+    }
 };
-
-

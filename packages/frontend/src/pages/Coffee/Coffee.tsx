@@ -9,14 +9,13 @@ import { CoffeeAttrDataWindow } from '../../windows/AttrDataWindow';
 import { CoffeeDetailWindow } from '../../windows/CoffeeCard/CoffeeDetailWindow';
 import { InlineCoffeeCardDisplay } from '../../windows/CoffeeCard/InlineCoffeeCard';
 import OverlayFrame from '../../windows/OverlayFrame/OverlayFrame';
-import { throwDataError, throwDataSucess } from '../User/userHelperFunctions';
 import { default as chemexSVG, default as CoffeeReplacement } from './../../images/Chemex.svg';
-import { getCoffees, getFilterMenu, getCoffeStores } from './CoffeeHelperFunctions';
+import { getFilterMenu } from './CoffeeHelperFunctions';
+import { UserContext } from '../../Contexts/UserContext';
 
 export const Coffee = () => {
     const {
         coffees,
-        setCoffees,
         basePath,
         filterAttr,
         filterName,
@@ -27,12 +26,13 @@ export const Coffee = () => {
         setFilterName,
         setPostOrderBy,
         setSearchString,
-        user,
         goToCreateCoffee,
         openAttrWindow,
         getFilterCoffeeList,
-        setCoffeeStores
+        contextInitiateCoffees,
+        contextInitiateCoffeeStores,
     } = useContext(CoffeeContext);
+    const { user } = useContext(UserContext);
     const { extention } = useParams();
 
     const filterMenu: FilterMenuType[] = getFilterMenu();
@@ -46,25 +46,10 @@ export const Coffee = () => {
         getFilterCoffeeList();
     }, [coffees, filterName, filterAttr, searchString, postOrderBy]);
 
+    //Maybe this can be done when the context loads;
     const initiateData = () => {
-        getCoffeStores()
-            .then((coffeeStores) => {
-                setCoffeeStores(coffeeStores);
-                console.log('Coffee Stores', coffeeStores);
-                throwDataSucess('got coffee stores');
-            })
-            .catch((error) => {
-                throwDataError('cant get data from data', error);
-            });
-
-        getCoffees()
-            .then((coffees) => {
-                throwDataSucess('got coffees');
-                setCoffees(coffees);
-            })
-            .catch((error) => {
-                throwDataError('cant get coffees', error);
-            });
+        contextInitiateCoffees();
+        contextInitiateCoffeeStores();
     };
 
     return (
@@ -98,12 +83,19 @@ export const Coffee = () => {
                 </IntroText>
 
                 <div className={'CoffeeContainer'}>
-                    {filteredPosts.length === 0 ? (
+                    {!filteredPosts && (
+                        <div className={'ReplImg'}>
+                            <img src={CoffeeReplacement} alt="no content" />
+                            <p>Error loading coffee data</p>
+                        </div>
+                    )}
+                    {filteredPosts && filteredPosts.length === 0 ? (
                         <div className={'ReplImg'}>
                             <img src={CoffeeReplacement} alt="no content" />
                             <p>No coffees to display</p>
                         </div>
                     ) : (
+                        filteredPosts &&
                         filteredPosts.map((post, i) => (
                             <InlineCoffeeCardDisplay entry={post} key={`${post.name}_${i}`} />
                         ))

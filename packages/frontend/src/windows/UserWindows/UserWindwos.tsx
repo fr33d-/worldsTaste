@@ -16,30 +16,29 @@ import {
 } from '../../pages/User/userHelperFunctions';
 import { green, white } from '../../styles/colors';
 import { CoffeeContext } from '../../Contexts/CoffeeContext';
-
+import { UserContext } from '../../Contexts/UserContext';
 
 export const LoginWindow = () => {
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [msg, setMsg] = useState('');
 
-    const {contextLogin} = useContext(CoffeeContext);
+    const { contextLogin } = useContext(UserContext);
 
-    const innerLogin = () => {
-        contextLogin(username, password)
-            .then((res) => {
-                setMsg(`Maybe Logged in! ${res} `);
-            })
-            .catch((error) => {
-                console.log(error);
-                if (error && error.response && error.response.status === 400) {
-                    setMsg('You need to enter a valid Mail and a Password!');
-                } else if (error && error.response && error.response.status === 401) {
-                    setMsg('Wrong data or you dont exist!');
-                } else {
-                    setMsg('Sorry, soemething went wrong!');
-                }
-            });
+    const innerLogin = async () => {
+        try {
+            const res = await contextLogin(username, password);
+            setMsg(`Logged in! ${res} `);
+        } catch (error) {
+            if (error && error.response && error.response.status === 400) {
+                setMsg('You need to enter a valid Mail and a Password!');
+            } else if (error && error.response && error.response.status === 401) {
+                setMsg('Wrong data or you dont exist!');
+            } else {
+                setMsg('Sorry, soemething went wrong!');
+            }
+            throw error;
+        }
     };
 
     return (
@@ -99,17 +98,15 @@ export const UserAdminWindow: FC<{ user: FullUser }> = ({ user }) => {
     // Todo: why we dont use this?
     // const [newUserRole, setNewUserRole] = useState<AttrDataItemType>();
 
-    const innerChangeUser = () => {
+    const innerChangeUser = async () => {
         if (selectedUser) {
-            changeUser(selectedUser)
-                .then((res) => {
-                    console.log('user updated');
-                    console.log(res);
-                })
-                .catch((error) => {
-                    console.log(error);
-                    setSaveingError(true);
-                });
+            try {
+                await changeUser(selectedUser);
+                setSaveingError(false);
+            } catch (e) {
+                setSaveingError(true);
+                throw e;
+            }
         }
     };
 
@@ -117,15 +114,13 @@ export const UserAdminWindow: FC<{ user: FullUser }> = ({ user }) => {
         //do some magic here
     };
 
-    const innerGetUserList = () => {
-        getUserList()
-            .then((data) => {
-                setListOfAllUsers(data);
-            })
-            .catch((error) => {
-                console.log(error);
-                // Todo: throw toast here
-            });
+    const innerGetUserList = async () => {
+        try {
+            const data = await getUserList();
+            setListOfAllUsers(data);
+        } catch (e) {
+            throw e;
+        }
     };
 
     useEffect(() => {
@@ -189,14 +184,14 @@ export const UserAdminWindow: FC<{ user: FullUser }> = ({ user }) => {
 export const UserCreateNewWindow: FC<{ user: FullUser }> = () => {
     const [newUser, setNewUser] = useState<ExtendedUser>(newExtendedUser);
 
-    const innerCreateUser = () => {
-        createUser(newUser)
-            .then((res) => {
-                throwDataSucess('user created');
-            })
-            .catch((e) => {
-                throwDataError('can not create user', e);
-            });
+    const innerCreateUser = async () => {
+        try {
+            await createUser(newUser);
+            throwDataSucess('user created');
+        } catch(e) {
+            throwDataError('can not create user', e);
+            throw e;
+        };
     };
 
     return (

@@ -48,6 +48,7 @@ import { Coffee } from './pages/Coffee/Coffee';
 import { Home } from './pages/Home';
 import { UserPage } from './pages/User';
 import { CoffeeContextProvider } from './Contexts/CoffeeContext';
+import { UserContextProvider } from './Contexts/UserContext';
 
 library.add(
     faTrashAlt,
@@ -98,30 +99,28 @@ library.add(
 // its very root which is automatically populated by the appRoutes defined in Routes.ts.
 export const App = () => (
     <>
-        {/* <Navigationbar />
-        <MainNavigator menu={MainMenu} /> */}
         <BrowserRouter>
-            <Switch>
-                <Route path="/user/:extention?">
-                    <CoffeeContextProvider>
+            <UserContextProvider>
+                <Switch>
+                    <Route path="/user/:extention?">
                         <UserPage />
-                    </CoffeeContextProvider>
-                </Route>
-                <Route path="/coffee/:extention?">
-                    <CoffeeContextProvider>
-                        <Coffee />
-                    </CoffeeContextProvider>
-                </Route>
-                <Route path="/cigars/:id?">
-                    <Cigars />
-                </Route>
-                <Route path="/blog/:id?">
-                    <Blog />
-                </Route>
-                <Route path="/">
-                    <Home />
-                </Route>
-            </Switch>
+                    </Route>
+                    <Route path="/coffee/:extention?">
+                        <CoffeeContextProvider>
+                            <Coffee />
+                        </CoffeeContextProvider>
+                    </Route>
+                    <Route path="/cigars/:id?">
+                        <Cigars />
+                    </Route>
+                    <Route path="/blog/:id?">
+                        <Blog />
+                    </Route>
+                    <Route path="/">
+                        <Home />
+                    </Route>
+                </Switch>
+            </UserContextProvider>
         </BrowserRouter>
     </>
 );

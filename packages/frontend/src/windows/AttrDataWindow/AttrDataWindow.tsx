@@ -42,45 +42,34 @@ export type AttrDataState = {
 export const AttrDataWindow = ({ close, content }: AttrDataProps) => {
     const [selectedCategory, setSelectedCategory] = useState<AttrDataType>(content[0]);
     const [newItemName, setNewItemName] = useState<string>();
-    const [error, setError] = useState<boolean>(false);
 
     const selectCategory = (id: number) => {
         setSelectedCategory(content.filter((item) => item.id === id)[0]);
     };
 
-    const innerAddNewItem = () => {
-
-        console.log('Selected category', selectedCategory);
-
+    const innerAddNewItem = async () => {
         if (newItemName) {
-            addNewItem(selectedCategory.urlSubstring, newItemName)
-                .then((id) => {
-                    setSelectedCategory((cat) => ({
-                        ...cat,
-                        items: [...cat.items, { id: id, name: newItemName }],
-                    }));
-                    setNewItemName('');
-                    setError(false);
-                })
-                .catch((error) => {
-                    console.log(error);
-                    setError(true);
-                });
-        }
+            try {
+                const id = await addNewItem(selectedCategory.urlSubstring, newItemName);
+                setSelectedCategory((cat) => ({
+                    ...cat,
+                    items: [...cat.items, { id: id, name: newItemName }],
+                }));
+                setNewItemName('');
+            } catch(e) {
+                throwDataError('Cant add item', e);
+            }
+        };
     };
 
-    const innerDeleteItem = (id: number) => {
-        deleteItem(selectedCategory.urlSubstring, id)
-            .then(() => {
-                setSelectedCategory((cat) => ({ ...cat, items: cat.items.filter((item) => item.id !== id) }));
-                setError(false);
-                throwDataSucess('item deleted');
-            })
-            .catch((error) => {
-                console.log(error);
-                setError(true);
-                throwDataError('cand delete item', error);
-            });
+    const innerDeleteItem = async (id: number) => {
+        try {
+            await deleteItem(selectedCategory.urlSubstring, id);
+            setSelectedCategory((cat) => ({ ...cat, items: cat.items.filter((item) => item.id !== id) }));
+            throwDataSucess('item deleted');
+        } catch(e) {
+            throwDataError('cand delete item', e);
+        };
     };
 
     const handleItemNameChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -149,7 +138,6 @@ export const AttrDataWindow = ({ close, content }: AttrDataProps) => {
                                 </Row>
                             </li>
                         </ul>
-                        {error && <p className={'Error'}>Theres a error with the server, sorry!</p>}
                     </div>
                 </Row>
             </div>
