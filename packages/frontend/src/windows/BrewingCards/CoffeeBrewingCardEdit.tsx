@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { isEqual } from 'lodash';
 import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
 import { SaveSection } from '../../components/Buttons/AdvancedButtons';
-import { BoolInput, WTDateInput, NumberInput, StringDropdownInput, TextareaInput } from '../../components/FormElements';
+import { BoolInput, WTDateInput, NumberInput, DropdownInput, TextareaInput } from '../../components/FormElements';
 import { ObjLikeSliderAttrField, ObjSingleSliderAttrField, ObjSliderAttrField } from '../../components/FormElements/AttrFields';
 import { CoffeeContext } from '../../Contexts/CoffeeContext';
 import { displayDate } from '../../helpers/helperFunctions';
@@ -43,41 +43,36 @@ export const CoffeeBrewingCardEdit = ({
                     </h4>
                 </div>
                 <div className="col-12 col-md-6">
-                    <StringDropdownInput
+                    <DropdownInput
                         items={methods}
-                        label="Brühmethode"
-                        onChange={setFormBrewing}
-                        selectedItem={formBrewing.method}
+                        name="Brühmethode"
+                        setValue={(val) => setFormBrewing(curBrew => ({...curBrew, method: val}))}
+                        value={formBrewing.method}
                         icon={'flask'}
                         iconColor={blue}
-                        propPath={['method']}
-                        obj={formBrewing}
                     />
                 </div>
                 <div className="col-12 col-md-6">
                     <WTDateInput
-                        label="Datum"
-                        obj={formBrewing}
-                        setStateHandler={setFormBrewing}
-                        propPath={['brewDate']}
+                        name="Datum"
+                        value={formBrewing.brewDate}
+                        setValue={(val) => setFormBrewing(curBrew => ({...curBrew, brewDate: val}))}
                     />
                 </div>
                 <div className="col-12 col-md-6">
                     <NumberInput
                         name="Wassermänge:"
                         unit="ml"
-                        obj={formBrewing}
-                        setStateHandler={setFormBrewing}
-                        propPath={['waterAmount']}
+                        value={formBrewing.waterAmount}
+                        setValue={(val) => setFormBrewing(curBrew => ({...curBrew, waterAmount: val}))}
                     />
                 </div>
                 <div className="col-12 col-md-6">
                     <NumberInput
                         name="Kaffeemänge:"
                         unit="g"
-                        obj={formBrewing}
-                        setStateHandler={setFormBrewing}
-                        propPath={['coffeeAmount']}
+                        value={formBrewing.coffeeAmount}
+                        setValue={(val) => setFormBrewing(curBrew => ({...curBrew, coffeeAmount: val}))}
                     />
                 </div>
                 <div className="col-12 col-md-6">
@@ -91,10 +86,9 @@ export const CoffeeBrewingCardEdit = ({
                 </div>
                 <div className="col-12 col-md-6">
                     <BoolInput
-                        label="Für Berechnung verwenden:"
-                        obj={formBrewing}
-                        setStateHandler={setFormBrewing}
-                        propPath={['useforcalculation']}
+                        name="Für Berechnung verwenden:"
+                        value={formBrewing.useforcalculation}
+                        setValue={(val) => setFormBrewing(curBrew => ({...curBrew, useforcalculation: val}))}
                     />
                 </div>
                 <div className="col-12 col-md-6">
@@ -154,10 +148,9 @@ export const CoffeeBrewingCardEdit = ({
                 </div>
                 <div className="col-12">
                     <TextareaInput
-                        label="Beschreibung"
-                        obj={formBrewing}
-                        setStateHandler={setFormBrewing}
-                        propPath={['ownDescription']}
+                        name="Beschreibung"
+                        value={formBrewing.ownDescription}
+                        setValue={(val) => setFormBrewing(curBrew => ({...curBrew, ownDescription: val}))}
                     />
                 </div>
             </div>
@@ -169,12 +162,6 @@ export const CoffeeBrewingCardEdit = ({
                         saveFunction={async () => saveBrewing(formBrewing)}
                         deleteFunction={async () => deleteBrewing(formBrewing)}
                     />
-                    {/* <DeleteButton onClick={() => deleteBrewing(formBrewing)} withText />
-                    <AdvancedSaveButton
-                        save={() => saveBrewing(formBrewing)}
-                        changes={true}
-                        close={() => setEditMode(false)}
-                    /> */}
                 </div>
             </div>
         </>

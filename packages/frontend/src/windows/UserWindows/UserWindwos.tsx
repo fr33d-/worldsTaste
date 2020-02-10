@@ -1,10 +1,10 @@
 import React, { FC, useEffect, useState, useContext } from 'react';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { SimplePasswordInput, SimpleTextInput, TextInput, AttrDataDropdownInput } from '../../components/FormElements';
+import { TextInput, AttrDataDropdownInput, PasswordInput } from '../../components/FormElements';
 import { AttrField } from '../../components/FormElements/AttrFields';
 import { IconButton } from '../../components/Buttons';
-import { ExtendedUser, FullUser, User } from '../../helpers/types';
+import { ExtendedUser, FullUser } from '../../helpers/types';
 import { UserRoles } from '../../pages/User';
 import {
     changeUser,
@@ -15,7 +15,6 @@ import {
     throwDataSucess,
 } from '../../pages/User/userHelperFunctions';
 import { green, white } from '../../styles/colors';
-import { CoffeeContext } from '../../Contexts/CoffeeContext';
 import { UserContext } from '../../Contexts/UserContext';
 
 export const LoginWindow = () => {
@@ -50,8 +49,8 @@ export const LoginWindow = () => {
                         You are currently not logged in. If you wish to sign up please send me a mail.
                     </div>
                     <div className={'Form'}>
-                        <SimpleTextInput onChange={setUserName} name="Username" value={username} />
-                        <SimplePasswordInput onChange={setPassword} name="Password" value={password} />
+                        <TextInput setValue={(val) => setUserName(val)} name="Username" value={username} />
+                        <PasswordInput setValue={(val) => setPassword(val)} name="Password" value={password} />
                     </div>
                     <div className={'ButtonSection'}>
                         <Button className={'Login'} onClick={innerLogin}>
@@ -90,13 +89,9 @@ export const UserDataWindow: FC<{ user: FullUser }> = ({ user }) => {
 };
 
 export const UserAdminWindow: FC<{ user: FullUser }> = ({ user }) => {
-    //New User Data
-
     const [saveingError, setSaveingError] = useState(false);
     const [listOfAllUsers, setListOfAllUsers] = useState<FullUser[]>([]);
-    const [selectedUser, setSelectedUser] = useState<User>();
-    // Todo: why we dont use this?
-    // const [newUserRole, setNewUserRole] = useState<AttrDataItemType>();
+    const [selectedUser, setSelectedUser] = useState<FullUser>();
 
     const innerChangeUser = async () => {
         if (selectedUser) {
@@ -127,7 +122,7 @@ export const UserAdminWindow: FC<{ user: FullUser }> = ({ user }) => {
         innerGetUserList();
     }, [user]);
 
-    const userClicked = (userItem: User) => {
+    const userClicked = (userItem: FullUser) => {
         setSelectedUser(userItem);
     };
 
@@ -144,14 +139,21 @@ export const UserAdminWindow: FC<{ user: FullUser }> = ({ user }) => {
             {selectedUser && (
                 <>
                     <h2>Details</h2>
-                    <TextInput name="Name" obj={selectedUser} propPath="name" setStateHandler={setSelectedUser} />
+                    <TextInput
+                        name="Name"
+                        value={selectedUser.name}
+                        setValue={(val) => setSelectedUser((user) => (user ? { ...user, name: val } : user))}
+                    />
                     <TextInput
                         name="User Name"
-                        obj={selectedUser}
-                        propPath="username"
-                        setStateHandler={setSelectedUser}
+                        value={selectedUser.username}
+                        setValue={(val) => setSelectedUser((user) => (user ? { ...user, username: val } : user))}
                     />
-                    <TextInput name="E-Mail" obj={selectedUser} propPath="email" setStateHandler={setSelectedUser} />
+                    <TextInput
+                        name="E-Mail"
+                        value={selectedUser.name}
+                        setValue={(val) => setSelectedUser((user) => (user ? { ...user, email: val } : user))}
+                    />
                     <AttrDataDropdownInput
                         items={UserRoles}
                         iconColor={green}
@@ -188,20 +190,36 @@ export const UserCreateNewWindow: FC<{ user: FullUser }> = () => {
         try {
             await createUser(newUser);
             throwDataSucess('user created');
-        } catch(e) {
+        } catch (e) {
             throwDataError('can not create user', e);
             throw e;
-        };
+        }
     };
 
     return (
         <>
             <h2>Create User</h2>
             <p>All fields must me longer than 4 charecters</p>
-            <TextInput name="Name" obj={newUser} propPath={['name']} setStateHandler={setNewUser} />
-            <TextInput name="User name" obj={newUser} propPath={['username']} setStateHandler={setNewUser} />
-            <TextInput name="E-Mail" obj={newUser} propPath={['email']} setStateHandler={setNewUser} />
-            <TextInput name="Passwort" obj={newUser} propPath={['password']} setStateHandler={setNewUser} />
+            <TextInput
+                name="Name"
+                value={newUser.name}
+                setValue={(val) => setNewUser((user) => (user ? { ...user, name: val } : user))}
+            />
+            <TextInput
+                name="User name"
+                value={newUser.username}
+                setValue={(val) => setNewUser((user) => (user ? { ...user, username: val } : user))}
+            />
+            <TextInput
+                name="E-Mail"
+                value={newUser.email}
+                setValue={(val) => setNewUser((user) => (user ? { ...user, email: val } : user))}
+            />
+            <TextInput
+                name="Passwort"
+                value={newUser.password}
+                setValue={(val) => setNewUser((user) => (user ? { ...user, password: val } : user))}
+            />
             <AttrDataDropdownInput
                 items={UserRoles}
                 icon="leaf"
@@ -237,9 +255,9 @@ export const UserChangePasswordWindow: FC<{ user: FullUser }> = ({ user }) => {
     return (
         <>
             <h2>Change Password</h2>
-            <SimpleTextInput name="Altes Passwort" value={oldPW} onChange={setOldPW} />
-            <SimpleTextInput name="Neues Passwort" value={newPW} onChange={setNewPW} />
-            <SimpleTextInput name="Neues Passwort wiederholen" value={repNewPW} onChange={setRepNewPW} />
+            <TextInput name="Altes Passwort" value={oldPW} setValue={setOldPW} />
+            <TextInput name="Neues Passwort" value={newPW} setValue={setNewPW} />
+            <TextInput name="Neues Passwort wiederholen" value={repNewPW} setValue={setRepNewPW} />
             {/* <SaveButton withText={true} error={savePWError} save={saveNewPW} /> */}
             <IconButton
                 icon={savePWError ? 'ban' : 'save'}

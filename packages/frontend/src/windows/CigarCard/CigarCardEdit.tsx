@@ -5,11 +5,14 @@ import React, { ChangeEvent, useState } from 'react';
 import { baseURL, cigarsURL } from '../../data';
 import { CigarEntry } from '../../pages/Cigars';
 import { brown, grayDarker, greenAccent, yellowAccent } from '../../styles/colors';
-import { BoolInput, NumberInput, TextareaInput, TextInput, AttrDataDropdownInput } from '../../components/FormElements';
+import { BoolInput, NumberInput, TextareaInput, TextInput, AttrDataDropdownInput, WTDateInput } from '../../components/FormElements';
 import { ObjLikeSliderAttrField, ObjSliderAttrField } from '../../components/FormElements/AttrFields';
 import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import { AttrDataItemType } from '../../helpers/types';
 import { SaveSection } from '../../components/Buttons/AdvancedButtons';
+import { throwDataError, throwDataSucess } from '../../pages/User/userHelperFunctions';
+import { set } from 'lodash';
+import { DateInput } from '@blueprintjs/datetime';
 
 type CigarCardEditProps = {
     entry: CigarEntry;
@@ -44,39 +47,32 @@ export const CigarCardEdit = ({
     const [tab, setTab] = useState(0);
 
     const saveCard = async (): Promise<number> => {
-        return await axios
-            .put(`${baseURL}${cigarsURL}/${entry.id}`, { ...formCigar })
-            .then((response) => {
-                setEdited(false);
-                return entry.id;
-                // setSaveError(false);
-            })
-            .catch((error) => {
-                return error;
-                console.log(error);
-            });
+        try {
+            await axios.put(`${baseURL}${cigarsURL}/${entry.id}`, { ...formCigar });
+            setEdited(false);
+            throwDataSucess('Cigar saved');
+            return entry.id;
+        } catch (e) {
+            throwDataError('Cant save cigar', e);
+            throw e;
+        }
     };
 
-    const deleteImageByURL = (url: string, id: number) => {
-        axios
-            .delete(`${baseURL}${cigarsURL}/assets/${id}`, { data: { url: url } })
-            .then((response) => {
-                console.log('... sucessfully');
-                // setSaveError(false);
-
-                if (formCigar.imageStrings !== undefined && formCigar.imageStrings.length > 0) {
-                    // setImageStrings(imageStrings.filter((image) => image !== url));
-                    setFormCigar({
-                        ...formCigar,
-                        imageStrings: formCigar.imageStrings.filter((image) => image !== url),
-                    });
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-                console.log('... failed');
-                // setSaveError(true);
-            });
+    const deleteImageByURL = async (url: string, id: number) => {
+        // Todo; make try await !!!!!!!!!!!!!
+        try {
+            await axios.delete(`${baseURL}${cigarsURL}/assets/${id}`, { data: { url: url } });
+            if (formCigar.imageStrings !== undefined && formCigar.imageStrings.length > 0) {
+                // setImageStrings(imageStrings.filter((image) => image !== url));
+                setFormCigar({
+                    ...formCigar,
+                    imageStrings: formCigar.imageStrings.filter((image) => image !== url),
+                });
+            }
+        } catch (e) {
+            throwDataError('Cant delete image', e);
+            throw e;
+        }
     };
 
     const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
@@ -122,7 +118,7 @@ export const CigarCardEdit = ({
         <>
             <div className={'LayoutCard'}>
                 <div className="col-12">
-                    <TextInput name="Name" obj={formCigar} propPath={['name']} setStateHandler={setFormCigar} />
+                    <TextInput name="Name" setValue={(val) => set(formCigar, 'name', val)} value={formCigar.name} />
                 </div>
                 <div className={GeneralStyles.TabBar}>
                     <ul>
@@ -148,7 +144,6 @@ export const CigarCardEdit = ({
                                         iconColor={yellowAccent}
                                         label="Hersteller"
                                         selectedItem={formCigar.producer}
-                                        // onChange={setProducer}
                                         obj={formCigar}
                                         propPath={['producer']}
                                         onChange={setFormCigar}
@@ -161,7 +156,6 @@ export const CigarCardEdit = ({
                                         iconColor={greenAccent}
                                         label="Herkunft"
                                         selectedItem={formCigar.origin}
-                                        // onChange={setOrigin}
                                         propPath={['origin']}
                                         onChange={setFormCigar}
                                         obj={formCigar}
@@ -170,7 +164,6 @@ export const CigarCardEdit = ({
                                 <div className="col-12 col-md-6">
                                     <ObjLikeSliderAttrField
                                         maxValue={5}
-                                        // value={rating} onChange={setRating}
                                         obj={formCigar}
                                         propPath={['rating']}
                                         setStateHandler={setFormCigar}
@@ -178,20 +171,16 @@ export const CigarCardEdit = ({
                                 </div>
                                 <div className="col-12 col-md-6">
                                     <BoolInput
-                                        label="Nochmal rauchen?"
-                                        obj={formCigar}
-                                        propPath={['smokeagain']}
-                                        setStateHandler={setFormCigar}
-                                        // onChange={setSmokeagain} value={smokeagain}
+                                        name="Nochmal rauchen?"
+                                        setValue={val => set(formCigar, 'smokeagain', val)}
+                                        value={formCigar.smokeagain}
                                     />
                                 </div>
                                 <div className="col-12">
                                     <TextareaInput
-                                        label="Beschreibung"
-                                        obj={formCigar}
-                                        propPath={['description']}
-                                        setStateHandler={setFormCigar}
-                                        // onChange={setDescription} value={description}
+                                        name="Beschreibung"
+                                        setValue={val => set(formCigar, 'description', val)}
+                                        value={formCigar.description}
                                     />
                                 </div>
                             </div>
@@ -258,37 +247,33 @@ export const CigarCardEdit = ({
                                 <div className="col-12 col-md-6">
                                     <NumberInput
                                         name="Länge:"
-                                        obj={formCigar}
-                                        setStateHandler={setFormCigar}
-                                        propPath={['lenght']}
                                         unit="cm"
+                                        setValue={val => set(formCigar, 'lenght', val)}
+                                        value={formCigar.lenght}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
                                     <NumberInput
                                         name="Ringmas:"
                                         unit="cm"
-                                        obj={formCigar}
-                                        setStateHandler={setFormCigar}
-                                        propPath={['ringmas']}
+                                        setValue={val => set(formCigar, 'ringmas', val)}
+                                        value={formCigar.ringmas}
                                     />
                                 </div>
                             </div>
                             <div className={'Row'}>
                                 <div className="col-12 col-md-6">
-                                    <TextInput
+                                    <WTDateInput
                                         name="Gekauft am:"
-                                        obj={formCigar}
-                                        setStateHandler={setFormCigar}
-                                        propPath={['buydate']}
+                                        setValue={val => set(formCigar, 'buydate', val)}
+                                        value={new Date(formCigar.buydate)}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
-                                    <TextInput
+                                    <WTDateInput
                                         name="Geraucht am:"
-                                        obj={formCigar}
-                                        setStateHandler={setFormCigar}
-                                        propPath={['smokedate']}
+                                        setValue={val => set(formCigar, 'smokedate', val)}
+                                        value={new Date(formCigar.smokedate)}
                                     />
                                 </div>
                             </div>
@@ -297,9 +282,8 @@ export const CigarCardEdit = ({
                                     <NumberInput
                                         name="Rauchdauer:"
                                         unit="min"
-                                        obj={formCigar}
-                                        setStateHandler={setFormCigar}
-                                        propPath={['smokeduration']}
+                                        setValue={val => set(formCigar, 'smokeduration', val)}
+                                        value={formCigar.smokeduration}
                                     />
                                 </div>
                             </div>
@@ -407,9 +391,6 @@ export const CigarCardEdit = ({
                             closeFunction={close}
                             saveFunction={saveCard}
                         />
-                        {/* <AdvancedDeleteButton changes={edited} onClick={() => deleteCigar(formCigar.id)} />
-                        <AdvancedCancelButton changes={edited} onClick={close} />
-                        <AdvancedSaveButton save={saveCard} close={close} error={saveError} changes={edited} /> */}
                     </div>
                 </div>
             </div>

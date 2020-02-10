@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { isEqual } from 'lodash';
 import React, { ChangeEvent, useContext, useState } from 'react';
 import { SaveSection } from '../../components/Buttons/AdvancedButtons';
-import { TextareaInput, TextInput, AttrDataDropdownInput, StringDropdownInput } from '../../components/FormElements';
+import { TextareaInput, TextInput, AttrDataDropdownInput, DropdownInput } from '../../components/FormElements';
 import {
     ObjLikeSliderAttrField,
     ObjSingleSliderAttrField,
@@ -29,43 +29,40 @@ export const CoffeeCardEdit = ({ coffee }: CoffeeCardEditProps) => {
     const { coffeeStores, contextDeleteCoffee, contextSaveCoffee, viewCoffeeCard } = useContext(CoffeeContext);
 
     const innerDeleteImage = async (url: string, id: number) => {
-
         try {
             await deleteImageByURL(url, id);
             if (imageStrings !== undefined && imageStrings.length > 0) {
                 setImageStrings(imageStrings.filter((image) => image !== url));
             }
-        } catch(e) {
+        } catch (e) {
             throwDataError('Cant delete image', e);
             throw e;
-        };
+        }
     };
 
     const innerSaveCoffee = async (): Promise<number> => {
-
         try {
             const newId = await contextSaveCoffee(formCoffee);
             setFormCoffee({ ...formCoffee, id: newId });
             return newId;
-        } catch(e) {
-            throwDataError('Cant save coffee', e)
+        } catch (e) {
+            throwDataError('Cant save coffee', e);
             throw e;
-        };
+        }
     };
 
     const uploadSelectedFile = async (event: ChangeEvent<HTMLInputElement>) => {
         const eventFiles = event.target.files;
-        if (eventFiles === null)
-            throw 'no file there';
+        if (eventFiles === null) throw 'no file there';
 
         try {
             const newImageString = await handleFileUpload(eventFiles, coffee.id);
             if (imageStrings !== undefined) setImageStrings([newImageString, ...imageStrings]);
             throwDataSucess('File uploaded');
-        } catch(e) {
+        } catch (e) {
             throwDataError('Cant upload file', e);
             throw e;
-        };
+        }
     };
 
     const uploadDropeddFile = async (event: React.DragEvent<HTMLInputElement>) => {
@@ -73,13 +70,13 @@ export const CoffeeCardEdit = ({ coffee }: CoffeeCardEditProps) => {
         if (eventFiles === null) throw 'no file there';
 
         try {
-            const newImageString = await handleFileUpload(eventFiles, coffee.id)
+            const newImageString = await handleFileUpload(eventFiles, coffee.id);
             if (imageStrings !== undefined) setImageStrings([newImageString, ...imageStrings]);
             throwDataSucess('File uploaded');
-        } catch(e) {
+        } catch (e) {
             throwDataError('Cant upload file', e);
             throw e;
-        };
+        }
     };
 
     return !coffeeStores ? (
@@ -87,7 +84,11 @@ export const CoffeeCardEdit = ({ coffee }: CoffeeCardEditProps) => {
     ) : (
         <>
             <div className="col-12">
-                <TextInput name="Name" obj={formCoffee} propPath={['name']} setStateHandler={setFormCoffee} />
+                <TextInput
+                    name="Name"
+                    value={formCoffee.name}
+                    setValue={(val) => setFormCoffee((coffee) => ({ ...coffee, name: val }))}
+                />
             </div>
             <div className={'TabBar'}>
                 <ul>
@@ -107,27 +108,23 @@ export const CoffeeCardEdit = ({ coffee }: CoffeeCardEditProps) => {
                     <div className={'TextSection'}>
                         <div className="row">
                             <div className="col-12 col-md-6">
-                                <StringDropdownInput
+                                <DropdownInput
                                     items={localCoffeeAttrData.origins}
                                     icon="globe-americas"
                                     iconColor={green}
-                                    label="Herkunft"
-                                    selectedItem={formCoffee.origin}
-                                    onChange={setFormCoffee}
-                                    propPath={['origin']}
-                                    obj={formCoffee}
+                                    name="Herkunft"
+                                    value={formCoffee.origin}
+                                    setValue={(val) => setFormCoffee((coffee) => ({ ...coffee, origin: val }))}
                                 />
                             </div>
                             <div className="col-12 col-md-6">
-                                <StringDropdownInput
+                                <DropdownInput
                                     items={localCoffeeAttrData.kinds}
                                     icon="mug-hot"
                                     iconColor={brown}
-                                    label="Art"
-                                    selectedItem={formCoffee.kind}
-                                    onChange={setFormCoffee}
-                                    propPath={['kind']}
-                                    obj={formCoffee}
+                                    name="Art"
+                                    value={formCoffee.kind}
+                                    setValue={(val) => setFormCoffee((coffee) => ({ ...coffee, kind: val }))}
                                 />
                             </div>
                             <div className="col-12 col-md-6">
@@ -143,27 +140,23 @@ export const CoffeeCardEdit = ({ coffee }: CoffeeCardEditProps) => {
                                 />
                             </div>
                             <div className="col-12 col-md-6">
-                                <StringDropdownInput
+                                <DropdownInput
                                     items={localCoffeeAttrData.processes}
                                     icon="leaf"
                                     iconColor={green}
-                                    label="Prozess"
-                                    selectedItem={formCoffee.process}
-                                    onChange={setFormCoffee}
-                                    propPath={['process']}
-                                    obj={formCoffee}
+                                    name="Prozess"
+                                    value={formCoffee.process}
+                                    setValue={(val) => setFormCoffee((coffee) => ({ ...coffee, process: val }))}
                                 />
                             </div>
                             <div className="col-12 col-md-6">
-                                <StringDropdownInput
+                                <DropdownInput
                                     items={localCoffeeAttrData.specieses}
                                     icon="leaf"
                                     iconColor={green}
-                                    label="Bohnenart"
-                                    selectedItem={formCoffee.species}
-                                    onChange={setFormCoffee}
-                                    propPath={['species']}
-                                    obj={formCoffee}
+                                    name="Bohnenart"
+                                    value={formCoffee.species}
+                                    setValue={(val) => setFormCoffee((coffee) => ({ ...coffee, species: val }))}
                                 />
                             </div>
                             <div className="col-12 col-md-6">
@@ -177,10 +170,9 @@ export const CoffeeCardEdit = ({ coffee }: CoffeeCardEditProps) => {
                             </div>
                             <div className="col-12">
                                 <TextareaInput
-                                    label="Beschreibung"
-                                    obj={formCoffee}
-                                    propPath={['description']}
-                                    setStateHandler={setFormCoffee}
+                                    name="Beschreibung"
+                                    value={formCoffee.description}
+                                    setValue={(val) => setFormCoffee((coffee) => ({ ...coffee, description: val }))}
                                 />
                             </div>
                         </div>
@@ -239,10 +231,9 @@ export const CoffeeCardEdit = ({ coffee }: CoffeeCardEditProps) => {
                             </div>
                             <div className="col-12">
                                 <TextareaInput
-                                    label="Eigene Beschreibung"
-                                    obj={formCoffee}
-                                    propPath={['ownDescription']}
-                                    setStateHandler={setFormCoffee}
+                                    name="Eigene Beschreibung"
+                                    value={formCoffee.ownDescription}
+                                    setValue={(val) => setFormCoffee((coffee) => ({ ...coffee, ownDescription: val }))}
                                 />
                             </div>
                         </div>
@@ -260,7 +251,7 @@ export const CoffeeCardEdit = ({ coffee }: CoffeeCardEditProps) => {
                                         <button onClick={() => innerDeleteImage(url, formCoffee.id)}>
                                             <FontAwesomeIcon icon="trash" color={grayDarker} />
                                         </button>
-                                        <img src={`${baseURL}${url}`} key={i} />
+                                        <img src={`${baseURL}${url}`} key={i} alt="a nice cooffe" />
                                     </div>
                                 </>
                             ))}
@@ -288,17 +279,10 @@ export const CoffeeCardEdit = ({ coffee }: CoffeeCardEditProps) => {
             <div className={'ButtonSection'}>
                 <SaveSection
                     changes={isEqual(formCoffee, coffee)}
-                    deleteFunction={async() => contextDeleteCoffee(formCoffee.id)}
+                    deleteFunction={async () => contextDeleteCoffee(formCoffee.id)}
                     closeFunction={async () => viewCoffeeCard(formCoffee.id)}
                     saveFunction={async () => innerSaveCoffee()}
                 />
-                {/* <AdvancedDeleteButton changes={true} onClick={() => contextDeleteCoffee(formCoffee.id)} />
-                <AdvancedCancelButton changes={true} onClick={() => viewCoffeeCard(formCoffee.id)} />
-                <AdvancedSaveButton
-                    save={() => contextSaveCoffee(formCoffee)}
-                    close={() => viewCoffeeCard(formCoffee.id)}
-                    changes={true}
-                /> */}
             </div>
         </>
     );
