@@ -106,7 +106,7 @@ export const Coffee = () => {
                 <Route exact path={`${basePath}/attrDataWindow`}>
                     <CoffeeAttrDataWindow />
                 </Route>
-                <Route exact path={`${basePath}/card/:id?`}>
+                <Route exact path={`${basePath}/card/:id?/brewings?/brewingId?/`}>
                     <OverlayFrame>
                         <div className={'LayoutCard'}>
                             <CoffeeDetailWindow />

@@ -21,9 +21,10 @@ import { deleteCoffeeBrewing, getCoffeeBrewings, newBrewing, saveCoffeeBrewing }
 
 type CoffeeCardDetailProps = {
     coffee: CoffeeEntry;
+    brewing?: string;
 };
 
-export const CoffeeCardDetail = ({ coffee }: CoffeeCardDetailProps) => {
+export const CoffeeCardDetail = ({ coffee, brewing }: CoffeeCardDetailProps) => {
     const [tab, setTab] = useState(0);
     const [brewings, setBrewings] = useState<BrewingEntry[]>([]);
     const [selectedBrewing, setSelectedBrewing] = useState<BrewingEntry>();
@@ -33,6 +34,11 @@ export const CoffeeCardDetail = ({ coffee }: CoffeeCardDetailProps) => {
     useEffect(() => {
         innerGetBrewings();
     }, [coffee]);
+
+    useEffect(() => {
+        if (brewing)
+        setTab(3)
+    }, [brewing]);
 
     const innerGetBrewings = async () => {
         try {

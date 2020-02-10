@@ -7,7 +7,7 @@ import { emptyCoffee } from './CoffeeCardHelperFuctions';
 import { UserContext } from '../../Contexts/UserContext';
 
 export const CoffeeDetailWindow = () => {
-    const { id } = useParams();
+    const { id, brewings, brewingId } = useParams();
     const { search } = useLocation();
 
     const { coffees, coffeeStores } = useContext(CoffeeContext);
@@ -33,7 +33,7 @@ export const CoffeeDetailWindow = () => {
         // } else if (view === 'brewings') {
         //     return <CoffeeBrewingWindow coffee={coffee} />;
         } else {
-            return <CoffeeCardDetail coffee={coffee} />;
+            return <CoffeeCardDetail coffee={coffee} brewing={brewingId}/>;
         }
     }
 };
