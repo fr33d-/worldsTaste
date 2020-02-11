@@ -16,18 +16,23 @@ import Beans from '../../images/beans.svg';
 import Cup from '../../images/cup-bw.svg';
 import { throwDataError, throwDataSucess } from '../../pages/User/userHelperFunctions';
 import { blue, cyan, green, yellow } from '../../styles/colors';
-import { CoffeeBrewingCard } from '../BrewingCards/CoffeeBrewingCard';
 import { deleteCoffeeBrewing, getCoffeeBrewings, newBrewing, saveCoffeeBrewing } from './CoffeeCardHelperFuctions';
+import { CoffeeBrewingCardDisplay } from '../BrewingCards/CoffeeBrewingCardDisplay';
+import { CoffeeBrewingCardEdit } from '../BrewingCards/CoffeeBrewingCardEdit';
 
 type CoffeeCardDetailProps = {
     coffee: CoffeeEntry;
-    brewing?: string;
+    brewingId?: string;
+    initialTab?: string;
+    initialState?: string;
+    baseUrl: string;
 };
 
-export const CoffeeCardDetail = ({ coffee, brewing }: CoffeeCardDetailProps) => {
-    const [tab, setTab] = useState(0);
+export const CoffeeCardDetail = ({ coffee, brewingId, initialState, initialTab, baseUrl }: CoffeeCardDetailProps) => {
+    const [tab, setTab] = useState(initialTab ? initialTab : 'information');
     const [brewings, setBrewings] = useState<BrewingEntry[]>([]);
     const [selectedBrewing, setSelectedBrewing] = useState<BrewingEntry>();
+    const [state, setState] = useState<string | undefined>(initialState);
 
     const { user } = useContext(UserContext);
 
@@ -35,20 +40,19 @@ export const CoffeeCardDetail = ({ coffee, brewing }: CoffeeCardDetailProps) => 
         innerGetBrewings();
     }, [coffee]);
 
-    useEffect(() => {
-        if (brewing)
-        setTab(3)
-    }, [brewing]);
-
     const innerGetBrewings = async () => {
         try {
             const res = await getCoffeeBrewings(coffee.id);
             setBrewings(res);
-        } catch(e) {
+
+            if (brewingId && Number(brewingId)) {
+                setSelectedBrewing(brewings.find((elm) => elm.id === Number(brewingId)));
+            }
+        } catch (e) {
             throwDataError('Cant get brewings', e);
             throw e;
         }
-    }
+    };
 
     const createBrewing = () => {
         const newBrewingEntry = newBrewing();
@@ -108,21 +112,21 @@ export const CoffeeCardDetail = ({ coffee, brewing }: CoffeeCardDetailProps) => 
             </div>
             <div className={'TabBar'}>
                 <ul>
-                    <li className={classNames(tab === 0 && 'Active')} onClick={() => setTab(0)}>
+                    <li className={classNames(tab === 'informaton' && 'Active')} onClick={() => setTab('informaton')}>
                         Information
                     </li>
-                    <li className={classNames(tab === 1 && 'Active')} onClick={() => setTab(1)}>
+                    <li className={classNames(tab === 'details' && 'Active')} onClick={() => setTab('details')}>
                         Details
                     </li>
-                    <li className={classNames(tab === 2 && 'Active')} onClick={() => setTab(2)}>
+                    <li className={classNames(tab === 'images' && 'Active')} onClick={() => setTab('images')}>
                         Images
                     </li>
-                    <li className={classNames(tab === 3 && 'Active')} onClick={() => setTab(3)}>
+                    <li className={classNames(tab === 'brewings' && 'Active')} onClick={() => setTab('brewings')}>
                         Bewings
                     </li>
                 </ul>
             </div>
-            {tab === 0 && (
+            {tab === 'informaton' && (
                 <>
                     <div className={'TextSection'}>
                         <div className="row">
@@ -157,7 +161,7 @@ export const CoffeeCardDetail = ({ coffee, brewing }: CoffeeCardDetailProps) => 
                 </>
             )}
 
-            {tab === 1 && (
+            {tab === 'details' && (
                 <>
                     <div className={'TextSection'}>
                         <div className="row">
@@ -184,7 +188,7 @@ export const CoffeeCardDetail = ({ coffee, brewing }: CoffeeCardDetailProps) => 
                 </>
             )}
 
-            {tab === 2 && (
+            {tab === 'images' && (
                 <>
                     <div className={'ImageSection'}>
                         {coffee.imageStrings && coffee.imageStrings.length > 0 ? (
@@ -201,7 +205,7 @@ export const CoffeeCardDetail = ({ coffee, brewing }: CoffeeCardDetailProps) => 
                     </div>
                 </>
             )}
-            {tab === 3 && (
+            {tab === 'brewings' && (
                 <>
                     <div className="container">
                         <div className="row">
@@ -234,11 +238,9 @@ export const CoffeeCardDetail = ({ coffee, brewing }: CoffeeCardDetailProps) => 
                             </div>
                             <div className={'BrewingCard col-8'}>
                                 {selectedBrewing ? (
-                                    <CoffeeBrewingCard
+                                    <CoffeeBrewingCardDisplay
                                         brewing={selectedBrewing}
-                                        key={selectedBrewing.id}
-                                        saveBrewing={innerSaveBrewing}
-                                        deleteBrewing={innerDeleteBrewing}
+                                        extendedBaseUrl={`${baseUrl}/${coffee.id}/brewings/${brewingId}`}
                                     />
                                 ) : (
                                     <div className={'NoContent'}>
@@ -249,6 +251,16 @@ export const CoffeeCardDetail = ({ coffee, brewing }: CoffeeCardDetailProps) => 
                         </div>
                     </div>
                 </>
+            )}
+            {state && state === 'edit' && selectedBrewing && (
+                <div className={'LayoutCard'}>
+                    <CoffeeBrewingCardEdit
+                        brewing={selectedBrewing}
+                        deleteBrewing={innerDeleteBrewing}
+                        saveBrewing={innerSaveBrewing}
+                        extendedBaseUrl={`${baseUrl}/${coffee.id}/brewings/${brewingId}`}
+                    />
+                </div>
             )}
         </>
     );

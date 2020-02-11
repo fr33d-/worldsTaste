@@ -1,14 +1,14 @@
 import React, { useContext } from 'react';
-import { useLocation, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { CoffeeContext } from '../../Contexts/CoffeeContext';
+import { UserContext } from '../../Contexts/UserContext';
 import { CoffeeCardDetail } from './CoffeeCardDetail';
 import { CoffeeCardEdit } from './CoffeeCardEdit';
 import { emptyCoffee } from './CoffeeCardHelperFuctions';
-import { UserContext } from '../../Contexts/UserContext';
 
 export const CoffeeDetailWindow = () => {
-    const { id, brewings, brewingId } = useParams();
-    const { search } = useLocation();
+    const { fistParam, secondParam, thirdParam, forthParam } = useParams();
+    // const { search } = useLocation();
 
     const { coffees, coffeeStores } = useContext(CoffeeContext);
     const { user } = useContext(UserContext);
@@ -17,23 +17,27 @@ export const CoffeeDetailWindow = () => {
     // const coffees: CoffeeEntry[] = [];
     // console.log('Coffees in context', coffees);
 
-    const coffee = coffees && coffees.find((elm) => elm.id === Number(id));
-    const view = new URLSearchParams(search).get('view');
+    // const view = new URLSearchParams(search).get('view');
 
     if (!coffeeStores) return <p>Error, no coffee stores defined</p>;
 
-    if (view === 'new') {
+    if (fistParam === 'new') {
         if (!user) return <p>Error, you are not logged in </p>;
 
         return <CoffeeCardEdit coffee={emptyCoffee(user, coffeeStores)} />;
-    } else {
+    } else if (typeof Number(fistParam) === 'number') {
+
+        const coffee = coffees && coffees.find((elm) => elm.id === Number(fistParam));
         if (!coffee) return <p>Error, coffee not found</p>;
-        if (view === 'edit') {
+
+        if (secondParam === 'edit') {
             return <CoffeeCardEdit coffee={coffee} />;
-        // } else if (view === 'brewings') {
-        //     return <CoffeeBrewingWindow coffee={coffee} />;
         } else {
-            return <CoffeeCardDetail coffee={coffee} brewing={brewingId}/>;
+            return (
+                <CoffeeCardDetail coffee={coffee} initialTab={secondParam} brewingId={thirdParam} state={forthParam} />
+            );
         }
+    } else {
+        return <p>Invalid url</p>;
     }
 };

@@ -1,9 +1,14 @@
 import classNames from 'classnames';
 import { isEqual } from 'lodash';
-import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { useHistory } from 'react-router';
 import { SaveSection } from '../../components/Buttons/AdvancedButtons';
-import { BoolInput, WTDateInput, NumberInput, DropdownInput, TextareaInput } from '../../components/FormElements';
-import { ObjLikeSliderAttrField, ObjSingleSliderAttrField, ObjSliderAttrField } from '../../components/FormElements/AttrFields';
+import { BoolInput, DropdownInput, NumberInput, TextareaInput, WTDateInput } from '../../components/FormElements';
+import {
+    ObjLikeSliderAttrField,
+    ObjSingleSliderAttrField,
+    ObjSliderAttrField,
+} from '../../components/FormElements/AttrFields';
 import { CoffeeContext } from '../../Contexts/CoffeeContext';
 import { displayDate } from '../../helpers/helperFunctions';
 import { BrewingEntry } from '../../helpers/types';
@@ -13,17 +18,22 @@ type CoffeeBrewingCardEditProps = {
     brewing: BrewingEntry;
     deleteBrewing(brewing: BrewingEntry): Promise<void>;
     saveBrewing(brewing: BrewingEntry): Promise<number>;
-    setEditMode: Dispatch<SetStateAction<boolean>>;
+    extendedBaseUrl: string;
 };
 
 export const CoffeeBrewingCardEdit = ({
     brewing,
     deleteBrewing,
     saveBrewing,
-    setEditMode,
+    extendedBaseUrl,
 }: CoffeeBrewingCardEditProps) => {
     const [formBrewing, setFormBrewing] = useState<BrewingEntry>(brewing);
     const { coffeeAttrData } = useContext(CoffeeContext);
+    const history = useHistory();
+
+    const closeEditMode = () => {
+        history.push(`${extendedBaseUrl}/${brewing.id}`);
+    };
 
     const methods = coffeeAttrData && coffeeAttrData.brewMethods;
     return !methods ? (
@@ -46,7 +56,7 @@ export const CoffeeBrewingCardEdit = ({
                     <DropdownInput
                         items={methods}
                         name="Brühmethode"
-                        setValue={(val) => setFormBrewing(curBrew => ({...curBrew, method: val}))}
+                        setValue={(val) => setFormBrewing((curBrew) => ({ ...curBrew, method: val }))}
                         value={formBrewing.method}
                         icon={'flask'}
                         iconColor={blue}
@@ -56,7 +66,7 @@ export const CoffeeBrewingCardEdit = ({
                     <WTDateInput
                         name="Datum"
                         value={formBrewing.brewDate}
-                        setValue={(val) => setFormBrewing(curBrew => ({...curBrew, brewDate: val}))}
+                        setValue={(val) => setFormBrewing((curBrew) => ({ ...curBrew, brewDate: val }))}
                     />
                 </div>
                 <div className="col-12 col-md-6">
@@ -64,7 +74,7 @@ export const CoffeeBrewingCardEdit = ({
                         name="Wassermänge:"
                         unit="ml"
                         value={formBrewing.waterAmount}
-                        setValue={(val) => setFormBrewing(curBrew => ({...curBrew, waterAmount: val}))}
+                        setValue={(val) => setFormBrewing((curBrew) => ({ ...curBrew, waterAmount: val }))}
                     />
                 </div>
                 <div className="col-12 col-md-6">
@@ -72,7 +82,7 @@ export const CoffeeBrewingCardEdit = ({
                         name="Kaffeemänge:"
                         unit="g"
                         value={formBrewing.coffeeAmount}
-                        setValue={(val) => setFormBrewing(curBrew => ({...curBrew, coffeeAmount: val}))}
+                        setValue={(val) => setFormBrewing((curBrew) => ({ ...curBrew, coffeeAmount: val }))}
                     />
                 </div>
                 <div className="col-12 col-md-6">
@@ -88,7 +98,7 @@ export const CoffeeBrewingCardEdit = ({
                     <BoolInput
                         name="Für Berechnung verwenden:"
                         value={formBrewing.useforcalculation}
-                        setValue={(val) => setFormBrewing(curBrew => ({...curBrew, useforcalculation: val}))}
+                        setValue={(val) => setFormBrewing((curBrew) => ({ ...curBrew, useforcalculation: val }))}
                     />
                 </div>
                 <div className="col-12 col-md-6">
@@ -150,7 +160,7 @@ export const CoffeeBrewingCardEdit = ({
                     <TextareaInput
                         name="Beschreibung"
                         value={formBrewing.ownDescription}
-                        setValue={(val) => setFormBrewing(curBrew => ({...curBrew, ownDescription: val}))}
+                        setValue={(val) => setFormBrewing((curBrew) => ({ ...curBrew, ownDescription: val }))}
                     />
                 </div>
             </div>
@@ -158,7 +168,7 @@ export const CoffeeBrewingCardEdit = ({
                 <div className={classNames('ButtonSection col-12')}>
                     <SaveSection
                         changes={isEqual(formBrewing, brewing)}
-                        closeFunction={async () => setEditMode(false)}
+                        closeFunction={async () => closeEditMode()}
                         saveFunction={async () => saveBrewing(formBrewing)}
                         deleteFunction={async () => deleteBrewing(formBrewing)}
                     />

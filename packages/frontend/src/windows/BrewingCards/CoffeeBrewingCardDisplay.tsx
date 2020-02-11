@@ -10,14 +10,18 @@ import { IconButton } from '../../components/Buttons';
 import { displayDate } from '../../helpers/helperFunctions';
 import { BrewingEntry } from '../../helpers/types';
 import { black, blue, yellow, cyan, green, red } from '../../styles/colors';
+import { useHistory } from 'react-router';
 
 type CoffeeBrewingCardDisplayProps = {
     brewing: BrewingEntry;
-    setEditMode: Dispatch<SetStateAction<boolean>>;
+    extendedBaseUrl: string;
 };
 
-export const CoffeeBrewingCardDisplay = ({ brewing, setEditMode }: CoffeeBrewingCardDisplayProps) => {
-    console.log('displayed brewing', brewing);
+export const CoffeeBrewingCardDisplay = ({ brewing, extendedBaseUrl }: CoffeeBrewingCardDisplayProps) => {
+    const history = useHistory();
+    const enterEditMode = () => {
+        history.push(`${extendedBaseUrl}/${brewing.id}/edit`)
+    }
     return (
         <>
             <div className="row">
@@ -33,7 +37,7 @@ export const CoffeeBrewingCardDisplay = ({ brewing, setEditMode }: CoffeeBrewing
                     </h4>
                 </div>
                 <div className="col-3">
-                    <IconButton name="Edit" onClick={() => setEditMode(true)} className="HoverBlue" icon="edit" />
+                    <IconButton name="Edit" onClick={() => enterEditMode()} className="HoverBlue" icon="edit" />
                 </div>
                 <div className="col-12 col-md-6">
                     <NewAttrField

@@ -1,25 +1,27 @@
-import React, { useState } from 'react';
-import { BrewingEntry } from '../../helpers/types';
-import { CoffeeBrewingCardDisplay } from './CoffeeBrewingCardDisplay';
-import { CoffeeBrewingCardEdit } from './CoffeeBrewingCardEdit';
+export const DEPRICATED = 'shouldup linter';
 
-type CoffeeBrewingCardProps = {
-    brewing: BrewingEntry;
-    deleteBrewing(brewing: BrewingEntry): Promise<void>;
-    saveBrewing(brewing: BrewingEntry): Promise<number>;
-};
+// import React, { useState } from 'react';
+// import { BrewingEntry } from '../../helpers/types';
+// import { CoffeeBrewingCardDisplay } from './CoffeeBrewingCardDisplay';
+// import { CoffeeBrewingCardEdit } from './CoffeeBrewingCardEdit';
 
-export const CoffeeBrewingCard = ({ brewing, saveBrewing, deleteBrewing }: CoffeeBrewingCardProps) => {
-    const [editModeActive, setEditModeActive] = useState(brewing.id === 0);
+// type CoffeeBrewingCardProps = {
+//     brewing: BrewingEntry;
+//     deleteBrewing(brewing: BrewingEntry): Promise<void>;
+//     saveBrewing(brewing: BrewingEntry): Promise<number>;
+// };
 
-    return editModeActive ? (
-        <CoffeeBrewingCardEdit
-            brewing={brewing}
-            deleteBrewing={deleteBrewing}
-            saveBrewing={saveBrewing}
-            setEditMode={setEditModeActive}
-        />
-    ) : (
-        <CoffeeBrewingCardDisplay brewing={brewing} setEditMode={setEditModeActive} />
-    );
-};
+// export const CoffeeBrewingCard = ({ brewing, saveBrewing, deleteBrewing }: CoffeeBrewingCardProps) => {
+//     const [editModeActive, setEditModeActive] = useState(brewing.id === 0);
+
+//     return editModeActive ? (
+//         <CoffeeBrewingCardEdit
+//             brewing={brewing}
+//             deleteBrewing={deleteBrewing}
+//             saveBrewing={saveBrewing}
+//             setEditMode={setEditModeActive}
+//         />
+//     ) : (
+//         <CoffeeBrewingCardDisplay brewing={brewing} extendedBaseUrl={'setEditModeActive'} />
+//     );
+// };
