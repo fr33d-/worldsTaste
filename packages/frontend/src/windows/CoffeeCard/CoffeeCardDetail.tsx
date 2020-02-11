@@ -29,7 +29,7 @@ type CoffeeCardDetailProps = {
 };
 
 export const CoffeeCardDetail = ({ coffee, brewingId, initialState, initialTab, baseUrl }: CoffeeCardDetailProps) => {
-    const [tab, setTab] = useState(initialTab ? initialTab : 'information');
+    const [tab, setTab] = useState(initialTab ? initialTab : 'informaton');
     const [brewings, setBrewings] = useState<BrewingEntry[]>([]);
     const [selectedBrewing, setSelectedBrewing] = useState<BrewingEntry>();
     const [state, setState] = useState<string | undefined>(initialState);
@@ -240,7 +240,7 @@ export const CoffeeCardDetail = ({ coffee, brewingId, initialState, initialTab, 
                                 {selectedBrewing ? (
                                     <CoffeeBrewingCardDisplay
                                         brewing={selectedBrewing}
-                                        extendedBaseUrl={`${baseUrl}/${coffee.id}/brewings/${brewingId}`}
+                                        extendedBaseUrl={`${baseUrl}/brewings/${brewingId}`}
                                     />
                                 ) : (
                                     <div className={'NoContent'}>

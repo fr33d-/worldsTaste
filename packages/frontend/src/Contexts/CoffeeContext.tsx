@@ -123,7 +123,7 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
     };
 
     const goToCreateCoffee = () => {
-        history.push('/coffee/card/?view=new');
+        history.push('/coffee/card/new');
     };
 
     const goToCoffees = () => {
@@ -131,11 +131,11 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
     };
 
     const editCoffeeCard = (id: number) => {
-        history.push(`/coffee/card/${id}?view=edit`);
+        history.push(`/coffee/card/${id}/edit`);
     };
 
     const viewCoffeeCard = (id: number) => {
-        history.push(`/coffee/card/${id}?view=view`);
+        history.push(`/coffee/card/${id}`);
     };
 
     const getFilterCoffeeList = () => {
