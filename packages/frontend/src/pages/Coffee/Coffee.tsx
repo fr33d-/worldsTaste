@@ -12,6 +12,7 @@ import OverlayFrame from '../../windows/OverlayFrame/OverlayFrame';
 import { default as chemexSVG, default as CoffeeReplacement } from './../../images/Chemex.svg';
 import { getFilterMenu } from './CoffeeHelperFunctions';
 import { UserContext } from '../../Contexts/UserContext';
+import { ModalRoot, WTModal } from '../../components/Modal/Modal';
 
 export const Coffee = () => {
     const {
@@ -101,7 +102,13 @@ export const Coffee = () => {
                         ))
                     )}
                 </div>
+
+                <WTModal>
+                    <CoffeeAttrDataWindow />
+                </WTModal>
+
             </AppWindow>
+            <ModalRoot />
             <Switch>
                 <Route exact path={`${basePath}/attrDataWindow`}>
                     <CoffeeAttrDataWindow />
