@@ -56,7 +56,7 @@ export const InlineCoffeeCardDisplay = ({ entry }: InlineCoffeeCardDisplayProps)
                     <div className="container">
                         <div className="row">
                             <h2>
-                                <Link to={`/coffee/card/${entry.id}?view=display`}>{entry.name}</Link>
+                                <Link to={`/coffee/card/${entry.id}`}>{entry.name}</Link>
                             </h2>
 
                             <div className="col-12 col-md-6">
