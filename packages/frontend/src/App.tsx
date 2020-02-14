@@ -105,7 +105,7 @@ export const App = () => (
                     <Route path="/user/:extention?">
                         <UserPage />
                     </Route>
-                    <Route path="/coffee/:extention?">
+                    <Route path="/coffee/:firstParam?/:secondParam?/:thirdParam?/:forthParam?">
                         <CoffeeContextProvider>
                             <Coffee />
                         </CoffeeContextProvider>

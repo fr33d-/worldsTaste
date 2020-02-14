@@ -23,8 +23,6 @@ export const CoffeeAttrDataWindow = () => {
         },
     ];
 
-    console.log('Attr Data', attrData);
-
     return <AttrDataWindow close={closeAttrWindow} content={attrData} />;
 };
 

@@ -61,8 +61,7 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
     const contextInitiateCoffeeStores = async () => {
         try {
             const coffeeStores = await getCoffeStores();
-            setCoffeeStores(coffeeStores);
-            console.log('Coffee Stores', coffeeStores);
+            setCoffeeStores(coffeeStores.concat({id: 999, name: 'undefined'}));
             throwDataSucess('got coffee stores');
         } catch (e) {
             throwDataError('cant get data from data', e);

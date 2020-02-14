@@ -34,7 +34,12 @@ export const Coffee = () => {
         contextInitiateCoffeeStores,
     } = useContext(CoffeeContext);
     const { user } = useContext(UserContext);
-    const { extention } = useParams();
+    const { firstParam, secondParam, thirdParam, forthParam } = useParams();
+
+    console.log('First param: ', firstParam);
+    console.log('Second param: ', secondParam);
+    console.log('Third param: ', thirdParam);
+    console.log('Forth param: ', forthParam);
 
     const filterMenu: FilterMenuType[] = getFilterMenu();
 
@@ -56,7 +61,7 @@ export const Coffee = () => {
     return (
         <>
             <AppWindow
-                editState={extention ? true : false}
+                editState={firstParam !== undefined}
                 sidebar={
                     <Sidemenu
                         filter={filterMenu}
@@ -103,10 +108,11 @@ export const Coffee = () => {
                     )}
                 </div>
 
-                <WTModal>
-                    <CoffeeAttrDataWindow />
-                </WTModal>
-
+                {/* {firstParam === 'attrDataWindow' && (
+                    <WTModal>
+                        <CoffeeAttrDataWindow />
+                    </WTModal>
+                )} */}
             </AppWindow>
             <ModalRoot />
             <Switch>
