@@ -71,7 +71,7 @@ export const InlineCoffeeCardDisplay = ({ entry }: InlineCoffeeCardDisplayProps)
                                 <AttrField color={blue} icon="flask" value={entry.kind} name="Art:" />
                             </div>
                             <div className="col-12 col-md-6">
-                                <AttrField color={yellow} icon="store" value={entry.store.name} name="Rösterei:" />
+                                <AttrField color={yellow} icon="store" value={entry.store && entry.store.name} name="Rösterei:" />
                             </div>
 
                             <div className="col-12 col-md-6">

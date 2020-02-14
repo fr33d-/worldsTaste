@@ -142,7 +142,7 @@ export const CoffeeCardDetail = ({ coffee, brewingId, initialState, initialTab, 
                                 <AttrField color={yellow} icon="mug-hot" value={coffee.kind} name="Art:" />
                             </div>
                             <div className="col-12 col-md-6">
-                                <AttrField color={yellow} icon="flask" value={coffee.store.name} name="Rösterei:" />
+                                <AttrField color={yellow} icon="flask" value={coffee.store && coffee.store.name} name="Rösterei:" />
                             </div>
                             <div className="col-12 col-md-6">
                                 <AttrField color={yellow} icon="leaf" value={coffee.process} name="Prozess:" />

@@ -1,10 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
-import React, { FC, SetStateAction, Dispatch } from 'react';
+import React, { FC, SetStateAction, Dispatch, useState, useContext, useEffect } from 'react';
 // import 'from' './Filter.module.scss';
 // import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import { Link } from 'react-router-dom';
 import { FilterMenuType } from '../../helpers/types';
+import { WTModal } from '../Modal/Modal';
+import { CoffeeAttrDataWindow } from '../../windows/AttrDataWindow';
+import { CoffeeContext } from '../../Contexts/CoffeeContext';
 
 type SearchProps = {
     searchString?: string;
@@ -72,6 +75,28 @@ export const DataButton: FC<{ onClick(): void }> = ({ onClick }) => (
         <FontAwesomeIcon icon="database" />
     </button>
 );
+
+export const DataAttrWindowButton = () => {
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const { setEditState } = useContext(CoffeeContext);
+
+    useEffect(() => {
+        setEditState(dialogOpen);
+    }, [dialogOpen]);
+
+    return (
+        <>
+            <button className={classNames('add-button big', 'WTButton')} onClick={() => setDialogOpen(true)}>
+                <FontAwesomeIcon icon="database" />
+            </button>
+            {dialogOpen && (
+                <WTModal>
+                    <CoffeeAttrDataWindow closeDialog={() => setDialogOpen(false)} />
+                </WTModal>
+            )}
+        </>
+    );
+};
 
 export const IntroText: FC<{ header: string }> = ({ header, children }) => (
     <div className={'Introtext'}>

@@ -13,7 +13,7 @@ export const AppWindow: FC<AppWindowProps> = ({ loading = false, children, sideb
     return (
         <>
             <div className={'BackgroundHelper'} />
-            <div className={classNames((editState) && 'EditBackground')}>
+            <div className={classNames(editState && 'EditBackground')}>
                 <Navigationbar />
                 <div className={'Container'}>
                     {/* <MobileHeader icon="mug-hot" name="Blog of Coffee" /> */}

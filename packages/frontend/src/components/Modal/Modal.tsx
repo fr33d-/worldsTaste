@@ -8,10 +8,14 @@ export const WTModal = ({ children }: Props) => {
     const ModalContainer = document.createElement('div');
 
     useEffect(() => {
-        modalRoot && modalRoot.appendChild(ModalContainer);
+        if (modalRoot) {
+            modalRoot.appendChild(ModalContainer);
+        } else {
+            console.log('no modal parent found');
+        }
     });
 
     return ReactDOM.createPortal(<div className="wt-modal">{children}</div>, ModalContainer);
 };
 
-export const ModalRoot = () => <div className="modal-root" />;
+export const ModalRoot = () => <div id="modal-root" />;

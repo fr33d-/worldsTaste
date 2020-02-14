@@ -1,18 +1,17 @@
 import React, { useContext, useEffect } from 'react';
 import { Route, Switch, useParams } from 'react-router';
-import { AddButton, DataButton, Filter, IntroText, Search } from '../../components/Filter';
+import { AddButton, DataAttrWindowButton, Filter, IntroText, Search } from '../../components/Filter';
+import { ModalRoot } from '../../components/Modal/Modal';
 import { Sidemenu } from '../../components/Sidemenu';
 import { CoffeeContext } from '../../Contexts/CoffeeContext';
+import { UserContext } from '../../Contexts/UserContext';
 import { FilterMenuType } from '../../helpers/types';
 import { AppWindow } from '../../windows/AppWindow';
-import { CoffeeAttrDataWindow } from '../../windows/AttrDataWindow';
 import { CoffeeDetailWindow } from '../../windows/CoffeeCard/CoffeeDetailWindow';
 import { InlineCoffeeCardDisplay } from '../../windows/CoffeeCard/InlineCoffeeCard';
 import OverlayFrame from '../../windows/OverlayFrame/OverlayFrame';
 import { default as chemexSVG, default as CoffeeReplacement } from './../../images/Chemex.svg';
 import { getFilterMenu } from './CoffeeHelperFunctions';
-import { UserContext } from '../../Contexts/UserContext';
-import { ModalRoot, WTModal } from '../../components/Modal/Modal';
 
 export const Coffee = () => {
     const {
@@ -28,13 +27,18 @@ export const Coffee = () => {
         setPostOrderBy,
         setSearchString,
         goToCreateCoffee,
-        openAttrWindow,
         getFilterCoffeeList,
         contextInitiateCoffees,
         contextInitiateCoffeeStores,
+        editState
     } = useContext(CoffeeContext);
     const { user } = useContext(UserContext);
-    const { extention } = useParams();
+    const { firstParam, secondParam, thirdParam, forthParam } = useParams();
+
+    console.log('First param: ', firstParam);
+    console.log('Second param: ', secondParam);
+    console.log('Third param: ', thirdParam);
+    console.log('Forth param: ', forthParam);
 
     const filterMenu: FilterMenuType[] = getFilterMenu();
 
@@ -56,7 +60,7 @@ export const Coffee = () => {
     return (
         <>
             <AppWindow
-                editState={extention ? true : false}
+                editState={firstParam !== undefined || editState}
                 sidebar={
                     <Sidemenu
                         filter={filterMenu}
@@ -72,7 +76,7 @@ export const Coffee = () => {
                     <Search searchString={searchString} setSearchString={setSearchString} />
                     <Filter orderItems={filterMenu} orderString={postOrderBy} setOrderString={setPostOrderBy} />
                     {user && <AddButton onClick={goToCreateCoffee} />}
-                    {user && <DataButton onClick={openAttrWindow} />}
+                    {user && <DataAttrWindowButton />}
                 </div>
 
                 <IntroText header={'Kaffee - Genuss und Wissenschaft'}>
@@ -103,16 +107,13 @@ export const Coffee = () => {
                     )}
                 </div>
 
-                <WTModal>
-                    <CoffeeAttrDataWindow />
-                </WTModal>
 
             </AppWindow>
             <ModalRoot />
             <Switch>
-                <Route exact path={`${basePath}/attrDataWindow`}>
+                {/* <Route exact path={`${basePath}/attrDataWindow`}>
                     <CoffeeAttrDataWindow />
-                </Route>
+                </Route> */}
                 <Route exact path={`${basePath}/card/:firstParam?/:secondParam?/:thirdParam?/:forthParam?`}>
                     <OverlayFrame>
                         <div className={'LayoutCard'}>
