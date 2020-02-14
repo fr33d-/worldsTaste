@@ -1,18 +1,16 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classnames from 'classnames';
-import React, { ChangeEvent, KeyboardEvent, useContext, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useContext, useState, FC } from 'react';
 import { Row } from 'react-bootstrap';
 import { CoffeeContext } from '../../Contexts/CoffeeContext';
 import { AttrDataType } from '../../helpers/types';
 import { throwDataError, throwDataSucess } from '../../pages/User/userHelperFunctions';
 import { addNewItem, deleteItem } from './AttrDataHelperFunctions';
 
-export const CoffeeAttrDataWindow = () => {
-    const { coffeeStores, closeAttrWindow } = useContext(CoffeeContext);
-
+export const CoffeeAttrDataWindow: FC<{closeDialog(): void}> = ({closeDialog}) => {
+    const { coffeeStores} = useContext(CoffeeContext);
     if (!coffeeStores) return <p>Error, no coffee data loaded</p>;
 
-    // Todo: warum fällt das nicht aus der API raus
     const attrData: AttrDataType[] = [
         {
             id: 1,
@@ -23,7 +21,7 @@ export const CoffeeAttrDataWindow = () => {
         },
     ];
 
-    return <AttrDataWindow close={closeAttrWindow} content={attrData} />;
+    return <AttrDataWindow close={closeDialog} content={attrData} />;
 };
 
 export type AttrDataProps = {
@@ -54,10 +52,10 @@ export const AttrDataWindow = ({ close, content }: AttrDataProps) => {
                     items: [...cat.items, { id: id, name: newItemName }],
                 }));
                 setNewItemName('');
-            } catch(e) {
+            } catch (e) {
                 throwDataError('Cant add item', e);
             }
-        };
+        }
     };
 
     const innerDeleteItem = async (id: number) => {
@@ -65,9 +63,9 @@ export const AttrDataWindow = ({ close, content }: AttrDataProps) => {
             await deleteItem(selectedCategory.urlSubstring, id);
             setSelectedCategory((cat) => ({ ...cat, items: cat.items.filter((item) => item.id !== id) }));
             throwDataSucess('item deleted');
-        } catch(e) {
+        } catch (e) {
             throwDataError('cand delete item', e);
-        };
+        }
     };
 
     const handleItemNameChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -109,17 +107,15 @@ export const AttrDataWindow = ({ close, content }: AttrDataProps) => {
                             {selectedCategory.description}
                         </span>
                         <ul>
-                            {selectedCategory.items && selectedCategory.items.map((item) => (
-                                <li key={item.id}>
-                                    {item.name}{' '}
-                                    <button
-                                        onClick={() => innerDeleteItem(item.id)}
-                                        className={'ListDeleteButton'}
-                                    >
-                                        <FontAwesomeIcon icon="trash-alt" size="xs" color="#929292" />
-                                    </button>
-                                </li>
-                            ))}
+                            {selectedCategory.items &&
+                                selectedCategory.items.map((item) => (
+                                    <li key={item.id}>
+                                        {item.name}{' '}
+                                        <button onClick={() => innerDeleteItem(item.id)} className={'ListDeleteButton'}>
+                                            <FontAwesomeIcon icon="trash-alt" size="xs" color="#929292" />
+                                        </button>
+                                    </li>
+                                ))}
                             <li>
                                 <Row>
                                     <input

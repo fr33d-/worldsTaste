@@ -28,6 +28,8 @@ type CoffeeContextType = {
     coffeeStores: AttrDataItemType[] | undefined;
     setCoffeeStores: Dispatch<SetStateAction<AttrDataItemType[]>>;
     basePath: string;
+    editState: boolean;
+    setEditState: Dispatch<SetStateAction<boolean>>;
     contextSaveCoffee(coffee: CoffeeEntry): Promise<number>;
     contextDeleteCoffee(id: number): Promise<void>;
     openAttrWindow(): void;
@@ -52,6 +54,7 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
     const [filterAttr, setFilterAttr] = useState<string>();
     const [searchString, setSearchString] = useState<string>();
     const [postOrderBy, setPostOrderBy] = useState<string>();
+    const [editState, setEditState] = useState(false);
 
     const [coffeeAttrData, _] = useState<LocalCoffeeAttrData>(localCoffeeAttrData);
 
@@ -61,7 +64,7 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
     const contextInitiateCoffeeStores = async () => {
         try {
             const coffeeStores = await getCoffeStores();
-            setCoffeeStores(coffeeStores.concat({id: 999, name: 'undefined'}));
+            setCoffeeStores(coffeeStores.concat({ id: 999, name: 'undefined' }));
             throwDataSucess('got coffee stores');
         } catch (e) {
             throwDataError('cant get data from data', e);
@@ -230,6 +233,8 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
                 setCoffeeStores,
                 contextInitiateCoffeeStores,
                 contextInitiateCoffees,
+                editState,
+                setEditState,
             }}
         >
             {children}
