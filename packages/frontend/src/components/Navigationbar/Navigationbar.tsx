@@ -8,6 +8,7 @@ import { setUserFromSessionStorage } from '../../pages/User/userHelperFunctions'
 // import { useJwt } from '../../windows/UserWindows/UserHelperFunctions';
 import logoSmall from './../../images/wt-logo-small.svg';
 import logoBig from './../../images/wt-logo-big.svg';
+import { UserLoginButton } from '../Buttons/FunctioalButtons';
 
 type NavbarProps = {
     light?: boolean;
@@ -53,11 +54,7 @@ export const Navigationbar = ({ light, big }: NavbarProps) => {
                         </div>
 
                         <div className={'Burger'}>
-                            <Link to="/user">
-                                <button className={'UserIcon'}>
-                                    <FontAwesomeIcon icon="user" color={user ? black : grayDark} />
-                                </button>
-                            </Link>
+                            <UserLoginButton />
                             <FontAwesomeIcon icon="bars" size="lg" />
                         </div>
                     </div>

@@ -1,12 +1,11 @@
 import classNames from 'classnames';
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, Container, Row } from 'react-bootstrap';
 import { Navigationbar } from '../../components/Navigationbar';
-import { CoffeeContext } from '../../Contexts/CoffeeContext';
+import { UserContext } from '../../Contexts/UserContext';
 import { AttrDataItemType, FullUser } from '../../helpers/types';
 import userAvatar from '../../images/avatar-frederic.png';
 import {
-    LoginWindow,
     UserAdminWindow,
     UserChangePasswordWindow,
     UserCreateNewWindow,
@@ -14,7 +13,6 @@ import {
     UserDetailWindow,
 } from '../../windows/UserWindows/';
 import { setUserFromSessionStorage } from './userHelperFunctions';
-import { UserContext } from '../../Contexts/UserContext';
 
 export const UserRoles: AttrDataItemType[] = [
     { id: 0, name: 'ADMIN' },
@@ -88,7 +86,7 @@ export const UserPage = () => {
                                 </div>
                             </>
                         )}
-                        {!user && <LoginWindow />}
+                        {!user && <p> You are not logged in</p>}
                     </Row>
                 </Container>
             </div>

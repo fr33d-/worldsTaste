@@ -1,17 +1,17 @@
 import React, { useContext, useEffect } from 'react';
 import { Route, Switch, useParams } from 'react-router';
-import { AddButton, DataAttrWindowButton, Filter, IntroText, Search } from '../../components/Filter';
+import { AddButton, Filter, IntroText, Search } from '../../components/Filter';
 import { ModalRoot } from '../../components/Modal/Modal';
 import { Sidemenu } from '../../components/Sidemenu';
 import { CoffeeContext } from '../../Contexts/CoffeeContext';
 import { UserContext } from '../../Contexts/UserContext';
 import { FilterMenuType } from '../../helpers/types';
 import { AppWindow } from '../../windows/AppWindow';
-import { CoffeeDetailWindow } from '../../windows/CoffeeCard/CoffeeDetailWindow';
+import { CoffeeDetailFrame } from '../../windows/CoffeeCard/CoffeeDetailFrame';
 import { InlineCoffeeCardDisplay } from '../../windows/CoffeeCard/InlineCoffeeCard';
-import OverlayFrame from '../../windows/OverlayFrame/OverlayFrame';
 import { default as chemexSVG, default as CoffeeReplacement } from './../../images/Chemex.svg';
 import { getFilterMenu } from './CoffeeHelperFunctions';
+import { DataAttrWindowButton } from '../../components/Buttons/FunctioalButtons';
 
 export const Coffee = () => {
     const {
@@ -30,15 +30,10 @@ export const Coffee = () => {
         getFilterCoffeeList,
         contextInitiateCoffees,
         contextInitiateCoffeeStores,
-        editState
+        editState,
     } = useContext(CoffeeContext);
     const { user } = useContext(UserContext);
-    const { firstParam, secondParam, thirdParam, forthParam } = useParams();
-
-    console.log('First param: ', firstParam);
-    console.log('Second param: ', secondParam);
-    console.log('Third param: ', thirdParam);
-    console.log('Forth param: ', forthParam);
+    const { firstParam } = useParams();
 
     const filterMenu: FilterMenuType[] = getFilterMenu();
 
@@ -106,20 +101,11 @@ export const Coffee = () => {
                         ))
                     )}
                 </div>
-
-
             </AppWindow>
-            <ModalRoot />
+
             <Switch>
-                {/* <Route exact path={`${basePath}/attrDataWindow`}>
-                    <CoffeeAttrDataWindow />
-                </Route> */}
-                <Route exact path={`${basePath}/card/:firstParam?/:secondParam?/:thirdParam?/:forthParam?`}>
-                    <OverlayFrame>
-                        <div className={'LayoutCard'}>
-                            <CoffeeDetailWindow />
-                        </div>
-                    </OverlayFrame>
+                <Route path={`${basePath}/:firstParam/:secondParam?/:thirdParam?/:forthParam?`}>
+                    <CoffeeDetailFrame />
                 </Route>
             </Switch>
         </>

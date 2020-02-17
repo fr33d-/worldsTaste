@@ -49,6 +49,7 @@ import { Home } from './pages/Home';
 import { UserPage } from './pages/User';
 import { CoffeeContextProvider } from './Contexts/CoffeeContext';
 import { UserContextProvider } from './Contexts/UserContext';
+import { ModalRoot } from './components/Modal/Modal';
 
 library.add(
     faTrashAlt,
@@ -105,7 +106,7 @@ export const App = () => (
                     <Route path="/user/:extention?">
                         <UserPage />
                     </Route>
-                    <Route path="/coffee/:firstParam?/:secondParam?/:thirdParam?/:forthParam?">
+                    <Route path="/coffee/">
                         <CoffeeContextProvider>
                             <Coffee />
                         </CoffeeContextProvider>
@@ -120,6 +121,7 @@ export const App = () => (
                         <Home />
                     </Route>
                 </Switch>
+                <ModalRoot />
             </UserContextProvider>
         </BrowserRouter>
     </>

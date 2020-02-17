@@ -32,7 +32,6 @@ type CoffeeContextType = {
     setEditState: Dispatch<SetStateAction<boolean>>;
     contextSaveCoffee(coffee: CoffeeEntry): Promise<number>;
     contextDeleteCoffee(id: number): Promise<void>;
-    openAttrWindow(): void;
     closeAttrWindow(): void;
     goToCreateCoffee(): void;
     goToCoffees(): void;
@@ -116,16 +115,12 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
         }
     };
 
-    const openAttrWindow = () => {
-        history.push('/coffee/attrDataWindow/');
-    };
-
     const closeAttrWindow = () => {
         history.push('/coffee/');
     };
 
     const goToCreateCoffee = () => {
-        history.push('/coffee/card/new');
+        history.push('/coffee/new');
     };
 
     const goToCoffees = () => {
@@ -133,11 +128,11 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
     };
 
     const editCoffeeCard = (id: number) => {
-        history.push(`/coffee/card/${id}/edit`);
+        history.push(`/coffee/${id}/edit`);
     };
 
     const viewCoffeeCard = (id: number) => {
-        history.push(`/coffee/card/${id}`);
+        history.push(`/coffee/${id}`);
     };
 
     const getFilterCoffeeList = () => {
@@ -224,7 +219,6 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
                 contextDeleteCoffee,
                 contextSaveCoffee,
                 goToCreateCoffee,
-                openAttrWindow,
                 editCoffeeCard,
                 goToCoffees,
                 viewCoffeeCard,

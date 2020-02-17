@@ -41,7 +41,6 @@ export const UserContextProvider = ({ children }: PropsWithChildren<{}>) => {
         throwDataSucess('Logged out!');
         sessionStorage.removeItem('auth');
         setUser(undefined);
-        // history.push('/');
     };
 
     return (

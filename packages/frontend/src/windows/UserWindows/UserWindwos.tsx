@@ -16,8 +16,44 @@ import {
 } from '../../pages/User/userHelperFunctions';
 import { green, white } from '../../styles/colors';
 import { UserContext } from '../../Contexts/UserContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export const LoginWindow = () => {
+export const UserModal: FC<{ closeDialog(): void }> = ({ closeDialog }) => {
+    const { user } = useContext(UserContext);
+    console.log('User', user);
+    return user ? <UserDetailModal closeDialog={closeDialog} /> : <LoginWindow closeDialog={closeDialog} />;
+};
+
+export const UserDetailModal: FC<{ closeDialog(): void }> = ({ closeDialog }) => {
+    const { user, contextLogout } = useContext(UserContext);
+
+    return !user ? (
+        <p>you are not logged in </p>
+    ) : (
+        <>
+            <div className={'LoginWindow'}>
+                <div className={'Head Head__center'}>
+                    <h1>{user.name}</h1>
+                    <button onClick={closeDialog} className="icon-button CloseButton">
+                        <FontAwesomeIcon icon={'times'} />
+                    </button>
+                </div>
+                <div>
+                    <p>Mail: {user.email}</p>
+                    <p>Role: {user.role}</p>
+                    <p>Username: {user.username}</p>
+                </div>
+                <div className={'ButtonSection'}>
+                    <Button className={'Login'} onClick={contextLogout}>
+                        Logout
+                    </Button>
+                </div>
+            </div>
+        </>
+    );
+};
+
+export const LoginWindow: FC<{ closeDialog(): void }> = ({ closeDialog }) => {
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [msg, setMsg] = useState('');
@@ -28,6 +64,7 @@ export const LoginWindow = () => {
         try {
             await contextLogin(username, password);
             setMsg(`Logged in! `);
+            closeDialog();
         } catch (error) {
             if (error && error.response && error.response.status === 400) {
                 setMsg('You need to enter a valid Mail and a Password!');
@@ -42,23 +79,24 @@ export const LoginWindow = () => {
 
     return (
         <>
-            <div className={`col-12 col-md-6 offset-md-3 ${'Login'} `}>
-                <h1>Login</h1>
-                <div className={'LoginWindow'}>
-                    <div className={'Head'}>
-                        You are currently not logged in. If you wish to sign up please send me a mail.
-                    </div>
-                    <div className={'Form'}>
-                        <TextInput setValue={(val) => setUserName(val)} name="Username" value={username} />
-                        <PasswordInput setValue={(val) => setPassword(val)} name="Password" value={password} />
-                    </div>
-                    <div className={'ButtonSection'}>
-                        <Button className={'Login'} onClick={innerLogin}>
-                            Login
-                        </Button>
-                    </div>
-                    <p className={'Error'}>{msg}</p>
+            <div className={'LoginWindow'}>
+                <div className={'Head Head__center'}>
+                    <h1>Login</h1>
+                    You are currently not logged in. If you wish to sign up please send me a mail.
+                    <button onClick={closeDialog} className="icon-button CloseButton">
+                        <FontAwesomeIcon icon={'times'} />
+                    </button>
                 </div>
+                <div className={'Form'}>
+                    <TextInput setValue={(val) => setUserName(val)} name="Username" value={username} />
+                    <PasswordInput setValue={(val) => setPassword(val)} name="Password" value={password} />
+                </div>
+                <div className={'ButtonSection'}>
+                    <Button className={'Login'} onClick={innerLogin}>
+                        Login
+                    </Button>
+                </div>
+                <p className={'Error'}>{msg}</p>
             </div>
         </>
     );

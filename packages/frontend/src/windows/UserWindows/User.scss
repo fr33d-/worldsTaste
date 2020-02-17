@@ -16,7 +16,7 @@
 
             width: $image-dimension;
             height: $image-dimension;
-            border-radius: calc(#{$image-dimension}/2);
+            border-radius: calc(#{$image-dimension}/ 2);
             background: $new-dark-gray;
             margin: $default-space-xxl 0;
             // background-image: url('./../../images/avatar-frederic.png');
@@ -68,19 +68,29 @@
     }
 }
 
-
 .Login {
     padding-top: 120px; //$default-space-xxl;
 }
 
 .LoginWindow {
-    @extend .card-now-hover;
+    // @extend .card-now-hover;
 
     .Head {
         margin-bottom: $default-space-s;
         padding: $default-space-s;
 
         border-bottom: 1px solid $new-dark-gray;
+
+        &__center h1 {
+            margin: 0 auto $default-space-s auto;
+            width: fit-content;
+        }
+
+        .CloseButton {
+            position: absolute;
+            top: $default-space-m;
+            right: $default-space-m;
+        }
     }
 
     .Form {
