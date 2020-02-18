@@ -13,6 +13,7 @@ import {
     UserDetailWindow,
 } from '../../windows/UserWindows/';
 import { setUserFromSessionStorage } from './userHelperFunctions';
+import { NotFoundPage } from '../../windows/404/404';
 
 export const UserRoles: AttrDataItemType[] = [
     { id: 0, name: 'ADMIN' },
@@ -26,9 +27,9 @@ export const UserPage = () => {
 
     const { contextLogout } = useContext(UserContext);
 
-    useEffect(() => {
-        setUser(setUserFromSessionStorage());
-    });
+    // useEffect(() => {
+    //     setUser(setUserFromSessionStorage());
+    // });
 
     return (
         <>
@@ -86,7 +87,7 @@ export const UserPage = () => {
                                 </div>
                             </>
                         )}
-                        {!user && <p> You are not logged in</p>}
+                        {!user && <NotFoundPage message="Sorry, you are not logged in"/>}
                     </Row>
                 </Container>
             </div>

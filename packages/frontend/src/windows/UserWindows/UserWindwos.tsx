@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState, useContext } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, ButtonGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { TextInput, AttrDataDropdownInput, PasswordInput } from '../../components/FormElements';
 import { AttrField } from '../../components/FormElements/AttrFields';
@@ -44,6 +44,9 @@ export const UserDetailModal: FC<{ closeDialog(): void }> = ({ closeDialog }) =>
                     <p>Username: {user.username}</p>
                 </div>
                 <div className={'ButtonSection'}>
+                    <Link to="/user">
+                        <Button className="color-button blue-full">Go to user page</Button>
+                    </Link>
                     <Button className={'Login'} onClick={contextLogout}>
                         Logout
                     </Button>

@@ -9,6 +9,11 @@
     background: rgba(0,0,0,0.2);
     padding-top: 120px;
     overflow: scroll;
+    z-index: 999;
+}
+
+.wt-modal {
+    z-index: 999;
 }
 
 
