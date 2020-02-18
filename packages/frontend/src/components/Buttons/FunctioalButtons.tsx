@@ -1,16 +1,17 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
-import React, { useContext, useEffect, useState } from 'react';
-import { CoffeeContext } from '../../Contexts/CoffeeContext';
+import React, { Dispatch, FC, SetStateAction, useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../Contexts/UserContext';
+import { AttrDataType } from '../../helpers/types';
 import { black, grayDark } from '../../styles/colors';
-import { CoffeeAttrDataWindow } from '../../windows/AttrDataWindow';
+import { AttrDataWindow } from '../../windows/AttrDataWindow';
 import { UserModal } from '../../windows/UserWindows';
 import { WTModal } from '../Modal/Modal';
 
-export const DataAttrWindowButton = () => {
+//Todo: Maybe we can abstract this buttons with component composition
+
+export const DataAttrWindowButton: FC<{setEditState: Dispatch<SetStateAction<boolean>>; attrData: AttrDataType[]}> = ({setEditState, attrData}) => {
     const [dialogOpen, setDialogOpen] = useState(false);
-    const { setEditState } = useContext(CoffeeContext);
 
     useEffect(() => {
         setEditState(dialogOpen);
@@ -23,7 +24,8 @@ export const DataAttrWindowButton = () => {
             </button>
             {dialogOpen && (
                 <WTModal>
-                    <CoffeeAttrDataWindow closeDialog={() => setDialogOpen(false)} />
+                    {/* <CoffeeAttrDataWindow closeDialog={() => setDialogOpen(false)} /> */}
+                    <AttrDataWindow close={() => setDialogOpen(false)} content={attrData} />
                 </WTModal>
             )}
         </>

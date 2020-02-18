@@ -1,7 +1,7 @@
 import React, { createContext, Dispatch, PropsWithChildren, SetStateAction, useState } from 'react';
 import { useHistory } from 'react-router';
 import { localCoffeeAttrData } from '../helpers/attrData';
-import { AttrDataItemType, CoffeeEntry, LocalCoffeeAttrData } from '../helpers/types';
+import { AttrDataItemType, CoffeeEntry, LocalCoffeeAttrData, AttrDataType } from '../helpers/types';
 import {
     deleteCoffee,
     getCoffees,
@@ -30,6 +30,7 @@ type CoffeeContextType = {
     basePath: string;
     editState: boolean;
     setEditState: Dispatch<SetStateAction<boolean>>;
+    attrData: AttrDataType[];
     contextSaveCoffee(coffee: CoffeeEntry): Promise<number>;
     contextDeleteCoffee(id: number): Promise<void>;
     closeAttrWindow(): void;
@@ -135,6 +136,16 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
         history.push(`/coffee/${id}`);
     };
 
+    const attrData: AttrDataType[] = [
+        {
+            id: 1,
+            name: 'Röstereien',
+            urlSubstring: 'coffeesStores',
+            description: 'Läden oder Röstereien weltweit',
+            items: coffeeStores,
+        },
+    ];
+
     const getFilterCoffeeList = () => {
         let newPosts: CoffeeEntry[] | undefined = [];
 
@@ -229,6 +240,7 @@ export const CoffeeContextProvider = ({ children }: PropsWithChildren<{}>) => {
                 contextInitiateCoffees,
                 editState,
                 setEditState,
+                attrData,
             }}
         >
             {children}

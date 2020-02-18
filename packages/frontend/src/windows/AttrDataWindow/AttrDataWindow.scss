@@ -1,30 +1,30 @@
-.AttrDataBackground {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100vw;
-    z-index: 10;
+// .AttrDataBackground {
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//     height: 100vh;
+//     width: 100vw;
+//     z-index: 10;
 
-    background: $white;
-    opacity: 0.8;
-}
+//     background: $white;
+//     opacity: 0.8;
+// }
 
 .AttrDataWindow {
-    @extend .container;
-    position: absolute;
-    top: 20vh;
-    left: 50vw;
-    margin-left: -345px;
-    width: 690px;
-    height: 500px;
-    min-height: 300px;
-    opacity: 1;
-    z-index: 20;
+    // @extend .container;
+    // position: absolute;
+    // top: 20vh;
+    // left: 50vw;
+    // margin-left: -345px;
+    // width: 690px;
+    // height: 500px;
+    // min-height: 300px;
+    // opacity: 1;
+    // z-index: 20;
 
-    border-radius: $border-radius;
-    background: $white;
-    box-shadow: $box-shadow-lg;
+    // border-radius: $border-radius;
+    // background: $white;
+    // box-shadow: $box-shadow-lg;
 
     // padding: $default-space;
 

@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { Route, Switch, useParams } from 'react-router';
 import { AddButton, Filter, IntroText, Search } from '../../components/Filter';
-import { ModalRoot } from '../../components/Modal/Modal';
 import { Sidemenu } from '../../components/Sidemenu';
 import { CoffeeContext } from '../../Contexts/CoffeeContext';
 import { UserContext } from '../../Contexts/UserContext';
@@ -31,6 +30,8 @@ export const Coffee = () => {
         contextInitiateCoffees,
         contextInitiateCoffeeStores,
         editState,
+        setEditState,
+        attrData
     } = useContext(CoffeeContext);
     const { user } = useContext(UserContext);
     const { firstParam } = useParams();
@@ -71,7 +72,7 @@ export const Coffee = () => {
                     <Search searchString={searchString} setSearchString={setSearchString} />
                     <Filter orderItems={filterMenu} orderString={postOrderBy} setOrderString={setPostOrderBy} />
                     {user && <AddButton onClick={goToCreateCoffee} />}
-                    {user && <DataAttrWindowButton />}
+                    {user && <DataAttrWindowButton setEditState={setEditState} attrData={attrData} />}
                 </div>
 
                 <IntroText header={'Kaffee - Genuss und Wissenschaft'}>

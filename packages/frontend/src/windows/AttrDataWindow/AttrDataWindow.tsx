@@ -7,22 +7,22 @@ import { AttrDataType } from '../../helpers/types';
 import { throwDataError, throwDataSucess } from '../../pages/User/userHelperFunctions';
 import { addNewItem, deleteItem } from './AttrDataHelperFunctions';
 
-export const CoffeeAttrDataWindow: FC<{closeDialog(): void}> = ({closeDialog}) => {
-    const { coffeeStores} = useContext(CoffeeContext);
-    if (!coffeeStores) return <p>Error, no coffee data loaded</p>;
+// export const CoffeeAttrDataWindow: FC<{closeDialog(): void}> = ({closeDialog}) => {
+//     const { coffeeStores} = useContext(CoffeeContext);
+//     if (!coffeeStores) return <p>Error, no coffee data loaded</p>;
 
-    const attrData: AttrDataType[] = [
-        {
-            id: 1,
-            name: 'Röstereien',
-            urlSubstring: 'coffeesStores',
-            description: 'Läden oder Röstereien weltweit',
-            items: coffeeStores,
-        },
-    ];
+//     const attrData: AttrDataType[] = [
+//         {
+//             id: 1,
+//             name: 'Röstereien',
+//             urlSubstring: 'coffeesStores',
+//             description: 'Läden oder Röstereien weltweit',
+//             items: coffeeStores,
+//         },
+//     ];
 
-    return <AttrDataWindow close={closeDialog} content={attrData} />;
-};
+//     return <AttrDataWindow close={closeDialog} content={attrData} />;
+// };
 
 export type AttrDataProps = {
     content: AttrDataType[];
