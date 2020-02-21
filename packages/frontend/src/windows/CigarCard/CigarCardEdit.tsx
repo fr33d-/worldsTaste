@@ -116,7 +116,7 @@ export const CigarCardEdit = ({
 
     return (
         <>
-            <div className={'LayoutCard'}>
+            <div className={'LayoutCard LayoutCard--content'}>
                 <div className="col-12">
                     <TextInput name="Name" setValue={(val) => set(formCigar, 'name', val)} value={formCigar.name} />
                 </div>

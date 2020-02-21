@@ -20,7 +20,7 @@ export const InlineCoffeeCardDisplay = ({ entry }: InlineCoffeeCardDisplayProps)
 
     return (
         <>
-            <div className={'InlineLayoutCard'}>
+            <div className={'InlineLayoutCard LayoutCard--content'}>
                 <div className={'ActionSection'}>
                     {user && (
                         <button

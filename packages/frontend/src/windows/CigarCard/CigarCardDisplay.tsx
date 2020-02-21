@@ -60,7 +60,7 @@ export const CigarCardDisplay = ({ deleteFunction, editFunction, entry }: CigarC
 
     return (
         <>
-            <div className={classNames('InlineLayoutCard', expanded && 'Exanded')}>
+            <div className={classNames('InlineLayoutCard LayoutCard--content', expanded && 'Exanded')}>
                 <div className={'ActionSection'}>
                     <button onClick={editCard} className={classNames('IconButton', 'HoverGreen')}>
                         <FontAwesomeIcon icon="edit" /> Edit

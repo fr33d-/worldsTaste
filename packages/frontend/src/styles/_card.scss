@@ -6,7 +6,7 @@
     left: 0;
     height: 100vh;
     width: 100vw;
-    background: rgba(0,0,0,0.2);
+    background: rgba(0, 0, 0, 0.2);
     padding-top: 120px;
     overflow: scroll;
     z-index: 999;
@@ -15,7 +15,6 @@
 .wt-modal {
     z-index: 999;
 }
-
 
 .cardActive {
     margin-top: -10px;
@@ -33,7 +32,7 @@
 .card-now-hover {
     width: 100%;
 
-    padding: $default-space-l;
+    // padding: $default-space-l;
     margin-bottom: $default-space-l;
 
     background: none;

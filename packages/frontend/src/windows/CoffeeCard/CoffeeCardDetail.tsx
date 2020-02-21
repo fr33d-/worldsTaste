@@ -89,7 +89,7 @@ export const CoffeeCardDetail = ({ coffee, brewingId, initialState, initialTab, 
     const { goToCoffees, editCoffeeCard, contextDeleteCoffee } = useContext(CoffeeContext);
 
     return (
-        <>
+        <div className="LayoutCard--content">
             <div className="col-12">
                 <h2>{coffee.name}</h2>
             </div>
@@ -262,6 +262,6 @@ export const CoffeeCardDetail = ({ coffee, brewingId, initialState, initialTab, 
                     />
                 </div>
             )}
-        </>
+        </div>
     );
 };

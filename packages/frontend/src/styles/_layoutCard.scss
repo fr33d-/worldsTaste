@@ -3,19 +3,24 @@
 // Hier sollte sich alles aus den coffee cards sammeln und vieleicht etwas einheitlich werden, da es an sehr vielen stellen verwendet wird
 .LayoutCard {
     @extend .card;
+    $block: &;
 
     display: flex;
     flex-direction: column;
     overflow: hidden;
     position: relative;
     border: none;
-    padding: $default-space-xl;
+    // padding: $default-space-xl;
 
     animation-duration: 1s;
     animation-name: slidein;
 
     @include media-breakpoint-down(sm) {
         flex-direction: column;
+    }
+
+    &--content, &#{block}--content {
+        padding: $default-space-xl;
     }
 
     .Row {

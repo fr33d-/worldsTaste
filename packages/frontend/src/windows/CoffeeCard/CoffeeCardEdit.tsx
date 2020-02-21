@@ -82,7 +82,7 @@ export const CoffeeCardEdit = ({ coffee }: CoffeeCardEditProps) => {
     return !coffeeStores ? (
         <h1>no coffee data</h1>
     ) : (
-        <>
+        <div className="LayoutCard--content">
             <div className="col-12">
                 <TextInput
                     name="Name"
@@ -284,6 +284,6 @@ export const CoffeeCardEdit = ({ coffee }: CoffeeCardEditProps) => {
                     saveFunction={async () => innerSaveCoffee()}
                 />
             </div>
-        </>
+        </div>
     );
 };

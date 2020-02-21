@@ -83,7 +83,7 @@ export const AttrDataWindow = ({ close, content }: AttrDataProps) => {
         <>
             <div className={'AttrDataWindow'}>
                 <Row>
-                    <div className={'AttrList'}>
+                    <div className={'col-5 AttrList'}>
                         <h2>Zusätzliche Daten</h2>
                         <ul>
                             {content.map((item) => (
@@ -98,7 +98,7 @@ export const AttrDataWindow = ({ close, content }: AttrDataProps) => {
                             ))}
                         </ul>
                     </div>
-                    <div className={'AttrItemList'}>
+                    <div className={'col-7 AttrItemList'}>
                         <button className={'CloseButton'} onClick={() => close()}>
                             <FontAwesomeIcon icon="times" color="#929292" />
                         </button>
