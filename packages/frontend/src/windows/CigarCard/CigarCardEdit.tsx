@@ -12,7 +12,6 @@ import { AttrDataItemType } from '../../helpers/types';
 import { SaveSection } from '../../components/Buttons/AdvancedButtons';
 import { throwDataError, throwDataSucess } from '../../pages/User/userHelperFunctions';
 import { set } from 'lodash';
-import { DateInput } from '@blueprintjs/datetime';
 
 type CigarCardEditProps = {
     entry: CigarEntry;
@@ -120,15 +119,15 @@ export const CigarCardEdit = ({
                 <div className="col-12">
                     <TextInput name="Name" setValue={(val) => set(formCigar, 'name', val)} value={formCigar.name} />
                 </div>
-                <div className={GeneralStyles.TabBar}>
+                <div className={'TabBar'}>
                     <ul>
-                        <li className={classNames(tab === 0 && GeneralStyles.Active)} onClick={() => setTab(0)}>
+                        <li className={classNames(tab === 0 && 'Active')} onClick={() => setTab(0)}>
                             Information
                         </li>
-                        <li className={classNames(tab === 1 && GeneralStyles.Active)} onClick={() => setTab(1)}>
+                        <li className={classNames(tab === 1 && 'Active')} onClick={() => setTab(1)}>
                             Details
                         </li>
-                        <li className={classNames(tab === 2 && GeneralStyles.Active)} onClick={() => setTab(2)}>
+                        <li className={classNames(tab === 2 && 'Active')} onClick={() => setTab(2)}>
                             Images
                         </li>
                     </ul>
@@ -163,6 +162,7 @@ export const CigarCardEdit = ({
                                 </div>
                                 <div className="col-12 col-md-6">
                                     <ObjLikeSliderAttrField
+                                        name="Gesammtbewertung"
                                         maxValue={5}
                                         obj={formCigar}
                                         propPath={['rating']}
