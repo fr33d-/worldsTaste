@@ -1,9 +1,8 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
-import React, { Component, useState, Dispatch, SetStateAction } from 'react';
-import { grayDarker, red, white, green } from '../../styles/colors';
-import { Button } from 'react-bootstrap';
+import React, { Dispatch, SetStateAction, useState } from 'react';
+import { grayDarker, red, white } from '../../styles/colors';
 
 type FrameButtonProps = {
     name: string;
@@ -36,7 +35,7 @@ export enum ButtonState {
     norm,
     max,
     error,
-    success,
+    success,∏
 }
 
 //Todo: Error aus den funktionen und changes variable ...

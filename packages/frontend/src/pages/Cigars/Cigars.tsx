@@ -1,26 +1,17 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-import classNames from 'classnames';
-import React, { useEffect, useState, useContext } from 'react';
-import { Route, useHistory, useLocation } from 'react-router';
-import { AttrDataWindow } from '../../windows/AttrDataWindow';
+import React, { useContext, useEffect, useState } from 'react';
+import { useHistory, useLocation } from 'react-router';
+import { DataAttrWindowButton } from '../../components/Buttons/FunctioalButtons';
+import { AddButton, Filter, IntroText, Search } from '../../components/Filter';
+import { Sidemenu } from '../../components/Sidemenu';
+import { UserContext } from '../../Contexts/UserContext';
+import { baseURL, cigarsAttrURL, cigarsURL } from '../../data';
+import { AttrDataItemType, FilterMenuType } from '../../helpers/types';
+import { AppWindow } from '../../windows/AppWindow';
 import { CigarCardDisplay } from '../../windows/CigarCard';
 import { CigarCardEdit } from '../../windows/CigarCard/CigarCardEdit';
-import { AddButton, DataButton, Filter, IntroText, Search } from '../../components/Filter';
-import { Footer } from '../../components/Footer';
-import { Navigationbar } from '../../components/Navigationbar';
-import { Sidemenu } from '../../components/Sidemenu';
-import { baseURL, cigarsAttrURL, cigarsURL } from '../../data';
 import CigarReplacement from './../../images/Cigar-replacement.svg';
 import Tabak from './../../images/Tabak.svg';
-// import GeneralStyles from './../../styles/'module'.scss';
-// import LocalStyles from './Cigars.module.scss';
-import { AttrDataItemType, FilterMenuType } from '../../helpers/types';
-import { setUserFromSessionStorage } from '../User/userHelperFunctions';
-import { DataAttrWindowButton } from '../../components/Buttons/FunctioalButtons';
-import { UserContext } from '../../Contexts/UserContext';
-import { AppWindow } from '../../windows/AppWindow';
-// import { useJwt } from '../../windows/UserWindows/UserHelperFunctions';
 
 export type CigarEntry = {
     abbrand: number;
