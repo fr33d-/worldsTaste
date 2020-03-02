@@ -5,13 +5,12 @@ import React, { ChangeEvent, useState } from 'react';
 import { baseURL, cigarsURL } from '../../data';
 import { CigarEntry } from '../../pages/Cigars';
 import { brown, grayDarker, greenAccent, yellowAccent } from '../../styles/colors';
-import { BoolInput, NumberInput, TextareaInput, TextInput, AttrDataDropdownInput, WTDateInput } from '../../components/FormElements';
 import { ObjLikeSliderAttrField, ObjSliderAttrField } from '../../components/FormElements/AttrFields';
-import GeneralStyles from './../../styles/GeneralStyles.module.scss';
 import { AttrDataItemType } from '../../helpers/types';
 import { SaveSection } from '../../components/Buttons/AdvancedButtons';
 import { throwDataError, throwDataSucess } from '../../pages/User/userHelperFunctions';
 import { set } from 'lodash';
+import { TextInput, AttrDataDropdownInput, BoolInput, TextareaInput, NumberInput, WTDateInput } from '../../components/FormElements/FormElements';
 
 type CigarCardEditProps = {
     entry: CigarEntry;

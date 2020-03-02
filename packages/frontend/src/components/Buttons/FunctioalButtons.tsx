@@ -1,25 +1,28 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import classNames from 'classnames';
-import React, { Dispatch, FC, SetStateAction, useContext, useEffect, useState } from 'react';
-import { UserContext } from '../../Contexts/UserContext';
-import { AttrDataType } from '../../helpers/types';
-import { black, grayDark } from '../../styles/colors';
-import { AttrDataWindow } from '../../windows/AttrDataWindow';
-import { UserModal } from '../../windows/UserWindows';
-import { WTModal } from '../Modal/Modal';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import classNames from "classnames";
+import React, { Dispatch, FC, SetStateAction, useContext, useEffect, useState } from "react";
+import { UserContext } from "../../Contexts/UserContext";
+import { AttrDataType } from "../../helpers/types";
+import { black, grayDark } from "../../styles/colors";
+import { AttrDataWindow } from "../../windows/AttrDataWindow";
+import { UserModal } from "../../windows/UserWindows";
+import { WTModal } from "../Modal/Modal";
 
 //Todo: Maybe we can abstract this buttons with component composition
 
-export const DataAttrWindowButton: FC<{setEditState: Dispatch<SetStateAction<boolean>>; attrData: AttrDataType[]}> = ({setEditState, attrData}) => {
+export const DataAttrWindowButton: FC<{
+    setEditState: Dispatch<SetStateAction<boolean>>;
+    attrData: AttrDataType[];
+}> = ({ setEditState, attrData }) => {
     const [dialogOpen, setDialogOpen] = useState(false);
 
     useEffect(() => {
         setEditState(dialogOpen);
-    }, [dialogOpen]);
+    }, [dialogOpen, setEditState]);
 
     return (
         <>
-            <button className={classNames('add-button big', 'WTButton')} onClick={() => setDialogOpen(true)}>
+            <button className={classNames("add-button big", "WTButton")} onClick={() => setDialogOpen(true)}>
                 <FontAwesomeIcon icon="database" />
             </button>
             {dialogOpen && (
@@ -37,11 +40,11 @@ export const UserLoginButton = () => {
     const [dialogOpen, setDialogOpen] = useState(false);
     return (
         <>
-            <button className={'UserIcon'} onClick={() => setDialogOpen(true)}>
+            <button className={"UserIcon"} onClick={() => setDialogOpen(true)}>
                 <FontAwesomeIcon icon="user" color={user ? black : grayDark} />
             </button>
             {dialogOpen && (
-                <WTModal size={'small'}>
+                <WTModal size={"small"}>
                     <UserModal closeDialog={() => setDialogOpen(false)} />
                 </WTModal>
             )}

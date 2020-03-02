@@ -1,11 +1,12 @@
-import React, { FC, useEffect, useState, useContext } from 'react';
-import { Button, ButtonGroup } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { TextInput, AttrDataDropdownInput, PasswordInput } from '../../components/FormElements';
-import { AttrField } from '../../components/FormElements/AttrFields';
-import { IconButton } from '../../components/Buttons';
-import { ExtendedUser, FullUser } from '../../helpers/types';
-import { UserRoles } from '../../pages/User';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { FC, useContext, useEffect, useState } from "react";
+import { Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { IconButton } from "../../components/Buttons";
+import { AttrField } from "../../components/FormElements/AttrFields";
+import { UserContext } from "../../Contexts/UserContext";
+import { ExtendedUser, FullUser } from "../../helpers/types";
+import { UserRoles } from "../../pages/User";
 import {
     changeUser,
     createUser,
@@ -13,14 +14,13 @@ import {
     newExtendedUser,
     throwDataError,
     throwDataSucess,
-} from '../../pages/User/userHelperFunctions';
-import { green, white } from '../../styles/colors';
-import { UserContext } from '../../Contexts/UserContext';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+} from "../../pages/User/userHelperFunctions";
+import { green, white } from "../../styles/colors";
+import { TextInput, PasswordInput, AttrDataDropdownInput } from "../../components/FormElements/FormElements";
 
 export const UserModal: FC<{ closeDialog(): void }> = ({ closeDialog }) => {
     const { user } = useContext(UserContext);
-    console.log('User', user);
+    console.log("User", user);
     return user ? <UserDetailModal closeDialog={closeDialog} /> : <LoginWindow closeDialog={closeDialog} />;
 };
 
@@ -31,11 +31,11 @@ export const UserDetailModal: FC<{ closeDialog(): void }> = ({ closeDialog }) =>
         <p>you are not logged in </p>
     ) : (
         <>
-            <div className={'LoginWindow'}>
-                <div className={'Head Head__center'}>
+            <div className={"LoginWindow"}>
+                <div className={"Head Head__center"}>
                     <h1>{user.name}</h1>
                     <button onClick={closeDialog} className="icon-button CloseButton">
-                        <FontAwesomeIcon icon={'times'} />
+                        <FontAwesomeIcon icon={"times"} />
                     </button>
                 </div>
                 <div>
@@ -43,11 +43,11 @@ export const UserDetailModal: FC<{ closeDialog(): void }> = ({ closeDialog }) =>
                     <p>Role: {user.role}</p>
                     <p>Username: {user.username}</p>
                 </div>
-                <div className={'ButtonSection'}>
+                <div className={"ButtonSection"}>
                     <Link to="/user">
                         <Button className="color-button blue-full">Go to user page</Button>
                     </Link>
-                    <Button className={'Login'} onClick={contextLogout}>
+                    <Button className={"Login"} onClick={contextLogout}>
                         Logout
                     </Button>
                 </div>
@@ -57,9 +57,9 @@ export const UserDetailModal: FC<{ closeDialog(): void }> = ({ closeDialog }) =>
 };
 
 export const LoginWindow: FC<{ closeDialog(): void }> = ({ closeDialog }) => {
-    const [username, setUserName] = useState('');
-    const [password, setPassword] = useState('');
-    const [msg, setMsg] = useState('');
+    const [username, setUserName] = useState("");
+    const [password, setPassword] = useState("");
+    const [msg, setMsg] = useState("");
 
     const { contextLogin } = useContext(UserContext);
 
@@ -70,11 +70,11 @@ export const LoginWindow: FC<{ closeDialog(): void }> = ({ closeDialog }) => {
             closeDialog();
         } catch (error) {
             if (error && error.response && error.response.status === 400) {
-                setMsg('You need to enter a valid Mail and a Password!');
+                setMsg("You need to enter a valid Mail and a Password!");
             } else if (error && error.response && error.response.status === 401) {
-                setMsg('Wrong data or you dont exist!');
+                setMsg("Wrong data or you dont exist!");
             } else {
-                setMsg('Sorry, soemething went wrong!');
+                setMsg("Sorry, soemething went wrong!");
             }
             throw error;
         }
@@ -82,24 +82,24 @@ export const LoginWindow: FC<{ closeDialog(): void }> = ({ closeDialog }) => {
 
     return (
         <>
-            <div className={'LoginWindow'}>
-                <div className={'Head Head__center'}>
+            <div className={"LoginWindow"}>
+                <div className={"Head Head__center"}>
                     <h1>Login</h1>
                     You are currently not logged in. If you wish to sign up please send me a mail.
                     <button onClick={closeDialog} className="icon-button CloseButton">
-                        <FontAwesomeIcon icon={'times'} />
+                        <FontAwesomeIcon icon={"times"} />
                     </button>
                 </div>
-                <div className={'Form'}>
+                <div className={"Form"}>
                     <TextInput setValue={(val) => setUserName(val)} name="Username" value={username} />
                     <PasswordInput setValue={(val) => setPassword(val)} name="Password" value={password} />
                 </div>
-                <div className={'ButtonSection'}>
-                    <Button className={'Login'} onClick={innerLogin}>
+                <div className={"ButtonSection"}>
+                    <Button className={"Login"} onClick={innerLogin}>
                         Login
                     </Button>
                 </div>
-                <p className={'Error'}>{msg}</p>
+                <p className={"Error"}>{msg}</p>
             </div>
         </>
     );
@@ -109,10 +109,10 @@ export const UserDetailWindow: FC<{ user: FullUser }> = ({ user }) => {
     return (
         <>
             <h2>General</h2>
-            <AttrField value={user.name} name="Name:" className={'AttrField'} />
-            <AttrField value={user.email} name="E-Mail:" className={'AttrField'} />
-            <AttrField value={user.created} name="Erstellt am:" className={'AttrField'} />
-            <AttrField value={user.role} name="Rolle:" className={'AttrField'} />
+            <AttrField value={user.name} name="Name:" className={"AttrField"} />
+            <AttrField value={user.email} name="E-Mail:" className={"AttrField"} />
+            <AttrField value={user.created} name="Erstellt am:" className={"AttrField"} />
+            <AttrField value={user.role} name="Rolle:" className={"AttrField"} />
         </>
     );
 };
@@ -205,18 +205,18 @@ export const UserAdminWindow: FC<{ user: FullUser }> = ({ user }) => {
                         obj={selectedUser}
                     />
                     <IconButton
-                        icon={saveingError ? 'ban' : 'save'}
-                        name={saveingError ? 'Error while saving' : 'Update User'}
+                        icon={saveingError ? "ban" : "save"}
+                        name={saveingError ? "Error while saving" : "Update User"}
                         color={white}
                         onClick={innerChangeUser}
-                        className={saveingError ? 'RedFull' : 'GreenFull'}
+                        className={saveingError ? "RedFull" : "GreenFull"}
                     />
                     <IconButton
                         icon="envelope-open"
                         name="Send user password reset link"
                         color={white}
                         onClick={sendResetPasswordLink}
-                        className={'GreenFull'}
+                        className={"GreenFull"}
                     />
                 </>
             )}
@@ -230,9 +230,9 @@ export const UserCreateNewWindow: FC<{ user: FullUser }> = () => {
     const innerCreateUser = async () => {
         try {
             await createUser(newUser);
-            throwDataSucess('user created');
+            throwDataSucess("user created");
         } catch (e) {
-            throwDataError('can not create user', e);
+            throwDataError("can not create user", e);
             throw e;
         }
     };
@@ -266,17 +266,17 @@ export const UserCreateNewWindow: FC<{ user: FullUser }> = () => {
                 icon="leaf"
                 iconColor={green}
                 label="Rolle"
-                propPath={['userrole']}
+                propPath={["userrole"]}
                 onChange={setNewUser}
                 obj={newUser}
             />
             {/* Todo: Das sollte besser so ein magic save button sein */}
             <IconButton
-                icon={'save'}
-                name={'Save new User'}
+                icon={"save"}
+                name={"Save new User"}
                 color={white}
                 onClick={innerCreateUser}
-                className={'GreenFull'}
+                className={"GreenFull"}
             />
         </>
     );
@@ -284,9 +284,9 @@ export const UserCreateNewWindow: FC<{ user: FullUser }> = () => {
 
 export const UserChangePasswordWindow: FC<{ user: FullUser }> = ({ user }) => {
     // Change Password
-    const [oldPW, setOldPW] = useState('');
-    const [newPW, setNewPW] = useState('');
-    const [repNewPW, setRepNewPW] = useState('');
+    const [oldPW, setOldPW] = useState("");
+    const [newPW, setNewPW] = useState("");
+    const [repNewPW, setRepNewPW] = useState("");
     const [savePWError, SetSavePWError] = useState(false);
 
     const saveNewPW = () => {
@@ -301,11 +301,11 @@ export const UserChangePasswordWindow: FC<{ user: FullUser }> = ({ user }) => {
             <TextInput name="Neues Passwort wiederholen" value={repNewPW} setValue={setRepNewPW} />
             {/* <SaveButton withText={true} error={savePWError} save={saveNewPW} /> */}
             <IconButton
-                icon={savePWError ? 'ban' : 'save'}
-                name={savePWError ? 'Error while saving' : 'Save new Password'}
+                icon={savePWError ? "ban" : "save"}
+                name={savePWError ? "Error while saving" : "Save new Password"}
                 color={white}
                 onClick={saveNewPW}
-                className={savePWError ? 'RedFull' : 'GreenFull'}
+                className={savePWError ? "RedFull" : "GreenFull"}
             />
         </>
     );

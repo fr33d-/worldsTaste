@@ -35,7 +35,7 @@ export enum ButtonState {
     norm,
     max,
     error,
-    success,∏
+    success,
 }
 
 //Todo: Error aus den funktionen und changes variable ...

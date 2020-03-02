@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import { isEqual } from 'lodash';
 import React, { ChangeEvent, useContext, useState } from 'react';
 import { SaveSection } from '../../components/Buttons/AdvancedButtons';
-import { TextareaInput, TextInput, AttrDataDropdownInput, DropdownInput } from '../../components/FormElements';
 import {
     ObjLikeSliderAttrField,
     ObjSingleSliderAttrField,
@@ -16,6 +15,7 @@ import { blue, brown, cyan, grayDarker, green, yellow } from '../../styles/color
 import { deleteImageByURL, handleFileUpload } from './CoffeeCardHelperFuctions';
 import { localCoffeeAttrData } from '../../helpers/attrData';
 import { throwDataError, throwDataSucess } from '../../pages/User/userHelperFunctions';
+import { TextInput, DropdownInput, AttrDataDropdownInput, TextareaInput } from '../../components/FormElements/FormElements';
 
 type CoffeeCardEditProps = {
     coffee: CoffeeEntry;

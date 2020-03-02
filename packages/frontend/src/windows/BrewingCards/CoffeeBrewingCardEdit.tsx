@@ -3,7 +3,6 @@ import { isEqual } from 'lodash';
 import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router';
 import { SaveSection } from '../../components/Buttons/AdvancedButtons';
-import { BoolInput, DropdownInput, NumberInput, TextareaInput, WTDateInput } from '../../components/FormElements';
 import {
     ObjLikeSliderAttrField,
     ObjSingleSliderAttrField,
@@ -13,6 +12,7 @@ import { CoffeeContext } from '../../Contexts/CoffeeContext';
 import { displayDate } from '../../helpers/helperFunctions';
 import { BrewingEntry } from '../../helpers/types';
 import { black, blue, blueAccent, green, yellow } from '../../styles/colors';
+import { DropdownInput, WTDateInput, NumberInput, BoolInput, TextareaInput } from '../../components/FormElements/FormElements';
 
 type CoffeeBrewingCardEditProps = {
     brewing: BrewingEntry;
