@@ -3,12 +3,8 @@ import { CoffeeEntity } from "./CoffeeEntity";
 
 @Entity()
 export class CoffeeBrewingEntity extends BaseEntity {
-
     @PrimaryGeneratedColumn()
     public id!: number;
-
-    @Column()
-    public bitter!: number;
 
     @Column()
     public brewDate!: Date;
@@ -17,25 +13,10 @@ export class CoffeeBrewingEntity extends BaseEntity {
     public ownDescription!: string;
 
     @Column()
-    public taste!: number;
-
-    @Column()
-    public tasteKind!: number;
-
-    @Column()
     public useforcalculation!: boolean;
 
     @Column()
     public rating!: number;
-
-    @Column()
-    public strength!: number;
-
-    @Column()
-    public sour!: number;
-
-    @Column()
-    public woody!: number;
 
     @Column()
     public waterAmount!: number;
@@ -46,6 +27,40 @@ export class CoffeeBrewingEntity extends BaseEntity {
     @Column()
     public method!: string;
 
-    @ManyToOne(type => CoffeeEntity, coffee => coffee.brewings, { onDelete: 'CASCADE' })
+    @Column()
+    public body!: number;
+
+    @Column()
+    public sweetness!: number;
+
+    @Column()
+    public balance!: number;
+
+    @Column()
+    public aftertaste!: number;
+
+    @Column()
+    public acidity!: number;
+
+    @Column()
+    public tannicAsid!: number;
+
+    @Column()
+    public bitterness!: number;
+
+    @Column()
+    public fragrance!: string[];
+
+    @Column()
+    public aroma!: string[];
+
+    @Column()
+    public intensity!: number;
+
+    @ManyToOne(
+        (type) => CoffeeEntity,
+        (coffee) => coffee.brewings,
+        { onDelete: "CASCADE" }
+    )
     public coffee!: CoffeeEntity;
 }
