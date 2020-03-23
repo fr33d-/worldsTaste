@@ -49,10 +49,10 @@ export class CoffeeBrewingEntity extends BaseEntity {
     public bitterness!: number;
 
     @Column()
-    public fragrance!: string[];
+    public fragrance!: string;
 
     @Column()
-    public aroma!: string[];
+    public aroma!: string;
 
     @Column()
     public intensity!: number;

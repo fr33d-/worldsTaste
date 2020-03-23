@@ -67,10 +67,10 @@ export class CoffeeEntity extends BaseEntity {
     public bitterness!: number;
 
     @Column()
-    public fragrance!: string[];
+    public fragrance!: string;
 
     @Column()
-    public aroma!: string[];
+    public aroma!: string;
 
     @ManyToOne(
         (type) => UserEntity,

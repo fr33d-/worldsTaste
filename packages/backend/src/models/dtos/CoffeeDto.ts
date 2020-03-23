@@ -32,8 +32,8 @@ export class CoffeeDto {
     public acidity: number;
     public tannicAsid: number;
     public bitterness: number;
-    public fragrance: string[];
-    public aroma: string[];
+    public fragrance: string;
+    public aroma: string;
 
     // This constructs a UserDto from a given UserEntity via new UserDto(userEntity).
     public constructor({

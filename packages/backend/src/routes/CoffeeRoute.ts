@@ -41,7 +41,7 @@ coffeeRoute.route('/:id').put(updateCoffeeById);
 
 coffeeRoute.route('/stores').get(getCoffeeStores);
 coffeeRoute.route('/stores').post(createCoffeeStore);
-coffeeRoute.route('/stores').put(updateCoffeeStoreById);
-coffeeRoute.route('/stores').delete(deleteCoffeeStoreById);
+coffeeRoute.route('/stores/:id').put(updateCoffeeStoreById);
+coffeeRoute.route('/stores/:id').delete(deleteCoffeeStoreById);
 
 export { coffeeRoute };
