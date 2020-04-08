@@ -60,6 +60,9 @@ export class CoffeeBrewingEntity extends BaseEntity {
     @Column()
     public grindSize!: number;
 
+    @Column()
+    public brewTime!: number;
+
     @ManyToOne(
         (type) => CoffeeEntity,
         (coffee) => coffee.brewings,
