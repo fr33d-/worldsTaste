@@ -29,7 +29,9 @@ process.on('unhandledRejection', (error) => {
 
 // Create TypeORM connection
 createConnection()
-    .then(() => {
+    .then((connection) => {
+        connection.runMigrations();
+
         const server = express();
 
         // 3rd party middleware
@@ -40,6 +42,7 @@ createConnection()
         // safe configuration!
         // https://expressjs.com/en/resources/middleware/cors.html
         server.use(cors({ exposedHeaders: ['Location'] }));
+        server.options("*", cors());
 
         // Root route
         server.get('/', (_, result) => result.sendStatus(httpStatusCodes.FORBIDDEN));

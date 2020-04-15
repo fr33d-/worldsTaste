@@ -45,9 +45,7 @@
         "start": "DEBUG=api:* node build/Server.js",
         "dev": "DEBUG=api:* node --inspect -r ts-node/register src/Server.ts",
         "watch": "nodemon",
-        "migrate": "ts-node ../../node_modules/typeorm/cli.js migration:run",
-        "migrate:docker": "node ./node_modules/typeorm/cli.js migration:run",
-        "start:docker": "yarn migrate:docker && yarn start"
+        "migrate": "ts-node ../../node_modules/typeorm/cli.js migration:run"
     },
     "nodemonConfig": {
         "ignore": [
