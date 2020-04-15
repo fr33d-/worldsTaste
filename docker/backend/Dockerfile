@@ -28,4 +28,4 @@ COPY --chown=node:node --from=build-environment /usr/src/app/node_modules ./node
 USER node
 EXPOSE 4000
 
-CMD [ "yarn", "start" ]
+CMD [ "yarn", "start:docker" ]
