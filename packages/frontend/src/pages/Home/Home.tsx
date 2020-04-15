@@ -23,7 +23,7 @@ const HomeBase = (props: HomeProps) => {
 
     return (
         <>
-            <Navigationbar />
+            <Navigationbar light big/>
             <MainNavigator menu={MainMenu} />
             <Footer year='2019' version='0.1' />
         </>

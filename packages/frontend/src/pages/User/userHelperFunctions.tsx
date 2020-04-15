@@ -1,53 +1,44 @@
 import { Position, Toaster } from '@blueprintjs/core';
 import axios from 'axios';
+import jwt from 'jsonwebtoken';
 import { baseURL, userURL } from '../../data';
-import { ExtendedUser, FullUser, User } from './User';
+import { ExtendedUser, FullUser, User } from '../../helpers/types';
 
 export const createUser = async (newUser: ExtendedUser): Promise<void> => {
     const jwtObj = sessionStorage.getItem('auth');
 
-    await axios
-        .post(`${baseURL}${userURL}/`, { ...newUser }, { headers: { auth: jwtObj } })
-        .then((response) => {
-            console.log('user created');
-            return response;
-            // console.log(response);
-        })
-        .catch((error) => {
-            console.log('cant create user, sorry');
-            throw new Error(error);
-            // console.log(error);
-        });
+    try {
+        const res = await axios.post(`${baseURL}${userURL}/`, { ...newUser }, { headers: { auth: jwtObj } });
+        throwDataSucess(`User created under: ${res.headers} `)
+    } catch(e) {
+        throwDataError('Cant create user', e);
+        throw e;
+    }
 };
 
 export const getUserList = async (): Promise<FullUser[]> => {
     const jwtObj = sessionStorage.getItem('auth');
 
-    await axios
-        .get<FullUser[]>(`${baseURL}${userURL}/`, { headers: { auth: jwtObj } })
-        .then((response) => {
-            // console.log('Got user list');
-            return response.data;
-        })
-        .catch((error) => {
-            // console.log(error);
-            return error;
-        });
-
-    // Todo: warum brauch ich das und geht das überhaupt?
-    return [];
+    try {
+        const res = await axios.get<FullUser[]>(`${baseURL}${userURL}/`, { headers: { auth: jwtObj } })
+        throwDataSucess('Got user list');
+        return res.data;
+    } catch(e) {
+        throwDataError('Cant get user list', e)
+        throw e;
+    }
 };
 
 export const changeUser = async (user: User): Promise<void> => {
     const jwtObj = sessionStorage.getItem('auth');
-    axios
-        .patch(`${baseURL}${userURL}/${user.id}`, user, { headers: { auth: jwtObj } })
-        .then((response) => {
-            return response;
-        })
-        .catch((error) => {
-            return error;
-        });
+
+    try {
+        const res = await axios.patch(`${baseURL}${userURL}/${user.id}`, user, { headers: { auth: jwtObj } });
+        throwDataSucess('User edited');
+    } catch(e) {
+        throwDataError('Cant edit user', e);
+        throw e;
+    }
 };
 
 export const newExtendedUser: ExtendedUser = {
@@ -58,18 +49,43 @@ export const newExtendedUser: ExtendedUser = {
     password: 'test',
     email: 'test@test.de',
     image: '',
-}
+};
+
+export const AppToaster = Toaster.create({
+    className: 'coffee-toaster',
+    position: Position.TOP_RIGHT,
+});
 
 export const throwDataSucess = (message: string) => {
     console.log('success', message);
-    Toaster.create({
-        position: Position.TOP_RIGHT,
-    }).show({ message: message, intent: 'success' });
+    AppToaster.show({ message: message, intent: 'success' });
 };
 
 export const throwDataError = (message: string, error?: any) => {
     console.log('error', message, error);
-    Toaster.create({
-        position: Position.TOP_RIGHT,
-    }).show({ message: message, intent: 'danger' });
+    AppToaster.show({ message: message, intent: 'danger' });
+};
+
+export const setUserFromSessionStorage = (): FullUser | undefined=> {
+    const jwtObj = sessionStorage.getItem('auth');
+
+    if (jwtObj == null) {
+        // throwDataError('cant set user from session strorage, your not logged in ');
+        return undefined;
+    } else {
+        let data = jwt.decode(jwtObj);
+
+        if (data != null && typeof data !== 'string') {
+            const user: FullUser = {
+                id: data['userId'],
+                username: data['username'],
+                name: data['name'],
+                email: data['email'],
+                image: 'avatar_frederic.png',
+                created: 'sice 07.08.1989',
+                role: data['role'],
+            };
+            return user;
+        }
+    }
 };

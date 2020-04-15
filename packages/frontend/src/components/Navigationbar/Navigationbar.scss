@@ -1,0 +1,123 @@
+.NavigationContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    z-index: 10;
+    margin-top: 0;
+
+    background: $white-transparend;
+    border-bottom: 2px solid $new-gray;
+    box-shadow: inset 0px 50px 60px -40px rgba(0,0,0,0.75);
+    backdrop-filter: blur(4px);
+
+    &.light {
+        background: none;
+        backdrop-filter: blur(0);
+        border-bottom: none;
+    }
+}
+
+.NavigationContainerLight {
+    background: none;
+}
+
+.Navbar {
+    background: none;
+    box-shadow: none;
+    height: $default-space-6xl;
+    width: 100%;
+    color: $gray-darkest;
+
+    display: flex;
+    align-items: center;
+    padding-top: 0;
+
+    &.big {
+        align-items: flex-start;
+        padding-top: $default-space-m;
+        height: 260px;
+    }
+
+    .UserIcon {
+        border: none;
+        background: none;
+        margin-right: $default-space;
+        color: $white;
+
+        width: $default-space-l;
+        height: $default-space-l;
+        border-radius: $default-space-s;
+        background: $new-gray;
+    }
+
+    .Burger {
+        // width: 140px;
+        // position: absolute;
+        // right: 0;
+        // top: 3px;
+        z-index: 2;
+        // height: fit-content;
+
+        transition: top 300ms ease-in-out;
+
+        &:hover {
+            top: 0;
+        }
+    }
+
+    .Logo {
+        font-size: 24px;
+        text-align: left;
+        z-index: 10;
+        width: fit-content;
+        margin: 0 $default-space-s;
+        transition: margin 300ms ease-in-out;
+        flex-grow: 20;
+
+        &:hover {
+            margin-top: -3px;
+        }
+    }
+
+    .Breadcrupm {
+        // position: absolute;
+        // right: 140px;
+        // top: 0;
+        text-align: right;
+        background: none;
+        z-index: 5;
+        // width: 30%;
+
+        @include media-breakpoint-down(sm) {
+            display: none;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            margin-right: $default-space-m;
+
+            li {
+                display: inline-block;
+                margin-right: 15px;
+                transition: margin 300ms ease-in-out;
+                text-transform: capitalize;
+                line-height: 0;
+                // margin-top: 3px;
+
+                &:hover {
+                    margin-top: 0;
+                }
+
+                .svg {
+                    margin-left: 10px;
+                }
+
+                &:last-child::after {
+                    content: ' ';
+                }
+            }
+        }
+    }
+}

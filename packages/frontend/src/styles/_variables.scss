@@ -3,7 +3,7 @@
 
 $font-family-sans-serif: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
-//Colors: 
+//Colors:
 $brand-white: #fff;
 $brand-black: #000;
 $brand-white-blue: #F4F4F6;
@@ -14,17 +14,18 @@ $brand-dark-gray: #4A4A4A;
 
 $brand-text-dark-gray: #2c3340;
 
-$gray-darkest: rgba(48, 48, 48, 0.9);
+$gray-darkest: rgba(48, 48, 48, 1);
+$gray-dark-transparend: rgba(48, 48, 48, 0.3);
 $new-light-gray: #F9F9FF;
 $new-light-gray2: #F2F2F2;
 $new-gray: #ECEDF6;
 $new-dark-gray: #C6C7D1;
 $new-darker-gray: #929292;
-$gray-darkest: rgba(48, 48, 48, 0.9); 
 
-$blue-gray: #F5F7FD; 
+$blue-gray: #F5F7FD;
 
 $white: #fff;
+$white-transparend: rgba(255, 255, 255, 0.4);
 $black: #000;
 
 
@@ -32,22 +33,12 @@ $black: #000;
 $body-bg: $white; //$new-gray; //$brand-white-clay;
 $body-color: $brand-text-dark-gray;
 
-$border-radius-min: 5px;
-$border-radius: 10px;
-$border-radius-lg: 20px;
-
-$line-space: 15px;
-
-$activ-box-shadow-height: 3px;
-
 $box-shadow-sm:  0px 0px 10px 0px rgba(0,0,0,0.1);
 $box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
 $box-shadow-lg: 0px 10px 30px 0px rgba(0,0,0,0.15);
 
-$navbar-padding-y: 15px;
-$navbar-padding-x: 0;
 
-//Custom variables:
+//Custom colors:
 
 $navbar-bg-color: $brand-white-blue;
 $card-bg-color: $brand-white;
@@ -55,17 +46,7 @@ $card-bg-color: $brand-white;
 $brand-blue: #254CFB;
 $brand-blue-light: #0097FF;
 
-$container-margin-big: 50px;
-$default-space-small: 15px;
-$default-space: 30px;
-$default-space-large: 60px;
-
 $icon-button-color: $brand-gray;
-
-$main-menu-with: 360px;
-$sub-menu-with: 340px;
-$teaser-with: 250px;
-$menu-margin: 20px;
 
 $red: #DC3545;
 $red-accent: #BB5959;
@@ -78,3 +59,38 @@ $yellow-accent: #EBAD64;
 
 $blue: #007BFF;
 $blue-accent: #6792BA; //#17A2B8;
+
+
+// Spacing
+
+$default-space: 8px;
+$default-space-s: calc(#{$default-space*2}); //16
+$default-space-m: calc(#{$default-space*3}); //24
+$default-space-l: calc(#{$default-space*4}); //32
+$default-space-xl: calc(#{$default-space*5}); //40
+$default-space-xxl: calc(#{$default-space*7}); //56
+$default-space-3xl: calc(#{$default-space*8}); //64
+$default-space-4xl: calc(#{$default-space*9}); //72
+$default-space-5xl: calc(#{$default-space*10}); //80
+$default-space-6xl: calc(#{$default-space*11}); //96
+
+// $container-margin-big: $default-space-xxl;
+// $default-space-small: 15px;
+// $default-space: 30px;
+// $default-space-large: 60px;
+
+$main-menu-with: 360px;
+$sub-menu-with: 340px;
+$teaser-with: 250px;
+$menu-margin: $default-space-m;
+
+$navbar-padding-y: $default-space-s;
+$navbar-padding-x: 0;
+
+$border-radius-min: 5px;
+$border-radius: 10px;
+$border-radius-lg: 20px;
+
+$line-space: 15px;
+
+$activ-box-shadow-height: 3px;

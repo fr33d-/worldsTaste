@@ -10,27 +10,33 @@
     margin-left: 10px;
 
     &.btn-ls, &.big {
-        height: 48px;
-        width: 48px;
+        height: $default-space-xl;
+        width: $default-space-xl;
+        // height: 48px;
+        // width: 48px;
         border-radius: 28px;
         font-size: 20px;
     }
 
     &.btn-sm, &.small {
-        height: 28px;
-        width: 28px;
+        height: $default-space-m;
+        width: $default-space-m;
+        // height: 28px;
+        // width: 28px;
         border-radius: 14px;
         font-size: 16px;
     }
 }
 
 .color-button {
-    height: 45px;
-    padding: 10px 15px;
+    height: $default-space-xl;
+    // height: 45px;
+    padding: $default-space $default-space-s;
+    // padding: 10px 15px;
     border: none;
     border-radius: $border-radius;
-    margin-bottom: $default-space-small;
-    margin-right: $default-space-small;
+    margin-bottom: $default-space-s;
+    margin-right: $default-space-s;
     background: $new-gray;
 
     svg {
@@ -93,4 +99,40 @@
         border: 1px solid $new-dark-gray;
     }
 
+}
+
+.IconButton {
+    @extend .icon-button;
+
+    border-radius: 15px;
+    height: 30px;
+    padding: 4px 12px;
+    margin-right: 5px;
+    font-size: 14px;
+    color: $new-darker-gray;
+    outline: 0;
+
+    &:hover,
+    &:focus {
+        outline: 0;
+    }
+
+    svg {
+        margin-right: 8px;
+    }
+
+    &.HoverGreen:hover {
+        background-color: $green;
+        color: $white;
+    }
+
+    &.HoverBlue:hover {
+        background-color: $blue;
+        color: $white;
+    }
+
+    &.HoverRed:hover {
+        background-color: $red;
+        color: $white;
+    }
 }

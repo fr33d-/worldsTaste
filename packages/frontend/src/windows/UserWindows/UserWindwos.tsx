@@ -1,110 +1,118 @@
-import axios from 'axios';
-import jwt from 'jsonwebtoken';
-import React, { useState, FC, useEffect } from 'react';
-import { Button } from 'react-bootstrap';
-import { SimplePasswordInput, SimpleTextInput, DropdownInput, TextInput } from '../../components/FormElements';
-import { authURL, baseURL } from '../../data';
-import LocalStyles from './User.module.scss';
-import { User, ExtendedUser, FullUser, UserRoles } from '../../pages/User';
-import { IconButton } from '../../components/IconButton';
-import { createUser, throDataSucess, newExtendedUser, throDataError, getUserList, changeUser } from '../../pages/User/userHelperFunctions';
-import { green, white } from '../../styles/colors';
-import { Link } from 'react-router-dom';
-import { AttrDataItemType } from '../../components/FormComponents';
-import { AttrField } from '../../components/FormElements/AttrFields';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { FC, useContext, useEffect, useState } from "react";
+import { Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { IconButton } from "../../components/Buttons";
+import { AttrField } from "../../components/FormElements/AttrFields";
+import { UserContext } from "../../Contexts/UserContext";
+import { ExtendedUser, FullUser } from "../../helpers/types";
+import { UserRoles } from "../../pages/User";
+import {
+    changeUser,
+    createUser,
+    getUserList,
+    newExtendedUser,
+    throwDataError,
+    throwDataSucess,
+} from "../../pages/User/userHelperFunctions";
+import { green, white } from "../../styles/colors";
+import { TextInput, PasswordInput, AttrDataDropdownInput } from "../../components/FormElements/FormElements";
 
-export const useJwt = (): User | undefined => {
-    const jwtObj = sessionStorage.getItem('auth');
-
-    if (jwtObj == null && typeof jwtObj !== 'string') {
-        return;
-    } else {
-        const jwtJson = jwt.decode(jwtObj);
-        // console.log(jwtJson);
-
-        if (
-            jwtJson !== null &&
-            typeof jwtJson !== 'string' &&
-            jwtJson['userId'] !== null &&
-            jwtJson['username'] !== null &&
-            jwtJson['name'] !== null &&
-            jwtJson['role'] !== null
-        ) {
-            return {
-                id: jwtJson['userId'],
-                username: jwtJson['username'],
-                name: jwtJson['name'],
-                role: jwtJson['role'],
-            };
-        }
-    }
+export const UserModal: FC<{ closeDialog(): void }> = ({ closeDialog }) => {
+    const { user } = useContext(UserContext);
+    console.log("User", user);
+    return user ? <UserDetailModal closeDialog={closeDialog} /> : <LoginWindow closeDialog={closeDialog} />;
 };
 
-type LoginWindwoProps = {
-    setUserFromStr(): void;
-};
+export const UserDetailModal: FC<{ closeDialog(): void }> = ({ closeDialog }) => {
+    const { user, contextLogout } = useContext(UserContext);
 
-export const LoginWindow = (props: LoginWindwoProps) => {
-    const [username, setUserName] = useState('');
-    const [password, setPassword] = useState('');
-    const [msg, setMsg] = useState('');
-
-    const login = () => {
-        axios
-            .post<string>(`${baseURL}${authURL}/login`, { username, password })
-            .then((response) => {
-                // console.log(response);
-                sessionStorage.setItem('auth', response.data);
-
-                setMsg('Logged in!');
-                // location.reload();
-                props.setUserFromStr();
-            })
-            .catch((error) => {
-                console.log(error);
-                if (error && error.response && error.response.status === 400) {
-                    setMsg('You need to enter a valid Mail and a Password!');
-                } else if (error && error.response && error.response.status === 401) {
-                    setMsg('Wrong data or you dont exist!');
-                } else {
-                    setMsg('Sorry, soemething went wrong!');
-                }
-            });
-    };
-
-    return (
+    return !user ? (
+        <p>you are not logged in </p>
+    ) : (
         <>
-            <div className={`col-12 col-md-6 offset-md-3 ${LocalStyles.Login} `}>
-                <h1>Login</h1>
-                <div className={LocalStyles.LoginWindow}>
-                    <div className={LocalStyles.Head}>
-                        You are currently not logged in. If you wish to sign up please send me a mail.
-                    </div>
-                    <div className={LocalStyles.Form}>
-                        <SimpleTextInput onChange={setUserName} name="Username" value={username} />
-                        <SimplePasswordInput onChange={setPassword} name="Password" value={password} />
-                    </div>
-                    <div className={LocalStyles.ButtonSection}>
-                        <Button className={LocalStyles.Login} onClick={login}>
-                            Login
-                        </Button>
-                    </div>
-                    <p className={LocalStyles.Error}>{msg}</p>
+            <div className={"LoginWindow"}>
+                <div className={"Head Head__center"}>
+                    <h1>{user.name}</h1>
+                    <button onClick={closeDialog} className="icon-button CloseButton">
+                        <FontAwesomeIcon icon={"times"} />
+                    </button>
+                </div>
+                <div>
+                    <p>Mail: {user.email}</p>
+                    <p>Role: {user.role}</p>
+                    <p>Username: {user.username}</p>
+                </div>
+                <div className={"ButtonSection"}>
+                    <Link to="/user">
+                        <Button className="color-button blue-full">Go to user page</Button>
+                    </Link>
+                    <Button className={"Login"} onClick={contextLogout}>
+                        Logout
+                    </Button>
                 </div>
             </div>
         </>
     );
 };
 
+export const LoginWindow: FC<{ closeDialog(): void }> = ({ closeDialog }) => {
+    const [username, setUserName] = useState("");
+    const [password, setPassword] = useState("");
+    const [msg, setMsg] = useState("");
+
+    const { contextLogin } = useContext(UserContext);
+
+    const innerLogin = async () => {
+        try {
+            await contextLogin(username, password);
+            setMsg(`Logged in! `);
+            closeDialog();
+        } catch (error) {
+            if (error && error.response && error.response.status === 400) {
+                setMsg("You need to enter a valid Mail and a Password!");
+            } else if (error && error.response && error.response.status === 401) {
+                setMsg("Wrong data or you dont exist!");
+            } else {
+                setMsg("Sorry, soemething went wrong!");
+            }
+            throw error;
+        }
+    };
+
+    return (
+        <>
+            <div className={"LoginWindow"}>
+                <div className={"Head Head__center"}>
+                    <h1>Login</h1>
+                    You are currently not logged in. If you wish to sign up please send me a mail.
+                    <button onClick={closeDialog} className="icon-button CloseButton">
+                        <FontAwesomeIcon icon={"times"} />
+                    </button>
+                </div>
+                <div className={"Form"}>
+                    <TextInput setValue={(val) => setUserName(val)} name="Username" value={username} />
+                    <PasswordInput setValue={(val) => setPassword(val)} name="Password" value={password} />
+                </div>
+                <div className={"ButtonSection"}>
+                    <Button className={"Login"} onClick={innerLogin}>
+                        Login
+                    </Button>
+                </div>
+                <p className={"Error"}>{msg}</p>
+            </div>
+        </>
+    );
+};
 
 export const UserDetailWindow: FC<{ user: FullUser }> = ({ user }) => {
     return (
         <>
             <h2>General</h2>
-            <AttrField value={user.name} name="Name:" className={LocalStyles.AttrField} />
-            <AttrField value={user.email} name="E-Mail:" className={LocalStyles.AttrField} />
-            <AttrField value={user.created} name="Erstellt am:" className={LocalStyles.AttrField} />
-            <AttrField value={user.role} name="Rolle:" className={LocalStyles.AttrField} />
+            <AttrField value={user.name} name="Name:" className={"AttrField"} />
+            <AttrField value={user.email} name="E-Mail:" className={"AttrField"} />
+            <AttrField value={user.created} name="Erstellt am:" className={"AttrField"} />
+            <AttrField value={user.role} name="Rolle:" className={"AttrField"} />
         </>
     );
 };
@@ -122,25 +130,19 @@ export const UserDataWindow: FC<{ user: FullUser }> = ({ user }) => {
 };
 
 export const UserAdminWindow: FC<{ user: FullUser }> = ({ user }) => {
-    //New User Data
-
     const [saveingError, setSaveingError] = useState(false);
     const [listOfAllUsers, setListOfAllUsers] = useState<FullUser[]>([]);
-    const [selectedUser, setSelectedUser] = useState<User>();
-    // Todo: why we dont use this?
-    const [newUserRole, setNewUserRole] = useState<AttrDataItemType>();
+    const [selectedUser, setSelectedUser] = useState<FullUser>();
 
-    const innerChangeUser = () => {
+    const innerChangeUser = async () => {
         if (selectedUser) {
-            changeUser(selectedUser)
-                .then((res) => {
-                    console.log('user updated');
-                    console.log(res);
-                })
-                .catch((error) => {
-                    console.log(error);
-                    setSaveingError(true);
-                });
+            try {
+                await changeUser(selectedUser);
+                setSaveingError(false);
+            } catch (e) {
+                setSaveingError(true);
+                throw e;
+            }
         }
     };
 
@@ -148,22 +150,20 @@ export const UserAdminWindow: FC<{ user: FullUser }> = ({ user }) => {
         //do some magic here
     };
 
-    const innerGetUserList = () => {
-        getUserList()
-            .then((data) => {
-                setListOfAllUsers(data);
-            })
-            .catch((error) => {
-                console.log(error);
-                // Todo: throw toast here
-            });
+    const innerGetUserList = async () => {
+        try {
+            const data = await getUserList();
+            setListOfAllUsers(data);
+        } catch (e) {
+            throw e;
+        }
     };
 
     useEffect(() => {
         innerGetUserList();
     }, [user]);
 
-    const userClicked = (userItem: User) => {
+    const userClicked = (userItem: FullUser) => {
         setSelectedUser(userItem);
     };
 
@@ -180,35 +180,43 @@ export const UserAdminWindow: FC<{ user: FullUser }> = ({ user }) => {
             {selectedUser && (
                 <>
                     <h2>Details</h2>
-                    <TextInput name="Name" obj={selectedUser} propPath="name" setStateHandler={setSelectedUser} />
+                    <TextInput
+                        name="Name"
+                        value={selectedUser.name}
+                        setValue={(val) => setSelectedUser((user) => (user ? { ...user, name: val } : user))}
+                    />
                     <TextInput
                         name="User Name"
-                        obj={selectedUser}
-                        propPath="username"
-                        setStateHandler={setSelectedUser}
+                        value={selectedUser.username}
+                        setValue={(val) => setSelectedUser((user) => (user ? { ...user, username: val } : user))}
                     />
-                    <TextInput name="E-Mail" obj={selectedUser} propPath="email" setStateHandler={setSelectedUser} />
-                    <DropdownInput
+                    <TextInput
+                        name="E-Mail"
+                        value={selectedUser.name}
+                        setValue={(val) => setSelectedUser((user) => (user ? { ...user, email: val } : user))}
+                    />
+                    <AttrDataDropdownInput
                         items={UserRoles}
                         iconColor={green}
                         label="Rolle"
                         selectedItem={selectedUser}
                         onChange={setSelectedUser}
                         propPath="role"
+                        obj={selectedUser}
                     />
                     <IconButton
-                        icon={saveingError ? 'ban' : 'save'}
-                        name={saveingError ? 'Error while saving' : 'Update User'}
+                        icon={saveingError ? "ban" : "save"}
+                        name={saveingError ? "Error while saving" : "Update User"}
                         color={white}
                         onClick={innerChangeUser}
-                        className={saveingError ? LocalStyles.RedFull : LocalStyles.GreenFull}
+                        className={saveingError ? "RedFull" : "GreenFull"}
                     />
                     <IconButton
                         icon="envelope-open"
                         name="Send user password reset link"
                         color={white}
                         onClick={sendResetPasswordLink}
-                        className={LocalStyles.GreenFull}
+                        className={"GreenFull"}
                     />
                 </>
             )}
@@ -219,39 +227,56 @@ export const UserAdminWindow: FC<{ user: FullUser }> = ({ user }) => {
 export const UserCreateNewWindow: FC<{ user: FullUser }> = () => {
     const [newUser, setNewUser] = useState<ExtendedUser>(newExtendedUser);
 
-    const innerCreateUser = () => {
-        createUser(newUser)
-            .then((res) => {
-                throDataSucess('user created');
-            })
-            .catch((e) => {
-                throDataError('can not create user', e);
-            });
+    const innerCreateUser = async () => {
+        try {
+            await createUser(newUser);
+            throwDataSucess("user created");
+        } catch (e) {
+            throwDataError("can not create user", e);
+            throw e;
+        }
     };
 
     return (
         <>
             <h2>Create User</h2>
             <p>All fields must me longer than 4 charecters</p>
-            <TextInput name="Name" obj={newUser} propPath={['name']} setStateHandler={setNewUser} />
-            <TextInput name="User name" obj={newUser} propPath={['username']} setStateHandler={setNewUser} />
-            <TextInput name="E-Mail" obj={newUser} propPath={['email']} setStateHandler={setNewUser} />
-            <TextInput name="Passwort" obj={newUser} propPath={['password']} setStateHandler={setNewUser} />
-            <DropdownInput
+            <TextInput
+                name="Name"
+                value={newUser.name}
+                setValue={(val) => setNewUser((user) => (user ? { ...user, name: val } : user))}
+            />
+            <TextInput
+                name="User name"
+                value={newUser.username}
+                setValue={(val) => setNewUser((user) => (user ? { ...user, username: val } : user))}
+            />
+            <TextInput
+                name="E-Mail"
+                value={newUser.email}
+                setValue={(val) => setNewUser((user) => (user ? { ...user, email: val } : user))}
+            />
+            <TextInput
+                name="Passwort"
+                value={newUser.password}
+                setValue={(val) => setNewUser((user) => (user ? { ...user, password: val } : user))}
+            />
+            <AttrDataDropdownInput
                 items={UserRoles}
                 icon="leaf"
                 iconColor={green}
                 label="Rolle"
-                propPath={['userrole']}
+                propPath={["userrole"]}
                 onChange={setNewUser}
+                obj={newUser}
             />
             {/* Todo: Das sollte besser so ein magic save button sein */}
             <IconButton
-                icon={'save'}
-                name={'Save new User'}
+                icon={"save"}
+                name={"Save new User"}
                 color={white}
                 onClick={innerCreateUser}
-                className={LocalStyles.GreenFull}
+                className={"GreenFull"}
             />
         </>
     );
@@ -259,9 +284,9 @@ export const UserCreateNewWindow: FC<{ user: FullUser }> = () => {
 
 export const UserChangePasswordWindow: FC<{ user: FullUser }> = ({ user }) => {
     // Change Password
-    const [oldPW, setOldPW] = useState('');
-    const [newPW, setNewPW] = useState('');
-    const [repNewPW, setRepNewPW] = useState('');
+    const [oldPW, setOldPW] = useState("");
+    const [newPW, setNewPW] = useState("");
+    const [repNewPW, setRepNewPW] = useState("");
     const [savePWError, SetSavePWError] = useState(false);
 
     const saveNewPW = () => {
@@ -271,16 +296,16 @@ export const UserChangePasswordWindow: FC<{ user: FullUser }> = ({ user }) => {
     return (
         <>
             <h2>Change Password</h2>
-            <SimpleTextInput name="Altes Passwort" value={oldPW} onChange={setOldPW} />
-            <SimpleTextInput name="Neues Passwort" value={newPW} onChange={setNewPW} />
-            <SimpleTextInput name="Neues Passwort wiederholen" value={repNewPW} onChange={setRepNewPW} />
+            <TextInput name="Altes Passwort" value={oldPW} setValue={setOldPW} />
+            <TextInput name="Neues Passwort" value={newPW} setValue={setNewPW} />
+            <TextInput name="Neues Passwort wiederholen" value={repNewPW} setValue={setRepNewPW} />
             {/* <SaveButton withText={true} error={savePWError} save={saveNewPW} /> */}
             <IconButton
-                icon={savePWError ? 'ban' : 'save'}
-                name={savePWError ? 'Error while saving' : 'Save new Password'}
+                icon={savePWError ? "ban" : "save"}
+                name={savePWError ? "Error while saving" : "Save new Password"}
                 color={white}
                 onClick={saveNewPW}
-                className={savePWError ? LocalStyles.RedFull : LocalStyles.GreenFull}
+                className={savePWError ? "RedFull" : "GreenFull"}
             />
         </>
     );

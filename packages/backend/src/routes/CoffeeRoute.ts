@@ -16,6 +16,7 @@ import {
     postCoffeesAssets,
     updateCoffeeById,
 } from '../controllers/CoffeeController';
+import { getCoffeeStores, createCoffeeStore, deleteCoffeeStoreById, updateCoffeeStoreById } from '../controllers/CoffeeAttrsController';
 
 // Define a new router that basically wraps multiple endpoint into a single object.
 const coffeeRoute = Router();
@@ -37,5 +38,10 @@ coffeeRoute.route('/:id/brewings/:brewId').delete(deleteCoffeeBrewingById);
 
 coffeeRoute.route('/:id').put(updateCoffeeById);
 // coffeeRoute.route('/:id').put(uploadImage);
+
+coffeeRoute.route('/stores').get(getCoffeeStores);
+coffeeRoute.route('/stores').post(createCoffeeStore);
+coffeeRoute.route('/stores/:id').put(updateCoffeeStoreById);
+coffeeRoute.route('/stores/:id').delete(deleteCoffeeStoreById);
 
 export { coffeeRoute };

@@ -1,65 +1,61 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { default as classnames, default as classNames } from 'classnames';
 import React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router';
+import { useLocation } from 'react-router';
+import { Link } from 'react-router-dom';
 import { black, grayDark } from '../../styles/colors';
-import { useJwt } from '../../windows/UserWindows/UserWindwos';
-import LocalStyles from './Navigationbar.module.scss';
+import { setUserFromSessionStorage } from '../../pages/User/userHelperFunctions';
+// import { useJwt } from '../../windows/UserWindows/UserHelperFunctions';
+import logoSmall from './../../images/wt-logo-small.svg';
+import logoBig from './../../images/wt-logo-big.svg';
+import { UserLoginButton } from '../Buttons/FunctioalButtons';
 
-type NavbarProps = RouteComponentProps & {
-    // items: NavigationItem[];
+type NavbarProps = {
     light?: boolean;
+    big?: boolean;
 };
 
-export const NavigationbarBase = ({ location, light, history }: NavbarProps) => {
-    // const { location: { pathname: path } } = this.props;
-    const { pathname } = location;
+export const Navigationbar = ({ light, big }: NavbarProps) => {
+    const { pathname } = useLocation();
     const path = pathname.split('/').filter(Boolean);
 
-    const gotoUser = () => {
-        history.push('/user');
-    };
-
-    const goHome = () => () => {
-        history.push(`/`);
-    };
-
-    const user = useJwt();
+    const user = setUserFromSessionStorage();
 
     return (
-        <div className={LocalStyles.Container}>
-            <div className={classNames('container', light && LocalStyles.ContainerLight)}>
+        <div className={classNames('NavigationContainer', light && 'light')}>
+            <div className={classNames('container', light && 'NavigationContainerLight')}>
                 <div className="row">
-                    <div className={classNames('col-12', LocalStyles.Navbar)}>
-                        <div className={classnames(LocalStyles.Navbar, LocalStyles.Breadcrupm)}>
+                    <div className={classNames('col-12', 'Navbar', big && 'big')}>
+                        <div className={'Logo'}>
+                            <Link to="/">
+                                <img src={big ? logoBig : logoSmall} alt="Worls taste" />
+                            </Link>
+                        </div>
+
+                        <div className={'Breadcrupm'}>
                             <ul>
-                                <li>
+                                <li key={'chevron-right'}>
                                     Home
-                                    <FontAwesomeIcon icon="chevron-right" className={LocalStyles.svg} />
+                                    <FontAwesomeIcon icon="chevron-right" className={'svg'} />
                                 </li>
                                 {path.map((item, i) => {
                                     if (path.length === i + 1) {
-                                        return <li>{item}</li>;
+                                        return <li key={`${item}_${i}`}>{item}</li>;
                                     } else {
                                         return (
-                                            <li>
+                                            <li key={`${item}_${i}`}>
                                                 {item}
-                                                <FontAwesomeIcon icon="chevron-right" className={LocalStyles.svg} />
+                                                <FontAwesomeIcon icon="chevron-right" className={'svg'} />
                                             </li>
                                         );
                                     }
                                 })}
                             </ul>
                         </div>
-                        <div className={classnames(LocalStyles.Navbar, LocalStyles.Burger)}>
-                            <button className={LocalStyles.User} onClick={gotoUser}>
-                                {user && <FontAwesomeIcon icon="user" color={black} />}
-                                {!user && <FontAwesomeIcon icon="user" color={grayDark} />}
-                            </button>
+
+                        <div className={'Burger'}>
+                            <UserLoginButton />
                             <FontAwesomeIcon icon="bars" size="lg" />
-                        </div>
-                        <div className={classnames(LocalStyles.Navbar, LocalStyles.Logo)} onClick={() => goHome()}>
-                            Logo
                         </div>
                     </div>
                 </div>
@@ -67,5 +63,3 @@ export const NavigationbarBase = ({ location, light, history }: NavbarProps) => 
         </div>
     );
 };
-
-export const Navigationbar = withRouter(NavigationbarBase);

@@ -1,0 +1,119 @@
+.TextInput {
+    @extend .formElement;
+    outline: none !important;
+    padding: 15px;
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+
+    .NumberInput {
+        text-align: right;
+        margin-right: 8px;
+        width: 40%;
+    }
+
+    .Name {
+        margin-right: 15px;
+        font-weight: 600;
+        color: $new-darker-gray;
+        white-space: nowrap;
+    }
+
+    .Unit {
+        color: $new-darker-gray;
+    }
+
+    input {
+        border: none;
+        background: none;
+        display: inline;
+        flex-grow: 100;
+    }
+}
+
+.DropdownInput {
+    label {
+        font-size: 14px;
+    }
+
+    .select {
+        @extend .formElement;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+
+        select {
+            width: 80%;
+            background: none;
+            border: none;
+            margin-left: 10px;
+        }
+    }
+}
+
+.DateInput {
+    label {
+        font-size: 14px;
+    }
+
+    .DateInputArea {
+        @extend .formElement;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+
+        input {
+            background: none;
+            border: none;
+        }
+
+        svg {
+            margin-right: $default-space-m;
+        }
+
+    }
+}
+
+.TextareaInput {
+    @extend .formElement;
+    height: fit-content;
+    text-orientation: upright;
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    align-items: baseline;
+
+    svg {
+        margin: 5px 15px 5px 15px;
+        display: inline;
+    }
+
+    textarea {
+        border: none;
+        background: none;
+        display: inline;
+        width: 90%;
+        min-height: 150px;
+    }
+}
+
+.BoolInput {
+    @extend .formElement;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+
+    label {
+        font-weight: 600;
+        color: $new-darker-gray;
+        flex-grow: 1;
+        margin: 0;
+    }
+
+    input {
+        flex-grow: 1;
+        align-content: flex-end;
+        margin-bottom: 5px;
+        margin-left: 20px;
+    }
+}

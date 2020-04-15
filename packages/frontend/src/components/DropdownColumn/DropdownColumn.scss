@@ -1,0 +1,13 @@
+.CustomDropdown {
+    .select {
+        @extend .formElement;
+        padding: 10px;
+
+        select {
+            width: 80%;
+            background: none;
+            border: none;
+            margin-left: 10px;
+        }
+    }
+}

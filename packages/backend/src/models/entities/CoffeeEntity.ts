@@ -1,13 +1,7 @@
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import {
-    CoffeeKindEntity,
-    CoffeeOriginEntity,
-    CoffeeProcessEntity,
-    CoffeeRoastedEntity,
-    CoffeeSpeciesEntity,
-} from './CoffeeAttrsEntity';
-import { CoffeeBrewingEntity } from './CoffeeBrewingEntity';
-import { UserEntity } from './UserEntity';
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { CoffeeStoreEntity } from "./CoffeeStoresEntity";
+import { CoffeeBrewingEntity } from "./CoffeeBrewingEntity";
+import { UserEntity } from "./UserEntity";
 
 export type Image = {
     name: string;
@@ -31,21 +25,6 @@ export class CoffeeEntity extends BaseEntity {
     public rating!: number;
 
     @Column()
-    public taste!: number;
-
-    @Column()
-    public tasteKind!: number;
-
-    @Column()
-    public woody!: number;
-
-    @Column()
-    public bitter!: number;
-
-    @Column()
-    public sour!: number;
-
-    @Column()
     public ownDescription!: string;
 
     @Column()
@@ -54,31 +33,63 @@ export class CoffeeEntity extends BaseEntity {
     @Column()
     public buyDate!: Date;
 
-    @ManyToOne((type) => UserEntity, (user) => user.id)
-    @JoinColumn({ name: 'owner' })
+    @Column()
+    public process!: string;
+
+    @Column()
+    public species!: string;
+
+    @Column()
+    public origin!: string;
+
+    @Column()
+    public roastIntensity!: number;
+
+    @Column()
+    public body!: number;
+
+    @Column()
+    public sweetness!: number;
+
+    @Column()
+    public balance!: number;
+
+    @Column()
+    public aftertaste!: number;
+
+    @Column()
+    public acidity!: number;
+
+    @Column()
+    public tannicAsid!: number;
+
+    @Column()
+    public bitterness!: number;
+
+    @Column()
+    public fragrance!: string;
+
+    @Column()
+    public aroma!: string;
+
+    @ManyToOne(
+        (type) => UserEntity,
+        (user) => user.id
+    )
+    @JoinColumn({ name: "owner" })
     public owner!: UserEntity;
 
-    @ManyToOne((type) => CoffeeOriginEntity, (coffeeOrigin) => coffeeOrigin.id)
-    @JoinColumn({ name: 'origin' })
-    public origin!: CoffeeOriginEntity;
+    @ManyToOne(
+        (type) => CoffeeStoreEntity,
+        (coffeeStore) => coffeeStore.id
+    )
+    @JoinColumn({ name: "store" })
+    public store!: CoffeeStoreEntity;
 
-    @ManyToOne((type) => CoffeeKindEntity, (coffeeKind) => coffeeKind.id)
-    @JoinColumn({ name: 'kind' })
-    public kind!: CoffeeOriginEntity; // Todo: Coffe Kind Entry? 
-
-    @ManyToOne((type) => CoffeeRoastedEntity, (coffeeRoasted) => coffeeRoasted.id)
-    @JoinColumn({ name: 'roasted' })
-    public roasted!: CoffeeOriginEntity; // Todo: Coffe Roasted Entry? Also die Rösterei oder? 
-
-    @ManyToOne((type) => CoffeeProcessEntity, (coffeeProcess) => coffeeProcess.id)
-    @JoinColumn({ name: 'process' })
-    public process!: CoffeeProcessEntity;
-
-    @ManyToOne((type) => CoffeeSpeciesEntity, (coffeeSpecies) => coffeeSpecies.id)
-    @JoinColumn({ name: 'species' })
-    public species!: CoffeeSpeciesEntity;
-
-    @OneToMany((type) => CoffeeBrewingEntity, (coffeeBrewings) => coffeeBrewings.coffee )
-    // @JoinColumn({ name: 'brewings' })
+    @OneToMany(
+        (type) => CoffeeBrewingEntity,
+        (coffeeBrewings) => coffeeBrewings.coffee
+    )
+    // @JoinColumn({ name: 'brewings' })∏
     public brewings!: CoffeeBrewingEntity[];
 }

@@ -1,0 +1,113 @@
+.User {
+    @extend .container;
+
+    .LogoutButton {
+        @extend .color-button;
+        @extend .gray;
+    }
+
+    .Sidebar {
+        background: $blue-gray;
+        height: 100vh;
+        padding-top: 120px; //$default-space-xxl;
+
+        .Image {
+            $image-dimension: 120px;
+
+            width: $image-dimension;
+            height: $image-dimension;
+            border-radius: calc(#{$image-dimension}/ 2);
+            background: $new-dark-gray;
+            margin: $default-space-xxl 0;
+            // background-image: url('./../../images/avatar-frederic.png');
+            background-size: cover;
+
+            img {
+                width: 100%;
+            }
+        }
+
+        .Name {
+            @extend .h3;
+        }
+
+        .Subline {
+            @extend .small;
+            color: $new-darker-gray;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: $default-space-l 0;
+
+            .ListHeader {
+                @extend .small;
+                color: $new-darker-gray;
+                padding-top: $default-space-l;
+            }
+
+            .active {
+                font-weight: bold;
+            }
+
+            li {
+                @extend .h5;
+                padding: 0;
+                margin: 0;
+            }
+        }
+    }
+
+    .Content {
+        padding-top: 320px; //$default-space-xxl;
+
+        .AttrField {
+            margin-bottom: $default-space-l;
+        }
+    }
+}
+
+.Login {
+    padding-top: 120px; //$default-space-xxl;
+}
+
+.LoginWindow {
+    // @extend .card-now-hover;
+
+    .Head {
+        margin-bottom: $default-space-s;
+        padding: $default-space-s;
+
+        border-bottom: 1px solid $new-dark-gray;
+
+        &__center h1 {
+            margin: 0 auto $default-space-s auto;
+            width: fit-content;
+        }
+
+        .CloseButton {
+            position: absolute;
+            top: $default-space-m;
+            right: $default-space-m;
+        }
+    }
+
+    .Form {
+        padding: $default-space-l;
+    }
+
+    .Error {
+        color: $red;
+    }
+
+    .ButtonSection {
+        display: flex;
+        justify-content: center;
+
+        .Login {
+            @extend .color-button;
+            @extend .blue-full;
+        }
+    }
+}

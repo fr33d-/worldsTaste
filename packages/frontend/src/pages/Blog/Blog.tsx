@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import Styles from '../../index.module.scss';
-import LocalStyles from './Blog.module.scss';
-import classnames from 'classnames';
 import { Navigationbar } from '../../components/Navigationbar';
 
 type BlogProps = {};

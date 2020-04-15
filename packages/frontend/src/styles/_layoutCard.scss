@@ -1,0 +1,237 @@
+// @import '../../styles/barel.scss';
+
+// Hier sollte sich alles aus den coffee cards sammeln und vieleicht etwas einheitlich werden, da es an sehr vielen stellen verwendet wird
+.LayoutCard {
+    @extend .card;
+    $block: &;
+
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    border: none;
+    // padding: $default-space-xl;
+
+    animation-duration: 1s;
+    animation-name: slidein;
+
+    @include media-breakpoint-down(sm) {
+        flex-direction: column;
+    }
+
+    &--content, &#{block}--content {
+        padding: $default-space-xl;
+    }
+
+    .Row {
+        display: flex;
+        flex-direction: row;
+        margin-bottom: $default-space-xxl;
+
+        &:last-of-type {
+            margin-bottom: 0;
+        }
+    }
+
+    .ButtonSection {
+        display: flex;
+        width: 100%;
+        padding: $default-space-l 0 0 0;
+
+        button:last-of-type {
+            margin-left: auto;
+            margin-right: 0;
+        }
+    }
+
+    .ActionSection {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+
+        @include media-breakpoint-down(sm) {
+            top: 265px;
+        }
+    }
+
+    .ImageSection {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: $default-space-s;
+
+        @include media-breakpoint-down(sm) {
+            width: 100%;
+            background: $new-darker-gray;
+            min-width: 250px;
+            text-align: center;
+        }
+
+        .images-replacement {
+            width: 100%;
+            text-align: center;
+            color: $new-dark-gray;
+            @extend h4;
+        }
+
+        img,
+        .Img {
+            width: 83px;
+            height: 83px;
+            border-radius: $border-radius-min;
+            margin: $default-space-s $default-space-s 0 0;
+            display: inline-block;
+
+            background-size: cover;
+            background-position: center;
+
+            &:first-of-type {
+                width: 220px;
+                height: 220px;
+                border-radius: $border-radius;
+                margin-top: 0;
+            }
+        }
+
+        .Image {
+            position: relative;
+            margin: $default-space-s $default-space-s 0 0;
+
+            button {
+                position: absolute;
+                height: 32px;
+                width: 32px;
+                top: 0;
+                right: 0px;
+                background: $new-dark-gray;
+                border-radius: 16px;
+            }
+
+            // img {
+            //     width: 120px;
+            // }
+        }
+
+        .UploadArea {
+            height: 120px;
+            width: 120px;
+            border: 1px dashed $new-dark-gray;
+            border-radius: $border-radius;
+            margin: $default-space-s $default-space-s 0 0;
+            position: relative;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            label {
+                position: absolute;
+                top: 50px;
+                left: 50px;
+            }
+
+            button {
+                margin: auto;
+            }
+        }
+
+        .Fileupload {
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            background: red;
+        }
+    }
+
+    .TextSection {
+        width: 100%;
+        margin-left: $default-space-s;
+        padding-left: $default-space-s;
+
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        align-items: flex-start;
+
+        @include media-breakpoint-down(md) {
+            flex-direction: column;
+        }
+
+        .BrewingTab {
+            height: 500px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+
+        .Description {
+            width: 100%;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 24px;
+            margin-bottom: $line-space;
+
+            color: $gray-600;
+            width: 50%;
+
+            span {
+                color: $black;
+                margin-right: 5px;
+                width: 40px;
+                display: inline-block;
+                text-align: center;
+            }
+        }
+
+        h2 {
+            width: 100%;
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0 0 15px 5px;
+            line-height: 24xp;
+            // text-align: center;
+        }
+    }
+}
+
+.InlineLayoutCard {
+    @extend .LayoutCard;
+
+    flex-direction: row;
+
+    .TextSection {
+        border-left: 1px solid $new-dark-gray;
+    }
+
+    .ImageSection {
+        width: fit-content;
+        max-width: 230px;
+    }
+}
+
+
+.TabBar {
+    width: 100%;
+    text-align: center;
+    padding: $default-space 0;
+
+    ul {
+        padding: 0;
+
+        li {
+            display: inline;
+            padding: 9px 20px;
+            font-size: 16px;
+            color: $new-darker-gray;
+
+            &.Active {
+                background: $blue;
+                color: $white;
+                border-radius: 18px;
+            }
+        }
+    }
+}

@@ -5,48 +5,51 @@ import {
     faBars,
     faBeer,
     faBook,
+    faCalendar,
+    faCalendarAlt,
+    faCarrot,
     faChevronDown,
     faChevronRight,
     faChevronUp,
+    faClock,
+    faCog,
+    faCut,
     faDatabase,
     faEdit,
+    faEnvelopeOpen,
     faFlask,
     faGlobeAmericas,
     faHamburger,
     faHeart,
+    faLeaf,
     faLink,
     faMugHot,
     faPlus,
     faRocket,
+    faRuler,
     faSave,
+    faSearch,
+    faSmileBeam,
     faSmoking,
     faStar,
     faStore,
     faTimes,
     faTimesCircle,
+    faTrash,
     faTrashAlt,
     faUpload,
-    faLeaf,
-    faRuler,
-    faClock,
-    faCut,
-    faCog,
-    faCalendarAlt,
-    faSmileBeam,
-    faCarrot,
-    faSearch,
-    faTrash,
-    faCalendar,
     faUser,
-    faEnvelopeOpen,
 } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { Home } from './pages/Home';
-import CoffeeBase from './pages/Coffee/Coffee';
-import { UserPage } from './pages/User';
-import { Cigars } from './pages/Cigars';
 import { Blog } from './pages/Blog';
+import { Cigars } from './pages/Cigars';
+import { Coffee } from './pages/Coffee/Coffee';
+import { Home } from './pages/Home';
+import { UserPage } from './pages/User';
+import { CoffeeContextProvider } from './Contexts/CoffeeContext';
+import { UserContextProvider } from './Contexts/UserContext';
+import { ModalRoot } from './components/Modal/Modal';
 
 library.add(
     faTrashAlt,
@@ -89,33 +92,37 @@ library.add(
     faTrash,
     faCalendar,
     faUser,
-    faEnvelopeOpen
+    faEnvelopeOpen,
+    faChevronRight
 );
 
 // The App component hosts all components of our application. It does so by rendering the BrowserRouter component at
 // its very root which is automatically populated by the appRoutes defined in Routes.ts.
 export const App = () => (
     <>
-        {/* <Navigationbar />
-        <MainNavigator menu={MainMenu} /> */}
         <BrowserRouter>
-            <Switch>
-                <Route path="/user/:extention?">
-                    <UserPage />
-                </Route>
-                <Route path="/coffee/:id?">
-                    <CoffeeBase />
-                </Route>
-                <Route path="/cigars/:id?">
-                    <Cigars />
-                </Route>
-                <Route path="/blog/:id?">
-                    <Blog />
-                </Route>
-                <Route path="/">
-                    <Home />
-                </Route>
-            </Switch>
+            <UserContextProvider>
+                <Switch>
+                    <Route path="/user/:extention?">
+                        <UserPage />
+                    </Route>
+                    <Route path="/coffee/">
+                        <CoffeeContextProvider>
+                            <Coffee />
+                        </CoffeeContextProvider>
+                    </Route>
+                    <Route path="/cigars/:id?">
+                        <Cigars />
+                    </Route>
+                    <Route path="/blog/:id?">
+                        <Blog />
+                    </Route>
+                    <Route path="/">
+                        <Home />
+                    </Route>
+                </Switch>
+                <ModalRoot />
+            </UserContextProvider>
         </BrowserRouter>
     </>
 );

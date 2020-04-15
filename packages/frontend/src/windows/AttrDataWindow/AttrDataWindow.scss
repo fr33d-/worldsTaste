@@ -1,0 +1,93 @@
+.AttrDataWindow {
+    ul {
+        padding: 0;
+        list-style: none;
+    }
+
+    .AttrList {
+        height: 500px;
+        padding: 20px $default-space-l;
+        background: $new-gray;
+        padding: $default-space-xxl $default-space-l $default-space-xxl $default-space-xxl;
+        border-radius: $border-radius 0 0 $border-radius;
+
+        h2 {
+            font-size: 32px;
+            color: $black;
+            font-weight: 400;
+            margin-bottom: $default-space-l;
+        }
+
+        ul {
+            li {
+                width: 100%;
+                color: $new-darker-gray;
+
+                &:hover,
+                &.Active {
+                    font-weight: 700;
+                }
+            }
+        }
+    }
+
+    .AttrItemList {
+        position: relative;
+        height: 500px;
+        width: 370px;
+        padding: $default-space-xxl;
+
+        .ListHeader {
+            font-size: 16px;
+            color: $new-darker-gray;
+
+            h2 {
+                font-size: 24px;
+                color: $black;
+                font-weight: 400;
+                margin-bottom: $default-space-s;
+            }
+        }
+
+        ul {
+            padding: $default-space-l 0 0 10px;
+
+            li {
+                padding-bottom: 10px;
+
+                .ListDeleteButton {
+                    margin: 0 0 0 5px;
+                    @extend .iconButton;
+                }
+
+                .ListAddButton {
+                    margin: 9px 0 0 -33px;
+                    @extend .iconButton;
+                }
+            }
+
+            .Input {
+                margin: 10px 0 0 10px;
+                width: 80%;
+            }
+
+            input {
+                @extend .formElement;
+                border: none;
+                padding: 15px;
+            }
+        }
+    }
+
+    .CloseButton {
+        @extend .iconButton;
+
+        position: absolute;
+        right: 35px;
+        top: 20px;
+    }
+
+    .Error {
+        color: $red;
+    }
+}

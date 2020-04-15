@@ -1,22 +1,17 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
-import { Route, useHistory, useLocation } from 'react-router';
-import { AttrDataWindow } from '../../windows/AttrDataWindow';
-import { CigarCardDisplay } from '../../components/CigarCard';
-import { CigarCardEdit } from '../../components/CigarCard/CigarCardEdit';
-import { AddButton, DataButton, Filter, IntroText } from '../../components/Filter';
-import { Footer } from '../../components/Footer';
-import { AttrDataItemType, FilterMenuType } from '../../components/FormComponents';
-import { Navigationbar } from '../../components/Navigationbar';
+import React, { useContext, useEffect, useState } from 'react';
+import { useHistory, useLocation } from 'react-router';
+import { DataAttrWindowButton } from '../../components/Buttons/FunctioalButtons';
+import { AddButton, Filter, IntroText, Search } from '../../components/Filter';
 import { Sidemenu } from '../../components/Sidemenu';
+import { UserContext } from '../../Contexts/UserContext';
 import { baseURL, cigarsAttrURL, cigarsURL } from '../../data';
-import { useJwt } from '../../windows/UserWindows';
+import { AttrDataItemType, FilterMenuType } from '../../helpers/types';
+import { AppWindow } from '../../windows/AppWindow';
+import { CigarCardDisplay } from '../../windows/CigarCard';
+import { CigarCardEdit } from '../../windows/CigarCard/CigarCardEdit';
 import CigarReplacement from './../../images/Cigar-replacement.svg';
 import Tabak from './../../images/Tabak.svg';
-import GeneralStyles from './../../styles/GeneralStyles.module.scss';
-import LocalStyles from './Cigars.module.scss';
 
 export type CigarEntry = {
     abbrand: number;
@@ -45,13 +40,7 @@ export type CigarEntry = {
     zugwiederstand: number;
 };
 
-export type CigarsState = {
-    posts: CigarEntry[];
-    filteredPosts: CigarEntry[];
-    menu: AttrDataItemType[];
-    filter: string;
-    loading: boolean;
-    displayAttrMenu: boolean;
+export type CigarAttrData = {
     cigarsProducer: AttrDataItemType[];
     cigarsOrigin: AttrDataItemType[];
     cigarEinlage: AttrDataItemType[];
@@ -59,8 +48,6 @@ export type CigarsState = {
     cigarDeckblatt: AttrDataItemType[];
     cigarAnschnitt: AttrDataItemType[];
     cigarAromarad: AttrDataItemType[];
-    editCard?: CigarEntry;
-    activeFilter?: string;
 };
 
 export const Cigars = () => {
@@ -92,8 +79,8 @@ export const Cigars = () => {
         history.push(pathname.replace('attrDataWindow/', ''));
     };
 
-    const deletePost = (id: number) => {
-        axios
+    const deletePost = async (id: number) => {
+        return await axios
             .delete(`http://localhost:4000/cigars/${id}`)
             .then((response) => {
                 console.log(response);
@@ -204,7 +191,6 @@ export const Cigars = () => {
             });
     };
 
-
     useEffect(() => {
         initiateData();
     }, [pathname]);
@@ -228,30 +214,9 @@ export const Cigars = () => {
                 newPosts = posts;
                 break;
         }
-
-        // this.setState({ filteredPosts: newPosts });
         setFilteredPosts(newPosts);
     };
 
-    // tslint:disable-next-line: max-func-body-length
-    // public render() {
-    //     const {
-    //         posts,
-    //         displayAttrMenu,
-    //         cigarAnschnitt,
-    //         cigarAromarad,
-    //         cigarDeckblatt,
-    //         cigarEinlage,
-    //         cigarUmblatt,
-    //         cigarsOrigin,
-    //         cigarsProducer,
-    //         filter,
-    //         loading,
-    //         menu,
-    //         editCard,
-    //         filteredPosts,
-    //         activeFilter,
-    //     } = this.state;
     const attrData = [
         {
             description: 'So schneidet man eine Zigarre an',
@@ -339,66 +304,61 @@ export const Cigars = () => {
         },
     ];
 
-    const user = useJwt();
+    const { user } = useContext(UserContext);
+    const [filterName, setFilterName] = useState<string>();
+    const [filterAttr, setFilterAttr] = useState<string>();
+    const [searchString, setSearchString] = useState<string>();
+    const [postOrderBy, setPostOrderBy] = useState<string>();
+    const [editState, setEditState] = useState(false);
 
     return (
         <>
-            <div className={GeneralStyles.BackgroundHelper} />
-            <Navigationbar />
-            <div className={classNames(editCard && LocalStyles.EditBackground)}>
-                <div className={classNames(`container`, GeneralStyles.Container, 'pageContainer')}>
-                    <div className={classNames('row', GeneralStyles.MobileHeader)}>
-                        <FontAwesomeIcon icon="smoking" size="4x" color="#8B572A" />
-                        <h1>Smoke of fame</h1>
-                    </div>
-                    <div className="row">
-                        <Sidemenu
-                            filter={filterMenuData}
-                            image={Tabak}
-                            filterAction={filterPosts}
-                            activeFilter={activeFilter}
-                        />
-                        <div className={classNames(`col-12 col-lg-9`)}>
-                            <Filter orderAction={() => {}} orderItems={filterMenuData} />
-                            {user && <AddButton onClick={createCard} />}
-                            {user && <DataButton onClick={toggleAttrMenu} />}
-                            <IntroText header="Zigarren raucht man überall">
-                                Irgend was schlaues über Zigarren.
-                            </IntroText>
-
-                            <div className={`${GeneralStyles.CardsContainer}`}>
-                                {posts.length === 0 ? (
-                                    <div className={GeneralStyles.ReplImg}>
-                                        <img src={CigarReplacement} />
-                                        <p>No cigars to display</p>
-                                    </div>
-                                ) : (
-                                    filteredPosts.map((post) => {
-                                        return (
-                                            <CigarCardDisplay
-                                                entry={post}
-                                                key={post.id}
-                                                deleteFunction={deletePost}
-                                                editFunction={openEditCard}
-                                            />
-                                        );
-                                    })
-                                )}
-                            </div>
-                        </div>
-                    </div>
+            <AppWindow
+                editState={editCard !== undefined || editState}
+                sidebar={
+                    <Sidemenu
+                        filter={filterMenuData}
+                        image={Tabak}
+                        filterAttr={filterAttr}
+                        filterName={filterName}
+                        setFilterAttr={setFilterAttr}
+                        setFilterName={setFilterName}
+                    />
+                }
+            >
+                <div className={'FilterRow'}>
+                    <Search searchString={searchString} setSearchString={setSearchString} />
+                    <Filter orderItems={filterMenuData} orderString={postOrderBy} setOrderString={setPostOrderBy} />
+                    {user && <AddButton onClick={createCard} />}
+                    {user && <DataAttrWindowButton setEditState={setEditState} attrData={attrData}/>}
                 </div>
-                {/* {displayAttrMenu && <AttrDataWindow content={attrData} toggleFunktion={this.toggleAttrMenu} />} */}
-                <Route path={`${basePath}/attrDataWindow`}>
-                    <AttrDataWindow content={attrData} close={() => closeAttrWindow()} />
-                </Route>
-                <Footer year="2019" version="0.1" />
-            </div>
+                <IntroText header="Zigarren raucht man überall">Irgend was schlaues über Zigarren.</IntroText>
+
+                <div className={`${'CardsContainer'}`}>
+                    {posts.length === 0 ? (
+                        <div className={'ReplImg'}>
+                            <img src={CigarReplacement} alt="no cards" />
+                            <p>No cigars to display</p>
+                        </div>
+                    ) : (
+                        filteredPosts.map((post) => {
+                            return (
+                                <CigarCardDisplay
+                                    entry={post}
+                                    key={post.id}
+                                    deleteFunction={deletePost}
+                                    editFunction={openEditCard}
+                                />
+                            );
+                        })
+                    )}
+                </div>
+            </AppWindow>
             {editCard && (
-                <div className={LocalStyles.EditFrame}>
+                <div className={'EditFrame'}>
                     <div className="container">
                         <div className="col-12 col-md-10 offset-md-1">
-                            <div className={LocalStyles.EditCard}>
+                            <div className={'EditCard'}>
                                 <CigarCardEdit
                                     entry={editCard}
                                     deleteCigar={deletePost}

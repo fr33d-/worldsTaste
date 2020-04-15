@@ -1,7 +1,10 @@
 @import '~@blueprintjs/core/src/blueprint.scss';
+@import '~@blueprintjs/datetime/lib/css/blueprint-datetime.css';
 @import '~@blueprintjs/icons/lib/css/blueprint-icons.css';
 @import '~bootstrap/scss/bootstrap.scss';
+
 @import './variables';
+
 
 @import './nav';
 @import './card';
@@ -9,3 +12,23 @@
 @import './fonts';
 @import './forms';
 @import './fontfaces';
+@import './layoutCard';
+@import './general';
+
+@import './../components/Navigationbar/Navigationbar.scss';
+@import './../components/DropdownColumn/DropdownColumn.scss';
+@import './../components/MainNavigator/MainNavigator.scss';
+@import './../components/Filter/Filter.scss';
+@import './../components/Footer/Footer.scss';
+@import './../components/FormElements/AttrFields.scss';
+@import './../components/FormElements/FormElements.scss';
+@import './../components/Buttons/IconButton.scss';
+@import './../components/IconSelectColumn/IconSelectColumn.scss';
+@import './../components/MobileHeader/MobileHeader.scss';
+@import './../components/Sidemenu/Sidemenu.scss';
+
+@import './../windows/CoffeeCard/CoffeeCard.scss';
+@import './../windows/AttrDataWindow/AttrDataWindow.scss';
+@import './../windows/UserWindows/User.scss';
+@import './../windows/AppWindow/AppWindow.scss';
+@import './../windows/404/404.scss';

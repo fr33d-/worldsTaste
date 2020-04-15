@@ -1,0 +1,11 @@
+.MobileHeader {
+    margin-bottom: $default-space;
+
+    @include media-breakpoint-up(lg) {
+        display: none;
+    }
+
+    svg {
+        margin-right: 20px;
+    }
+}

@@ -8,13 +8,13 @@ import 'reflect-metadata';
 import { createConnection } from 'typeorm';
 import { cigarAttrsRoute } from './routes/CigarAttrsRouts';
 import { cigarRoute } from './routes/CigarsRoute';
-import { coffeeAttrsRoute } from './routes/CoffeeAttrsRouts';
 import { coffeeBrewingRoute } from './routes/CoffeeBrewingRoute';
 import { coffeeRoute } from './routes/CoffeeRoute';
 import { usersRoute } from './routes/UsersRoute';
 import { authRouter } from './routes/AuthRoute';
 import { errorLoggerMiddleware, errorMiddleware } from './utils/ErrorHandlerUtil';
 import { createLogger } from './utils/LoggerUtil';
+import { coffeeStoresRoute } from './routes/CoffeeStoreRouts';
 
 // Export all necessary Dtos to make them accessible from the frontend
 export * from './models/dtos/UserDto';
@@ -48,7 +48,7 @@ createConnection()
         server.use('/api/auth', authRouter);
         server.use('/api/user', usersRoute);
         server.use('/api/coffee', coffeeRoute);
-        server.use('/api/coffeeAttrs', coffeeAttrsRoute);
+        server.use('/api/coffeesStores', coffeeStoresRoute);
         server.use('/api/coffeebrewings', coffeeBrewingRoute);
         server.use('/api/cigars', cigarRoute);
         server.use('/api/cigarAttrs', cigarAttrsRoute);

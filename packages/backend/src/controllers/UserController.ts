@@ -31,7 +31,7 @@ export const getOneById: RequestHandler = async (req: Request, res: Response) =>
         res.status(404).send('User not found');
     }
 
-    // Todo? Müsste ich hier nicht die userliste verschicken? 
+    // Todo? Müsste ich hier nicht die userliste verschicken?
 };
 
 export const newUser: RequestHandler = async (req: Request, res: Response) => {
@@ -59,15 +59,15 @@ export const newUser: RequestHandler = async (req: Request, res: Response) => {
     //Try to save. If fails, the username is already in use
     const userRepository = getRepository(UserEntity);
     try {
-        await userRepository.save(user);
+        const newUser = await userRepository.save(user);
+        //If all ok, send 201 response
+        res.status(201).location(`/user/${newUser.id}`).send('User created');
     } catch (e) {
         res.status(409).send('username already in use');
         console.log('username already in use', e)
         return;
     }
 
-    //If all ok, send 201 response
-    res.status(201).send('User created');
 };
 
 export const editUser: RequestHandler = async (req: Request, res: Response) => {
