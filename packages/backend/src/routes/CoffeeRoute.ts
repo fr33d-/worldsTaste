@@ -31,10 +31,10 @@ import { checkRole } from "../middlewares/checkRole";
 
 coffeeRoute.route("/").get(getAllCoffees);
 // coffeeRoute.route('/').post(createCoffee);
-coffeeRoute.post("/", [checkJwt, checkRole(["ADMIN"])], createCoffee);
+coffeeRoute.post("/", [checkJwt, checkRole(["ADMIN", "USER"])], createCoffee);
 coffeeRoute.route("/:id").get(getCoffeeById);
 // coffeeRoute.route('/:id').delete(deleteCoffeeById);
-coffeeRoute.delete("/:id", [checkJwt, checkRole(["ADMIN"])], deleteCoffeeById);
+coffeeRoute.delete("/:id", [checkJwt, checkRole(["ADMIN", "USER"])], deleteCoffeeById);
 coffeeRoute.use("/assets", express.static(path.join(__dirname, "../../uploads/coffee-images")));
 coffeeRoute.route("/assets/").get(getCoffeesAssets);
 coffeeRoute.route("/assets/:id").post(postCoffeesAssets);
@@ -44,21 +44,21 @@ coffeeRoute.route("/assets/:id").delete(deleteCoffeeImageByURL);
 
 coffeeRoute.route("/:id/brewings").get(getCoffeeBrewings);
 // coffeeRoute.route('/:id/brewings').post(createCoffeeBrewing);
-coffeeRoute.post("/:id/brewings", [checkJwt, checkRole(["ADMIN"])], createCoffeeBrewing);
+coffeeRoute.post("/:id/brewings", [checkJwt, checkRole(["ADMIN", "USER"])], createCoffeeBrewing);
 // coffeeRoute.route('/:id/brewings/:brewId').put(updateCoffeeBrewingById);
-coffeeRoute.put("/:id/brewings/:brewId", [checkJwt, checkRole(["ADMIN"])], updateCoffeeBrewingById);
+coffeeRoute.put("/:id/brewings/:brewId", [checkJwt, checkRole(["ADMIN", "USER"])], updateCoffeeBrewingById);
 // coffeeRoute.route('/:id/brewings/:brewId').delete(deleteCoffeeBrewingById);
-coffeeRoute.delete("/:id/brewings/:brewId", [checkJwt, checkRole(["ADMIN"])], deleteCoffeeBrewingById);
+coffeeRoute.delete("/:id/brewings/:brewId", [checkJwt, checkRole(["ADMIN", "USER"])], deleteCoffeeBrewingById);
 
 coffeeRoute.route("/:id").put(updateCoffeeById);
 // coffeeRoute.route('/:id').put(uploadImage);
 
 coffeeRoute.route("/stores").get(getCoffeeStores);
 // coffeeRoute.route('/stores').post(createCoffeeStore);
-coffeeRoute.post("/stores", [checkJwt, checkRole(["ADMIN"])], createCoffeeStore);
+coffeeRoute.post("/stores", [checkJwt, checkRole(["ADMIN", "USER"])], createCoffeeStore);
 // coffeeRoute.route('/stores/:id').put(updateCoffeeStoreById);
-coffeeRoute.put("/stores/:id", [checkJwt, checkRole(["ADMIN"])], updateCoffeeStoreById);
+coffeeRoute.put("/stores/:id", [checkJwt, checkRole(["ADMIN", "USER"])], updateCoffeeStoreById);
 // coffeeRoute.route('/stores/:id').delete(deleteCoffeeStoreById);
-coffeeRoute.delete("/stores/:id", [checkJwt, checkRole(["ADMIN"])], deleteCoffeeStoreById);
+coffeeRoute.delete("/stores/:id", [checkJwt, checkRole(["ADMIN", "USER"])], deleteCoffeeStoreById);
 
 export { coffeeRoute };

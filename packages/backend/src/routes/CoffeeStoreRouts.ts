@@ -13,8 +13,8 @@ import { checkJwt } from "../middlewares/checkJwt";
 import { checkRole } from "../middlewares/checkRole";
 
 coffeeStoresRoute.route("/").get(getCoffeeStores);
-coffeeStoresRoute.post("/", [checkJwt, checkRole(["ADMIN"])], createCoffeeStore);
-coffeeStoresRoute.put("/", [checkJwt, checkRole(["ADMIN"])], updateCoffeeStoreById);
-coffeeStoresRoute.delete("/", [checkJwt, checkRole(["ADMIN"])], deleteCoffeeStoreById);
+coffeeStoresRoute.post("/", [checkJwt, checkRole(["ADMIN", "USER"])], createCoffeeStore);
+coffeeStoresRoute.put("/", [checkJwt, checkRole(["ADMIN", "USER"])], updateCoffeeStoreById);
+coffeeStoresRoute.delete("/", [checkJwt, checkRole(["ADMIN", "USER"])], deleteCoffeeStoreById);
 
 export { coffeeStoresRoute };

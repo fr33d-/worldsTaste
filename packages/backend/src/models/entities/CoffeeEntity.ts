@@ -34,6 +34,9 @@ export class CoffeeEntity extends BaseEntity {
     public buyDate!: Date;
 
     @Column()
+    public roastDate!: Date;
+
+    @Column()
     public process!: string;
 
     @Column()

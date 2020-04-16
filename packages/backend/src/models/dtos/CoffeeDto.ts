@@ -18,8 +18,9 @@ export class CoffeeDto {
     public store: CoffeeStoreEntity;
     public ownDescription: string;
     public dateAdded: Date;
-    public process: string;
     public buyDate: Date;
+    public roastDate: Date;
+    public process: string;
     public species: string;
     public owner: UserEntity;
     public brewings: CoffeeBrewingEntity[];
@@ -60,6 +61,7 @@ export class CoffeeDto {
         bitterness,
         fragrance,
         aroma,
+        roastDate,
     }: CoffeeEntity) {
         this.id = id;
         this.name = name;
@@ -71,6 +73,7 @@ export class CoffeeDto {
         this.ownDescription = ownDescription;
         this.buyDate = buyDate;
         this.dateAdded = dateAdded;
+        this.roastDate = roastDate;
         this.process = process;
         this.species = species;
         this.owner = owner;
