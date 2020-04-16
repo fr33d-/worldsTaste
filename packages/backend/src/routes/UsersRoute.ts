@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router } from "express";
 // import {
 // createUser,
 // deleteUserById,
@@ -6,9 +6,9 @@ import { Router } from 'express';
 // getUserById,
 // updateUserById,
 // } from "../controllers/UsersController-old";
-import { deleteUser, editUser, getOneById, listAll, newUser } from '../controllers/UserController';
-import { checkJwt } from '../middlewares/checkJwt';
-import { checkRole } from '../middlewares/checkRole';
+import { deleteUser, editUser, getOneById, listAll, newUser } from "../controllers/UserController";
+import { checkJwt } from "../middlewares/checkJwt";
+import { checkRole } from "../middlewares/checkRole";
 
 // Define a new router that basically wraps multiple endpoint into a single object.
 const usersRoute = Router();
@@ -22,18 +22,18 @@ const usersRoute = Router();
 
 // von tutorial
 //Get all users
-usersRoute.get('/', [checkJwt, checkRole(['ADMIN'])], listAll);
+usersRoute.get("/", [checkJwt, checkRole(["ADMIN", "USER"])], listAll);
 
 // Get one user
-usersRoute.get('/:id([0-9]+)', [checkJwt, checkRole(['ADMIN'])], getOneById);
+usersRoute.get("/:id([0-9]+)", [checkJwt, checkRole(["ADMIN", "USER"])], getOneById);
 
 //Create a new user
-usersRoute.post('/', [checkJwt, checkRole(['ADMIN'])], newUser);
+usersRoute.post("/", [checkJwt, checkRole(["ADMIN"])], newUser);
 
 //Edit one user
-usersRoute.patch('/:id([0-9]+)', [checkJwt, checkRole(['ADMIN'])], editUser);
+usersRoute.patch("/:id([0-9]+)", [checkJwt, checkRole(["ADMIN"])], editUser);
 
 //Delete one user
-usersRoute.delete('/:id([0-9]+)', [checkJwt, checkRole(['ADMIN'])], deleteUser);
+usersRoute.delete("/:id([0-9]+)", [checkJwt, checkRole(["ADMIN"])], deleteUser);
 
 export { usersRoute };
