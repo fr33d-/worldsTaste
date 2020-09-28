@@ -35,6 +35,7 @@ export class CoffeeDto {
     public bitterness: number;
     public fragrance: string;
     public aroma: string;
+    public inStock: boolean;
 
     // This constructs a UserDto from a given UserEntity via new UserDto(userEntity).
     public constructor({
@@ -62,6 +63,7 @@ export class CoffeeDto {
         fragrance,
         aroma,
         roastDate,
+        inStock,
     }: CoffeeEntity) {
         this.id = id;
         this.name = name;
@@ -88,6 +90,7 @@ export class CoffeeDto {
         this.bitterness = bitterness;
         this.fragrance = fragrance;
         this.aroma = aroma;
+        this.inStock = inStock;
     }
 
     // This is mostly used in combination with Array.map, since you cannot map a constructor.
