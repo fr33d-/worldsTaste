@@ -1,3 +1,6 @@
+### Uploads ###
+/packages/uploads
+
 ### Repository ###
 database
 packages/backend/uploads

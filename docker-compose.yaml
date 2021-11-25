@@ -1,17 +1,17 @@
 version: "3"
 services:
-#   frontend:
-#     container_name: frontend
-#     build:
-#       context: .
-#       dockerfile: docker/frontend/Dockerfile
-#     ports:
-#       - "80:80"
-#       - "443:443"
-#     depends_on:
-#       - backend
-#     links:
-#       - backend
+  #   frontend:
+  #     container_name: frontend
+  #     build:
+  #       context: .
+  #       dockerfile: docker/frontend/Dockerfile
+  #     ports:
+  #       - "80:80"
+  #       - "443:443"
+  #     depends_on:
+  #       - backend
+  #     links:
+  #       - backend
   backend:
     container_name: backend
     restart: always
@@ -26,6 +26,12 @@ services:
       - postgres
     links:
       - postgres
+    # volumes:
+    #   - ./packages/backend/uploads:/app/uploads
+    volumes:
+      - type: bind
+        source: ./packages/backend/uploads
+        target: /app/uploads
   postgres:
     container_name: postgres
     image: postgres:11.5-alpine
