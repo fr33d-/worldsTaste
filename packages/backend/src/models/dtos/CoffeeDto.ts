@@ -10,7 +10,7 @@ import { ImagesEntity } from "../entities/ImageEntry";
 export class CoffeeDto {
     public id: number;
     public name: string;
-    public imageStrings: string[];
+    // public imageStrings: string[];
     public description: string;
     public rating: number;
 
@@ -71,7 +71,7 @@ export class CoffeeDto {
     }: CoffeeEntity) {
         this.id = id;
         this.name = name;
-        this.imageStrings = [];
+        // this.imageStrings = [];
         this.description = description;
         this.rating = rating;
         this.origin = origin;

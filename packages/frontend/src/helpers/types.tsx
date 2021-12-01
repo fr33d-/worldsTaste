@@ -80,7 +80,7 @@ export type BrewingEntry = {
 export type CoffeeEntry = {
     id: number;
     imageFiles?: Image[];
-    imageStrings?: string[];
+    // imageStrings?: string[];
     name: string;
     description: string;
     origin: string;

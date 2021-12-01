@@ -6,6 +6,7 @@ import * as path from "path";
 import sharp from "sharp";
 import uniqid from "uniqid";
 import { CoffeeDto } from "../models/dtos/CoffeeDto";
+import { ImageDto } from "../models/dtos/ImageDto";
 import { CoffeeEntity } from "../models/entities/CoffeeEntity";
 import { ImagesEntity } from "../models/entities/ImageEntry";
 import { createLogger } from "../utils/LoggerUtil";
@@ -170,104 +171,62 @@ export const postCoffeesAssets: RequestHandler = async (request, result) => {
     }
 
     const { id } = (request.params as unknown) as PostCoffeeRequestParams;
-    const images = request.files.images as UploadedFile[];
-    const imagesArray = Array.isArray(images) ? images : [images];
-    // const imageStrings = [];
-    let errorHappend = false;
-
-    // --- Image to db
+    const uploadImage = request.files.images as UploadedFile;
 
     const coffeeEntity = await CoffeeEntity.findOne({ where: { id }, relations: ["images"] });
     if (coffeeEntity === undefined) {
         result.sendStatus(httpStatusCodes.CONFLICT);
         return;
     }
-    for (const { data, name } of imagesArray) {
-        // resize
+    const { data, name } = uploadImage;
 
-        const resizsedData = await sharp(data)
-            .resize(1200)
-            .toBuffer();
+    // resize
+    const resizsedData = await sharp(data)
+        .resize(1200)
+        .toBuffer();
 
-        try {
-            const imageEntity = ImagesEntity.create({
-                name: name,
-                alt: name,
-                description: name,
-                file: Buffer.from(resizsedData).toString("base64"),
-                coffee: coffeeEntity,
-            });
-            await ImagesEntity.save(imageEntity);
+    try {
+        const imageEntity = ImagesEntity.create({
+            name: name,
+            alt: name,
+            description: name,
+            file: Buffer.from(resizsedData).toString("base64"),
+            coffee: coffeeEntity,
+        });
+        await ImagesEntity.save(imageEntity);
 
-            coffeeEntity.images = [imageEntity, ...coffeeEntity.images];
-            log("Got new image for coffee:");
+        coffeeEntity.images = [imageEntity, ...coffeeEntity.images];
+        log("Got new image for coffee:");
 
-            await CoffeeEntity.save(coffeeEntity);
-            log("coffee saved");
-            // result.location(`/images/${imageEntity.id}`).sendStatus(httpStatusCodes.CREATED); // might not work
-        } catch (error) {
-            log("error");
-            // log(error);
-            errorHappend = true;
-            result.sendStatus(httpStatusCodes.CONFLICT); // send conflict for loop?
-        }
-
-        if (errorHappend) {
-            result.sendStatus(httpStatusCodes.CONFLICT);
-        }
-        result.sendStatus(httpStatusCodes.CREATED); // might not work
+        await CoffeeEntity.save(coffeeEntity);
+        log("coffee saved");
+        result.status(httpStatusCodes.CREATED).send(new ImageDto(imageEntity));
+    } catch (error) {
+        log("error");
+        result.sendStatus(httpStatusCodes.CONFLICT);
     }
 
-    // end ----
-
-    // --- Image fo fs
-
-    // for (const file of imagesArray) {
-    //     log("New asset");
-    //     const targetPath = `./uploads/coffee-images/${id}`;
-    //     if (!fs.existsSync(targetPath)) {
-    //         fs.mkdirSync(targetPath, { recursive: true });
-    //     }
-    //     const fileName = `${targetPath}/${uniqid()}.${file.name.split(".").slice(-1)[0]}`;
-    //     await file.mv(fileName);
-    //     imageStrings.push(fileName);
-    // }
-
-    // end ----
-
-    // result.location(String(imageStrings)).sendStatus(httpStatusCodes.OK);
+    // result.sendStatus(httpStatusCodes.CREATED);
 };
 
 // DELETE Asset /:id
 type DeleteCoffeeImageByIdRequestParams = { id: number };
-type DeleteCoffeeImageByIdRequestBody = { url: string };
 
 export const deleteCoffeeImageByURL: RequestHandler = async (request, result) => {
     log("Delete coffee by url");
 
     const { id } = (request.params as unknown) as DeleteCoffeeImageByIdRequestParams;
-    const { url } = request.body as DeleteCoffeeImageByIdRequestBody;
 
-    const fileName = url.split("/").slice(-1)[0];
-    const targetPath = `./uploads/coffee-images/${id}`;
+    log(`DELETE image :id (id = ${id})`);
+    const imageEntity = await ImagesEntity.findOne({ where: { id } });
 
-    try {
-        fs.unlinkSync(`${targetPath}/${fileName}`);
-    } catch (err) {
-        log(err);
+    if (imageEntity !== undefined) {
+        await ImagesEntity.delete({ id });
+        result.sendStatus(httpStatusCodes.OK);
+    } else {
         result.sendStatus(httpStatusCodes.NOT_FOUND);
     }
 
-    // log(`DELETE image :id (id = ${imageId})`);
-    // const imageEntity = await ImagesEntity.findOne({ where: { id } });
-
-    // if (imageEntity !== undefined) {
-    //     await imageEntity.delete({ id });
-    //     result.sendStatus(httpStatusCodes.OK);
-    // } else {
-    //     result.sendStatus(httpStatusCodes.NOT_FOUND);
-    // }
-
-    log("deleted" + targetPath + "/" + fileName);
+    log("deleted");
     result.sendStatus(httpStatusCodes.OK);
 };
