@@ -1,6 +1,7 @@
 import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { CoffeeStoreEntity } from "./CoffeeStoresEntity";
 import { CoffeeBrewingEntity } from "./CoffeeBrewingEntity";
+import { CoffeeStoreEntity } from "./CoffeeStoresEntity";
+import { ImagesEntity } from "./ImageEntry";
 import { UserEntity } from "./UserEntity";
 
 export type Image = {
@@ -96,6 +97,13 @@ export class CoffeeEntity extends BaseEntity {
         (type) => CoffeeBrewingEntity,
         (coffeeBrewings) => coffeeBrewings.coffee
     )
-    // @JoinColumn({ name: 'brewings' })∏
+    @JoinColumn({ name: "brewings" })
     public brewings!: CoffeeBrewingEntity[];
+
+    @OneToMany(
+        (type) => ImagesEntity,
+        (coffeeBrewings) => coffeeBrewings.coffee
+    )
+    @JoinColumn({ name: "images" })
+    public images!: ImagesEntity[];
 }

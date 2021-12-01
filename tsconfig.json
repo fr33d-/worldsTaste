@@ -1,4 +1,5 @@
 {
     "files": [],
-    "references": [{ "path": "packages" }]
+    "references": [{ "path": "packages" }],
+    "include": [".eslintrc.js", "./packages/**/*"]
 }

@@ -42,7 +42,7 @@ export const createCoffeeBrewing: RequestHandler = async (request, result) => {
     log(request.body);
     const { id } = (request.params as unknown) as PostCoffeeBrewingByIdRequestParams;
     const requestBody = request.body as CreateCoffeeBrewingRequestBody;
-    let coffeeEntity = await CoffeeEntity.findOne({ where: { id }, relations: ["brewings"] });
+    const coffeeEntity = await CoffeeEntity.findOne({ where: { id }, relations: ["brewings"] });
 
     if (coffeeEntity === undefined) {
         result.sendStatus(httpStatusCodes.CONFLICT);
