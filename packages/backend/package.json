@@ -1,6 +1,6 @@
 {
     "name": "backend",
-    "version": "1.0.0",
+    "version": "2.5.2",
     "private": true,
     "main": "./src/Server.ts",
     "module": "./src/Server.ts",
@@ -25,6 +25,7 @@
     "dependencies": {
         "@types/bcryptjs": "^2.4.2",
         "@types/jsonwebtoken": "^8.3.3",
+        "@types/testing-library__dom": "^7.5.0",
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.18.3",
         "class-validator": "^0.10.0",
@@ -37,12 +38,13 @@
         "jsonwebtoken": "^8.5.1",
         "pg": "^7.12.1",
         "reflect-metadata": "^0.1.13",
+        "sharp": "^0.29.3",
         "typeorm": "^0.2.18",
-        "uniqid": "^5.0.3",
-        "sharp": "^0.29.3"
+        "uniqid": "^5.0.3"
     },
     "scripts": {
         "build": "tsc",
+        "version": "tsc --version",
         "clean": "rm -rf build",
         "start": "DEBUG=api:* node build/Server.js",
         "dev": "DEBUG=api:* node --inspect -r ts-node/register src/Server.ts",
