@@ -1,7 +1,6 @@
 import { RequestHandler } from "express";
 import * as httpStatusCodes from "http-status-codes";
 import { CoffeeBrewingDto } from "../models/dtos/CoffeeBrewingDto";
-import { CoffeeDto } from "../models/dtos/CoffeeDto";
 import { CoffeeBrewingEntity } from "../models/entities/CoffeeBrewingEntity";
 import { CoffeeEntity } from "../models/entities/CoffeeEntity";
 import { createLogger } from "../utils/LoggerUtil";
@@ -76,7 +75,7 @@ type DeleteCoffeeBrewingByIdRequestParams = {
 export const deleteCoffeeBrewingById: RequestHandler = async (request, result) => {
     const { brewId } = (request.params as unknown) as DeleteCoffeeBrewingByIdRequestParams;
     log(`DELETE /coffeeBrewing/:id (id = ${brewId})`);
-    const coffeeBrewingEntity = await CoffeeBrewingEntity.findOne({ where: { brewId } });
+    const coffeeBrewingEntity = await CoffeeBrewingEntity.findOne({ where: { id: brewId } });
 
     if (coffeeBrewingEntity !== undefined) {
         await CoffeeBrewingEntity.delete({ id: brewId });
@@ -99,7 +98,7 @@ export const updateCoffeeBrewingById: RequestHandler = async (request, result) =
     const requestBody = request.body as UpdateCoffeeBrewingByIdRequestBody;
     log(`PUT /coffee/${id}/brewing/:${brewId}`);
 
-    const coffeeBrewingEntity = await CoffeeBrewingEntity.findOne({ where: { brewId } });
+    const coffeeBrewingEntity = await CoffeeBrewingEntity.findOne({ where: { id: brewId } });
 
     if (coffeeBrewingEntity !== undefined) {
         CoffeeBrewingEntity.merge(coffeeBrewingEntity, { ...requestBody });

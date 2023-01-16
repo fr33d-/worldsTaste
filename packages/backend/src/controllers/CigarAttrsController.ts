@@ -1,5 +1,5 @@
-import { RequestHandler } from 'express';
-import * as httpStatusCodes from 'http-status-codes';
+import { RequestHandler } from "express";
+import * as httpStatusCodes from "http-status-codes";
 import {
     CigarAnschnittDto,
     CigarAromaradDto,
@@ -8,7 +8,7 @@ import {
     CigarOriginDto,
     CigarProducerDto,
     CigarUmblattDto,
-} from '../models/dtos/CigarAttrDto';
+} from "../models/dtos/CigarAttrDto";
 import {
     CigarAnschnittEntity,
     CigarAromaradEntity,
@@ -17,11 +17,11 @@ import {
     CigarOriginEntity,
     CigarProducerEntity,
     CigarUmblattEntity,
-} from '../models/entities/CigarAttrsEntity';
-import { createLogger } from '../utils/LoggerUtil';
-import { Omit } from '../utils/TypeScriptUtils';
+} from "../models/entities/CigarAttrsEntity";
+import { createLogger } from "../utils/LoggerUtil";
+import { Omit } from "../utils/TypeScriptUtils";
 
-const log = createLogger('api:controllers:cigar');
+const log = createLogger("api:controllers:cigar");
 
 type WithId = {
     id: number;
@@ -36,7 +36,7 @@ export const getCigarAnschnittEntities: RequestHandler = async (_, result) => {
     result.status(httpStatusCodes.OK).json(cigarAnschnittEntity.map(CigarAnschnittDto.fromEntity));
 };
 
-type CreateCigarAnschnittEntityRequestBody = Omit<CigarAnschnittDto, 'id'>;
+type CreateCigarAnschnittEntityRequestBody = Omit<CigarAnschnittDto, "id">;
 
 export const createCigarAnschnittEntity: RequestHandler = async (request, result) => {
     log(`POST /cigarAttrs/anschnitt`);
@@ -55,7 +55,7 @@ export const createCigarAnschnittEntity: RequestHandler = async (request, result
 type DeleteCigarAnschnittEntityRequestBody = WithId;
 
 export const deleteCigarAnschnittEntity: RequestHandler = async (request, result) => {
-    const { id } = request.params as unknown as DeleteCigarAnschnittEntityRequestBody;
+    const { id } = (request.params as unknown) as DeleteCigarAnschnittEntityRequestBody;
     log(`DELETE /cigarAttrs/anschnitt/:id (id = ${id})`);
     const cigarAnschnittEntity = await CigarAnschnittEntity.findOne({ where: { id } });
 
@@ -76,7 +76,7 @@ export const getCigarAromaradEntities: RequestHandler = async (_, result) => {
     result.status(httpStatusCodes.OK).json(cigarAromaradEntity.map(CigarAromaradDto.fromEntity));
 };
 
-type CreateCigarAromaradEntityRequestBody = Omit<CigarAromaradDto, 'id'>;
+type CreateCigarAromaradEntityRequestBody = Omit<CigarAromaradDto, "id">;
 
 export const createCigarAromaradEntity: RequestHandler = async (request, result) => {
     log(`POST /cigarAttrs/aromarad`);
@@ -95,7 +95,7 @@ export const createCigarAromaradEntity: RequestHandler = async (request, result)
 type DeleteCigarAromaradEntityRequestBody = WithId;
 
 export const deleteCigarAromaradEntity: RequestHandler = async (request, result) => {
-    const { id } = request.params as unknown as DeleteCigarAromaradEntityRequestBody;
+    const { id } = (request.params as unknown) as DeleteCigarAromaradEntityRequestBody;
     log(`DELETE /cigarAttrs/aromarad/:id (id = ${id})`);
     const cigarAromaradEntity = await CigarAromaradEntity.findOne({ where: { id } });
 
@@ -116,7 +116,7 @@ export const getCigarDeckblattEntities: RequestHandler = async (_, result) => {
     result.status(httpStatusCodes.OK).json(cigarDeckblattEntity.map(CigarDeckblattDto.fromEntity));
 };
 
-type CreateCigarDeckblattEntityRequestBody = Omit<CigarDeckblattDto, 'id'>;
+type CreateCigarDeckblattEntityRequestBody = Omit<CigarDeckblattDto, "id">;
 
 export const createCigarDeckblattEntity: RequestHandler = async (request, result) => {
     log(`POST /cigarAttrs/deckblatt`);
@@ -135,7 +135,7 @@ export const createCigarDeckblattEntity: RequestHandler = async (request, result
 type DeleteCigarDeckblattEntityRequestBody = WithId;
 
 export const deleteCigarDeckblattEntity: RequestHandler = async (request, result) => {
-    const { id } = request.params as unknown as DeleteCigarDeckblattEntityRequestBody;
+    const { id } = (request.params as unknown) as DeleteCigarDeckblattEntityRequestBody;
     log(`DELETE /cigarAttrs/deckblatt/:id (id = ${id})`);
     const cigarDeckblattEntity = await CigarDeckblattEntity.findOne({ where: { id } });
 
@@ -156,7 +156,7 @@ export const getCigarEinlageEntities: RequestHandler = async (_, result) => {
     result.status(httpStatusCodes.OK).json(cigarEinlageEntity.map(CigarEinlageDto.fromEntity));
 };
 
-type CreateCigarEinlageEntityRequestBody = Omit<CigarEinlageDto, 'id'>;
+type CreateCigarEinlageEntityRequestBody = Omit<CigarEinlageDto, "id">;
 
 export const createCigarEinlageEntity: RequestHandler = async (request, result) => {
     log(`POST /cigarAttrs/einlage`);
@@ -175,7 +175,7 @@ export const createCigarEinlageEntity: RequestHandler = async (request, result) 
 type DeleteCigarEinlageEntityRequestBody = WithId;
 
 export const deleteCigarEinlageEntity: RequestHandler = async (request, result) => {
-    const { id } = request.params as unknown as DeleteCigarEinlageEntityRequestBody;
+    const { id } = (request.params as unknown) as DeleteCigarEinlageEntityRequestBody;
     log(`DELETE /cigarAttrs/einlage/:id (id = ${id})`);
     const cigarEinlageEntity = await CigarEinlageEntity.findOne({ where: { id } });
 
@@ -196,7 +196,7 @@ export const getCigarOriginEntities: RequestHandler = async (_, result) => {
     result.status(httpStatusCodes.OK).json(cigarOriginEntity.map(CigarOriginDto.fromEntity));
 };
 
-type CreateCigarOriginEntityRequestBody = Omit<CigarOriginDto, 'id'>;
+type CreateCigarOriginEntityRequestBody = Omit<CigarOriginDto, "id">;
 
 export const createCigarOriginEntity: RequestHandler = async (request, result) => {
     log(`POST /cigarAttrs/origin`);
@@ -215,7 +215,7 @@ export const createCigarOriginEntity: RequestHandler = async (request, result) =
 type DeleteCigarOriginEntityRequestBody = WithId;
 
 export const deleteCigarOriginEntity: RequestHandler = async (request, result) => {
-    const { id } = request.params as unknown as DeleteCigarOriginEntityRequestBody;
+    const { id } = (request.params as unknown) as DeleteCigarOriginEntityRequestBody;
     log(`DELETE /cigarAttrs/origin/:id (id = ${id})`);
     const cigarOriginEntity = await CigarOriginEntity.findOne({ where: { id } });
 
@@ -236,7 +236,7 @@ export const getCigarProducerEntities: RequestHandler = async (_, result) => {
     result.status(httpStatusCodes.OK).json(cigarProducerEntity.map(CigarProducerDto.fromEntity));
 };
 
-type CreateCigarProducerEntityRequestBody = Omit<CigarProducerDto, 'id'>;
+type CreateCigarProducerEntityRequestBody = Omit<CigarProducerDto, "id">;
 
 export const createCigarProducerEntity: RequestHandler = async (request, result) => {
     log(`POST /cigarAttrs/producer`);
@@ -255,7 +255,7 @@ export const createCigarProducerEntity: RequestHandler = async (request, result)
 type DeleteCigarProducerEntityRequestBody = WithId;
 
 export const deleteCigarProducerEntity: RequestHandler = async (request, result) => {
-    const { id } = request.params as unknown as DeleteCigarProducerEntityRequestBody;
+    const { id } = (request.params as unknown) as DeleteCigarProducerEntityRequestBody;
     log(`DELETE /cigarAttrs/producer/:id (id = ${id})`);
     const cigarProducerEntity = await CigarProducerEntity.findOne({ where: { id } });
 
@@ -276,7 +276,7 @@ export const getCigarUmblattEntities: RequestHandler = async (_, result) => {
     result.status(httpStatusCodes.OK).json(cigarUmblattEntity.map(CigarUmblattDto.fromEntity));
 };
 
-type CreateCigarUmblattEntityRequestBody = Omit<CigarUmblattDto, 'id'>;
+type CreateCigarUmblattEntityRequestBody = Omit<CigarUmblattDto, "id">;
 
 export const createCigarUmblattEntity: RequestHandler = async (request, result) => {
     log(`POST /cigarAttrs/umblatt`);
@@ -295,7 +295,7 @@ export const createCigarUmblattEntity: RequestHandler = async (request, result) 
 type DeleteCigarUmblattEntityRequestBody = WithId;
 
 export const deleteCigarUmblattEntity: RequestHandler = async (request, result) => {
-    const { id } = request.params as unknown as DeleteCigarUmblattEntityRequestBody;
+    const { id } = (request.params as unknown) as DeleteCigarUmblattEntityRequestBody;
     log(`DELETE /cigarAttrs/umblatt/:id (id = ${id})`);
     const cigarUmblattEntity = await CigarUmblattEntity.findOne({ where: { id } });
 

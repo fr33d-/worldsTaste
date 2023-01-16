@@ -1,10 +1,7 @@
 import { RequestHandler } from "express";
 import { UploadedFile } from "express-fileupload";
-import * as fs from "fs";
 import * as httpStatusCodes from "http-status-codes";
-import * as path from "path";
 import sharp from "sharp";
-import uniqid from "uniqid";
 import { CoffeeDto } from "../models/dtos/CoffeeDto";
 import { ImageDto } from "../models/dtos/ImageDto";
 import { CoffeeEntity } from "../models/entities/CoffeeEntity";
@@ -27,27 +24,9 @@ export const getAllCoffees: RequestHandler = async (_, result) => {
         relations: ["store", "images"],
     });
 
-    //Append images
-    // const uploadsFolder = path.join(__dirname, "../../uploads/coffee-images");
-    // const coffeeDtos = coffeeEntities.map((coffeeEntity) => {
-    //     const coffeeDto = CoffeeDto.fromEntity(coffeeEntity);
-
-    //     const imagePath = path.join(uploadsFolder, String(coffeeEntity.id));
-    //     if (fs.existsSync(imagePath)) {
-    //         const images = fs.readdirSync(imagePath).map((item) => `/coffee/assets/${coffeeEntity.id}/${item}`);
-    //         coffeeDto.imageStrings = images;
-    //     }
-    //     return coffeeDto;
-    // });
-
     const coffeeDtos = coffeeEntities.map((coffeeEntity) => {
+        coffeeEntity.images = coffeeEntity.images.length > 0 !== undefined ? [coffeeEntity.images[0]] : [];
         return CoffeeDto.fromEntity(coffeeEntity);
-
-        // const imagePath = path.join(uploadsFolder, String(coffeeEntity.id));
-        // if (fs.existsSync(imagePath)) {
-        //     const images = fs.readdirSync(imagePath).map((item) => `/coffee/assets/${coffeeEntity.id}/${item}`);
-        //     coffeeDto.imageStrings = images;
-        // }
     });
 
     result.status(httpStatusCodes.OK).json(coffeeDtos);
@@ -136,28 +115,28 @@ export const updateCoffeeById: RequestHandler = async (request, result) => {
     }
 };
 
-export const getCoffeesAssets: RequestHandler = async (request, result) => {
-    const coffeeId = request.params.id;
-    const uploadsFolder = path.join(__dirname, "../../uploads/coffee-images");
-    const coffeeImages = path.join(uploadsFolder, coffeeId);
-    if (!fs.existsSync(coffeeImages)) {
-        result.sendStatus(httpStatusCodes.NOT_FOUND);
-        return;
-    }
+// export const getCoffeesAssets: RequestHandler = async (request, result) => {
+//     const coffeeId = request.params.id;
+//     const uploadsFolder = path.join(__dirname, "../../uploads/coffee-images");
+//     const coffeeImages = path.join(uploadsFolder, coffeeId);
+//     if (!fs.existsSync(coffeeImages)) {
+//         result.sendStatus(httpStatusCodes.NOT_FOUND);
+//         return;
+//     }
 
-    const files = fs.readdirSync(coffeeImages);
+//     const files = fs.readdirSync(coffeeImages);
 
-    // const coffeeId = request.params.id;
-    // const uploadsFolder = path.join(__dirname, "../../uploads/coffee-images");
-    // const coffeeImages = path.join(uploadsFolder, coffeeId);
-    // if (!fs.existsSync(coffeeImages)) {
-    //     result.sendStatus(httpStatusCodes.NOT_FOUND);
-    //     return;
-    // }
+//     // const coffeeId = request.params.id;
+//     // const uploadsFolder = path.join(__dirname, "../../uploads/coffee-images");
+//     // const coffeeImages = path.join(uploadsFolder, coffeeId);
+//     // if (!fs.existsSync(coffeeImages)) {
+//     //     result.sendStatus(httpStatusCodes.NOT_FOUND);
+//     //     return;
+//     // }
 
-    // const files = fs.readdirSync(coffeeImages);
-    result.status(httpStatusCodes.OK).send();
-};
+//     // const files = fs.readdirSync(coffeeImages);
+//     result.status(httpStatusCodes.OK).send();
+// };
 
 //Post Assets
 type PostCoffeeRequestParams = WithId;
@@ -171,7 +150,7 @@ export const postCoffeesAssets: RequestHandler = async (request, result) => {
     }
 
     const { id } = (request.params as unknown) as PostCoffeeRequestParams;
-    const uploadImage = request.files.images as UploadedFile;
+    const uploadImage = request?.files?.images as UploadedFile;
 
     const coffeeEntity = await CoffeeEntity.findOne({ where: { id }, relations: ["images"] });
     if (coffeeEntity === undefined) {

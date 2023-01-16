@@ -12,7 +12,6 @@ import {
     deleteCoffeeImageByURL,
     getAllCoffees,
     getCoffeeById,
-    getCoffeesAssets,
     postCoffeesAssets,
     updateCoffeeById,
 } from "../controllers/CoffeeController";
@@ -36,7 +35,7 @@ coffeeRoute.route("/:id").get(getCoffeeById);
 // coffeeRoute.route('/:id').delete(deleteCoffeeById);
 coffeeRoute.delete("/:id", [checkJwt, checkRole(["ADMIN", "USER"])], deleteCoffeeById);
 coffeeRoute.use("/assets", express.static(path.join(__dirname, "../../uploads/coffee-images")));
-coffeeRoute.route("/assets/:id").get(getCoffeesAssets);
+// coffeeRoute.route("/assets/:id").get(getCoffeesAssets);
 coffeeRoute.route("/assets/:id").post(postCoffeesAssets);
 // coffeeRoute.post("/assets/:id", [checkJwt, checkRole(["ADMIN"])], postCoffeesAssets);
 coffeeRoute.route("/assets/:id").delete(deleteCoffeeImageByURL);

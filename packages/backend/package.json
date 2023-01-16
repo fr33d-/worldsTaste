@@ -44,7 +44,6 @@
     },
     "scripts": {
         "build": "tsc",
-        "version": "tsc --version",
         "clean": "rm -rf build",
         "start": "DEBUG=api:* node build/Server.js",
         "dev": "DEBUG=api:* node --inspect -r ts-node/register src/Server.ts",

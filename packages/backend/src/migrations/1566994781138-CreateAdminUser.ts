@@ -1,4 +1,5 @@
-import { MigrationInterface, QueryRunner, getRepository } from "typeorm";
+/* eslint-disable @typescript-eslint/no-empty-function */
+import { getRepository, MigrationInterface, QueryRunner } from "typeorm";
 import { UserEntity } from "../models/entities/UserEntity";
 
 export class CreateAdminUser1566994781138 implements MigrationInterface {
