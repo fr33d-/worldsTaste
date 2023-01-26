@@ -27,7 +27,7 @@
         "curly": ["warn", "all"],
         "eqeqeq": ["warn"],
         "newline-per-chained-call": ["warn", { "ignoreChainWithDepth": 3 }],
-        "no-console": ["warn"],
+        "no-console": ["off"],
         "no-new-wrappers": ["warn"],
         "no-param-reassign": ["warn"],
         "no-sequences": ["warn"],
