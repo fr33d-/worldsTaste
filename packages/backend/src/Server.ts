@@ -6,15 +6,16 @@ import helmet from "helmet";
 import * as httpStatusCodes from "http-status-codes";
 import "reflect-metadata";
 import { createConnection } from "typeorm";
+import { authRouter } from "./routes/AuthRoute";
+import { postRoute } from "./routes/BlogPostsRoute";
 import { cigarAttrsRoute } from "./routes/CigarAttrsRouts";
 import { cigarRoute } from "./routes/CigarsRoute";
 import { coffeeBrewingRoute } from "./routes/CoffeeBrewingRoute";
 import { coffeeRoute } from "./routes/CoffeeRoute";
+import { coffeeStoresRoute } from "./routes/CoffeeStoreRouts";
 import { usersRoute } from "./routes/UsersRoute";
-import { authRouter } from "./routes/AuthRoute";
 import { errorLoggerMiddleware, errorMiddleware } from "./utils/ErrorHandlerUtil";
 import { createLogger } from "./utils/LoggerUtil";
-import { coffeeStoresRoute } from "./routes/CoffeeStoreRouts";
 
 // Export all necessary Dtos to make them accessible from the frontend
 export * from "./models/dtos/UserDto";
@@ -28,6 +29,7 @@ process.on("unhandledRejection", (error) => {
 });
 
 // Create TypeORM connection
+// connectionSource().initialize()
 createConnection()
     .then((connection) => {
         connection.runMigrations();
@@ -57,6 +59,7 @@ createConnection()
         server.use("/api/coffeebrewings", coffeeBrewingRoute);
         server.use("/api/cigars", cigarRoute);
         server.use("/api/cigarAttrs", cigarAttrsRoute);
+        server.use("/api/posts", postRoute);
 
         // 404 - Not Found
         server.use((_, result) => result.sendStatus(httpStatusCodes.NOT_FOUND));
@@ -73,3 +76,21 @@ createConnection()
         });
     })
     .catch(log);
+
+// AppDataSource.initialize()
+//     .then(async () => {
+//         console.log("Inserting a new user into the database...");
+//         const user = new User();
+//         user.firstName = "Timber";
+//         user.lastName = "Saw";
+//         user.age = 25;
+//         await AppDataSource.manager.save(user);
+//         console.log("Saved a new user with id: " + user.id);
+
+//         console.log("Loading users from the database...");
+//         const users = await AppDataSource.manager.find(User);
+//         console.log("Loaded users: ", users);
+
+//         console.log("Here you can setup and run express / fastify / any other framework.");
+//     })
+//     .catch((error) => console.log(error));

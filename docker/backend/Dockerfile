@@ -1,5 +1,5 @@
 # Build Environment
-FROM node:10.15.3-alpine as build-environment
+FROM node:18.13.0-alpine3.16 as build-environment
 ENV NODE_ENV development
 
 RUN mkdir -p /usr/src/app
@@ -13,7 +13,7 @@ RUN yarn build
 RUN yarn install --production --ignore-scripts --prefer-offline
 
 # Production Environment
-FROM node:10.15.3-alpine as production-environment
+FROM node:18.13.0-alpine3.16 as production-environment
 ENV NODE_ENV production
 ENV DOCKERENV true
 

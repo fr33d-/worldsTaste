@@ -2,7 +2,6 @@ import { validate } from "class-validator";
 import { Request, RequestHandler, Response } from "express";
 import { getRepository } from "typeorm";
 import { UserEntity } from "../models/entities/UserEntity";
-import { error } from "util";
 
 // class UserController {
 // export const getAllCoffees: RequestHandler = async (_, result) => {
@@ -24,7 +23,10 @@ export const getOneById: RequestHandler = async (req: Request, res: Response) =>
     //Get the user from database
     const userRepository = getRepository(UserEntity);
     try {
-        const user = await userRepository.findOneOrFail(id, {
+        // const user = await userRepository.findOneOrFail(id, {
+        //     select: ["id", "username", "role"], //We dont want to send the password on response
+        // });
+        const user = await userRepository.findOneOrFail({
             select: ["id", "username", "role"], //We dont want to send the password on response
         });
     } catch (error) {
@@ -61,9 +63,7 @@ export const newUser: RequestHandler = async (req: Request, res: Response) => {
     try {
         const newUser = await userRepository.save(user);
         //If all ok, send 201 response
-        res.status(201)
-            .location(`/user/${newUser.id}`)
-            .send("User created");
+        res.status(201).location(`/user/${newUser.id}`).send("User created");
     } catch (e) {
         res.status(409).send("username already in use");
         console.log("username already in use", e);
@@ -82,7 +82,8 @@ export const editUser: RequestHandler = async (req: Request, res: Response) => {
     const userRepository = getRepository(UserEntity);
     let user;
     try {
-        user = await userRepository.findOneOrFail(id);
+        user = await userRepository.findOneOrFail({ select: ["id"] });
+        // user = await userRepository.findOneOrFail(id);
     } catch (error) {
         //If not found, send a 404 response
         res.status(404).send("User not found");
@@ -116,7 +117,8 @@ export const deleteUser: RequestHandler = async (req: Request, res: Response) =>
     const userRepository = getRepository(UserEntity);
     let user: UserEntity;
     try {
-        user = await userRepository.findOneOrFail(id);
+        user = await userRepository.findOneOrFail({ select: ["id"] });
+        // user = await userRepository.findOneOrFail(id);
     } catch (error) {
         res.status(404).send("User not found");
         return;

@@ -17,7 +17,7 @@ const log = createLogger("api:controllers:coffeeBrewing");
 type GetBrewingByIdRequestParams = WithId;
 
 export const getCoffeeBrewings: RequestHandler = async (request, result) => {
-    const requestParams = (request.params as unknown) as GetBrewingByIdRequestParams;
+    const requestParams = request.params as unknown as GetBrewingByIdRequestParams;
     log(`GET /coffee/:id/brewings/ (id = ${requestParams.id})`);
 
     const coffeeBrewingEntity = await CoffeeBrewingEntity.find({
@@ -26,9 +26,11 @@ export const getCoffeeBrewings: RequestHandler = async (request, result) => {
 
     if (coffeeBrewingEntity !== undefined) {
         log(coffeeBrewingEntity);
-        result.status(httpStatusCodes.OK).json(coffeeBrewingEntity.map((entity) => new CoffeeBrewingDto(entity)));
+        result
+            .status(httpStatusCodes.StatusCodes.OK)
+            .json(coffeeBrewingEntity.map((entity) => new CoffeeBrewingDto(entity)));
     } else {
-        result.sendStatus(httpStatusCodes.NOT_FOUND);
+        result.sendStatus(httpStatusCodes.StatusCodes.NOT_FOUND);
     }
 };
 
@@ -39,12 +41,12 @@ type CreateCoffeeBrewingRequestBody = Omit<CoffeeBrewingDto, "id">;
 export const createCoffeeBrewing: RequestHandler = async (request, result) => {
     log(`POST /coffee/id/brewing`);
     log(request.body);
-    const { id } = (request.params as unknown) as PostCoffeeBrewingByIdRequestParams;
+    const { id } = request.params as unknown as PostCoffeeBrewingByIdRequestParams;
     const requestBody = request.body as CreateCoffeeBrewingRequestBody;
     const coffeeEntity = await CoffeeEntity.findOne({ where: { id }, relations: ["brewings"] });
 
-    if (coffeeEntity === undefined) {
-        result.sendStatus(httpStatusCodes.CONFLICT);
+    if (!coffeeEntity) {
+        result.sendStatus(httpStatusCodes.StatusCodes.CONFLICT);
         return;
     }
 
@@ -58,11 +60,11 @@ export const createCoffeeBrewing: RequestHandler = async (request, result) => {
 
         await CoffeeEntity.save(coffeeEntity);
         log("coffee Brewing saved");
-        result.location(`/brewings/${coffeeBrewingEntity.id}`).sendStatus(httpStatusCodes.CREATED);
+        result.location(`/brewings/${coffeeBrewingEntity.id}`).sendStatus(httpStatusCodes.StatusCodes.CREATED);
     } catch (error) {
         log("error");
         log(error);
-        result.sendStatus(httpStatusCodes.CONFLICT);
+        result.sendStatus(httpStatusCodes.StatusCodes.CONFLICT);
     }
 };
 
@@ -73,15 +75,15 @@ type DeleteCoffeeBrewingByIdRequestParams = {
 };
 
 export const deleteCoffeeBrewingById: RequestHandler = async (request, result) => {
-    const { brewId } = (request.params as unknown) as DeleteCoffeeBrewingByIdRequestParams;
+    const { brewId } = request.params as unknown as DeleteCoffeeBrewingByIdRequestParams;
     log(`DELETE /coffeeBrewing/:id (id = ${brewId})`);
     const coffeeBrewingEntity = await CoffeeBrewingEntity.findOne({ where: { id: brewId } });
 
     if (coffeeBrewingEntity !== undefined) {
         await CoffeeBrewingEntity.delete({ id: brewId });
-        result.sendStatus(httpStatusCodes.OK);
+        result.sendStatus(httpStatusCodes.StatusCodes.OK);
     } else {
-        result.sendStatus(httpStatusCodes.NOT_FOUND);
+        result.sendStatus(httpStatusCodes.StatusCodes.NOT_FOUND);
     }
 };
 
@@ -94,17 +96,17 @@ type UpdateCoffeeBrewingByIdRequestParams = {
 type UpdateCoffeeBrewingByIdRequestBody = CoffeeBrewingDto;
 
 export const updateCoffeeBrewingById: RequestHandler = async (request, result) => {
-    const { id, brewId } = (request.params as unknown) as UpdateCoffeeBrewingByIdRequestParams;
+    const { id, brewId } = request.params as unknown as UpdateCoffeeBrewingByIdRequestParams;
     const requestBody = request.body as UpdateCoffeeBrewingByIdRequestBody;
     log(`PUT /coffee/${id}/brewing/:${brewId}`);
 
     const coffeeBrewingEntity = await CoffeeBrewingEntity.findOne({ where: { id: brewId } });
 
-    if (coffeeBrewingEntity !== undefined) {
+    if (coffeeBrewingEntity) {
         CoffeeBrewingEntity.merge(coffeeBrewingEntity, { ...requestBody });
         await CoffeeBrewingEntity.save(coffeeBrewingEntity);
-        result.sendStatus(httpStatusCodes.OK);
+        result.sendStatus(httpStatusCodes.StatusCodes.OK);
     } else {
-        result.sendStatus(httpStatusCodes.NOT_FOUND);
+        result.sendStatus(httpStatusCodes.StatusCodes.NOT_FOUND);
     }
 };

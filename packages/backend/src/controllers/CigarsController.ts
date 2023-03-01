@@ -44,7 +44,7 @@ export const getAllCigars: RequestHandler = async (_, result) => {
 type GetUserByIdRequestParams = WithId;
 
 export const getCigarById: RequestHandler = async (request, result) => {
-    const requestParams = (request.params as unknown) as GetUserByIdRequestParams;
+    const requestParams = request.params as unknown as GetUserByIdRequestParams;
 
     log(`GET /cigar/:id (id = ${requestParams.id})`);
 
@@ -53,10 +53,10 @@ export const getCigarById: RequestHandler = async (request, result) => {
         relations: ["anschnitt", "aromarad", "deckblatt", "einlage", "origin", "producer", "umblatt"],
     });
 
-    if (cigarEntity !== undefined) {
-        result.status(httpStatusCodes.OK).json(new CigarDto(cigarEntity));
+    if (cigarEntity) {
+        result.status(httpStatusCodes.StatusCodes.OK).json(new CigarDto(cigarEntity));
     } else {
-        result.sendStatus(httpStatusCodes.NOT_FOUND);
+        result.sendStatus(httpStatusCodes.StatusCodes.NOT_FOUND);
     }
 };
 
@@ -86,7 +86,7 @@ export const createCigar: RequestHandler = async (request, result) => {
 type DeleteCigarByIdRequestParams = WithId;
 
 export const deleteCigarById: RequestHandler = async (request, result) => {
-    const { id } = (request.params as unknown) as DeleteCigarByIdRequestParams;
+    const { id } = request.params as unknown as DeleteCigarByIdRequestParams;
     log(`DELETE /cigar/:id (id = ${id})`);
     const cigarEntity = await CigarEntity.findOne({ where: { id } });
 
@@ -103,14 +103,14 @@ type UpdateCigarByIdRequestParams = WithId;
 type UpdateCigarByIdRequestBody = CigarDto;
 
 export const updateCigarById: RequestHandler = async (request, result) => {
-    const { id } = (request.params as unknown) as UpdateCigarByIdRequestParams;
+    const { id } = request.params as unknown as UpdateCigarByIdRequestParams;
     log(`PUT /cigar/:id (id = ${id})`);
     const requestBody = request.body as UpdateCigarByIdRequestBody;
     const cigarEntity = await CigarEntity.findOne({ where: { id } });
 
-    if (cigarEntity !== undefined) {
+    if (cigarEntity) {
         if (cigarEntity.id !== requestBody.id) {
-            result.sendStatus(httpStatusCodes.CONFLICT);
+            result.sendStatus(httpStatusCodes.StatusCodes.CONFLICT);
         } else {
             CigarEntity.merge(cigarEntity, { ...requestBody });
             await CigarEntity.save(cigarEntity);
@@ -147,7 +147,7 @@ export const postCigarAssets: RequestHandler = async (request, result) => {
         return;
     }
 
-    const { id } = (request.params as unknown) as PostCigarRequestParams;
+    const { id } = request.params as unknown as PostCigarRequestParams;
     const images = request?.files?.images as UploadedFile[];
     const imagesArray = Array.isArray(images) ? images : [images];
     const imageStrings = [];
@@ -173,7 +173,7 @@ type DeleteCigarImageByIdRequestBody = { url: string };
 export const deleteCigarImageByURL: RequestHandler = async (request, result) => {
     log("Delete coffee by url");
 
-    const { id } = (request.params as unknown) as DeleteCigarImageByIdRequestParams;
+    const { id } = request.params as unknown as DeleteCigarImageByIdRequestParams;
     const { url } = request.body as DeleteCigarImageByIdRequestBody;
 
     const fileName = url.split("/").slice(-1)[0];

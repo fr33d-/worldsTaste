@@ -29,14 +29,14 @@ export const getAllCoffees: RequestHandler = async (_, result) => {
         return CoffeeDto.fromEntity(coffeeEntity);
     });
 
-    result.status(httpStatusCodes.OK).json(coffeeDtos);
+    result.status(httpStatusCodes.StatusCodes.OK).json(coffeeDtos);
 };
 
 // GET /:id
 type GetUserByIdRequestParams = WithId;
 
 export const getCoffeeById: RequestHandler = async (request, result) => {
-    const requestParams = (request.params as unknown) as GetUserByIdRequestParams;
+    const requestParams = request.params as unknown as GetUserByIdRequestParams;
 
     log(`GET /coffee/:id (id = ${requestParams.id})`);
 
@@ -45,10 +45,10 @@ export const getCoffeeById: RequestHandler = async (request, result) => {
         relations: ["store", "images"],
     });
 
-    if (coffeeEntity !== undefined) {
-        result.status(httpStatusCodes.OK).json(new CoffeeDto(coffeeEntity));
+    if (coffeeEntity) {
+        result.status(httpStatusCodes.StatusCodes.OK).json(new CoffeeDto(coffeeEntity));
     } else {
-        result.sendStatus(httpStatusCodes.NOT_FOUND);
+        result.sendStatus(httpStatusCodes.StatusCodes.NOT_FOUND);
     }
 };
 
@@ -64,11 +64,11 @@ export const createCoffee: RequestHandler = async (request, result) => {
     try {
         await CoffeeEntity.save(coffeeEntity);
         log("coffee saved");
-        result.location(`/coffee/${coffeeEntity.id}`).sendStatus(httpStatusCodes.CREATED);
+        result.location(`/coffee/${coffeeEntity.id}`).sendStatus(httpStatusCodes.StatusCodes.CREATED);
     } catch (error) {
         log("error");
         log(error);
-        result.sendStatus(httpStatusCodes.CONFLICT);
+        result.sendStatus(httpStatusCodes.StatusCodes.CONFLICT);
     }
 };
 
@@ -76,15 +76,15 @@ export const createCoffee: RequestHandler = async (request, result) => {
 type DeleteCoffeeByIdRequestParams = WithId;
 
 export const deleteCoffeeById: RequestHandler = async (request, result) => {
-    const { id } = (request.params as unknown) as DeleteCoffeeByIdRequestParams;
+    const { id } = request.params as unknown as DeleteCoffeeByIdRequestParams;
     log(`DELETE /coffee/:id (id = ${id})`);
     const coffeeEntity = await CoffeeEntity.findOne({ where: { id } });
 
     if (coffeeEntity !== undefined) {
         await CoffeeEntity.delete({ id });
-        result.sendStatus(httpStatusCodes.OK);
+        result.sendStatus(httpStatusCodes.StatusCodes.OK);
     } else {
-        result.sendStatus(httpStatusCodes.NOT_FOUND);
+        result.sendStatus(httpStatusCodes.StatusCodes.NOT_FOUND);
     }
 };
 
@@ -93,50 +93,27 @@ type UpdateCoffeeByIdRequestParams = WithId;
 type UpdateCoffeeByIdRequestBody = CoffeeDto;
 
 export const updateCoffeeById: RequestHandler = async (request, result) => {
-    const { id } = (request.params as unknown) as UpdateCoffeeByIdRequestParams;
+    const { id } = request.params as unknown as UpdateCoffeeByIdRequestParams;
     log(`PUT /coffee/:id (id = ${id})`);
     const requestBody = request.body as UpdateCoffeeByIdRequestBody;
     const coffeeEntity = await CoffeeEntity.findOne({ where: { id } });
 
-    if (coffeeEntity !== undefined) {
+    if (coffeeEntity) {
         if (coffeeEntity.id !== requestBody.id) {
             log(coffeeEntity.id);
             log(requestBody);
             log(id);
             log(coffeeEntity.id !== requestBody.id);
-            result.sendStatus(httpStatusCodes.CONFLICT);
+            result.sendStatus(httpStatusCodes.StatusCodes.CONFLICT);
         } else {
             CoffeeEntity.merge(coffeeEntity, { ...requestBody });
             await CoffeeEntity.save(coffeeEntity);
-            result.sendStatus(httpStatusCodes.OK);
+            result.sendStatus(httpStatusCodes.StatusCodes.OK);
         }
     } else {
-        result.sendStatus(httpStatusCodes.NOT_FOUND);
+        result.sendStatus(httpStatusCodes.StatusCodes.NOT_FOUND);
     }
 };
-
-// export const getCoffeesAssets: RequestHandler = async (request, result) => {
-//     const coffeeId = request.params.id;
-//     const uploadsFolder = path.join(__dirname, "../../uploads/coffee-images");
-//     const coffeeImages = path.join(uploadsFolder, coffeeId);
-//     if (!fs.existsSync(coffeeImages)) {
-//         result.sendStatus(httpStatusCodes.NOT_FOUND);
-//         return;
-//     }
-
-//     const files = fs.readdirSync(coffeeImages);
-
-//     // const coffeeId = request.params.id;
-//     // const uploadsFolder = path.join(__dirname, "../../uploads/coffee-images");
-//     // const coffeeImages = path.join(uploadsFolder, coffeeId);
-//     // if (!fs.existsSync(coffeeImages)) {
-//     //     result.sendStatus(httpStatusCodes.NOT_FOUND);
-//     //     return;
-//     // }
-
-//     // const files = fs.readdirSync(coffeeImages);
-//     result.status(httpStatusCodes.OK).send();
-// };
 
 //Post Assets
 type PostCoffeeRequestParams = WithId;
@@ -145,24 +122,22 @@ export const postCoffeesAssets: RequestHandler = async (request, result) => {
     log("Posting new coffee assets");
     if (request.files === undefined) {
         log("No images uploaded!");
-        result.sendStatus(httpStatusCodes.UNPROCESSABLE_ENTITY);
+        result.sendStatus(httpStatusCodes.StatusCodes.UNPROCESSABLE_ENTITY);
         return;
     }
 
-    const { id } = (request.params as unknown) as PostCoffeeRequestParams;
+    const { id } = request.params as unknown as PostCoffeeRequestParams;
     const uploadImage = request?.files?.images as UploadedFile;
 
     const coffeeEntity = await CoffeeEntity.findOne({ where: { id }, relations: ["images"] });
-    if (coffeeEntity === undefined) {
-        result.sendStatus(httpStatusCodes.CONFLICT);
+    if (!coffeeEntity) {
+        result.sendStatus(httpStatusCodes.StatusCodes.CONFLICT);
         return;
     }
     const { data, name } = uploadImage;
 
     // resize
-    const resizsedData = await sharp(data)
-        .resize(1200)
-        .toBuffer();
+    const resizsedData = await sharp(data).resize(1200).toBuffer();
 
     try {
         const imageEntity = ImagesEntity.create({
@@ -179,10 +154,10 @@ export const postCoffeesAssets: RequestHandler = async (request, result) => {
 
         await CoffeeEntity.save(coffeeEntity);
         log("coffee saved");
-        result.status(httpStatusCodes.CREATED).send(new ImageDto(imageEntity));
+        result.status(httpStatusCodes.StatusCodes.CREATED).send(new ImageDto(imageEntity));
     } catch (error) {
         log("error");
-        result.sendStatus(httpStatusCodes.CONFLICT);
+        result.sendStatus(httpStatusCodes.StatusCodes.CONFLICT);
     }
 
     // result.sendStatus(httpStatusCodes.CREATED);
@@ -194,18 +169,18 @@ type DeleteCoffeeImageByIdRequestParams = { id: number };
 export const deleteCoffeeImageByURL: RequestHandler = async (request, result) => {
     log("Delete coffee by url");
 
-    const { id } = (request.params as unknown) as DeleteCoffeeImageByIdRequestParams;
+    const { id } = request.params as unknown as DeleteCoffeeImageByIdRequestParams;
 
     log(`DELETE image :id (id = ${id})`);
     const imageEntity = await ImagesEntity.findOne({ where: { id } });
 
     if (imageEntity !== undefined) {
         await ImagesEntity.delete({ id });
-        result.sendStatus(httpStatusCodes.OK);
+        result.sendStatus(httpStatusCodes.StatusCodes.OK);
     } else {
-        result.sendStatus(httpStatusCodes.NOT_FOUND);
+        result.sendStatus(httpStatusCodes.StatusCodes.NOT_FOUND);
     }
 
     log("deleted");
-    result.sendStatus(httpStatusCodes.OK);
+    result.sendStatus(httpStatusCodes.StatusCodes.OK);
 };

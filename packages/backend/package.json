@@ -1,6 +1,6 @@
 {
     "name": "backend",
-    "version": "2.5.2",
+    "version": "0.2",
     "private": true,
     "main": "./src/Server.ts",
     "module": "./src/Server.ts",
@@ -8,39 +8,39 @@
         "src"
     ],
     "devDependencies": {
-        "@types/cors": "^2.8.4",
-        "@types/debug": "^4.1.3",
-        "@types/express": "^4.11.1",
-        "@types/express-fileupload": "^1.1.0",
+        "@types/cors": "^2.8.13",
+        "@types/debug": "^4.1.7",
+        "@types/express": "^4.17.16",
+        "@types/express-fileupload": "^1.4.0",
         "@types/helmet": "^0.0.43",
-        "@types/node": "^11.15.54",
-        "@types/sharp": "^0.29.4",
-        "@types/uniqid": "^4.1.3",
-        "nodemon": "^1.18.10",
-        "ts-node": "^8.0.3",
+        "@types/node": "^18.11.18",
+        "@types/sharp": "^0.31.1",
+        "@types/uniqid": "^5.3.2",
+        "nodemon": "^2.0.20",
+        "ts-node": "^10.9.1",
         "tslint": "^5.14.0",
-        "tslint-microsoft-contrib": "^6.1.0",
-        "typescript": "^3.3.4000"
+        "tslint-microsoft-contrib": "^6.2.0",
+        "typescript": "^4.9.4"
     },
     "dependencies": {
         "@types/bcryptjs": "^2.4.2",
-        "@types/jsonwebtoken": "^8.3.3",
+        "@types/jsonwebtoken": "^9.0.1",
         "@types/testing-library__dom": "^7.5.0",
         "bcryptjs": "^2.4.3",
-        "body-parser": "^1.18.3",
-        "class-validator": "^0.10.0",
+        "body-parser": "^1.20.1",
+        "class-validator": "^0.14.0",
         "cors": "^2.8.5",
-        "debug": "^4.1.1",
-        "express": "^4.16.4",
-        "express-fileupload": "^1.1.5",
-        "helmet": "^3.16.0",
-        "http-status-codes": "^1.3.2",
-        "jsonwebtoken": "^8.5.1",
-        "pg": "^7.12.1",
+        "debug": "^4.3.4",
+        "express": "^4.18.2",
+        "express-fileupload": "^1.4.0",
+        "helmet": "^6.0.1",
+        "http-status-codes": "^2.2.0",
+        "jsonwebtoken": "^9.0.0",
+        "pg": "^8.8.0",
         "reflect-metadata": "^0.1.13",
-        "sharp": "^0.29.3",
-        "typeorm": "^0.2.18",
-        "uniqid": "^5.0.3"
+        "sharp": "^0.31.3",
+        "typeorm": "^0.3.11",
+        "uniqid": "^5.4.0"
     },
     "scripts": {
         "build": "tsc",
@@ -48,7 +48,8 @@
         "start": "DEBUG=api:* node build/Server.js",
         "dev": "DEBUG=api:* node --inspect -r ts-node/register src/Server.ts",
         "watch": "nodemon",
-        "migrate": "ts-node ../../node_modules/typeorm/cli.js migration:run"
+        "migrate": "ts-node ../../node_modules/typeorm/cli.js migration:run",
+        "typeorm": "ts-node -r ../../node_modules/typeorm/cli.js"
     },
     "nodemonConfig": {
         "ignore": [
