@@ -1,5 +1,5 @@
 # Build Environment
-FROM node:21.7.3 as build-environment
+FROM node:20.19.2 as build-environment
 ENV NODE_ENV development
 
 RUN mkdir -p /usr/src/app
@@ -13,7 +13,7 @@ RUN yarn build
 RUN yarn install --production --ignore-scripts --prefer-offline
 
 # Production Environment
-FROM node:21.7.3 as production-environment
+FROM node:20.19.2 as production-environment
 ENV NODE_ENV production
 ENV DOCKERENV true
 
