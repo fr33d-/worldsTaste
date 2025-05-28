@@ -1,64 +1,41 @@
 {
-    "name": "backend",
-    "version": "1.0.0",
-    "private": true,
-    "main": "./src/Server.ts",
-    "module": "./src/Server.ts",
-    "files": [
-        "src"
-    ],
+    "name": "wt2backend",
+    "version": "0.0.1",
+    "description": "Awesome project developed with TypeORM.",
+    "type": "commonjs",
     "devDependencies": {
-        "@types/cors": "^2.8.4",
-        "@types/debug": "^4.1.3",
-        "@types/express": "^4.11.1",
-        "@types/express-fileupload": "^1.1.0",
+        "ts-node": "^10.9.1",
+        "@types/node": "^18.11.18",
+        "@types/cors": "^2.8.13",
+        "@types/debug": "^4.1.7",
+        "@types/express": "^4.17.16",
+        "@types/express-fileupload": "^1.4.0",
         "@types/helmet": "^0.0.43",
-        "@types/node": "^11.12.0",
-        "@types/uniqid": "^4.1.3",
-        "nodemon": "^1.18.10",
-        "ts-node": "^8.0.3",
+        "@types/sharp": "^0.31.1",
+        "@types/uniqid": "^5.3.2",
+        "nodemon": "^2.0.20",
         "tslint": "^5.14.0",
-        "tslint-microsoft-contrib": "^6.1.0",
-        "typescript": "^3.3.4000"
+        "typescript": "^4.9.4"
     },
     "dependencies": {
-        "@types/bcryptjs": "^2.4.2",
-        "@types/jsonwebtoken": "^8.3.3",
         "bcryptjs": "^2.4.3",
-        "body-parser": "^1.18.3",
-        "class-validator": "^0.10.0",
-        "cors": "^2.8.5",
-        "debug": "^4.1.1",
-        "express": "^4.16.4",
-        "express-fileupload": "^1.1.5",
-        "helmet": "^3.16.0",
-        "http-status-codes": "^1.3.2",
-        "jsonwebtoken": "^8.5.1",
-        "pg": "^7.12.1",
+        "typeorm": "0.3.11",
         "reflect-metadata": "^0.1.13",
-        "typeorm": "^0.2.18",
-        "uniqid": "^5.0.3"
+        "pg": "^8.4.0",
+        "express": "^4.18.2",
+        "express-fileupload": "^1.4.0",
+        "helmet": "^6.0.1",
+        "http-status-codes": "^2.2.0",
+        "uniqid": "^5.4.0",
+        "body-parser": "^1.20.1",
+        "cors": "^2.8.5",
+        "jsonwebtoken": "^9.0.0",
+        "class-validator": "^0.14.0",
+        "sharp": "^0.31.3"
     },
     "scripts": {
         "build": "tsc",
-        "clean": "rm -rf build",
-        "start": "DEBUG=api:* node build/Server.js",
-        "dev": "DEBUG=api:* node --inspect -r ts-node/register src/Server.ts",
-        "watch": "nodemon",
-        "migrate": "ts-node ../../node_modules/typeorm/cli.js migration:run"
-    },
-    "nodemonConfig": {
-        "ignore": [
-            "**/*.test.ts",
-            ".git",
-            "node_modules"
-        ],
-        "watch": [
-            "src",
-            ".env"
-        ],
-        "exec": "yarn dev",
-        "ext": "ts",
-        "inspect": true
+        "start": "ts-node src/index.ts --watch 'src/**/*.ts'",
+        "typeorm": "ts-node ./node_modules/typeorm/cli.js -d ./build/migration-data-source.js"
     }
 }

@@ -1,22 +1,23 @@
-import { validate } from 'class-validator';
-import { Request, Response } from 'express';
-import * as jwt from 'jsonwebtoken';
-import { getRepository } from 'typeorm';
-import config from '../config';
-import { UserEntity } from '../models/entities/UserEntity';
+import { validate } from "class-validator";
+import { Request, Response } from "express";
+import * as jwt from "jsonwebtoken";
+import config from "../config";
+import { AppDataSource } from "../data-source";
+import { UserEntity } from "../models/entities/UserEntity";
 
 // class AuthController {
 export const login = async (req: Request, res: Response) => {
     //Check if username and password are set
-    let { username, password } = req.body;
+    const { username, password } = req.body;
     if (!(username && password)) {
         res.status(400).send();
-        console.log('Auth: 400')
+        console.log("Auth: 400");
         return;
     }
 
     //Get user from database
-    const userRepository = getRepository(UserEntity);
+    const userRepository = AppDataSource.getRepository(UserEntity);
+
     let user: UserEntity;
     try {
         user = await userRepository.findOneOrFail({ where: { username } });
@@ -24,22 +25,28 @@ export const login = async (req: Request, res: Response) => {
         //Check if encrypted password match
         if (!user.checkIfUnencryptedPasswordIsValid(password)) {
             res.status(401).send();
-            console.log('Auth: 401')
+            console.log("Auth: 401");
             return;
         }
 
         //Sing JWT, valid for 1 hour
         const token = jwt.sign(
-            { userId: user.id, username: user.username, name: user.name, email: user.email, role: user.role },
+            {
+                userId: user.id,
+                username: user.username,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+            },
             config.jwtSecret,
-            { expiresIn: '7d' }
+            { expiresIn: "7d" }
         );
 
         //Send the jwt in the response
-        console.log('Auth: ok')
+        console.log("Auth: ok");
         res.send(token);
     } catch (error) {
-        console.log('Auth: 401')
+        console.log("Auth: 401");
         res.status(401).send();
     }
 };
@@ -55,10 +62,10 @@ export const changePassword = async (req: Request, res: Response) => {
     }
 
     //Get user from the database
-    const userRepository = getRepository(UserEntity);
+    const userRepository = AppDataSource.getRepository(UserEntity);
     let user: UserEntity;
     try {
-        user = await userRepository.findOneOrFail(id);
+        user = await userRepository.findOneOrFail({ where: { id } });
 
         //Check if old password matchs
         if (!user.checkIfUnencryptedPasswordIsValid(oldPassword)) {

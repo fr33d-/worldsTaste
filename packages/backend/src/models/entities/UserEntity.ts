@@ -1,6 +1,6 @@
-import * as bcrypt from 'bcryptjs';
-import { IsNotEmpty, Length } from 'class-validator';
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm';
+import * as bcrypt from "bcryptjs";
+import { IsNotEmpty, Length } from "class-validator";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
 
 // // This is our sample entity used in this example to show how TypeORM entities are defined. Please be aware that you
 // // need the bang (!) after each class member to prevent TypeScript from complaining about properties having no
@@ -30,7 +30,7 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Unique, Updat
 // }
 
 @Entity()
-@Unique(['username'])
+@Unique(["username"])
 export class UserEntity {
     @PrimaryGeneratedColumn()
     public id!: number;
@@ -62,7 +62,6 @@ export class UserEntity {
     @Column()
     @UpdateDateColumn()
     public updatedAt!: Date;
-
 
     // Todo: Logik in eigene klassen / services auslagern.
     public hashPassword() {

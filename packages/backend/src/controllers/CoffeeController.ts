@@ -1,43 +1,36 @@
-import { RequestHandler } from 'express';
-import { UploadedFile } from 'express-fileupload';
-import * as fs from 'fs';
-import * as httpStatusCodes from 'http-status-codes';
-import * as path from 'path';
-import uniqid from 'uniqid';
-import { CoffeeDto } from '../models/dtos/CoffeeDto';
-import { CoffeeEntity } from '../models/entities/CoffeeEntity';
-import { createLogger } from '../utils/LoggerUtil';
-import { Omit } from '../utils/TypeScriptUtils';
+import { RequestHandler } from "express";
+import { UploadedFile } from "express-fileupload";
+import * as httpStatusCodes from "http-status-codes";
+import sharp from "sharp";
+import { CoffeeDto } from "../models/dtos/CoffeeDto";
+import { ImageDto } from "../models/dtos/ImageDto";
+import { CoffeeEntity } from "../models/entities/CoffeeEntity";
+import { ImagesEntity } from "../models/entities/ImageEntry";
+import { RoasterEntity } from "../models/entities/RoasterEntity";
+import { createLogger } from "../utils/LoggerUtil";
+import { Omit } from "../utils/TypeScriptUtils";
 
 // Small helper type to embed id paramters into custom types.
 type WithId = {
     id: number;
 };
 
-const log = createLogger('api:controllers:coffee');
+const log = createLogger("api:controllers:coffee");
 
 // GET /
 export const getAllCoffees: RequestHandler = async (_, result) => {
-    log(`GET /coffee`);
+    console.log(`GET /coffee`);
 
     const coffeeEntities = await CoffeeEntity.find({
-        relations: ['store'],
+        relations: ["images", "roaster"],
     });
 
-    //Append images
-    const uploadsFolder = path.join(__dirname, '../../uploads/coffee-images');
     const coffeeDtos = coffeeEntities.map((coffeeEntity) => {
-        const coffeeDto = CoffeeDto.fromEntity(coffeeEntity);
-
-        const imagePath = path.join(uploadsFolder, String(coffeeEntity.id));
-        if (fs.existsSync(imagePath)) {
-            const images = fs.readdirSync(imagePath).map((item) => `/coffee/assets/${coffeeEntity.id}/${item}`);
-            coffeeDto.imageStrings = images;
-        }
-        return coffeeDto;
+        coffeeEntity.images = coffeeEntity.images.length > 0 !== undefined ? [coffeeEntity.images[0]] : [];
+        return CoffeeDto.fromEntity(coffeeEntity);
     });
 
-    result.status(httpStatusCodes.OK).json(coffeeDtos);
+    result.status(httpStatusCodes.StatusCodes.OK).json(coffeeDtos);
 };
 
 // GET /:id
@@ -46,37 +39,42 @@ type GetUserByIdRequestParams = WithId;
 export const getCoffeeById: RequestHandler = async (request, result) => {
     const requestParams = request.params as unknown as GetUserByIdRequestParams;
 
-    log(`GET /coffee/:id (id = ${requestParams.id})`);
+    console.log(`GET /coffee/:id (id = ${requestParams.id})`);
 
     const coffeeEntity = await CoffeeEntity.findOne({
         where: { id: requestParams.id },
-        relations: ['store'],
+        relations: ["store", "images", "owner", "roaster"],
     });
 
-    if (coffeeEntity !== undefined) {
-        result.status(httpStatusCodes.OK).json(new CoffeeDto(coffeeEntity));
+    if (coffeeEntity) {
+        result.status(httpStatusCodes.StatusCodes.OK).json(new CoffeeDto(coffeeEntity));
     } else {
-        result.sendStatus(httpStatusCodes.NOT_FOUND);
+        result.sendStatus(httpStatusCodes.StatusCodes.NOT_FOUND);
     }
 };
 
 // POST /
-type CreateCoffeeRequestBody = Omit<CoffeeDto, 'id'>;
+type CreateCoffeeRequestBody = Omit<CoffeeDto, "id">;
 
 export const createCoffee: RequestHandler = async (request, result) => {
-    log(`POST /coffee`);
-    log(request.body);
+    console.log(`POST /coffee`);
     const requestBody = request.body as CreateCoffeeRequestBody;
-    const coffeeEntity = CoffeeEntity.create({ ...requestBody, brewings: [] });
+    const coffeeEntity = CoffeeEntity.create({ ...requestBody, brewings: [], roaster: undefined });
+
+    if (requestBody.roaster?.id) {
+        const roasterEntity = await RoasterEntity.findOne({ where: { id: requestBody.roaster.id } });
+        coffeeEntity.roaster = roasterEntity;
+    } else {
+        coffeeEntity.roaster = undefined;
+    }
 
     try {
         await CoffeeEntity.save(coffeeEntity);
-        log('coffee saved');
-        result.location(`/coffee/${coffeeEntity.id}`).sendStatus(httpStatusCodes.CREATED);
+        console.log("coffee saved");
+        result.location(`/coffee/${coffeeEntity.id}`).sendStatus(httpStatusCodes.StatusCodes.CREATED);
     } catch (error) {
-        log('error');
-        log(error);
-        result.sendStatus(httpStatusCodes.CONFLICT);
+        console.log("error", error);
+        result.sendStatus(httpStatusCodes.StatusCodes.CONFLICT);
     }
 };
 
@@ -85,14 +83,14 @@ type DeleteCoffeeByIdRequestParams = WithId;
 
 export const deleteCoffeeById: RequestHandler = async (request, result) => {
     const { id } = request.params as unknown as DeleteCoffeeByIdRequestParams;
-    log(`DELETE /coffee/:id (id = ${id})`);
+    console.log(`DELETE /coffee/:id (id = ${id})`);
     const coffeeEntity = await CoffeeEntity.findOne({ where: { id } });
 
     if (coffeeEntity !== undefined) {
         await CoffeeEntity.delete({ id });
-        result.sendStatus(httpStatusCodes.OK);
+        result.sendStatus(httpStatusCodes.StatusCodes.OK);
     } else {
-        result.sendStatus(httpStatusCodes.NOT_FOUND);
+        result.sendStatus(httpStatusCodes.StatusCodes.NOT_FOUND);
     }
 };
 
@@ -102,93 +100,103 @@ type UpdateCoffeeByIdRequestBody = CoffeeDto;
 
 export const updateCoffeeById: RequestHandler = async (request, result) => {
     const { id } = request.params as unknown as UpdateCoffeeByIdRequestParams;
-    log(`PUT /coffee/:id (id = ${id})`);
+    console.log(`PUT /coffee/:id (id = ${id})`);
     const requestBody = request.body as UpdateCoffeeByIdRequestBody;
-    const coffeeEntity = await CoffeeEntity.findOne({ where: { id } });
+    const coffeeEntity = await CoffeeEntity.findOne({ where: { id }, relations: ["roaster"] });
 
-    if (coffeeEntity !== undefined) {
-        if (coffeeEntity.id !== requestBody.id) {
-            log(coffeeEntity.id);
-            log(requestBody);
-            log(id);
-            log(coffeeEntity.id !== requestBody.id);
-            result.sendStatus(httpStatusCodes.CONFLICT);
+    if (coffeeEntity) {
+        if (requestBody.roaster?.id) {
+            const roasterEntity = await RoasterEntity.findOne({ where: { id: requestBody.roaster.id } });
+
+            if (coffeeEntity.id !== requestBody.id) {
+                result.sendStatus(httpStatusCodes.StatusCodes.CONFLICT);
+            } else if (roasterEntity) {
+                coffeeEntity.roaster = roasterEntity;
+                CoffeeEntity.merge(coffeeEntity, { ...requestBody });
+                await CoffeeEntity.save(coffeeEntity);
+                result.sendStatus(httpStatusCodes.StatusCodes.OK);
+            } else {
+            }
         } else {
             CoffeeEntity.merge(coffeeEntity, { ...requestBody });
             await CoffeeEntity.save(coffeeEntity);
-            result.sendStatus(httpStatusCodes.OK);
+            result.sendStatus(httpStatusCodes.StatusCodes.OK);
         }
     } else {
-        result.sendStatus(httpStatusCodes.NOT_FOUND);
+        console.log(`not found`);
+        result.sendStatus(httpStatusCodes.StatusCodes.NOT_FOUND);
     }
-};
-
-//GET Assets
-
-export const getCoffeesAssets: RequestHandler = async (request, result) => {
-    const coffeeId = request.params.id;
-    const uploadsFolder = path.join(__dirname, '../../uploads/coffee-images');
-    const coffeeImages = path.join(uploadsFolder, coffeeId);
-    if (!fs.existsSync(coffeeImages)) {
-        result.sendStatus(httpStatusCodes.NOT_FOUND);
-        return;
-    }
-
-    const files = fs.readdirSync(coffeeImages);
-    result.status(httpStatusCodes.OK).send(files.map((item) => `/coffee/assets/${coffeeId}/${item}`));
 };
 
 //Post Assets
 type PostCoffeeRequestParams = WithId;
 
 export const postCoffeesAssets: RequestHandler = async (request, result) => {
-    log('Posting new coffee assets');
+    log("Posting new coffee assets");
     if (request.files === undefined) {
-        log('No images uploaded!');
-        result.sendStatus(httpStatusCodes.UNPROCESSABLE_ENTITY);
+        log("No images uploaded!");
+        result.sendStatus(httpStatusCodes.StatusCodes.UNPROCESSABLE_ENTITY);
         return;
     }
 
     const { id } = request.params as unknown as PostCoffeeRequestParams;
-    const images = request.files.images as UploadedFile[];
-    const imagesArray = Array.isArray(images) ? images : [images];
-    const imageStrings = [];
+    const uploadImage = request?.files?.images as UploadedFile;
 
-    for (const file of imagesArray) {
-        log('New asset');
-        const targetPath = `./uploads/coffee-images/${id}`;
-        if (!fs.existsSync(targetPath)) {
-            fs.mkdirSync(targetPath, { recursive: true });
-        }
-        const fileName = `${targetPath}/${uniqid()}.${file.name.split('.').slice(-1)[0]}`;
-        await file.mv(fileName);
-        imageStrings.push(fileName);
+    const coffeeEntity = await CoffeeEntity.findOne({
+        where: { id },
+        relations: ["images"],
+    });
+    if (!coffeeEntity) {
+        result.sendStatus(httpStatusCodes.StatusCodes.CONFLICT);
+        return;
+    }
+    const { data, name } = uploadImage;
+
+    // resize
+    const resizsedData = await sharp(data).resize(1200).toBuffer();
+
+    try {
+        const imageEntity = ImagesEntity.create({
+            name: name,
+            alt: name,
+            description: name,
+            file: Buffer.from(resizsedData).toString("base64"),
+            coffee: coffeeEntity,
+        });
+        await ImagesEntity.save(imageEntity);
+
+        coffeeEntity.images = [imageEntity, ...coffeeEntity.images];
+        log("Got new image for coffee:");
+
+        await CoffeeEntity.save(coffeeEntity);
+        log("coffee saved");
+        result.status(httpStatusCodes.StatusCodes.CREATED).send(new ImageDto(imageEntity));
+    } catch (error) {
+        log("error");
+        result.sendStatus(httpStatusCodes.StatusCodes.CONFLICT);
     }
 
-    result.location(String(imageStrings)).sendStatus(httpStatusCodes.OK);
+    // result.sendStatus(httpStatusCodes.CREATED);
 };
 
 // DELETE Asset /:id
 type DeleteCoffeeImageByIdRequestParams = { id: number };
-type DeleteCoffeeImageByIdRequestBody = { url: string };
 
 export const deleteCoffeeImageByURL: RequestHandler = async (request, result) => {
-    log('Delete coffee by url');
+    log("Delete coffee by url");
 
     const { id } = request.params as unknown as DeleteCoffeeImageByIdRequestParams;
-    const { url } = request.body as DeleteCoffeeImageByIdRequestBody;
 
-    const fileName = url.split('/').slice(-1)[0];
-    const targetPath = `./uploads/coffee-images/${id}`;
+    log(`DELETE image :id (id = ${id})`);
+    const imageEntity = await ImagesEntity.findOne({ where: { id } });
 
-    // log(targetPath + '/' + fileName);
-
-    try {
-        fs.unlinkSync(`${targetPath}/${fileName}`);
-    } catch (err) {
-        log(err);
-        result.sendStatus(httpStatusCodes.NOT_FOUND);
+    if (imageEntity !== undefined) {
+        await ImagesEntity.delete({ id });
+        result.sendStatus(httpStatusCodes.StatusCodes.OK);
+    } else {
+        result.sendStatus(httpStatusCodes.StatusCodes.NOT_FOUND);
     }
 
-    result.sendStatus(httpStatusCodes.OK);
+    // log("deleted");
+    // result.sendStatus(httpStatusCodes.StatusCodes.OK);
 };

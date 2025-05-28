@@ -1,8 +1,7 @@
-import { Request, Response, NextFunction } from "express";
-import { getRepository } from "typeorm";
+import { NextFunction, Request, Response } from "express";
 
+import { AppDataSource } from "../data-source";
 import { UserEntity } from "../models/entities/UserEntity";
-import { log } from "util";
 
 export const checkRole = (roles: Array<string>) => {
     return async (req: Request, res: Response, next: NextFunction) => {
@@ -10,10 +9,14 @@ export const checkRole = (roles: Array<string>) => {
         const id = res.locals.jwtPayload.userId;
 
         //Get user role from the database
-        const userRepository = getRepository(UserEntity);
+        const userRepository = AppDataSource.getRepository(UserEntity);
         let user: UserEntity;
+
         try {
-            user = await userRepository.findOneOrFail(id);
+            // user = await userRepository.findOneOrFail(id);
+            user = await userRepository.findOneOrFail({ where: { id } });
+
+            // console.log("user: ", user.role, roles, typeof roles);
             //Check if array of authorized roles includes the user's role
             if (roles.includes(user.role)) {
                 next();
@@ -22,6 +25,8 @@ export const checkRole = (roles: Array<string>) => {
             }
             return;
         } catch (error) {
+            // console.log("check roles but can not find user", id);
+            console.log("pw", roles);
             res.status(401).send();
         }
     };

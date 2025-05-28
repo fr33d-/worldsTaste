@@ -1,4 +1,5 @@
-import { Router } from 'express';
+import { Router } from "express";
+import { getAllBrewings } from "../controllers/CoffeeBrewingController";
 // import {
 //     createCoffeeBrewing,
 //     deleteCoffeeBrewingById,
@@ -10,6 +11,7 @@ import { Router } from 'express';
 const coffeeBrewingRoute = Router();
 
 // coffeeBrewingRoute.route('/').post(createCoffeeBrewing);
+coffeeBrewingRoute.route("/").get(getAllBrewings);
 // coffeeBrewingRoute.route('/:id').get(getCoffeeBrewingById);
 // coffeeBrewingRoute.route('/:id').delete(deleteCoffeeBrewingById);
 // coffeeBrewingRoute.route('/:id').put(updateCoffeeBrewingById);

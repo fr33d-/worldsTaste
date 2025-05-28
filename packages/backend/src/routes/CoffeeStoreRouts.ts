@@ -1,9 +1,9 @@
 import { Router } from "express";
 import {
-    getCoffeeStores,
     createCoffeeStore,
-    updateCoffeeStoreById,
     deleteCoffeeStoreById,
+    getCoffeeStores,
+    updateCoffeeStoreById,
 } from "../controllers/CoffeeAttrsController";
 
 // Define a new router that basically wraps multiple endpoint into a single object.
@@ -13,6 +13,7 @@ import { checkJwt } from "../middlewares/checkJwt";
 import { checkRole } from "../middlewares/checkRole";
 
 coffeeStoresRoute.route("/").get(getCoffeeStores);
+// coffeeStoresRoute.route("/:id").get(getCoffeeStoresById);
 coffeeStoresRoute.post("/", [checkJwt, checkRole(["ADMIN", "USER"])], createCoffeeStore);
 coffeeStoresRoute.put("/", [checkJwt, checkRole(["ADMIN", "USER"])], updateCoffeeStoreById);
 coffeeStoresRoute.delete("/", [checkJwt, checkRole(["ADMIN", "USER"])], deleteCoffeeStoreById);

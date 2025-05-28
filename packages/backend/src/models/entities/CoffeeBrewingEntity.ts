@@ -1,5 +1,6 @@
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CoffeeEntity } from "./CoffeeEntity";
+import { ImagesEntity } from "./ImageEntry";
 
 @Entity()
 export class CoffeeBrewingEntity extends BaseEntity {
@@ -63,10 +64,12 @@ export class CoffeeBrewingEntity extends BaseEntity {
     @Column()
     public brewTime!: number;
 
-    @ManyToOne(
-        (type) => CoffeeEntity,
-        (coffee) => coffee.brewings,
-        { onDelete: "CASCADE" }
-    )
+    @ManyToOne((type) => CoffeeEntity, (coffee) => coffee.brewings, {
+        onDelete: "CASCADE",
+    })
     public coffee!: CoffeeEntity;
+
+    @OneToOne((type) => ImagesEntity, (image) => image.extraction)
+    @JoinColumn({ name: "image" })
+    public image!: ImagesEntity;
 }

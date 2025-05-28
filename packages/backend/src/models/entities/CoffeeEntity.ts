@@ -1,6 +1,9 @@
+import { File } from "buffer";
 import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { CoffeeStoreEntity } from "./CoffeeStoresEntity";
 import { CoffeeBrewingEntity } from "./CoffeeBrewingEntity";
+import { CoffeeStoreEntity } from "./CoffeeStoresEntity";
+import { ImagesEntity } from "./ImageEntry";
+import { RoasterEntity } from "./RoasterEntity";
 import { UserEntity } from "./UserEntity";
 
 export type Image = {
@@ -78,24 +81,23 @@ export class CoffeeEntity extends BaseEntity {
     @Column()
     public aroma!: string;
 
-    @ManyToOne(
-        (type) => UserEntity,
-        (user) => user.id
-    )
+    @ManyToOne((type) => UserEntity, (user) => user.id)
     @JoinColumn({ name: "owner" })
     public owner!: UserEntity;
 
-    @ManyToOne(
-        (type) => CoffeeStoreEntity,
-        (coffeeStore) => coffeeStore.id
-    )
+    @ManyToOne((type) => CoffeeStoreEntity, (coffeeStore) => coffeeStore.id)
     @JoinColumn({ name: "store" })
     public store!: CoffeeStoreEntity;
 
-    @OneToMany(
-        (type) => CoffeeBrewingEntity,
-        (coffeeBrewings) => coffeeBrewings.coffee
-    )
-    // @JoinColumn({ name: 'brewings' })∏
+    @ManyToOne((type) => RoasterEntity, (roaster) => roaster.id)
+    @JoinColumn({ name: "roaster" })
+    public roaster!: RoasterEntity;
+
+    @OneToMany((type) => CoffeeBrewingEntity, (coffeeBrewings) => coffeeBrewings.coffee)
+    @JoinColumn({ name: "brewings" })
     public brewings!: CoffeeBrewingEntity[];
+
+    @OneToMany((type) => ImagesEntity, (coffeeBrewings) => coffeeBrewings.coffee)
+    @JoinColumn({ name: "images" })
+    public images!: ImagesEntity[];
 }
