@@ -40,19 +40,5 @@
         "dev": "DEBUG=api:* node --inspect -r ts-node/register src/Server.ts",
         "watch": "nodemon",
         "migrate": "ts-node ../../node_modules/typeorm/cli.js migration:run"
-    },
-    "nodemonConfig": {
-        "ignore": [
-            "**/*.test.ts",
-            ".git",
-            "node_modules"
-        ],
-        "watch": [
-            "src",
-            ".env"
-        ],
-        "exec": "yarn dev",
-        "ext": "ts",
-        "inspect": true
     }
 }
