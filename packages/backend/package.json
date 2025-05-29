@@ -35,7 +35,24 @@
     },
     "scripts": {
         "build": "tsc",
-        "start": "ts-node src/index.ts --watch 'src/**/*.ts'",
-        "typeorm": "ts-node ./node_modules/typeorm/cli.js -d ./build/migration-data-source.js"
+        "clean": "rm -rf build",
+        "start": "DEBUG=api:* node build/Server.js",
+        "dev": "DEBUG=api:* node --inspect -r ts-node/register src/Server.ts",
+        "watch": "nodemon",
+        "migrate": "ts-node ../../node_modules/typeorm/cli.js migration:run"
+    },
+    "nodemonConfig": {
+        "ignore": [
+            "**/*.test.ts",
+            ".git",
+            "node_modules"
+        ],
+        "watch": [
+            "src",
+            ".env"
+        ],
+        "exec": "yarn dev",
+        "ext": "ts",
+        "inspect": true
     }
 }
