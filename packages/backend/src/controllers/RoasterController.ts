@@ -3,6 +3,7 @@ import { RequestHandler } from "express";
 import { UploadedFile } from "express-fileupload";
 import * as httpStatusCodes from "http-status-codes";
 import sharp from "sharp";
+import { AppDataSource } from "../data-source";
 import { CoffeeDto } from "../models/dtos/CoffeeDto";
 import { ImageDto } from "../models/dtos/ImageDto";
 import { RoasterDto } from "../models/dtos/RoasterDto";
@@ -20,7 +21,8 @@ type WithId = {
 export const getAllRoaster: RequestHandler = async (_, result) => {
     console.log(`GET /roaster`);
 
-    const roasterEntities = await RoasterEntity.find({
+    const roasterRepo = AppDataSource.getRepository(RoasterEntity);
+    const roasterEntities = await roasterRepo.find({
         relations: ["images"],
     });
 
@@ -36,7 +38,7 @@ export const getAllRoaster: RequestHandler = async (_, result) => {
 type GetUserByIdRequestParams = WithId;
 
 export const getRoasterById: RequestHandler = async (request, result) => {
-    const requestParams = request.params as unknown as GetUserByIdRequestParams;
+    const requestParams = (request.params as unknown) as GetUserByIdRequestParams;
 
     console.log(`GET /roaster/:id (id = ${requestParams.id})`);
 
@@ -96,7 +98,7 @@ export const createRoaster: RequestHandler = async (request, result) => {
 type DeleteRoasterByIdRequestParams = WithId;
 
 export const deleteRoasterById: RequestHandler = async (request, result) => {
-    const { id } = request.params as unknown as DeleteRoasterByIdRequestParams;
+    const { id } = (request.params as unknown) as DeleteRoasterByIdRequestParams;
     console.log(`DELETE /roaster/:id (id = ${id})`);
     const roasterEntity = await RoasterEntity.findOne({ where: { id } });
 
@@ -113,7 +115,7 @@ type UpdateRoasterByIdRequestParams = WithId;
 type UpdateRoasterByIdRequestBody = RoasterDto;
 
 export const updateRoasterById: RequestHandler = async (request, result) => {
-    const { id } = request.params as unknown as UpdateRoasterByIdRequestParams;
+    const { id } = (request.params as unknown) as UpdateRoasterByIdRequestParams;
     console.log(`PUT /roaster/:id (id = ${id})`);
 
     const requestBody = request.body as UpdateRoasterByIdRequestBody;
@@ -147,7 +149,7 @@ export const postRoasterAssets: RequestHandler = async (request, result) => {
         return;
     }
 
-    const { id } = request.params as unknown as PostRoasterRequestParams;
+    const { id } = (request.params as unknown) as PostRoasterRequestParams;
     const uploadImage = request?.files?.images as UploadedFile;
 
     const roasterEntity = await RoasterEntity.findOne({
@@ -161,7 +163,9 @@ export const postRoasterAssets: RequestHandler = async (request, result) => {
     const { data, name } = uploadImage;
 
     // resize
-    const resizsedData = await sharp(data).resize(1200).toBuffer();
+    const resizsedData = await sharp(data)
+        .resize(1200)
+        .toBuffer();
 
     try {
         const imageEntity = ImagesEntity.create({
@@ -191,7 +195,7 @@ type DeleteRoasterImageByIdRequestParams = { id: number };
 export const deleteRoasterImageByURL: RequestHandler = async (request, result) => {
     console.log("Delete roaster by url");
 
-    const { id } = request.params as unknown as DeleteRoasterImageByIdRequestParams;
+    const { id } = (request.params as unknown) as DeleteRoasterImageByIdRequestParams;
 
     console.log(`DELETE image :id (id = ${id})`);
     const imageEntity = await ImagesEntity.findOne({ where: { id } });
