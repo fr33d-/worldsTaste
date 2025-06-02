@@ -12,8 +12,7 @@ export const AppDataSource = new DataSource({
     database: "postgres",
     logging: false,
     synchronize: true,
-    dropSchema: true,
-    entities: ["./src/models/entities/**/*.js"],
-    migrations: ["./src/migrations/*.js"],
+    entities: ["./build/models/entities/**/*.js"],
+    migrations: ["./build/migrations/*.js"],
     name: "default",
 });
