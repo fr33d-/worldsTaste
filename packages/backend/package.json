@@ -36,8 +36,8 @@
     "scripts": {
         "build": "tsc",
         "clean": "rm -rf build",
-        "start": "DEBUG=api:* node build/Server.js",
-        "dev": "DEBUG=api:* node --inspect -r ts-node/register src/Server.ts",
+        "start": "DEBUG=api:* node build/index.js",
+        "dev": "DEBUG=api:* node --inspect -r ts-node/register src/index.ts",
         "watch": "nodemon",
         "migrate": "ts-node ../../node_modules/typeorm/cli.js migration:run"
     }
