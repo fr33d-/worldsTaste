@@ -11,7 +11,7 @@ export const AppDataSource = new DataSource({
     password: "postgres",
     database: "postgres",
     logging: false,
-    synchronize: false,
+    synchronize: true,
     entities: ["./src/models/entities/**/*.ts"],
     migrations: ["./src/migrations/*.ts"],
     name: "default",
