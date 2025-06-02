@@ -2,7 +2,7 @@
     "name": "react-full-stack-sample",
     "private": true,
     "devDependencies": {
-        "lerna": "^3.13.1"
+        "lerna": "^8.2.2"
     },
     "scripts": {
         "clean": "lerna clean && rm -rf node_modules",
